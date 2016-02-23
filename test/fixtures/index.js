@@ -1,0 +1,261 @@
+// jscs:disable
+/* jshint ignore:start */
+
+module.exports = {
+    collectionV2: require('../../examples/collection-v2.json'),
+    rawUrls: [
+        // If adding to this list, add to the END, or you'll break a lot of tests which
+        // use indexes to access particular URLs.
+        'https://user:pass@echo.getpostman.com/get/?a=1&b=2#heading',
+        'http://google.com/',
+        'https://echo.getpostman.com:9090/',
+        'echo.getpostman.com/something/somethingelse#yo',
+        'http://postman.tech/?a=b&b={{c}}#{{fragment}}',
+        '{{url}}/awesomestuff/endpoint?a=1&b=ghj',
+        '{{url}}/somepath/{{alpha}}/{{version}}?yo={{awesome}}&gg=wp#{{fragment}}',
+        'someone@postman.xyz/asdasd',
+        'HTTP://Example.com:80/resource?id=123', // This is intentionally having caps.
+        {
+            protocol: 'http',
+            host: 'echo.getpostman.com',
+            port: '80',
+            path: '/:resource',
+            query: [{ key: 'id', value: '123' }],
+            variable: [
+                {
+                    "id": "resource",
+                    "value": "post"
+                }
+            ]
+        },
+        {
+            protocol: 'http',
+            host: 'echo.getpostman.com',
+            port: '80',
+            path: '/:method',
+            variable: [
+                {
+                    id: 'method',
+                    value: 'get'
+                }
+            ]
+        },
+        {
+            protocol: 'http',
+            host: 'echo.getpostman.com',
+            port: '80',
+            path: '/:method',
+            variable: [
+                {
+                    id: 'method',
+                    value: 'get'
+                }
+            ]
+        }
+    ],
+    rawQueryStrings: [
+        'asdf=abab&yo=true&akshay={{something}}&something=bald'
+    ],
+    queryParams: [
+        {
+            key: 'hello',
+            value: 'what up'
+        },
+        {
+            key: 'omg',
+            value: 'thisisawesome'
+        }
+    ],
+    authRequests: {
+        basic: {
+            auth: {
+                type: 'basic',
+                basic: {
+                    username: 'abhijit',
+                    password: 'kane',
+                    showPassword: false
+                }
+            },
+            url: 'httpbin.org/get',
+            method: 'GET',
+            header: [],
+            data: {
+                mode: 'formdata',
+                content: []
+            },
+            description: ''
+        },
+        digest: {
+            url: 'https://echo.getpostman.com/digest-auth',
+            method: 'GET',
+            header: [],
+            data: {
+                mode: 'formdata',
+                content: []
+            },
+            auth: {
+                type: 'digest',
+                digest: {
+                    username: 'postman',
+                    realm: 'Users',
+                    password: 'password',
+                    nonce: 'bcgEc5RPU1ANglyT2I0ShU0oxqPB5jXp',
+                    nonceCount: '',
+                    algorithm: 'MD5',
+                    qop: '',
+                    clientNonce: '',
+                    opaque: ''
+                }
+            }
+        },
+        oauth1: {
+            auth: {
+                type: 'oauth1',
+                oauth1: {
+                    consumerKey: 'RKCGzna7bv9YD57c',
+                    consumerSecret: 'D+EdQ-gs$-%@2Nu7',
+                    token: '',
+                    tokenSecret: '',
+                    signatureMethod: 'HMAC-SHA1',
+                    timeStamp: '1453890475',
+                    nonce: 'yly1UR',
+                    version: '1.0',
+                    realm: 'oauthrealm',
+                    addParamsToHeader: true,
+                    autoAddParam: true,
+                    addEmptyParamsToSign: false
+                }
+            },
+            url: 'https://echo.getpostman.com/oauth1?hi=hello&yo=true',
+            method: 'POST',
+            header: [
+                {
+                    key: 'Authorization',
+                    value: 'OAuth oauth_consumer_key="RKCGzna7bv9YD57c",oauth_signature_method="HMAC-SHA1",' +
+                             'oauth_timestamp="1453890449",oauth_nonce="aT8kIM",oauth_version="1.0",' +
+                             'oauth_signature="Ng8eD0bKh6LO5V0A9O6Z%2BY6D0tU%3D"',
+                    description: ''
+                }
+            ],
+            data: {
+                mode: 'urlencoded',
+                content: [{
+                    key: 'haha',
+                    value: 'somevalue'
+                }]
+            }
+        },
+        awsv4: {
+            auth: {
+                type: 'awsv4',
+                awsv4: {
+                    id: 'awsSigV4',
+                    time: 1452673288848,
+                    // Fake Credentials
+                    accessKey: 'AKIAI53QRL',
+                    secretKey: 'cr2RAfsY4IIVweutTBoBzR',
+                    region: 'eu-west-1',
+                    service: '',
+                    auto: true,
+                    saveHelper: true,
+                    serviceName: 'execute-api'
+                }
+            },
+            url: 'https://the2yl2ege.execute-api.eu-west-1.amazonaws.com/{{stagename}}/item',
+            method: 'POST',
+            header: [
+                {
+                    key: 'content-type',
+                    value: 'application/json',
+                    description: ''
+                },
+                {
+                    key: 'X-Amz-Date',
+                    value: '20160128T095051Z',
+                    description: ''
+                }
+            ],
+            data: {
+                mode: 'raw',
+                content: '{\'what\': \'isthis\'}'
+            },
+            description: ''
+        },
+        hawk: {
+            "auth": {
+                "type": "hawk",
+                "hawk": {
+                    "authId": "dh37fgj492je",
+                    "authKey": "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn",
+                    "algorithm": "sha256",
+                    "user": "asda",
+                    "saveHelperData": true,
+                    "nonce": "eFRP2o",
+                    "extraData": "skjdfklsjhdflkjhsdf",
+                    "appId": "",
+                    "delegation": "",
+                    "timestamp": ""
+                }
+            },
+            "url": "http://echo.getpostman.com/auth/hawk",
+            "method": "GET",
+            "header": [
+                {
+                    "key": "Authorization",
+                    "value": "Hawk id=\"dh37fgj492je\", ts=\"1448888081\", nonce=\"HoH6Ay\", ext=\"skjdfklsjhdflkjhsdf\", mac=\"moWleO5f/8QbvIiy7oo2zj1bmezhrYwrCkz4BsXg0M4=\"",
+                    "description": ""
+                }
+            ],
+            "data": {
+                "mode": "formdata",
+                "formdata": []
+            },
+            "description": ""
+        }
+    },
+    samplePropertyList: [
+        {
+            keyAttr: 'heyo',
+            value: 'what'
+        },
+        {
+            keyAttr: 'somethingidk',
+            value: 'oops'
+        }
+    ],
+    environments: [
+        {
+            somevar: 'asdasd',
+            root: 'one'
+        },
+        {
+            somevar: '2nd layer override',
+            hi: 'hello'
+        },
+        {
+            somevar: '3nd layer override'
+        }
+    ],
+    rawCookie: 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH',
+    requestData: {
+        "mode": "formdata",
+        "formdata": [
+            {
+                "key": "hiya",
+                "value": "heyo"
+            },
+            {
+                "key": "alpha",
+                "value": "beta"
+            }
+        ],
+        "raw": "abhijitkane",
+        "urlencoded": [
+            {
+                key: 'haha',
+                value: 'somevalue'
+            }
+        ]
+    }
+};
+/* jshint ignore:end */
