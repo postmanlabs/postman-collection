@@ -14,7 +14,7 @@ describe('Request', function () {
             expect(jsonified.method).to.eql(rawRequest.method);
             expect(jsonified.url).to.eql(rawRequest.url);
             expect(jsonified.header).to.eql(rawRequest.header);
-            expect(jsonified.data).to.eql(rawRequest.data);
+            expect(jsonified.body).to.eql(rawRequest.body);
         });
     });
 

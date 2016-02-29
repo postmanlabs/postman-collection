@@ -18,8 +18,8 @@ describe('Request', function () {
             expect(request.headers.all()).to.not.be.empty();
         });
 
-        it('data', function () {
-            expect(request).to.have.property('data');
+        it('body', function () {
+            expect(request).to.have.property('body');
         });
 
         it('method', function () {
