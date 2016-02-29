@@ -77,7 +77,7 @@
               "value": "GA1.2.113558537.1435817423"
             }
           ],
-          "data": "response body"
+          "body": "response body"
         }
       ],
       "event": [
@@ -110,7 +110,7 @@
             "value": "application/json"
           }
         ],
-        "data": {
+        "body": {
           "mode": "urlencoded",
           "urlencoded": [
             {
@@ -141,7 +141,7 @@
               "value": "GA1.2.113558537.1435817423"
             }
           ],
-          "data": "response body"
+          "body": "response body"
         }
       ],
       "event": [
@@ -169,7 +169,7 @@
           "request": {
             "url": "http://echo.getpostman.com/status/201",
             "method": "PUT",
-            "data": {
+            "body": {
               "mode": "urlencoded",
               "urlencoded": [
                 {
@@ -186,7 +186,7 @@
           "name": "201",
           "request": {
             "url": "http://echo.getpostman.com/post",
-            "data": {
+            "body": {
               "mode": "raw",
               "raw": "blahblah"
             },

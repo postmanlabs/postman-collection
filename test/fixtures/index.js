@@ -206,7 +206,7 @@ module.exports = {
                     "description": ""
                 }
             ],
-            "data": {
+            "body": {
                 "mode": "formdata",
                 "formdata": []
             },

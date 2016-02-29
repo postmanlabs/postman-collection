@@ -1,19 +1,19 @@
 var expect = require('expect.js'),
-    rawRequestData = require('../fixtures').requestData,
-    RequestData = require('../../lib/index.js').RequestData,
+    rawRequestBody = require('../fixtures').requestData,
+    RequestBody = require('../../lib/index.js').RequestBody,
     QueryParam = require('../../lib/index.js').QueryParam;
 
 /* global describe, it */
-describe('RequestData', function () {
+describe('RequestBody', function () {
     it('should be jsonified properly', function () {
-        var reqData = new RequestData(rawRequestData),
+        var reqData = new RequestBody(rawRequestBody),
             jsonified = reqData.toJSON();
-        expect(jsonified).to.eql(rawRequestData);
+        expect(jsonified).to.eql(rawRequestBody);
     });
 
     it('should be stringified properly', function () {
-        var reqData = new RequestData(rawRequestData),
-            expectedQueryData = QueryParam.unparse(rawRequestData.urlencoded);
+        var reqData = new RequestBody(rawRequestBody),
+            expectedQueryData = QueryParam.unparse(rawRequestBody.urlencoded);
 
         // Set the mode to URL encoded
         reqData.mode = 'urlencoded';

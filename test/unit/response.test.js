@@ -21,8 +21,8 @@ describe('Response', function () {
             expect(response.cookies.all()).to.be.an('array');
         });
 
-        it('data', function () {
-            expect(response).to.have.property('data', rawResponse.data);
+        it('body', function () {
+            expect(response).to.have.property('body', rawResponse.body);
         });
 
         it('header', function () {

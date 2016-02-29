@@ -14,9 +14,9 @@ describe('Response', function () {
 
             expect(jsonified.status).to.eql(rawResponse.status);
             expect(jsonified.code).to.eql(rawResponse.code);
-            expect(jsonified.data).to.eql(rawResponse.data);
+            expect(jsonified.body).to.eql(rawResponse.body);
             expect(Header.unparse(jsonified.header).trim()).to.eql(rawResponse.header.trim());
-            // Skip cookie tests, because cookies are tested independantly.
+            // Skip cookie tests, because cookies are tested independently.
             expect(jsonified).to.have.property('cookie');
         });
     });
