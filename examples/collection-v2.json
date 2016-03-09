@@ -234,10 +234,16 @@
                                             "path": "path/to/document",
                                             "host": "sub.example.com."
                                         },
-                                        "header": {
-                                            "Host": "sub.example.com",
-                                            "Content-Type": "application/json"
-                                        }
+                                        "header": [
+                                            {
+                                                "key": "Host",
+                                                "value": "sub.example.com"
+                                            },
+                                            {
+                                                "key": "Content-Type",
+                                                "value": "application/json"
+                                            }
+                                        ]
                                     },
                                     "event": [
                                         {

@@ -34,10 +34,9 @@ describe('Response', function () {
             expect(response).to.have.property('name', rawResponse.name);
         });
 
-        // TODO: Fix
-        it('request', function () {
-            expect(response).to.have.property('request');
-            expect(response.request.url.getRaw()).to.eql(rawResponse.originalRequest);
+        it('originalRequest', function () {
+            expect(response).to.have.property('originalRequest');
+            expect(response.originalRequest.url.getRaw()).to.eql(rawResponse.originalRequest);
         });
 
         it('status', function () {

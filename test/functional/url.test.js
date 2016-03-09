@@ -30,14 +30,20 @@ describe('Url', function () {
                 url = new Url(rawUrl),
                 jsonified = url.toJSON();
             expect(jsonified.protocol).to.eql(rawUrl.protocol);
-            expect(jsonified.host).to.eql(rawUrl.host);
+            expect(jsonified.host).to.eql(rawUrl.host.split('.'));
             expect(jsonified.port).to.eql(rawUrl.port);
-            expect(jsonified.path).to.eql(rawUrl.path);
+            expect(jsonified.path).to.eql(rawUrl.path.split('/'));
             expect(jsonified.query).to.eql(rawUrl.query);
             expect(jsonified.hash).to.eql(rawUrl.hash);
-            // Since _.compact only accepts and returns an Array, the easiest way to get rid of
-            // keys with value "undefined" is to use JSON.*
-            expect(JSON.parse(JSON.stringify(jsonified.variable))).to.eql(rawUrl.variable);
+
+            // Can't use normal comparisons, because variables are by default assigned
+            // type = "any" and deep comparison fails because of that.
+            _.each(rawUrl.variable, function (variable, index) {
+                var jsonifiedVar = jsonified.variable[index];
+                _.forOwn(variable, function (value, attribute) {
+                    expect(jsonifiedVar[attribute]).to.eql(value);
+                });
+            });
         });
     });
 
