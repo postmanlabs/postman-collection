@@ -14,8 +14,5 @@ require('fs').readFile(process.argv.slice(2).pop(), 'utf8', function (err, data)
         throw e;
     }
 
-    var g = data.toJSON();
-    // console.dir(g, {colors: true, depth: 10000});
-    //
-    fs.writeFileSync('output.json', JSON.stringify(g, null, 4));
+    console.dir(data, {colors: true, depth: 10000});
 });
