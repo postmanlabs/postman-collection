@@ -1,4 +1,4 @@
-var inspect = require('util').inspect,
+var fs = require('fs'),
     stripJSONComments = require('strip-json-comments'),
     Collection = require('../lib/index').Collection;
 
@@ -14,5 +14,5 @@ require('fs').readFile(process.argv.slice(2).pop(), 'utf8', function (err, data)
         throw e;
     }
 
-    console.log(inspect(data, {colors: true, depth: 10000}));
+    console.dir(data, {colors: true, depth: 10000});
 });

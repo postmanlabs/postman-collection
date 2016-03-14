@@ -12,7 +12,7 @@ describe('Script', function () {
             var jsonified = script.toJSON();
             expect(jsonified.type).to.eql(rawScript.type);
             expect(jsonified.src).to.eql(rawScript.src);
-            expect(jsonified.exec).to.eql(rawScript.exec);
+            expect(jsonified.exec).to.eql(rawScript.exec.split('\n'));
         });
     });
 });
