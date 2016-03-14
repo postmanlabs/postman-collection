@@ -7,7 +7,11 @@
 set -e;
 
 echo -e "\n\n\033[93mRunning infrastructure tests...\033[0m";
-echo -e "\033[0m\033[2mmocha `mocha --version`\033[0m\n";
+echo -e "\033[0m\033[2mmocha `mocha --version`\033[0m";
+echo -e "\033[0m\033[2mpackity `packity --version`\033[0m\n";
+
+# run packity
+packity check .
 
 # run mocha tests
 mocha test/infra/**/*.test.js --recursive;
