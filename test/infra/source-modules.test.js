@@ -1,6 +1,7 @@
 /* global describe, it */
 var expect = require('expect.js'),
     _ = require('lodash'),
+    sdk = require('../../index'),
 
     _if = function (module, modules) {
         return _.indexOf(modules, module) > -1;
@@ -39,6 +40,10 @@ describe('collection module', function () {
 
             !_if(moduleName, BASELESS_MODULES) && it('must inherit from base', function () {
                 expect((new Module()) instanceof modules.PropertyBase.PropertyBase).to.be.ok();
+            });
+
+            it('must be exported in the SDK', function () {
+                expect(sdk[moduleName]).to.be.ok();
             });
         });
     });
