@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "#/definitions/info",
+    "title": "Information",
+    "description": "Detailed description of the info block", // TODO: Add detailed description
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "title": "Name of the collection",
+            "description": "A collection's friendly name is defined by this field. You would want to set this field to a value that would allow you to easily identify this collection among a bunch of other collections, as such outlining its usage or content."
+        },
+        "_postman_id": {
+            "type": "string",
+            "description": "Every collection is identified by the unique value of this field. The value of this field is usually easiest to generate using a UID generator function. If you already have a collection, it is recommended that you maintain the same id since changing the id usually implies that is a different collection than it was originally.\n *Note: This field exists for compatibility reasons with Collection Format V1.*"
+        },
+        "description": {
+            "$ref": "#/definitions/description"
+        },
+        "version": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "title": "Version",
+                    "description": "Postman allows you to version your collections as they grow, and this field holds the version number. While optional, it is recommended that you use this field to its fullest extent!",
+                    "properties": {
+                        "major": {
+                            "description": "Increment this number if you make changes to the collection that changes its behaviour. E.g: Removing or adding new test scripts. (partly or completely).",
+                            "type": "string"
+                        },
+                        "minor": {
+                            "description": "You should increment this number if you make changes that will not break anything that uses the collection. E.g: removing a folder.",
+                            "type": "string"
+                        },
+                        "patch": {
+                            "description": "Ideally, minor changes to a collection should result in the increment of this number.",
+                            "type": "string"
+                        },
+                        "identifier": {
+                            "description": "A human friendly identifier to make sense of the version numbers. E.g: 'beta-3'",
+                            "type": "string",
+                            "maxLength": 10
+                        },
+                        "meta": {}
+                    },
+                    "required": [
+                        "major",
+                        "minor",
+                        "patch"
+                    ]
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "schema": {
+            "description": "This should ideally hold a link to the Postman schema that is used to validate this collection. E.g: https://schema.getpostman.com/collection/v1",
+            "type": "string"
+        }
+    },
+    "required": [
+        "name",
+        "schema"
+    ]
+}

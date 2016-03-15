@@ -1,0 +1,37 @@
+{
+    "title": "Folder",
+    "id": "#/definitions/item-group",
+    "description": "One of the primary goals of Postman is to organize the development of APIs. To this end, it is necessary to be able to group requests together. This can be achived using 'Folders'. A folder just is an ordered set of requests.",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "A folder's friendly name is defined by this field. You would want to set this field to a value that would allow you to easily identify this folder."
+        },
+        "description": {
+            "type": "string",
+            "description": "Essays about the folder go into this field!"
+        },
+        "item": {
+            "description": "Items are entities which contain an actual HTTP request, and sample responses attached to it. Folders may contain many items.",
+            "type": "array",
+            "items": {
+                "title": "Items",
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/item"
+                    },
+                    {
+                        "$ref": "#/definitions/item-group"
+                    }
+                ]
+            }
+        },
+        "auth": {
+            "$ref": "#/definitions/auth"
+        }
+    },
+    "required": [
+        "item"
+    ]
+}

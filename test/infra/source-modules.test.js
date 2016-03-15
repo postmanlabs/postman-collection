@@ -1,7 +1,7 @@
 /* global describe, it */
 var expect = require('expect.js'),
+    sdk = require('../../lib'),
     _ = require('lodash'),
-    sdk = require('../../index'),
 
     _if = function (module, modules) {
         return _.indexOf(modules, module) > -1;
@@ -25,6 +25,10 @@ describe('collection module', function () {
         describe(moduleName, function () {
             var Module = modules[moduleName][moduleName];
 
+            it('must be exported in the SDK', function () {
+                expect(sdk[moduleName]).to.be.ok();
+            });
+
             it('must be constructed with no parameter', function () {
                 var err;
 
@@ -38,12 +42,12 @@ describe('collection module', function () {
                 expect(err).to.not.be.ok();
             });
 
-            !_if(moduleName, BASELESS_MODULES) && it('must inherit from base', function () {
+            !_if(moduleName, BASELESS_MODULES) && it('must inherit from PropertyBase', function () {
                 expect((new Module()) instanceof modules.PropertyBase.PropertyBase).to.be.ok();
             });
 
-            it('must be exported in the SDK', function () {
-                expect(sdk[moduleName]).to.be.ok();
+            _if(moduleName, BASELESS_MODULES) && it('must not inherit from PropertyBase', function () {
+                expect((new Module()) instanceof modules.PropertyBase.PropertyBase).to.not.be.ok();
             });
         });
     });
