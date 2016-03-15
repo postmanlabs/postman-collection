@@ -55,6 +55,7 @@
     "karma-mocha-reporter": "^1.1.5",
     "mocha": "^2.3.4",
     "packity": "0.0.0-beta.3",
+    "require-all": "^2.0.0",
     "strip-json-comments": "^2.0.0",
     "watchify": "^3.7.0"
   },

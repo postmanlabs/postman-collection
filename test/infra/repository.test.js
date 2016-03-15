@@ -4,7 +4,7 @@
  */
 var expect = require('expect.js');
 
-/* global describe, it */
+/* global describe, it, expect */
 describe('repository', function () {
     var fs = require('fs');
 
