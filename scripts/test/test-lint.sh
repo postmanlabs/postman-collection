@@ -9,7 +9,7 @@
 # Stop on first error
 set -e;
 
-FILES_TO_TEST="test/ index.js lib/";
+FILES_TO_TEST="test/ index.js lib/ scripts/";
 
 # Run js-beautifier if a file name is passed as argument
 if [ $# -gt 0 ]; then

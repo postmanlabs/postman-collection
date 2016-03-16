@@ -1,0 +1,98 @@
+{
+    "description": "If object, contains the complete broken-down URL for this request. If string, contains the literal request URL.",
+    "id": "#/definitions/url",
+    "title": "Url",
+    "oneOf": [
+        {
+            "type": "object",
+            "properties": {
+                "protocol": {
+                    "type": "string",
+                    "description": "The protocol associated with the request, E.g: 'http'"
+                },
+                "domain": {
+                    "title": "Domain",
+                    "description": "The domain for the URL, E.g: api.yourdomain.com. Can be stored as a string or as an array of strings.",
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "The domain, split into subdomain strings."
+                        }
+                    ]
+                },
+                "path": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "description": "The complete path of the current url, broken down into segments. A segment could be a string, or a path variable.",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "type": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "port": {
+                    "type": "string",
+                    "description": "The port number present in this URL. An empty value implies 80/443 depending on whether the protocol field contains http/https."
+                },
+                "query": {
+                    "type": "array",
+                    "description": "An array of QueryParams, which is basically the query string part of the URL, parsed into separate variables",
+                    "items": {
+                        "type": "object",
+                        "title": "QueryParam",
+                        "properties": {
+                            "key": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "hash": {
+                    "description": "Contains the URL fragment (if any). Usually this is not transmitted over the network, but it could be useful to store this in some cases.",
+                    "type": "string"
+                },
+                "variable": {
+                    "type": "array",
+                    "description": "Postman supports path variables with the syntax `/path/:variableName/to/somewhere`. These variables are stored in this field.",
+                    "items": {
+                        "$ref": "#/definitions/variable"
+                    }
+                }
+            }
+        },
+        {
+            "type": "string"
+        }
+    ]
+}

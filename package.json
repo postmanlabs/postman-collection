@@ -18,7 +18,8 @@
     "bin": "bin"
   },
   "scripts": {
-    "docs": "scripts/docs/docs.sh",
+    "build-docs": "scripts/build/build-docs.sh",
+    "build-schema": "scripts/build/build-schema.sh",
     "test": "scripts/test/test.sh",
     "test-unit": "scripts/test/test-unit.sh",
     "test-infra": "scripts/test/test-infra.sh",
@@ -37,6 +38,7 @@
     "node-oauth1": "^1.1.1",
     "node-uuid": "^1.4.7",
     "sanitize-html": "^1.11.2",
+    "schema-compiler": "0.0.3",
     "semver": "^5.1.0"
   },
   "devDependencies": {
@@ -54,8 +56,11 @@
     "karma-mocha": "^0.2.1",
     "karma-mocha-reporter": "^1.1.5",
     "mocha": "^2.3.4",
+    "mustache": "^2.2.1",
     "packity": "0.0.0-beta.3",
-    "strip-json-comments": "^2.0.0",
+    "require-all": "^2.0.0",
+    "strip-json-comments": "^2.0.1",
+    "tv4": "^1.2.7",
     "watchify": "^3.7.0"
   },
   "homepage": "https://github.com/postmanlabs/postman-collection#readme",
