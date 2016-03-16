@@ -17,7 +17,7 @@ describe('PostmanVariable', function () {
     it('should store environments as an array', function () {
         var parent = {},
             v = new VariableList(parent, [], rawEnvironments);
-        expect(v.environments).to.be.an('array');
+        expect(v._environments).to.be.an('array');
     });
 
     it('should store variables as an object as well', function () {
