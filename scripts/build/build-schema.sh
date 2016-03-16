@@ -8,7 +8,13 @@ set -e;
 
 echo -e "\033[93mGenerating schema...\033[0m";
 
-# clean directory
-[ -d ./out/schema ] && rm -rf ./out/schema;
+OUTPUT_FOLDER="./out/schema";
+OUTPUT_FILE="$OUTPUT_FOLDER/collection.json"
 
-echo " - schema can be found at ./out/schema";
+# clean directory
+[ -d "$OUTPUT_FOLDER" ] && [ -f "$OUTPUT_FILE" ] && rm -f "$OUTPUT_FILE";
+mkdir -p "$OUTPUT_FOLDER";
+
+json-schema-compiler --dir "lib/schema" --root "lib/schema/collection.json" --output "$OUTPUT_FILE";
+
+echo " - schema can be found at $OUTPUT_FILE";
