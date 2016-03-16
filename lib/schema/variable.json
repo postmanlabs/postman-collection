@@ -1,0 +1,23 @@
+{
+    "id": "#/definitions/variable",
+    "title": "Variable",
+    "description": "Using variables in your Postman requests eliminates the need to duplicate requests, which can save a lot of time. Variables can be defined, and referenced to from any part of a request.",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "A variable ID is a unique user-defined value that identifies the variable within a collection. In traditional terms, this would be a variable name.",
+            "type": "string"
+        },
+        "value": {
+            "description": "The value that a variable holds in this collection. Ultimately, the variables will be replaced by this value, when say running a set of requests from a collection"
+        },
+        "type": {
+            "description": "A variable may have multiple types. This field specifies the type of the variable.",
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "description": "Variable name"
+        }
+    }
+}

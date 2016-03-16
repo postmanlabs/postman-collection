@@ -1,0 +1,112 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "#/definitions/request",
+    "title": "Request",
+    "description": "A request represents an HTTP request. If a string, the string is assumed to be the request URL and the method is assumed to be 'GET'.",
+    "oneOf": [
+        {
+            "type": "object",
+            "title": "Request",
+            "properties": {
+                "url": {
+                    "$ref": "#/definitions/url"
+                },
+                "auth": {
+                    "$ref": "#/definitions/auth"
+                },
+                "method": {
+                    "description": "The HTTP method associated with this request.",
+                    "type": "string",
+                    "enum": [
+                        "GET",
+                        "PUT",
+                        "POST",
+                        "PATCH",
+                        "DELETE",
+                        "COPY",
+                        "HEAD",
+                        "OPTIONS",
+                        "LINK",
+                        "UNLINK",
+                        "PURGE",
+                        "LOCK",
+                        "UNLOCK",
+                        "PROPFIND",
+                        "VIEW"
+                    ]
+                },
+                "header": {
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "title": "Headers",
+                            "description": "No HTTP request is complete without its headers, and the same is true for a Postman request. This field is an array containing all the headers.",
+                            "items": {
+                                "$ref": "#/definitions/header"
+                            }
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "body": {
+                    "type": "object",
+                    "description": "This field contains the data usually contained in the request body.",
+                    "properties": {
+                        "mode": {
+                            "description": "Postman stores the type of data associated with this request in this field.",
+                            "enum": [
+                                "raw",
+                                "urlencoded",
+                                "formdata"
+                            ]
+                        },
+                        "raw": {
+                            "type": "string"
+                        },
+                        "urlencoded": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "title": "UrlEncodedParameter",
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    },
+                                    "enabled": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        },
+                        "formdata": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "title": "FormParameter",
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    },
+                                    "enabled": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "type": "string"
+        }
+    ]
+}
