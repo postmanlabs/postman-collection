@@ -36,20 +36,9 @@ describe('Request', function () {
 
             describe('has property', function () {
                 describe('auth', function () {
-                    it('an object', function () {
+                    it('is undefined', function () {
                         expect(request.url).to.have.property('auth');
-                        expect(request.url.auth).to.be.an('object');
-                        expect(request.url.auth).to.not.be.empty();
-                    });
-
-                    describe('has property', function () {
-                        it('user', function () {
-                            expect(request.url.auth).to.have.property('user', undefined);
-                        });
-
-                        it('password', function () {
-                            expect(request.url.auth).to.have.property('password', undefined);
-                        });
+                        expect(request.url.auth).to.be(undefined);
                     });
                 });
 
