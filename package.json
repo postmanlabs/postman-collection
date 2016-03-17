@@ -38,7 +38,7 @@
     "node-oauth1": "^1.1.1",
     "node-uuid": "^1.4.7",
     "sanitize-html": "^1.11.2",
-    "schema-compiler": "0.0.3",
+    "schema-compiler": "^0.0.3",
     "semver": "^5.1.0"
   },
   "devDependencies": {

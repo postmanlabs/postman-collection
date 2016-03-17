@@ -46,6 +46,10 @@ describe('collection module', function () {
                 expect(sdk[meta.name]).to.be.ok();
             });
 
+            it('must have its name defined in the constructor', function () {
+                expect(Module._postman_propertyName).to.be(meta.name);
+            });
+
             !_if(meta.name, SCHEMALESS_MODULES) && it('must have an associated schema file', function () {
                 expect(schemas.indexOf(meta.file) > -1).to.be.ok();
             });
