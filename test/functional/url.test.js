@@ -5,6 +5,238 @@ var expect = require('expect.js'),
 
 /* global describe, it */
 describe('Url', function () {
+    describe('.parse()', function () {
+        it('must parse bare ipv4 addresses', function () {
+            var subject = Url.parse('127.0.0.1');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse bare ipv4 addresses with variables', function () {
+            var subject = Url.parse('127.0.{{subnet}}.1');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '{{subnet}}', '1']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse bare ipv4 addresses with protocol', function () {
+            var subject = Url.parse('http://127.0.0.1');
+            expect(subject.protocol).to.be('http');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse bare ipv4 addresses with non standard protocol', function () {
+            var subject = Url.parse('{{my-protocol}}://127.0.0.1');
+            expect(subject.protocol).to.be('{{my-protocol}}');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse bare ipv4 addresses with port', function () {
+            var subject = Url.parse('127.0.0.1:80');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('80');
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse invalid port of bare ipv4 addresses', function () {
+            var subject = Url.parse('127.0.0.1:{{my-port}}');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('{{my-port}}');
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse bare ipv4 addresses with protocol and port', function () {
+            var subject = Url.parse('http://127.0.0.1:80');
+            expect(subject.protocol).to.be('http');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('80');
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+        it('must parse bare ipv4 addresses with protocol and port as variables', function () {
+            var subject = Url.parse('{{my-protocol}}://127.0.0.1:{{my-port}}');
+            expect(subject.protocol).to.be('{{my-protocol}}');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('{{my-port}}');
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+        it('must parse variable as host with protocol and port as variables', function () {
+            var subject = Url.parse('{{my-protocol}}://{{my-host}}:{{my-port}}');
+            expect(subject.protocol).to.be('{{my-protocol}}');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{my-host}}']);
+            expect(subject.port).to.be('{{my-port}}');
+            expect(subject.path).to.be(undefined);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse trailing path backslash in ipv4 address', function () {
+            var subject = Url.parse('http://127.0.0.1/');
+            expect(subject.protocol).to.be('http');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.eql(undefined);
+            expect(subject.path).to.eql(['']);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse trailing path backslash in ipv4 address and port', function () {
+            var subject = Url.parse('http://127.0.0.1:8080/');
+            expect(subject.protocol).to.be('http');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('8080');
+            expect(subject.path).to.eql(['']);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse path backslash in ipv4 address and port', function () {
+            var subject = Url.parse('http://127.0.0.1:8080/hello/world');
+            expect(subject.protocol).to.be('http');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('8080');
+            expect(subject.path).to.eql(['hello', 'world']);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse path backslash in ipv4 address and port and retan trailing slash marker', function () {
+            var subject = Url.parse('http://127.0.0.1:8080/hello/world/');
+            expect(subject.protocol).to.be('http');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be('8080');
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse path where entire host is a variable', function () {
+            var subject = Url.parse('{{my-url}}/hello/world/');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{my-url}}']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.be(undefined);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse path where entire host is a variable and query param provided', function () {
+            var subject = Url.parse('{{my-url}}/hello/world/?query=param');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{my-url}}']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.eql([{
+                key: 'query',
+                value: 'param'
+            }]);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse path where entire host is a variable and query param provided with hash', function () {
+            var subject = Url.parse('{{my-url}}/hello/world/?query=param#test-api');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{my-url}}']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.eql([{
+                key: 'query',
+                value: 'param'
+            }]);
+            expect(subject.hash).to.be('test-api');
+        });
+
+        it('must parse url query-param even if `?` is present in the URL hash', function () {
+            var subject = Url.parse('{{my-url}}/hello/world/?query=param#?test-api=true');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{my-url}}']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.eql([{
+                key: 'query',
+                value: 'param'
+            }]);
+            expect(subject.hash).to.be('?test-api=true');
+        });
+
+        it('must parse url even if dulicate `?` is present in query-param', function () {
+            var subject = Url.parse('{{my-url}}/hello/world/?query=param&err?ng=v_l?e@!');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{my-url}}']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.eql([{
+                key: 'query',
+                value: 'param'
+            }, {
+                key: 'err?ng',
+                value: 'v_l?e@!'
+            }]);
+            expect(subject.hash).to.be(undefined);
+        });
+
+        it('must parse url having auth even if dulicate `@` is present in query-param', function () {
+            var subject = Url.parse('username:password@{{my-url}}/hello/world/?query=param&err?ng=v_l?e@!');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.eql({
+                user: 'username',
+                password: 'password'
+            });
+            expect(subject.host).to.eql(['{{my-url}}']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.eql([{
+                key: 'query',
+                value: 'param'
+            }, {
+                key: 'err?ng',
+                value: 'v_l?e@!'
+            }]);
+            expect(subject.hash).to.be(undefined);
+        });
+    });
     describe('unparsing', function () {
         rawUrls.forEach(function (rawUrl) {
             _.isString(rawUrl) && describe(rawUrl, function () {
