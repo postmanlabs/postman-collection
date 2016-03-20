@@ -45,4 +45,4 @@ console.log(myCollection.toJSON());
 
 After loading the collection from file, one can do a lot more using the functions that are available in the SDK. To know
 more about these functions, head over to the 
-[Collection SDK Documentation](http://www.postmanlabs.com/postman-collection/sdk/docs/Collection.html).
+[Collection SDK Wiki](https://github.com/postmanlabs/postman-collection/wiki).
