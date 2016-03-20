@@ -13,6 +13,10 @@ like name and description too so that all the information that a developer needs
 To know more about Postman Collections, visit the 
 [collection documentation section on Postman Website](https://www.getpostman.com/docs/collections).
 
+> The new [Collection Format v2](http://blog.getpostman.com/2015/06/05/travelogue-of-postman-collection-format-v2/) 
+> builds a stronger foundation for improving your productivity while working with APIs. We want your feedback and iron 
+> out issues before this goes into the Postman Apps.
+
 ## Installing the SDK
 
 Postman Collection SDK can be installed using NPM or directly from the git repository within your NodeJS projects. If
