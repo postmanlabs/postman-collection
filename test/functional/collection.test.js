@@ -1,5 +1,4 @@
 var expect = require('expect.js'),
-    fixtures = require('../fixtures'),
     Collection = require('../../lib/index.js').Collection;
 
 /* global describe, it */
