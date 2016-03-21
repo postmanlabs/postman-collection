@@ -13,6 +13,10 @@ like name and description too so that all the information that a developer needs
 To know more about Postman Collections, visit the 
 [collection documentation section on Postman Website](https://www.getpostman.com/docs/collections).
 
+> The new [Collection Format v2](http://blog.getpostman.com/2015/06/05/travelogue-of-postman-collection-format-v2/) 
+> builds a stronger foundation for improving your productivity while working with APIs. We want your feedback and iron 
+> out issues before this goes into the Postman Apps.
+
 ## Installing the SDK
 
 Postman Collection SDK can be installed using NPM or directly from the git repository within your NodeJS projects. If
@@ -29,9 +33,6 @@ In this example snippet we will get started by loading a collection from a file 
 
 ```javascript
 var fs = require('fs'), // needed to read JSON file from disk
-	pretty = function (obj) { // function to neatly log the collection object to console
-		return require('util').inspect(obj, {colors: true});
-    },
 	Collection = require('postman-collection').Collection,
 	myCollection;
 
@@ -39,8 +40,9 @@ var fs = require('fs'), // needed to read JSON file from disk
 myCollection = new Collection(JSON.stringify(fs.readFileSync('sample-collection.json').toString()));
 
 // log items at root level of the collection
-console.log(pretty(myCollection));
+console.log(myCollection.toJSON());
 ```
 
 After loading the collection from file, one can do a lot more using the functions that are available in the SDK. To know
-more about these functions, head over to the definition of {@link Collection}.
+more about these functions, head over to the 
+[Collection SDK Wiki](https://github.com/postmanlabs/postman-collection/wiki).
