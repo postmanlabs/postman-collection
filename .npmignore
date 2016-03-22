@@ -9,6 +9,9 @@
 /scripts
 /test
 
+# CI related files
+.ci/
+
 ### Borrowed from .gitignore
 ### ========================
 
@@ -167,6 +170,3 @@ node_modules
 
 # Temporary directory
 .tmp
-
-# CI related files
-.ci/
