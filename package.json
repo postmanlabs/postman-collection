@@ -20,6 +20,7 @@
   "scripts": {
     "build-docs": "scripts/build/build-docs.sh",
     "build-schema": "scripts/build/build-schema.sh",
+    "publish-docs": "scripts/publish/publish-docs.sh",
     "test": "scripts/test/test.sh",
     "test-unit": "scripts/test/test-unit.sh",
     "test-infra": "scripts/test/test-infra.sh",
