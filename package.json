@@ -21,6 +21,7 @@
     "build-docs": "scripts/build/build-docs.sh",
     "build-schema": "scripts/build/build-schema.sh",
     "build-wiki": "scripts/build/build-wiki.sh",
+    "publish-wiki": "scripts/publish/publish-wiki.sh",
     "test": "scripts/test/test.sh",
     "test-unit": "scripts/test/test-unit.sh",
     "test-infra": "scripts/test/test-infra.sh",
