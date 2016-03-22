@@ -9,4 +9,4 @@ after_success:
 - eval "$(ssh-agent)"
 - chmod 600 ./.ci/deploy-key
 - ssh-add ./.ci/deploy-key
-- if [ "$TRAVIS_BRANCH" == "feature/docs-autodeploy" ] && [ "$TRAVIS_PULL_REQUEST" == false ]; then echo "Publishing Docs" && npm run publish-docs; fi;
+- if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_PULL_REQUEST" == false ]; then echo "Publishing Docs" && npm run publish-docs; fi;
