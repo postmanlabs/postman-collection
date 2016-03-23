@@ -20,6 +20,8 @@
   "scripts": {
     "build-docs": "scripts/build/build-docs.sh",
     "build-schema": "scripts/build/build-schema.sh",
+    "build-wiki": "scripts/build/build-wiki.sh",
+    "publish-wiki": "scripts/publish/publish-wiki.sh",
     "publish-docs": "scripts/publish/publish-docs.sh",
     "test": "scripts/test/test.sh",
     "test-unit": "scripts/test/test-unit.sh",
@@ -50,6 +52,7 @@
     "js-beautify": "^1.5.10",
     "jscs": "^2.7.0",
     "jsdoc": "^3.4.0",
+    "jsdoc-to-markdown": "^1.3.3",
     "jshint": "^2.8.0",
     "karma": "^0.13.19",
     "karma-browserify": "^5.0.1",
