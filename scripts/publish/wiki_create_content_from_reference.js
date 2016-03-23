@@ -12,11 +12,11 @@ var SOURCE_MD = 'out/wiki/REFERENCE.md',
 // extract sidebar from source
 sidebar = source.replace(/<a name="Collection"><\/a>[\s\S]+/g, '');
 
-// add timestamp to sidebar
-sidebar += '\n\n ' + (new Date()).toUTCString();
-
 // remove sidebar data from home
 home = source.substr(sidebar.length);
+
+// add timestamp to sidebar
+sidebar += '\n\n ' + (new Date()).toUTCString();
 
 // write the files
 fs.writeFileSync(HOME_MD, home);
