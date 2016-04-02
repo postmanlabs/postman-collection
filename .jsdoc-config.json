@@ -1,0 +1,43 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "source": {
+    "include": [ ],
+    "includePattern": ".+\\.js(doc)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+
+  "plugins": [
+    "plugins/markdown"
+  ],
+
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "dateFormat": "ddd MMM Do YYYY",
+    "meta": {
+        "title": "Postman Collection SDK Documentation"
+    },
+    "linenums"              : true,
+    "collapseSymbols"       : true,
+    "inverseNav"            : true,
+    "outputSourceFiles"     : true,
+    "outputSourcePath"      : true,
+    "highlightTutorialCode" : true
+  },
+
+  "opts": {
+    "template": "./node_modules/jaguarjs-jsdoc",
+    "encoding": "utf8",
+    "destination": "./out/docs",
+    "recurse": true,
+    "readme": "README.md"
+  },
+
+  "markdown": {
+    "parser": "gfm",
+    "hardwrap": false
+  }
+}

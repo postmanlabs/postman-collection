@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://schema.getpostman.com/json/collection/v2.0.0-rc.1/",
+    "type": "object",
+    "properties": {
+        "info": {
+            "$schema": "http://json-schema.org/draft-04/schema",
+            "id": "#/definitions/info",
+            "title": "Information",
+            "description": "Detailed description of the info block",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "Name of the collection",
+                    "description": "A collection's friendly name is defined by this field. You would want to set this field to a value that would allow you to easily identify this collection among a bunch of other collections, as such outlining its usage or content."
+                },
+                "_postman_id": {
+                    "type": "string",
+                    "description": "Every collection is identified by the unique value of this field. The value of this field is usually easiest to generate using a UID generator function. If you already have a collection, it is recommended that you maintain the same id since changing the id usually implies that is a different collection than it was originally.\n *Note: This field exists for compatibility reasons with Collection Format V1.*"
+                },
+                "description": {
+                    "$ref": "#/definitions/description"
+                },
+                "version": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/version"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "schema": {
+                    "description": "This should ideally hold a link to the Postman schema that is used to validate this collection. E.g: https://schema.getpostman.com/collection/v1",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "schema"
+            ]
+        },
+        "item": {
+            "type": "array",
+            "description": "Items are the basic unit for a Postman collection. You can think of them as corresponding to a single API endpoint. Each Item has one request and may have multiple API responses associated with it.",
+            "items": {
+                "title": "Items",
+                "oneOf": [
+                    {
+                        "$ref": "#/definitions/item"
+                    },
+                    {
+                        "$ref": "#/definitions/item-group"
+                    }
+                ]
+            }
+        },
+        "event": {
+            "description": "Postman allows you to configure scripts to run when specific events occur. These scripts are stored here, and can be referenced in the collection by their ID.",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/event"
+            }
+        },
+        "variable": {
+            "description": "Collection variables allow you to define a set of variables, that are a *part of the collection*, as opposed to environments, which are separate entities.\n*Note: Collection variables must not contain any sensitive information.*",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/variable"
+            }
+        },
+        "auth": {
+            "$ref": "#/definitions/auth"
+        }
+    },
+    "required": [
+        "info",
+        "item"
+    ]
+}

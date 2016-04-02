@@ -1,0 +1,142 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Echo - Digest",
+    "_postman_id": "10084d91-feb7-91f8-cea3-8432b25502e4",
+    "description": "Postman Echo is service you can use to test your REST clients and make sample API calls. It provides endpoints for `GET`, `POST`, `PUT`, various auth mechanisms and other utility endpoints.",
+    "schema": "http://schema.getpostman.com/collection/v2/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth: Digest",
+      "description": "Digest authentication protects an endpoint with a username and password without actually transmitting the password over network.\nOne has to apply a hash function (like MD5, etc) to the username and password before sending them over the network.\n\n> Username: `postman`\n>\n> Password: `password`\n\nUnlike Basic-Auth, authentication happens using two consecutive requests where the first request returns `401 Unauthorised` along with `WWW-Authenticate` header containing information that needs to be used to authenticate subsequent calls.\n\nTo know more about digest authentication, refer to the [Digest Access Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication) wikipedia article.\nThe article on [authentication helpers](https://www.getpostman.com/docs/helpers#digest-auth) elaborates how to use the same within the Postman app.",
+      "item": [
+        {
+          "id": "9808ab99-bb91-6d83-13e4-0219c2377e35",
+          "name": "DigestAuth Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": "tests[\"response code is 401\"] = responseCode.code === 401;\ntests[\"response has WWW-Authenticate header\"] = (postman.getResponseHeader('WWW-Authenticate'));\n\nvar authenticateHeader = postman.getResponseHeader('WWW-Authenticate'),\n    realmStart = authenticateHeader.indexOf('\"',authenticateHeader.indexOf(\"realm\")) + 1 ,\n    realmEnd = authenticateHeader.indexOf('\"',realmStart),\n    realm = authenticateHeader.slice(realmStart,realmEnd),\n    nonceStart = authenticateHeader.indexOf('\"',authenticateHeader.indexOf(\"nonce\")) + 1,\n    nonceEnd = authenticateHeader.indexOf('\"',nonceStart),\n    nonce = authenticateHeader.slice(nonceStart,nonceEnd);\n    \npostman.setGlobalVariable('echo_digest_realm', realm);\npostman.setGlobalVariable('echo_digest_nonce', nonce);"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth",
+              "noauth": {}
+            },
+            "url": "https://echo.getpostman.com/digest-auth",
+            "method": "GET",
+            "header": "Content-Type: application/json\nAuthorization: Hawk id=\"dh37fgj492je\", ts=\"1448549987\", nonce=\"eOJZCd\", mac=\"O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k=\"\n",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "code",
+                  "value": "xWnkliVQJURqB2x1",
+                  "type": "text",
+                  "enabled": true
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code",
+                  "type": "text",
+                  "enabled": true
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "https://www.getpostman.com/oauth2/callback",
+                  "type": "text",
+                  "enabled": true
+                },
+                {
+                  "key": "client_id",
+                  "value": "abc123",
+                  "type": "text",
+                  "enabled": true
+                },
+                {
+                  "key": "client_secret",
+                  "value": "ssh-secret",
+                  "type": "text",
+                  "enabled": true
+                }
+              ]
+            },
+            "description": "Performing a simple `GET` request to this endpoint returns status code `401 Unauthorized` with `WWW-Authenticate` header containing information to successfully authenticate subsequent requests.\nThe `WWW-Authenticate` header must be processed to extract `realm` and `nonce` values to hash subsequent requests.\n\nWhen this request is executed within Postman, the script attached with this request does the hard work of extracting realm and nonce from the header and set it as [global variables](https://www.getpostman.com/docs/environments#global-variables) named `echo_digest_nonce` and `echo_digest_realm`.\nThese variables are re-used in subsequent request for seamless integration of the two requests."
+          },
+          "response": [
+            {
+              "name": "a sample response",
+              "originalRequest": "http://echo.getpostman.com/status/200",
+              "status": "200 OK",
+              "code": 200,
+              "header": "Content-Type: application/json\nAuthorization: Hawk id=\"dh37fgj492je\", ts=\"1448549987\", nonce=\"eOJZCd\", mac=\"O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k=\"\n",
+              "cookie": [
+                {
+                  "domain": ".httpbin.org",
+                  "expires": 1502442248,
+                  "hostOnly": false,
+                  "httpOnly": false,
+                  "name": "_ga",
+                  "path": "/",
+                  "secure": false,
+                  "session": false,
+                  "_postman_storeId": "0",
+                  "value": "GA1.2.113558537.1435817423"
+                }
+              ],
+              "body": "response body"
+            }
+          ]
+        },
+        {
+          "id": "ee34b510-6e68-1280-1160-bc57bc29436e",
+          "name": "DigestAuth Success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": "tests[\"response code is 200\"] = responseCode.code === 200;\ntests[\"body contains authenticated\"] = responseBody.has(\"authenticated\");"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "digest",
+              "digest": {
+                "algorithm": "MD5",
+                "username": "postman",
+                "realm": "{{echo_digest_realm}}",
+                "password": "password",
+                "nonce": "{{echo_digest_nonce}}",
+                "nonceCount": "",
+                "clientNonce": "",
+                "opaque": "",
+                "qop": ""
+              }
+            },
+            "url": "https://echo.getpostman.com/digest-auth",
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Digest username=\"postman\", realm=\"Users\", nonce=\"ZKMCeJ68NEK1mpeg0i6RMXX7U8qANc9g\", uri=\"/digest-auth\", response=\"5cf1155abf5172ea751daec57db07340\", opaque=\"\"",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "description": "This endpoint sends a hashed Digest Authorization header to gain access to a valid `200 Ok` response code. In Postman, it uses the stored [global variables](https://www.getpostman.com/docs/environments#gloval-variables), `echo_digest_realm` and `echo_digest_nonce`, to generate the hashed authorisation header.\n\nWithin Postman, for this request to successfully authenticate, running the previous request \"DigestAuth Request\" stores the relevant information within the global variables."
+          }
+        }
+      ]
+    }
+  ]
+}
