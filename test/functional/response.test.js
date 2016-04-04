@@ -18,7 +18,7 @@ describe('Response', function () {
             expect(jsonified).to.have.property('cookie');
         });
 
-        it('must infer the http response reason phrase from the status code', function(){
+        it('must infer the http response reason phrase from the status code', function () {
             var rawResponse = {
                     name: 'a sample response',
                     originalRequest: 'http://echo.getpostman.com/status/200',
