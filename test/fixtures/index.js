@@ -54,7 +54,8 @@ module.exports = {
         }
     ],
     rawQueryStrings: [
-        'asdf=abab&yo=true&akshay={{something}}&something=bald'
+        'asdf=abab&yo=true&akshay={{something}}&something=bald',
+        'this={{ensures}}&{{multiple}}replacements=work-{{fine}}&one=1&two=2'
     ],
     queryParams: [
         {
