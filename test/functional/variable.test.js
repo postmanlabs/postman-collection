@@ -3,7 +3,7 @@ var expect = require('expect.js'),
 
 /* global describe, it */
 describe('Variable', function () {
-    it('should initialise variable of type `any` and value `undefined', function () {
+    it('should initialise variable of type `any` and value `undefined`', function () {
         var v = new Variable();
 
         expect(v.value).to.be(undefined);
