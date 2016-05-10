@@ -1,27 +1,25 @@
 var expect = require('expect.js'),
-    _ = require('lodash'),
-    fixtures = require('../fixtures'),
     Property = require('../../lib/index.js').Property;
 
 /* global describe, it */
-describe('Item', function () {
+describe('Property', function () {
     describe('variable resolution', function () {
         it('must resolve variables accurately', function () {
             var unresolvedRequest = {
-                    "method": "POST",
-                    "url": "{{host}}:{{port}}/{{path}}",
-                    "header": [
+                    method: 'POST',
+                    url: '{{host}}:{{port}}/{{path}}',
+                    header: [
                         {
-                            "key": "{{headerName}}",
-                            "value": "application/json"
+                            key: '{{headerName}}',
+                            value: 'application/json'
                         }
                     ],
-                    "body": {
-                        "mode": "urlencoded",
-                        "urlencoded": [
+                    body: {
+                        mode: 'urlencoded',
+                        urlencoded: [
                             {
-                                "key": "{{greeting}}",
-                                "value": "{{greeting_value}}"
+                                key: '{{greeting}}',
+                                value: '{{greeting_value}}'
                             }
                         ]
                     }
@@ -37,17 +35,17 @@ describe('Item', function () {
                 },
                 resolved = Property.replaceSubstitutionsIn(unresolvedRequest, [
                     {
-                        "greeting": "yo",
-                        "greeting_value": "omg"
+                        greeting: 'yo',
+                        greeting_value: 'omg'
                     },
                     {
-                        "host": "echo.getpostman.com",
-                        "port": "80",
-                        "path": "post"
+                        host: 'echo.getpostman.com',
+                        port: '80',
+                        path: 'post'
                     },
                     {
-                        "path": "get",
-                        "headerName": "Content-Type"
+                        path: 'get',
+                        headerName: 'Content-Type'
                     }
                 ]);
             expect(resolved).to.eql(expectedResolution);
