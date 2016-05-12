@@ -87,6 +87,15 @@ describe('PropertyList', function () {
             });
         });
 
+        describe('finds an item', function () {
+            it('when list has more than two items', function () {
+                enterprise.append(maverick);
+                enterprise.append(goose);
+                enterprise.append(stinger);
+                expect(enterprise.find({ id: 'goose' })).to.eql(goose);
+            });
+        });
+
         describe('prepends an item', function () {
             it('when list is empty', function () {
                 enterprise.prepend(maverick);
