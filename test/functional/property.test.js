@@ -40,22 +40,5 @@ describe('Property', function () {
                 ]);
             expect(resolved).to.eql(expectedResolution);
         });
-
-        it('must support function variables', function () {
-            var unresolved = {
-                    xyz: '{{$guid}}\n{{$timestamp}}\n{{someVar}}'
-                },
-                variables = [{ someVar: 'yo' }],
-                resolved = Property.replaceSubstitutionsIn(unresolved, variables),
-                values = resolved.xyz.split('\n'),
-                expectations = [
-                    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i, // GUID
-                    /^\d+$/, // A number, without decimals
-                    /yo/
-                ];
-            expectations.forEach(function (regex, index) {
-                expect(regex.test(values[index])).to.be(true);
-            });
-        });
     });
 });
