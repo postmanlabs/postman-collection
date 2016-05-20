@@ -30,4 +30,39 @@ describe('VariableList', function () {
             expect(regex.test(values[index])).to.be(true);
         });
     });
+
+    it('should recursively resolve variables', function () {
+        var unresolved = {
+                xyz: '{{alpha}}'
+            },
+            mylist = new VariableList({}, [], [
+                {
+                    alpha: '{{beta}}-bar'
+                },
+                {
+                    beta: '{{name}}'
+                },
+                {
+                    name: 'foo'
+                }
+            ]),
+            resolved = mylist.substitute(unresolved);
+        expect(resolved.xyz).to.eql('foo-bar');
+    });
+
+    it('should correctly handle cyclic resolution loops', function () {
+        var unresolved = {
+                xyz: '{{alpha}}'
+            },
+            cyclicList = new VariableList({}, [], [
+                {
+                    alpha: '{{beta}}',
+                    beta: '{{gamma}}',
+                    gamma: '{{delta}}',
+                    delta: '{{beta}}'
+                }
+            ]),
+            resolved = cyclicList.substitute(unresolved);
+        expect(resolved.xyz).to.eql('{{beta}}');
+    });
 });
