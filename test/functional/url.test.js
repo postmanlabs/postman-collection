@@ -247,7 +247,7 @@ describe('Url', function () {
 
     describe('Function variables', function () {
         it('should be unparsed properly', function () {
-            var rawUrl = "https://echo.getpostman.com/post?a={{$guid}}",
+            var rawUrl = 'https://echo.getpostman.com/post?a={{$guid}}',
                 url = new Url(rawUrl);
             expect(url.toString()).to.eql(rawUrl);
         });
