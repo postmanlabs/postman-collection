@@ -245,6 +245,14 @@ describe('Url', function () {
         });
     });
 
+    describe('Function variables', function () {
+        it('should be unparsed properly', function () {
+            var rawUrl = 'https://echo.getpostman.com/post?a={{$guid}}',
+                url = new Url(rawUrl);
+            expect(url.toString()).to.eql(rawUrl);
+        });
+    });
+
     describe('JSON representation', function () {
         it('should be generated properly', function () {
             var rawUrl = rawUrls[9],
