@@ -16,12 +16,6 @@
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false,
-    "dateFormat": "ddd MMM Do YYYY",
-    "linenums"              : true,
-    "collapseSymbols"       : true,
-    "inverseNav"            : true,
-    "outputSourceFiles"     : true,
-    "outputSourcePath"      : true,
     "highlightTutorialCode" : true
   },
 
