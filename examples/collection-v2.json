@@ -108,6 +108,10 @@
             },
             "name": "200 ok",
             "request": {
+                "description": {
+                    "content": "my description",
+                    "type": "text/markdown"
+                },
                 "method": "POST",
                 "url": "http://echo.getpostman.com/post",
                 "header": [

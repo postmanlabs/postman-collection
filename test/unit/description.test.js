@@ -19,10 +19,6 @@ describe('Description', function () {
         it('type', function () {
             expect(description).to.have.property('type', 'text/plain');
         });
-
-        it('version', function () {
-            expect(description).to.have.property('version');
-        });
     });
 
     describe('has method', function () {

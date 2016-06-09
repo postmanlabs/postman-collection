@@ -54,7 +54,8 @@ module.exports = {
         }
     ],
     rawQueryStrings: [
-        'asdf=abab&yo=true&akshay={{something}}&something=bald'
+        'asdf=abab&yo=true&akshay={{something}}&something=bald',
+        'this={{ensures}}&{{multiple}}replacements=work-{{fine}}&one=1&two=2'
     ],
     queryParams: [
         {
@@ -233,7 +234,7 @@ module.exports = {
             hi: 'hello'
         },
         {
-            somevar: '3nd layer override'
+            somevar: '3rd layer override'
         }
     ],
     rawCookie: 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH',

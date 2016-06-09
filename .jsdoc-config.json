@@ -16,20 +16,11 @@
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false,
-    "dateFormat": "ddd MMM Do YYYY",
-    "meta": {
-        "title": "Postman Collection SDK Documentation"
-    },
-    "linenums"              : true,
-    "collapseSymbols"       : true,
-    "inverseNav"            : true,
-    "outputSourceFiles"     : true,
-    "outputSourcePath"      : true,
     "highlightTutorialCode" : true
   },
 
   "opts": {
-    "template": "./node_modules/jaguarjs-jsdoc",
+    "template": "./node_modules/postman-jsdoc-theme",
     "encoding": "utf8",
     "destination": "./out/docs",
     "recurse": true,

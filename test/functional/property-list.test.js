@@ -1,5 +1,4 @@
 var expect = require('expect.js'),
-    fixtures = require('../fixtures'),
     PropertyList = require('../../lib/index.js').PropertyList,
     Item = require('../../lib/index.js').Item,
 
@@ -11,18 +10,137 @@ var expect = require('expect.js'),
 /* global describe, it, beforeEach, afterEach */
 describe('PropertyList', function () {
     it('should look up one single value with the custom key attribute', function () {
-        var rawList = fixtures.samplePropertyList,
-            FakeType = function (options) {
-                this.keyAttr = options.keyAttr;
-                this.value = options.value;
-            },
-            fakeParent = {},
-            list,
-            testItem = rawList[0];
+        var FakeType,
+            list;
 
-        list = new PropertyList(FakeType, fakeParent, rawList, { indexBy: 'keyAttr' });
+        FakeType = function (options) {
+            this.id = options.id;
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
 
-        expect(list.one(testItem.keyAttr).valueOf()).to.eql(rawList[0]);
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+
+        list = new PropertyList(FakeType, {}, {
+            id: 'woahwoah',
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+
+        expect(list.one('woahwoah')).to.not.be.ok();
+        expect(list.one('Yololo')).to.not.be.ok(); // cross check lowercase lookup to fail
+        expect(list.one('yoLoLo').valueOf()).to.eql({
+            id: 'woahwoah',
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+    });
+
+    it('should do a case insensitive lookup when set in type', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = true;
+
+        list = new PropertyList(FakeType, {}, {
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+
+        expect(list.one('yOlOlO').valueOf()).to.eql({
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+        expect(list.one('Yololo').valueOf()).to.eql({
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+    });
+
+    it('should remove an item using id lookup', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        // FakeType._postman_propertyIndexCaseInsensitive = false; // default is this
+
+        list = new PropertyList(FakeType, {}, {
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+
+        expect(list.count()).to.be(1);
+        list.remove('Yololo'); // remove using different case. it should not work
+        expect(list.count()).to.be(1);
+        expect(Object.keys(list.reference)).to.eql(['yoLoLo']);
+
+        list.remove('yoLoLo');
+        expect(list.count()).to.be(0);
+        expect(Object.keys(list.reference)).to.eql([]);
+    });
+
+    it('should remove an item using case insensitive lookup', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = true;
+
+        list = new PropertyList(FakeType, {}, {
+            keyAttr: 'yoLoLo',
+            value: 'what'
+        });
+
+        expect(list.count()).to.be(1);
+        expect(Object.keys(list.reference)).to.eql(['yololo']);
+        list.remove('Yololo');
+        expect(list.count()).to.be(0);
+        expect(Object.keys(list.reference)).to.eql([]);
+    });
+
+    it('should remove an item using a lookup function', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        // FakeType._postman_propertyIndexCaseInsensitive = false; // this is default
+
+        list = new PropertyList(FakeType, {}, [{
+            keyAttr: 'yoLoLo1',
+            value: 'what'
+        }, {
+            keyAttr: 'yoLoLo2',
+            value: 'where'
+        }]);
+
+        expect(list.count()).to.be(2);
+        list.remove(function (item) {
+            return (item.keyAttr === 'yoLoLo1');
+        });
+
+        expect(list.count()).to.be(1);
+        expect(Object.keys(list.reference)).to.eql(['yoLoLo2']);
     });
 
     describe('reordering method', function () {
@@ -84,6 +202,15 @@ describe('PropertyList', function () {
 
                 enterprise.append(goose);
                 expect(enterprise.map(extractId)).to.eql(['maverick', 'stinger', 'goose']);
+            });
+        });
+
+        describe('finds an item', function () {
+            it('when list has more than two items', function () {
+                enterprise.append(maverick);
+                enterprise.append(goose);
+                enterprise.append(stinger);
+                expect(enterprise.find({ id: 'goose' })).to.eql(goose);
             });
         });
 

@@ -11,5 +11,5 @@ echo -e "\033[93mGenerating documentation...\033[0m";
 # clean directory
 [ -d ./out/docs ] && rm -rf ./out/docs;
 
-jsdoc -c .jsdoc-config.json lib/*;
+jsdoc -c .jsdoc-config.json -u docs/ lib/*;
 echo " - documentation can be found at ./out/docs";
