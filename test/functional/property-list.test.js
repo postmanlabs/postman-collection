@@ -1,5 +1,4 @@
 var expect = require('expect.js'),
-    fixtures = require('../fixtures'),
     PropertyList = require('../../lib/index.js').PropertyList,
     Item = require('../../lib/index.js').Item,
 
