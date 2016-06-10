@@ -16,8 +16,8 @@ describe('Item', function () {
             // All of these have their own proper tests
             expect(jsonified).to.have.property('description');
             expect(jsonified).to.have.property('request');
-            expect(jsonified).to.have.property('response');
-            expect(jsonified).to.have.property('event');
+            expect(jsonified).to.have.property('responses');
+            expect(jsonified).to.have.property('events');
         });
     });
 });

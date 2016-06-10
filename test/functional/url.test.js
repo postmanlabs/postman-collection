@@ -268,7 +268,7 @@ describe('Url', function () {
             // Can't use normal comparisons, because variables are by default assigned
             // type = "any" and deep comparison fails because of that.
             _.each(rawUrl.variable, function (variable, index) {
-                var jsonifiedVar = jsonified.variable[index];
+                var jsonifiedVar = jsonified.variables[index];
                 _.forOwn(variable, function (value, attribute) {
                     expect(jsonifiedVar[attribute]).to.eql(value);
                 });

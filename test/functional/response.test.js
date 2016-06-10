@@ -13,9 +13,9 @@ describe('Response', function () {
             expect(jsonified.status).to.eql(rawResponse.status);
             expect(jsonified.code).to.eql(rawResponse.code);
             expect(jsonified.body).to.eql(rawResponse.body);
-            expect(Header.unparse(jsonified.header).trim()).to.eql(rawResponse.header.trim());
+            expect(Header.unparse(jsonified.headers).trim()).to.eql(rawResponse.header.trim());
             // Skip cookie tests, because cookies are tested independently.
-            expect(jsonified).to.have.property('cookie');
+            expect(jsonified).to.have.property('cookies');
         });
 
         it('must infer the http response reason phrase from the status code', function () {
@@ -32,7 +32,7 @@ describe('Response', function () {
             expect(jsonified.body).to.eql(rawResponse.body);
 
             // Skip cookie tests, because cookies are tested independently.
-            expect(jsonified).to.have.property('cookie');
+            expect(jsonified).to.have.property('cookies');
         });
     });
 });
