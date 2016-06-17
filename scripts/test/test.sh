@@ -34,9 +34,10 @@ npm run test-lint;
 # run infrastructure unit tests
 npm run test-infra;
 
+# run unit tests
+npm run test-unit;
+
+# run browser tests
 if [ "$CI" != "true" ]; then
   npm run test-browser
 fi
-
-# run unit tests
-npm run test-unit;
