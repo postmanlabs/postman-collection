@@ -35,4 +35,12 @@ describe('Response', function () {
             expect(jsonified).to.have.property('cookie');
         });
     });
+
+    describe('body', function () {
+        it('should parse response stream as text', function () {
+            expect((new Response({
+                stream: new Buffer([0x62,0x75,0x66,0x66,0x65,0x72])
+            })).text()).to.be('buffer');
+        });
+    });
 });
