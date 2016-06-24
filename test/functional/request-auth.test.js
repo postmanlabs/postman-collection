@@ -20,6 +20,7 @@ describe('RequestAuth', function () {
 
             authHeader = headers[0];
             expect(authHeader.toString()).to.eql('Authorization: Basic YWJoaWppdDprYW5l');
+            expect(authHeader.system).to.be(true);
         });
     });
 
@@ -37,6 +38,7 @@ describe('RequestAuth', function () {
             authHeader = headers[0];
 
             expect(authHeader.toString()).to.eql(expectedHeader);
+            expect(authHeader.system).to.be(true);
         });
     });
 
@@ -51,6 +53,7 @@ describe('RequestAuth', function () {
             authHeader = headers[0];
             // Since Nonce and Timestamp have to be generated at runtime, cannot assert anything beyond this.
             expect(authHeader.toString()).to.match(/Authorization: OAuth/);
+            expect(authHeader.system).to.be(true);
         });
     });
 
