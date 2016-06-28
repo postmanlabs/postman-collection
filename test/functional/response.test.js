@@ -35,4 +35,43 @@ describe('Response', function () {
             expect(jsonified).to.have.property('cookie');
         });
     });
+
+    describe('body', function () {
+        it('should parse response stream as text', function () {
+            expect((new Response({
+                stream: new Buffer([0x62,0x75,0x66,0x66,0x65,0x72])
+            })).text()).to.be('buffer');
+        });
+
+        it('should parse response as JSON', function () {
+            expect((new Response({
+                body: '{ \"hello\": \"world\" }'
+            })).json()).to.eql({
+                hello: 'world'
+            });
+        });
+
+        it('should throw friendly error while failing to parse json body', function () {
+            var response = new Response({
+                    body: '{ \"hello: \"world\" }'
+                }),
+                json,
+                error;
+
+            try {
+                json = response.json();
+            }
+            catch (e) {
+                error = e;
+            }
+
+            expect(json).not.be.ok();
+            expect(error).be.ok();
+            expect(error.toString()).be(
+                'JSONError: Unexpected token \'w\' at 1:12 in response\n' +
+                '{ "hello: "world" }\n' +
+                '           ^'
+            );
+        });
+    });
 });
