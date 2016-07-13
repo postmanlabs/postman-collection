@@ -292,7 +292,7 @@ describe('Url', function () {
             expect(url.toString()).to.eql('https://echo.getpostman.com/get?w=x%y');
         });
 
-        it('should be enabled if explicitly specified', function () {
+        it.skip('should be enabled if explicitly specified', function () {
             var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
                 url = new Url(rawUrl);
 
