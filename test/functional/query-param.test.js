@@ -6,16 +6,30 @@ var expect = require('expect.js'),
 describe('QueryParam', function () {
     rawQueryStrings.forEach(function (rawQueryString) {
         describe(rawQueryString, function () {
-            var params = QueryParam.parse(rawQueryString);
-
             it('should be parsed properly', function () {
+                var params = QueryParam.parse(rawQueryString);
                 expect(params.length).to.be(4);
             });
 
             it('should be unparsed properly', function () {
-                var paramStr = QueryParam.unparse(params);
+                var params = QueryParam.parse(rawQueryString),
+                    paramStr = QueryParam.unparse(params);
                 expect(paramStr).to.eql(rawQueryString);
             });
         });
+    });
+
+    it('should not url encode by default', function () {
+        var rawQueryString = 'x=y%z',
+            params = QueryParam.parse(rawQueryString),
+            paramStr = QueryParam.unparse(params);
+        expect(paramStr).to.eql(rawQueryString);
+    });
+
+    it('should url encode if explicitly asked to', function () {
+        var rawQueryString = 'x=y%z',
+            params = QueryParam.parse(rawQueryString),
+            paramStr = QueryParam.unparse(params, { encode: true });
+        expect(paramStr).to.eql('x=y%25z');
     });
 });
