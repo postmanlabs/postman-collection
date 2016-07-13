@@ -283,4 +283,22 @@ describe('Url', function () {
             expect(url.getPath()).to.eql('/get');
         });
     });
+
+    describe.only('URL Encoding', function () {
+        it('should be enabled by default', function () {
+            var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.toString()).to.eql('https://echo.getpostman.com/get?w=x%25y');
+        });
+
+        it('should be disabled if explicitly specified', function () {
+            var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.toString({
+                disableEncoding: true
+            })).to.eql('https://echo.getpostman.com/get?w=x%y');
+        });
+    });
 });
