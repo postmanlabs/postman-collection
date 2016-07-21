@@ -56,4 +56,53 @@ describe('RequestBody', function () {
             reqData = new RequestBody(rawBody);
         expect(reqData.file).to.have.property('ref', rawBody.file);
     });
+
+    describe('isEmpty', function () {
+        it('should return true if no request body is set', function () {
+            var body = new RequestBody();
+            expect(body.isEmpty()).to.be(true);
+        });
+
+        it('should return true if mode is set to raw and no data is present', function () {
+            var body = new RequestBody({ mode: 'raw', raw: '' });
+            expect(body.isEmpty()).to.be(true);
+        });
+
+        it('should return true if mode is formdata and no data is present', function () {
+            var body = new RequestBody({ mode: 'formdata', formdata: [], raw: 'something' });
+            expect(body.isEmpty()).to.be(true);
+        });
+
+        it('should return true if mode is urlencoded and no data is present', function () {
+            var body = new RequestBody({ mode: 'urlencoded', formdata: [] });
+            expect(body.isEmpty()).to.be(true);
+        });
+
+        it('should return false if mode is raw and data is available', function () {
+            var body = new RequestBody({ mode: 'raw', raw: 'yo' });
+            expect(body.isEmpty()).to.be(false);
+        });
+
+        it('should return false if mode is urlencoded and data is available', function () {
+            var body = new RequestBody({
+                mode: 'urlencoded',
+                urlencoded: [{
+                    key: 'haha',
+                    value: 'somevalue'
+                }]
+            });
+            expect(body.isEmpty()).to.be(false);
+        });
+
+        it('should return false if mode is formdata and data is available', function () {
+            var body = new RequestBody({
+                mode: 'urlencoded',
+                urlencoded: [{
+                    key: 'haha',
+                    value: { some: 'random', javascript: 'object' }  // this functionality is used in the app
+                }]
+            });
+            expect(body.isEmpty()).to.be(false);
+        });
+    });
 });
