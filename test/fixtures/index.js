@@ -191,11 +191,9 @@ module.exports = {
                     "algorithm": "sha256",
                     "user": "asda",
                     "saveHelperData": true,
-                    "nonce": "eFRP2o",
                     "extraData": "skjdfklsjhdflkjhsdf",
                     "appId": "",
-                    "delegation": "",
-                    "timestamp": ""
+                    "delegation": ""
                 }
             },
             "url": "http://echo.getpostman.com/auth/hawk",
