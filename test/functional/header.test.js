@@ -17,6 +17,10 @@ describe('Header', function () {
             key: 'name',
             value: 'value'
         });
+        expect(Header.create('name: my: value:is this')).to.eql({
+            key: 'name',
+            value: 'my: value:is this'
+        });
     });
 
     describe('inside PropertyList', function () {
