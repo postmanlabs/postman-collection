@@ -69,5 +69,18 @@ describe('Header', function () {
                 value: 'value2'
             }]);
         });
+        it('must load headers with empty values', function () {
+            var list = new PropertyList(Header, {}, {
+                name1: 'value1',
+                name2: ''
+            });
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name2',
+                value: ''
+            }]);
+        });
     });
 });
