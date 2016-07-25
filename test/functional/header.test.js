@@ -5,6 +5,10 @@ var expect = require('expect.js'),
 /* global describe, it */
 describe('Header', function () {
     it('must have a .create to create new instamce', function () {
+        expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date')).to.eql({
+            key: 'Date',
+            value: 'Mon, 25 Jul 2016 13:11:41 GMT'
+        });
         expect(Header.create('value', 'name')).to.eql({
             key: 'name',
             value: 'value'
