@@ -255,6 +255,16 @@ module.exports = {
                 value: 'somevalue'
             }
         ]
+    },
+    responseData1: {
+        code: 200,
+        body: '{"status":200}',
+        header: 'HTTP/1.1 200 OK\r\nServer: nginx/1.8.1\r\nDate: Sun, 24 Jul 2016 23:16:35 GMT\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 14\r\nConnection: keep-alive\r\nAccess-Control-Allow-Origin: \r\nAccess-Control-Allow-Credentials: \r\nAccess-Control-Allow-Methods: \r\nAccess-Control-Allow-Headers: \r\nAccess-Control-Expose-Headers: \r\nETag: W/"e-+3Pmmp/QERKiJq3DueGVYg"\r\nVary: Accept-Encoding\r\nset-cookie: sails.sid=s%3A5KvXh2N_L9GM7L-ZMtv7TCNbiVmNbH2_.aL8xAy5OL9F9vXEhJEIj5%2Br0bdcrpUPGUX4mB7gZ67o; Path=/; HttpOnly\r\n\r\n'
+    },
+    responseData2: {
+        code: 200,
+        body: '{"status":200}',
+        header: 'HTTP/1.1 200 OK\nServer: nginx/1.8.1\nDate: Sun, 24 Jul 2016 23:16:35 GMT\nContent-Type: application/json; charset=utf-8\nContent-Length: 14\nConnection: keep-alive\nAccess-Control-Allow-Origin: \nAccess-Control-Allow-Credentials: \nAccess-Control-Allow-Methods: \nAccess-Control-Allow-Headers: \nAccess-Control-Expose-Headers: \nETag: W/"e-+3Pmmp/QERKiJq3DueGVYg"\nVary: Accept-Encoding\nset-cookie: sails.sid=s%3A5KvXh2N_L9GM7L-ZMtv7TCNbiVmNbH2_.aL8xAy5OL9F9vXEhJEIj5%2Br0bdcrpUPGUX4mB7gZ67o; Path=/; HttpOnly'
     }
 };
 /* jshint ignore:end */
