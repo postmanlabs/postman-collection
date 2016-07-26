@@ -5,6 +5,10 @@ var expect = require('expect.js'),
 /* global describe, it */
 describe('Header', function () {
     it('must have a .create to create new instamce', function () {
+        expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date')).to.eql({
+            key: 'Date',
+            value: 'Mon, 25 Jul 2016 13:11:41 GMT'
+        });
         expect(Header.create('value', 'name')).to.eql({
             key: 'name',
             value: 'value'
@@ -16,6 +20,61 @@ describe('Header', function () {
         expect(Header.create({ key: 'name', value: 'value' })).to.eql({
             key: 'name',
             value: 'value'
+        });
+        expect(Header.create('name: my: value:is this')).to.eql({
+            key: 'name',
+            value: 'my: value:is this'
+        });
+    });
+
+    describe('parseSingle', function () {
+        it('should return an empty header on invalid input', function () {
+            expect(Header.parseSingle({})).to.eql({
+                key: '',
+                value: ''
+            });
+        });
+
+        it('should create an empty header on invalid input', function () {
+            expect(Header.parseSingle('novalue')).to.eql({
+                key: 'novalue',
+                value: ''
+            });
+        });
+
+        it('should strip whitespace and return the header', function () {
+            expect(Header.parseSingle('\tDate: Mon, 25 Jul 2016 13:11:41 GMT\n\n')).to.eql({
+                key: 'Date',
+                value: 'Mon, 25 Jul 2016 13:11:41 GMT'
+            });
+        });
+    });
+
+    describe('unparse', function () {
+        it('should unparse headers to a string', function () {
+            var raw = 'name1: value1\r\nname2: value2',
+                list = new PropertyList(Header, {}, raw);
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name2',
+                value: 'value2'
+            }]);
+            expect(Header.unparse(list)).to.be('name1: value1\nname2: value2');
+        });
+
+        it('should honor the given separator "\\r\\n"', function () {
+            var raw = 'name1: value1\r\nname2: value2',
+                list = new PropertyList(Header, {}, raw);
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name2',
+                value: 'value2'
+            }]);
+            expect(Header.unparse(list, '\r\n')).to.be(raw);
         });
     });
 
@@ -67,6 +126,19 @@ describe('Header', function () {
             }, {
                 key: 'name2',
                 value: 'value2'
+            }]);
+        });
+        it('must load headers with empty values', function () {
+            var list = new PropertyList(Header, {}, {
+                name1: 'value1',
+                name2: ''
+            });
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name2',
+                value: ''
             }]);
         });
     });
