@@ -74,4 +74,37 @@ describe('Response', function () {
             );
         });
     });
+
+    describe('size', function () {
+        it('must match the total size of the response', function () {
+            var rawResponse1 = fixtures.responseData1,
+                rawResponse2 = fixtures.responseData2,
+                response1 = new Response(rawResponse1),
+                response2 = new Response(rawResponse2),
+                size1 = response1.size(),
+                size2 = response2.size();
+            expect(size1.body + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size2.body + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+        });
+
+        it('must match the content-length of the response if gzip encoded', function () {
+            var rawResponse = {
+                code: 200,
+                body: 'gzipped content xyzxyzxyzxyzxyzxyz',
+                header: 'Content-Encoding: gzip\nContent-Length: 10'
+            },
+            response = new Response(rawResponse);
+            expect(response.size().body).to.eql(10);
+        });
+
+        it('must match the content-length of the response if deflate encoded', function () {
+            var rawResponse = {
+                code: 200,
+                body: 'gzipped content xyzxyzxyzxyzxyzxyz',
+                header: 'Content-Encoding: deflate\nContent-Length: 20'
+            },
+            response = new Response(rawResponse);
+            expect(response.size().body).to.eql(20);
+        });
+    });
 });

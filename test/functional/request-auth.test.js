@@ -1,4 +1,5 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
     Basic = require('../../lib/collection/request-auth/basic'),
     Digest = require('../../lib/collection/request-auth/digest'),
     OAuth1 = require('../../lib/collection/request-auth/oauth1'),
@@ -81,6 +82,19 @@ describe('RequestAuth', function () {
 
             // Ensure that the required headers have been added.
             expect(headers).to.have.property('authorization');
+        });
+
+        it('Authorized request must contain the generated timestamp and nonce', function () {
+            var request = new Request(rawRequests.hawk),
+                authorizedReq = Hawk.authorize(request);
+
+            // Original request should not have the timestamp and nonce
+            expect(_.get(rawRequests.hawk, 'auth.hawk.nonce')).to.not.be.ok();
+            expect(_.get(rawRequests.hawk, 'auth.hawk.timestamp')).to.not.be.ok();
+
+            expect(authorizedReq.auth).to.be.ok();
+            expect(_.get(authorizedReq, 'auth.hawk.nonce')).to.be.a('string');
+            expect(_.get(authorizedReq, 'auth.hawk.timestamp')).to.be.a('number');
         });
     });
 });
