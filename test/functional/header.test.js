@@ -61,7 +61,7 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
-            expect(Header.unparse(list)).to.eql('name1: value1\nname2: value2')
+            expect(Header.unparse(list)).to.be('name1: value1\nname2: value2')
         });
 
         it('should honor the given separator "\\r\\n"', function () {
@@ -74,7 +74,7 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
-            expect(Header.unparse(list, '\r\n')).to.eql(raw)
+            expect(Header.unparse(list, '\r\n')).to.be(raw)
         });
     });
 
