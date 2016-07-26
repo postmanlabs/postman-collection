@@ -50,6 +50,34 @@ describe('Header', function () {
         });
     });
 
+    describe('unparse', function () {
+        it('should unparse headers to a string', function () {
+            var raw = 'name1: value1\r\nname2: value2',
+                list = new PropertyList(Header, {}, raw);
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name2',
+                value: 'value2'
+            }]);
+            expect(Header.unparse(list)).to.eql('name1: value1\nname2: value2')
+        });
+
+        it('should honor the given separator "\\r\\n"', function () {
+            var raw = 'name1: value1\r\nname2: value2',
+                list = new PropertyList(Header, {}, raw);
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name2',
+                value: 'value2'
+            }]);
+            expect(Header.unparse(list, '\r\n')).to.eql(raw)
+        });
+    });
+
     describe('inside PropertyList', function () {
         it('must load a header string', function () {
             var list = new PropertyList(Header, {}, 'name1:value1\r\nname2:value2');
