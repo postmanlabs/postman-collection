@@ -27,6 +27,29 @@ describe('Header', function () {
         });
     });
 
+    describe('parseSingle', function () {
+        it('should return an empty header on invalid input', function () {
+            expect(Header.parseSingle({})).to.eql({
+                key: '',
+                value: ''
+            });
+        });
+
+        it('should create an empty header on invalid input', function () {
+            expect(Header.parseSingle('novalue')).to.eql({
+                key: 'novalue',
+                value: ''
+            });
+        });
+
+        it('should string whitespace and return the header', function () {
+            expect(Header.parseSingle('\tDate: Mon, 25 Jul 2016 13:11:41 GMT\n\n')).to.eql({
+                key: 'Date',
+                value: 'Mon, 25 Jul 2016 13:11:41 GMT'
+            });
+        });
+    });
+
     describe('inside PropertyList', function () {
         it('must load a header string', function () {
             var list = new PropertyList(Header, {}, 'name1:value1\r\nname2:value2');
