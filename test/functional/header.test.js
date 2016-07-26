@@ -42,7 +42,7 @@ describe('Header', function () {
             });
         });
 
-        it('should string whitespace and return the header', function () {
+        it('should strip whitespace and return the header', function () {
             expect(Header.parseSingle('\tDate: Mon, 25 Jul 2016 13:11:41 GMT\n\n')).to.eql({
                 key: 'Date',
                 value: 'Mon, 25 Jul 2016 13:11:41 GMT'
