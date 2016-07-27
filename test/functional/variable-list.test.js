@@ -65,4 +65,66 @@ describe('VariableList', function () {
             resolved = cyclicList.substitute(unresolved);
         expect(resolved.xyz).to.eql('{{beta}}');
     });
+
+    it('should correctly handle poly chained variable resolution(s)', function () {
+        var unresolved = {
+                xyz: '{{alpha}}'
+            },
+            polyChainList = new VariableList({}, [], [
+                {
+                    alpha: '{{beta-{{gamma}}}}',
+                    gamma: 'delta',
+                    'beta-delta': 'epsilon'
+                }
+            ]),
+            resolved = polyChainList.substitute(unresolved);
+        expect(resolved.xyz).to.eql('epsilon');
+    });
+
+    it('should correctly handle recursive poly chained variable resolution(s)', function () {
+        var unresolved = {
+                xyz: '{{alpha}}'
+            },
+            polyChainList = new VariableList({}, [], [
+                {
+                    alpha: '{{beta-{{gamma}}}}',
+                    gamma: 'delta',
+                    'beta-delta': '{{gamma}}'
+                }
+            ]),
+            resolved = polyChainList.substitute(unresolved);
+        expect(resolved.xyz).to.eql('delta');
+    });
+
+    it('should correctly handle recursive poly chained variable resolution(s)', function () {
+        var unresolved = {
+                xyz: '{{a}}'
+            },
+            polyChainList = new VariableList({}, [], [
+                {
+                    a: '{{b{{c{{d}}}}}}',
+                    d: 'e',
+                    ce: 'f',
+                    b: 'g',
+                    bf: 'z'
+                }
+            ]),
+            resolved = polyChainList.substitute(unresolved);
+        expect(resolved.xyz).to.eql('z');
+    });
+
+    it.skip('should correctly handle variables with single braces in their name', function () {
+        var unresolved = {
+                xyz: '{{alpha}}'
+            },
+            polyChainList = new VariableList({}, [], [
+                {
+                    alpha: '{{be{t}a}}',
+                    'be{t}a': 'gamma',
+                    gamma: 'delta'
+                }
+            ]),
+            resolved = polyChainList.substitute(unresolved);
+        expect(resolved.xyz).to.eql('delta');
+    });
 });
