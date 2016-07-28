@@ -79,12 +79,16 @@ describe('Response', function () {
         it('must match the total size of the response', function () {
             var rawResponse1 = fixtures.responseData1,
                 rawResponse2 = fixtures.responseData2,
+                rawResponse3 = fixtures.responseData3,
                 response1 = new Response(rawResponse1),
                 response2 = new Response(rawResponse2),
+                response3 = new Response(rawResponse3),
                 size1 = response1.size(),
-                size2 = response2.size();
-            expect(size1.body + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
-            expect(size2.body + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+                size2 = response2.size(),
+                size3 = response3.size();
+            expect(size1.total).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size2.total).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size3.total).to.eql(25);
         });
 
         it('must match the content-length of the response if gzip encoded', function () {
