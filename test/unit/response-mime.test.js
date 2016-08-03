@@ -103,6 +103,46 @@ describe('response mime', function () {
         });
     });
 
+    it('must be greedy in assuming xml types', function () {
+        var response = new Response({
+            header: [{
+                key: 'content-type',
+                // customer reported
+                value: 'application/vnd.yamaha.openscoreformat.osfpvg+xml'
+            }]
+        });
+
+        expect(response.mime()).be.eql({
+            type: 'text',
+            format: 'xml',
+            name: 'response',
+            ext: 'osfpvg',
+            _originalContentType: 'application/vnd.yamaha.openscoreformat.osfpvg+xml',
+            _sanitisedContentType: 'application/vnd.yamaha.openscoreformat.osfpvg+xml',
+            _accuratelyDetected: true,
+            filename: 'response.osfpvg',
+            source: 'header',
+            detected: null
+        });
+
+        // customer reported
+        // reusing the same response object
+        response.headers.one('content-type').value = 'application/vnd.route66.link66+xml';
+
+        expect(response.mime()).be.eql({
+            type: 'text',
+            format: 'xml',
+            name: 'response',
+            ext: 'link66',
+            _originalContentType: 'application/vnd.route66.link66+xml',
+            _sanitisedContentType: 'application/vnd.route66.link66+xml',
+            _accuratelyDetected: true,
+            filename: 'response.link66',
+            source: 'header',
+            detected: null
+        });
+    });
+
     it('must gracefully handle extremely deviant content type', function () {
         var response = new Response({
             header: [{
