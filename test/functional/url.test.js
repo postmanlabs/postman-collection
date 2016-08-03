@@ -235,6 +235,12 @@ describe('Url', function () {
                 });
             });
         });
+
+        it('should unparse urls containing parameters with equals sign properly', function () {
+            var rawUrl = 'https://localhost:1234/get?param=(key==value)',
+                url = new Url(rawUrl);
+            expect(url.toString()).to.eql(rawUrl);
+        });
     });
 
     describe('OAuth1 Base Url', function () {
