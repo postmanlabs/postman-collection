@@ -83,6 +83,16 @@ describe('RequestBody', function () {
             expect(body.isEmpty()).to.be(false);
         });
 
+        it('should return false if mode is file and file ref is available', function () {
+            var body = new RequestBody({ mode: 'file', file: { ref: '/somewhere/file.txt' } });
+            expect(body.isEmpty()).to.be(false);
+        });
+
+        it('should return false if mode is file and file content is available', function () {
+            var body = new RequestBody({ mode: 'file', file: { content: 'asjdhkashd' } });
+            expect(body.isEmpty()).to.be(false);
+        });
+
         it('should return false if mode is urlencoded and data is available', function () {
             var body = new RequestBody({
                 mode: 'urlencoded',
