@@ -41,11 +41,11 @@ describe('RequestBody', function () {
                     }
                 ],
                 file: {
-                    ref: '/somewhere/in/the/file/system'
+                    src: '/somewhere/in/the/file/system'
                 }
             },
             reqData = new RequestBody(rawBody);
-        expect(reqData.file).to.have.property('ref', rawBody.file.ref);
+        expect(reqData.file).to.have.property('src', rawBody.file.src);
     });
 
     it('should convert file reference to object, if only the reference is given', function () {
@@ -54,7 +54,7 @@ describe('RequestBody', function () {
                 file: '/omg/where/is/this/file'
             },
             reqData = new RequestBody(rawBody);
-        expect(reqData.file).to.have.property('ref', rawBody.file);
+        expect(reqData.file).to.have.property('src', rawBody.file);
     });
 
     describe('isEmpty', function () {
@@ -80,6 +80,27 @@ describe('RequestBody', function () {
 
         it('should return false if mode is raw and data is available', function () {
             var body = new RequestBody({ mode: 'raw', raw: 'yo' });
+            expect(body.isEmpty()).to.be(false);
+        });
+
+        it('should return false if mode is file and file src is available', function () {
+            var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt' } });
+            expect(body.isEmpty()).to.be(false);
+        });
+
+        it('should return true if mode is file and nothing is available', function () {
+            var body = new RequestBody({ mode: 'file', file: {} });
+            expect(body.isEmpty()).to.be(true);
+        });
+
+        it('should return false if mode is file and file src as well as content are available', function () {
+            var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt',
+                    content: new Buffer('omgomg') } });
+            expect(body.isEmpty()).to.be(false);
+        });
+
+        it('should return false if mode is file and file content is available', function () {
+            var body = new RequestBody({ mode: 'file', file: { content: 'asjdhkashd' } });
             expect(body.isEmpty()).to.be(false);
         });
 
