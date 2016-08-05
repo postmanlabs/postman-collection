@@ -83,12 +83,12 @@ describe('RequestBody', function () {
             expect(body.isEmpty()).to.be(false);
         });
 
-        it('should return false if mode is file and file ref is available', function () {
+        it('should return false if mode is file and file src is available', function () {
             var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt' } });
             expect(body.isEmpty()).to.be(false);
         });
 
-        it('should return false if mode is file and file ref as well as content are available', function () {
+        it('should return false if mode is file and file src as well as content are available', function () {
             var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt',
                     content: new Buffer('omgomg') } });
             expect(body.isEmpty()).to.be(false);
