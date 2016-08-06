@@ -136,7 +136,7 @@ describe('Url', function () {
             expect(subject.hash).to.be(undefined);
         });
 
-        it('must parse path backslash in ipv4 address and port and retan trailing slash marker', function () {
+        it('must parse path backslash in ipv4 address and port and retain trailing slash marker', function () {
             var subject = Url.parse('http://127.0.0.1:8080/hello/world/');
             expect(subject.protocol).to.be('http');
             expect(subject.auth).to.be(undefined);
@@ -147,7 +147,7 @@ describe('Url', function () {
             expect(subject.hash).to.be(undefined);
         });
 
-        it('must parse path and query in ipv4 address and port and retan trailing slash marker', function () {
+        it('must parse path and query in ipv4 address and port and retain trailing slash marker', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param');
             expect(subject.protocol).to.be(undefined);
             expect(subject.auth).to.be(undefined);
@@ -225,6 +225,26 @@ describe('Url', function () {
             }]);
             expect(subject.hash).to.be(undefined);
         });
+
+        it('must parse query params with no values and save the value as null', function () {
+            var subject = Url.parse('127.0.0.1/hello/world/?query=param&valueless1&valueless2');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '0', '1']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['hello', 'world', '']);
+            expect(subject.query).to.eql([{
+                key: 'query',
+                value: 'param'
+            }, {
+                key: 'valueless1',
+                value: null
+            }, {
+                key: 'valueless2',
+                value: null
+            }]);
+            expect(subject.hash).to.be(undefined);
+        });
     });
     describe('unparsing', function () {
         rawUrls.forEach(function (rawUrl) {
@@ -240,6 +260,18 @@ describe('Url', function () {
             var rawUrl = 'https://localhost:1234/get?param=(key==value)',
                 url = new Url(rawUrl);
             expect(url.toString()).to.eql(rawUrl);
+        });
+
+        it('should unparse urls containing parameters with no value or equal sign', function () {
+            var urlstring = 'https://localhost:1234/get?param1=&param2&param3',
+                url = new Url(urlstring);
+            expect(url.toString()).to.eql(urlstring);
+        });
+
+        it('should unparse urls containing parameters with no blank key and values', function () {
+            var urlstring = 'https://localhost:1234/get?param1=&&&param2',
+                url = new Url(urlstring);
+            expect(url.toString()).to.eql(urlstring);
         });
     });
 
