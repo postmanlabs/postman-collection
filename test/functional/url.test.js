@@ -339,4 +339,55 @@ describe('Url', function () {
             })).to.eql('https://echo.getpostman.com/get?w=x%25y');
         });
     });
+
+    describe('getRemote', function () {
+        it('should get the correct remote when port is specified', function () {
+            var rawUrl = 'https://echo.getpostman.com:8999/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com:8999');
+        });
+
+        it('should get the correct remote when port is not specified and protocol is "http"', function () {
+            var rawUrl = 'http://echo.getpostman.com/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com');
+        });
+
+        it('should get the correct remote when port is not specified and protocol is "https"', function () {
+            var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com');
+        });
+
+        it('should get the correct remote when port is specified and protocol is "http"', function () {
+            var rawUrl = 'http://echo.getpostman.com:22/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com:22');
+        });
+
+        it('should get the correct remote when port is specified and protocol is "https"', function () {
+            var rawUrl = 'https://echo.getpostman.com:3344/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com:3344');
+        });
+
+        it('should get the correct remote when port is specified and protocol is not specified', function () {
+            var rawUrl = 'echo.getpostman.com:8999/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com:8999');
+        });
+
+        it('should get the correct remote when port is not specified and protocol is not specified', function () {
+            var rawUrl = 'echo.getpostman.com/get?w=x%y',
+                url = new Url(rawUrl);
+
+            expect(url.getRemote()).to.eql('echo.getpostman.com');
+        });
+    });
 });
