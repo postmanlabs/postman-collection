@@ -34,6 +34,30 @@ describe('Request', function () {
         });
     });
 
+    describe('getHeaders', function () {
+        it('should get only enabled headers', function () {
+            var rawRequest = {
+                    url: 'echo.getpostman.com',
+                    method: 'GET',
+                    header: [
+                        {
+                            key: 'some',
+                            value: 'header'
+                        },
+                        {
+                            key: 'other',
+                            value: 'otherheader',
+                            disabled: true
+                        }
+                    ]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ enabled: true })).to.eql({
+                some: 'header'
+            });
+        });
+    });
+
     describe('removeQueryParams', function () {
         it('should remove query parameters from the request', function () {
             var testReq = request.clone(),
