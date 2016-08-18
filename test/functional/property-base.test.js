@@ -6,7 +6,7 @@ describe('PropertyBase', function () {
     describe('meta properties', function () {
         it('should return all the meta properties', function () {
             var definition = {
-                    _postman_one: { a: 'b'},
+                    _postman_one: { a: 'b' },
                     _postman_two: 'something',
                     _three: function () {}  // No-Op
                 },
@@ -19,7 +19,7 @@ describe('PropertyBase', function () {
 
         it('should pick given meta properties', function () {
             var definition = {
-                    _postman_one: { a: 'b'},
+                    _postman_one: { a: 'b' },
                     _postman_two: 'something',
                     _three: function () {}  // No-Op
                 },
