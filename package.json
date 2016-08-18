@@ -67,7 +67,7 @@
     "mocha": "^2.3.4",
     "mustache": "^2.2.1",
     "nsp": "^2.2.1",
-    "packity": "0.0.0-beta.3",
+    "packity": "0.2.0",
     "require-all": "^2.0.0",
     "strip-json-comments": "^2.0.1",
     "tv4": "^1.2.7",
