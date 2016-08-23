@@ -47,7 +47,8 @@
     "parse-json": "^2.2.0",
     "sanitize-html": "^1.11.2",
     "schema-compiler": "^0.0.3",
-    "semver": "^5.1.0"
+    "semver": "^5.1.0",
+    "strip-json-comments": "2.0.1"
   },
   "devDependencies": {
     "browserify": "^13.0.0",
