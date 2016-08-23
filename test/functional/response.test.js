@@ -51,6 +51,28 @@ describe('Response', function () {
             });
         });
 
+        it('should strip BOM from response while parsing JSON', function () {
+            expect((new Response({
+                body: String.fromCharCode(0xFEFF) + '{ \"hello\": \"world\" }'
+            })).json()).to.eql({
+                hello: 'world'
+            });
+
+            expect((new Response({
+                body: String.fromCharCode(0xEFBBBF) + '{ \"hello\": \"world\" }'
+            })).json()).to.eql({
+                hello: 'world'
+            });
+        });
+
+        it.only('should strip comments from response while parsing JSON', function () {
+            expect((new Response({
+                body: '{ \"hello\": /* hello comment */ \"world\" }'
+            })).json()).to.eql({
+                hello: 'world'
+            });
+        });
+
         it('should throw friendly error while failing to parse json body', function () {
             var response = new Response({
                     body: '{ \"hello: \"world\" }'
