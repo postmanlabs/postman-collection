@@ -39,4 +39,28 @@ describe('Collection', function () {
             expect(collection.forEachItem).to.be.a('function');
         });
     });
+
+    describe('info block parsing', function () {
+        it('must parse description', function () {
+            var collection = new Collection({
+                info: {
+                    name: 'test',
+                    description: 'this is test description'
+                }
+            });
+
+            expect(collection.description).be.ok();
+            expect(collection.description.toString()).be('this is test description');
+        });
+
+        it('must parse description from outside info block if info is absent', function () {
+            var collection = new Collection({
+                name: 'test',
+                description: 'this is test description'
+            });
+
+            expect(collection.description).be.ok();
+            expect(collection.description.toString()).be('this is test description');
+        });
+    });
 });
