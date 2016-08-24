@@ -65,14 +65,6 @@ describe('Response', function () {
             });
         });
 
-        it.only('should strip comments from response while parsing JSON', function () {
-            expect((new Response({
-                body: '{ \"hello\": /* hello comment */ \"world\" }'
-            })).json()).to.eql({
-                hello: 'world'
-            });
-        });
-
         it('should throw friendly error while failing to parse json body', function () {
             var response = new Response({
                     body: '{ \"hello: \"world\" }'
@@ -90,7 +82,7 @@ describe('Response', function () {
             expect(json).not.be.ok();
             expect(error).be.ok();
             expect(error.toString()).be(
-                'JSONError: Unexpected token \'w\' at 1:12 in response\n' +
+                'JSONError: Unexpected token \'w\' at 1:12\n' +
                 '{ "hello: "world" }\n' +
                 '           ^'
             );
