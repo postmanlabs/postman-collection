@@ -42,7 +42,7 @@
     "marked": "^0.3.5",
     "mime-format": "^1.0.0",
     "mime-types": "^2.1.11",
-    "node-oauth1": "^1.1.1",
+    "node-oauth1": "^1.1.2",
     "node-uuid": "^1.4.7",
     "parse-json": "^2.2.0",
     "sanitize-html": "^1.11.2",
