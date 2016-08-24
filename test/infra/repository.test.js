@@ -84,9 +84,9 @@ describe('repository', function () {
                 }
             });
 
-            it('must point to specific package version; (*) not expected', function () {
+            it('must point to specific package version; (*, ^, ~) not expected', function () {
                 for (var item in json.devDependencies) {
-                    expect(json.devDependencies[item]).not.to.equal('*');
+                    expect(/^\d/.test(json.devDependencies[item])).to.be.ok();
                 }
             });
         });
@@ -101,9 +101,9 @@ describe('repository', function () {
                 expect(json.dependencies.hawk).to.be('3.1.3');
             });
 
-            it('must point to specific package version; (*) not expected', function () {
+            it('must point to specific package version; (*, ^, ~) not expected', function () {
                 for (var item in json.dependencies) {
-                    expect(json.dependencies[item]).not.to.equal('*');
+                    expect(/^\d/.test(json.dependencies[item])).to.be.ok();
                 }
             });
         });
