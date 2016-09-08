@@ -12,4 +12,18 @@ describe('Collection', function () {
             expect(Collection.isCollection(nonCollection)).to.be(false);
         });
     });
+
+    describe('variables', function () {
+        it('must be able to sync variables from an object', function () {
+            var collection = new Collection();
+
+            collection.syncVariablesFrom({
+                var1: 'value1'
+            });
+
+            expect(collection.variables.count()).be(1);
+            expect(collection.variables.one('var1')).be.ok();
+            expect(collection.variables.one('var1').value).be('value1');
+        });
+    });
 });
