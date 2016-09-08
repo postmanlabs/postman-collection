@@ -5,7 +5,7 @@ var expect = require('expect.js'),
     VariableScope = require('../../').VariableScope;
 
 /* global describe, it */
-describe.only('VariableScope', function () {
+describe('VariableScope', function () {
     it('must be inherited from property and not list', function () {
         expect(new VariableScope() instanceof Property).be.ok();
     });
@@ -95,7 +95,7 @@ describe.only('VariableScope', function () {
 
             expect(scope.values.count()).be(0);
 
-            crud = scope.syncFromObject({
+            crud = scope.syncVariablesFrom({
                 var1: 'value1',
                 var2: 'value2'
             });
@@ -126,7 +126,7 @@ describe.only('VariableScope', function () {
 
             expect(scope.values.count()).be(2);
 
-            crud = scope.syncFromObject({
+            crud = scope.syncVariablesFrom({
                 original1: 'original1Updated',
                 synced1: 'syncedValue1'
             }, true);
@@ -164,7 +164,7 @@ describe.only('VariableScope', function () {
             expect(scope.values.one('oneNumber').type).eql('number');
 
             // we now sync object while setting track flag to true
-            crud = scope.syncFromObject({
+            crud = scope.syncVariablesFrom({
                 oneNumber: '17'
             }, true); // <- track is `true`
 
