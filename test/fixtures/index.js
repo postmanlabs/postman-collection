@@ -155,6 +155,7 @@ module.exports = {
                     // Fake Credentials
                     accessKey: 'AKIAI53QRL',
                     secretKey: 'cr2RAfsY4IIVweutTBoBzR',
+                    sessionToken: '33Dhtnwf0RVHCFttmMPYt3dxx9zi8I07CBwTXaqupHQ=',
                     region: 'eu-west-1',
                     service: '',
                     auto: true,
