@@ -164,7 +164,7 @@ describe('response mime', function () {
         });
     });
 
-    it('must detect mime from body', function () {
+    it.skip('must detect mime from body', function () {
         var response = new Response({
             header: [{
                 key: 'content-type',
