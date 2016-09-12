@@ -23,10 +23,10 @@ describe('VariableScope', function () {
 
     it('must accept an array of variable objects as definition', function () {
         var scope = new VariableScope([{
-            id: 'var-1',
+            key: 'var-1',
             value: 'var-1-value'
         }, {
-            id: 'var-2',
+            key: 'var-2',
             value: 'var-2-value'
         }]);
 
@@ -37,11 +37,11 @@ describe('VariableScope', function () {
 
         // check whether the
         expect(scope.values.idx(0) instanceof Variable).be.ok();
-        expect(scope.values.idx(0)).have.property('id', 'var-1');
+        expect(scope.values.idx(0)).have.property('key', 'var-1');
         expect(scope.values.idx(0)).have.property('value', 'var-1-value');
 
         expect(scope.values.idx(1) instanceof Variable).be.ok();
-        expect(scope.values.idx(1)).have.property('id', 'var-2');
+        expect(scope.values.idx(1)).have.property('key', 'var-2');
         expect(scope.values.idx(1)).have.property('value', 'var-2-value');
     });
 
@@ -49,10 +49,10 @@ describe('VariableScope', function () {
         var scope = new VariableScope({
             id: 'test-scope-id',
             values: [{
-                id: 'var-1',
+                key: 'var-1',
                 value: 'var-1-value'
             }, {
-                id: 'var-2',
+                key: 'var-2',
                 value: 'var-2-value'
             }]
         });
@@ -63,11 +63,11 @@ describe('VariableScope', function () {
         expect(scope.values.count()).be(2);
 
         expect(scope.values.idx(0) instanceof Variable).be.ok();
-        expect(scope.values.idx(0)).have.property('id', 'var-1');
+        expect(scope.values.idx(0)).have.property('key', 'var-1');
         expect(scope.values.idx(0)).have.property('value', 'var-1-value');
 
         expect(scope.values.idx(1) instanceof Variable).be.ok();
-        expect(scope.values.idx(1)).have.property('id', 'var-2');
+        expect(scope.values.idx(1)).have.property('key', 'var-2');
         expect(scope.values.idx(1)).have.property('value', 'var-2-value');
     });
 
@@ -101,24 +101,24 @@ describe('VariableScope', function () {
             });
 
             expect(crud).not.be.ok();
-
             expect(scope.values.count()).be(2);
+
             expect(scope.values.idx(0) instanceof Variable).be.ok();
-            expect(scope.values.idx(0)).have.property('id', 'var1');
+            expect(scope.values.idx(0)).have.property('key', 'var1');
             expect(scope.values.idx(0)).have.property('value', 'value1');
 
             expect(scope.values.idx(1) instanceof Variable).be.ok();
-            expect(scope.values.idx(1)).have.property('id', 'var2');
+            expect(scope.values.idx(1)).have.property('key', 'var2');
             expect(scope.values.idx(1)).have.property('value', 'value2');
         });
 
         it('must be able to sync values from an object and return crud operation details', function () {
             var scope = new VariableScope({
                     values: [{
-                        id: 'original1',
+                        key: 'original1',
                         value: 'originalValue1'
                     }, {
-                        id: 'original2',
+                        key: 'original2',
                         value: 'originalValue2'
                     }]
                 }),
@@ -133,11 +133,11 @@ describe('VariableScope', function () {
 
             expect(scope.values.count()).be(2);
             expect(scope.values.idx(0) instanceof Variable).be.ok();
-            expect(scope.values.idx(0)).have.property('id', 'original1');
+            expect(scope.values.idx(0)).have.property('key', 'original1');
             expect(scope.values.idx(0)).have.property('value', 'original1Updated');
 
             expect(scope.values.idx(1) instanceof Variable).be.ok();
-            expect(scope.values.idx(1)).have.property('id', 'synced1');
+            expect(scope.values.idx(1)).have.property('key', 'synced1');
             expect(scope.values.idx(1)).have.property('value', 'syncedValue1');
 
             expect(crud).eql({
@@ -150,7 +150,7 @@ describe('VariableScope', function () {
         it('must retain original type while syncing from object', function () {
             var scope = new VariableScope({
                     values: [{
-                        id: 'oneNumber',
+                        key: 'oneNumber',
                         value: 3.142,
                         type: 'number' // note that type is specified here
                     }]
