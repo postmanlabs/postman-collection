@@ -35,6 +35,7 @@ describe('repository', function () {
             it('must have a valid version string in form of <major>.<minor>.<revision>', function () {
                 /* jshint ignore:start */
                 expect(json.version).to.match(/^((\d+)\.(\d+)\.(\d+))(?:-([\dA-Za-z\-]+(?:\.[\dA-Za-z\-]+)*))?(?:\+([\dA-Za-z\-]+(?:\.[\dA-Za-z\-]+)*))?$/);
+
                 /* jshint ignore:end */
             });
         });

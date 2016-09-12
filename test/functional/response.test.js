@@ -39,13 +39,13 @@ describe('Response', function () {
     describe('body', function () {
         it('should parse response stream as text', function () {
             expect((new Response({
-                stream: new Buffer([0x62,0x75,0x66,0x66,0x65,0x72])
+                stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
             })).text()).to.be('buffer');
         });
 
         it('should parse response as JSON', function () {
             expect((new Response({
-                body: '{ \"hello\": \"world\" }'
+                body: '{ "hello": "world" }'
             })).json()).to.eql({
                 hello: 'world'
             });
@@ -53,7 +53,7 @@ describe('Response', function () {
 
         it('should throw friendly error while failing to parse json body', function () {
             var response = new Response({
-                    body: '{ \"hello: \"world\" }'
+                    body: '{ "hello: "world" }'
                 }),
                 json,
                 error;
@@ -89,21 +89,21 @@ describe('Response', function () {
 
         it('must match the content-length of the response if gzip encoded', function () {
             var rawResponse = {
-                code: 200,
-                body: 'gzipped content xyzxyzxyzxyzxyzxyz',
-                header: 'Content-Encoding: gzip\nContent-Length: 10'
-            },
-            response = new Response(rawResponse);
+                    code: 200,
+                    body: 'gzipped content xyzxyzxyzxyzxyzxyz',
+                    header: 'Content-Encoding: gzip\nContent-Length: 10'
+                },
+                response = new Response(rawResponse);
             expect(response.size().body).to.eql(10);
         });
 
         it('must match the content-length of the response if deflate encoded', function () {
             var rawResponse = {
-                code: 200,
-                body: 'gzipped content xyzxyzxyzxyzxyzxyz',
-                header: 'Content-Encoding: deflate\nContent-Length: 20'
-            },
-            response = new Response(rawResponse);
+                    code: 200,
+                    body: 'gzipped content xyzxyzxyzxyzxyzxyz',
+                    header: 'Content-Encoding: deflate\nContent-Length: 20'
+                },
+                response = new Response(rawResponse);
             expect(response.size().body).to.eql(20);
         });
     });

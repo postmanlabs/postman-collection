@@ -305,7 +305,7 @@ describe('Url', function () {
 
             // Can't use normal comparisons, because variables are by default assigned
             // type = "any" and deep comparison fails because of that.
-            _.each(rawUrl.variable, function (variable, index) {
+            _.forEach(rawUrl.variable, function (variable, index) {
                 var jsonifiedVar = jsonified.variable[index];
                 _.forOwn(variable, function (value, attribute) {
                     expect(jsonifiedVar[attribute]).to.eql(value);
@@ -330,7 +330,7 @@ describe('Url', function () {
             expect(url.toString()).to.eql('https://echo.getpostman.com/get?w=x%y');
         });
 
-        it.skip('should be enabled if explicitly specified', function () {
+        it('should be enabled if explicitly specified', function () {
             var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
                 url = new Url(rawUrl);
 

@@ -152,15 +152,15 @@ describe('PropertyList', function () {
 
         beforeEach(function () {
             enterprise = new PropertyList(Item);
-            maverick = new Item({ id: 'maverick' });
-            goose = new Item({ id: 'goose' });
-            stinger = new Item({ id: 'stinger' });
+            maverick = new Item({id: 'maverick'});
+            goose = new Item({id: 'goose'});
+            stinger = new Item({id: 'stinger'});
         });
 
         afterEach(function () {
             enterprise = null;
             maverick = null;
-            goose = null,
+            goose = null;
             stinger = null;
         });
 
@@ -210,7 +210,7 @@ describe('PropertyList', function () {
                 enterprise.append(maverick);
                 enterprise.append(goose);
                 enterprise.append(stinger);
-                expect(enterprise.find({ id: 'goose' })).to.eql(goose);
+                expect(enterprise.find({id: 'goose'})).to.eql(goose);
             });
         });
 

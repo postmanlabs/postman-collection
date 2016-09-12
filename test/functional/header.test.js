@@ -17,7 +17,7 @@ describe('Header', function () {
             key: 'name',
             value: 'value'
         });
-        expect(Header.create({ key: 'name', value: 'value' })).to.eql({
+        expect(Header.create({key: 'name', value: 'value'})).to.eql({
             key: 'name',
             value: 'value'
         });

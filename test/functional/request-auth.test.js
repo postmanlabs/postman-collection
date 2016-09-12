@@ -64,12 +64,12 @@ describe('RequestAuth', function () {
         (typeof window === 'undefined' ? it : it.skip)('Required headers must be added', function () {
             var request = new Request(rawRequests.awsv4),
                 authorizedReq = Awsv4.authorize(request),
-                headers = authorizedReq.getHeaders({ ignoreCase: true });
+                headers = authorizedReq.getHeaders({ignoreCase: true});
 
             // Ensure that the required headers have been added.
             // todo stricter tests?
             expect(headers).to.have.property('authorization');
-            expect(headers).to.have.property('content-type', request.getHeaders({ ignoreCase: true })['content-type']);
+            expect(headers).to.have.property('content-type', request.getHeaders({ignoreCase: true})['content-type']);
             expect(headers).to.have.property('x-amz-date');
         });
     });
@@ -78,7 +78,7 @@ describe('RequestAuth', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.hawk),
                 authorizedReq = Hawk.authorize(request),
-                headers = authorizedReq.getHeaders({ ignoreCase: true });
+                headers = authorizedReq.getHeaders({ignoreCase: true});
 
             // Ensure that the required headers have been added.
             expect(headers).to.have.property('authorization');
