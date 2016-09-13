@@ -183,33 +183,33 @@ module.exports = {
             description: ''
         },
         hawk: {
-            'auth': {
-                'type': 'hawk',
-                'hawk': {
-                    'authId': 'dh37fgj492je',
-                    'authKey': 'werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn',
-                    'algorithm': 'sha256',
-                    'user': 'asda',
-                    'saveHelperData': true,
-                    'extraData': 'skjdfklsjhdflkjhsdf',
-                    'appId': '',
-                    'delegation': ''
+            auth: {
+                type: 'hawk',
+                hawk: {
+                    authId: 'dh37fgj492je',
+                    authKey: 'werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn',
+                    algorithm: 'sha256',
+                    user: 'asda',
+                    saveHelperData: true,
+                    extraData: 'skjdfklsjhdflkjhsdf',
+                    appId: '',
+                    delegation: ''
                 }
             },
-            'url': 'http://echo.getpostman.com/auth/hawk',
-            'method': 'GET',
-            'header': [
+            url: 'http://echo.getpostman.com/auth/hawk',
+            method: 'GET',
+            header: [
                 {
-                    'key': 'Authorization',
-                    'value': 'Hawk id="dh37fgj492je", ts="1448888081", nonce="HoH6Ay", ext="skjdfklsjhdflkjhsdf", mac="moWleO5f/8QbvIiy7oo2zj1bmezhrYwrCkz4BsXg0M4="',
-                    'description': ''
+                    key: 'Authorization',
+                    value: 'Hawk id="dh37fgj492je", ts="1448888081", nonce="HoH6Ay", ext="skjdfklsjhdflkjhsdf", mac="moWleO5f/8QbvIiy7oo2zj1bmezhrYwrCkz4BsXg0M4="',
+                    description: ''
                 }
             ],
-            'body': {
-                'mode': 'formdata',
-                'formdata': []
+            body: {
+                mode: 'formdata',
+                formdata: []
             },
-            'description': ''
+            description: ''
         }
     },
     samplePropertyList: [
@@ -237,19 +237,19 @@ module.exports = {
     ],
     rawCookie: 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH',
     requestData: {
-        'mode': 'formdata',
-        'formdata': [
+        mode: 'formdata',
+        formdata: [
             {
-                'key': 'hiya',
-                'value': 'heyo'
+                key: 'hiya',
+                value: 'heyo'
             },
             {
-                'key': 'alpha',
-                'value': 'beta'
+                key: 'alpha',
+                value: 'beta'
             }
         ],
-        'raw': 'abhijitkane',
-        'urlencoded': [
+        raw: 'abhijitkane',
+        urlencoded: [
             {
                 key: 'haha',
                 value: 'somevalue'
