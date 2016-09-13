@@ -178,5 +178,25 @@ describe('VariableScope', function () {
             expect(scope.values.one('oneNumber').value).eql(17); // number has changed
             expect(scope.values.one('oneNumber').type).eql('number'); // type is still number
         });
+
+        it('must clone the variable-list instance if passed as a list in constructor', function () {
+            var list,
+                scope;
+
+            list = new VariableList({}, [{
+                key: 'var-1',
+                value: 'var-1-value'
+            }, {
+                key: 'var-2',
+                value: 'var-2-value'
+            }]);
+
+            scope = new VariableScope({
+                values: list
+            });
+
+            expect(scope.values).not.be(list);
+            expect(scope.values.one('var-1')).eql(list.one('var-1'));
+        });
     });
 });
