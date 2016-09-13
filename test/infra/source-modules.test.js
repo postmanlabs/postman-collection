@@ -14,20 +14,20 @@ var fs = require('fs'),
 
 describe('collection module', function () {
     var modules = require('require-all')({
-            dirname:  __dirname + '/../../lib/collection',
-            excludeDirs:  /^\.(git|svn)$/,
+            dirname: __dirname + '/../../lib/collection',
+            excludeDirs: /^\.(git|svn)$/,
             recursive: true
         }),
         schemas = fs.readdirSync(__dirname + '/../../lib/schema').filter(function (file) {
-            return /^.*\.json$/g.test(file);
+            return (/^.*\.json$/g).test(file);
         }).map(function (file) {
             return file.replace(/\.json$/, '');
         });
 
     modules = _.mapValues(modules, function (value, key) {
         var name = (key.substr(0, 1).toUpperCase() + key.substr(1)).replace(/-([a-z])/g, function (g) {
-                return g[1].toUpperCase();
-            });
+            return g[1].toUpperCase();
+        });
 
         return {
             module: value,
@@ -58,6 +58,7 @@ describe('collection module', function () {
                 var err;
 
                 try {
+                    // eslint-disable-next-line no-new
                     new Module();
                 }
                 catch (e) {

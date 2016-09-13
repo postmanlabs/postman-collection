@@ -65,10 +65,12 @@ describe('VariableList', function () {
 
     it('should correctly resolve variables with a backslash in their name', function () {
         var unresolved = {
+                // eslint-disable-next-line no-useless-escape
                 xyz: '{{al\pha}}'
             },
             mylist = new VariableList({}, [], [
                 {
+                    // eslint-disable-next-line no-useless-escape
                     'al\pha': 'beta'
                 }
             ]),

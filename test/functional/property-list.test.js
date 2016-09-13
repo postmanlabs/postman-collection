@@ -160,7 +160,7 @@ describe('PropertyList', function () {
         afterEach(function () {
             enterprise = null;
             maverick = null;
-            goose = null,
+            goose = null;
             stinger = null;
         });
 
