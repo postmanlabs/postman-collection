@@ -52,7 +52,7 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
-            expect(request.getHeaders({ enabled: true })).to.eql({
+            expect(request.getHeaders({enabled: true})).to.eql({
                 some: 'header'
             });
         });

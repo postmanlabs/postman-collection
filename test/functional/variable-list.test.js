@@ -107,7 +107,7 @@ describe('VariableList', function () {
         expect(resolved.xyz).to.eql('epsilon');
     });
 
-    it('should correctly handle recursive poly chained variable resolution(s)', function () {
+    it('should correctly handle recursive poly chained variable resolution(s) variant 1', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
@@ -122,7 +122,7 @@ describe('VariableList', function () {
         expect(resolved.xyz).to.eql('delta');
     });
 
-    it('should correctly handle recursive poly chained variable resolution(s)', function () {
+    it('should correctly handle recursive poly chained variable resolution(s) variant 2', function () {
         var unresolved = {
                 xyz: '{{a}}'
             },

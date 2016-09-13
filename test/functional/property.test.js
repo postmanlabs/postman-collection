@@ -8,19 +8,19 @@ describe('Property', function () {
             var unresolvedRequest = {
                     method: 'POST',
                     url: '{{host}}:{{port}}/{{path}}',
-                    header: [{ key: '{{headerName}}', value: 'application/json' }],
+                    header: [{key: '{{headerName}}', value: 'application/json'}],
                     body: {
                         mode: 'urlencoded',
-                        urlencoded: [{ key: '{{greeting}}', value: '{{greeting_value}}' }]
+                        urlencoded: [{key: '{{greeting}}', value: '{{greeting_value}}'}]
                     }
                 },
                 expectedResolution = {
                     method: 'POST',
                     url: 'echo.getpostman.com:80/post',
-                    header: [{ key: 'Content-Type', value: 'application/json' }],
+                    header: [{key: 'Content-Type', value: 'application/json'}],
                     body: {
                         mode: 'urlencoded',
-                        urlencoded: [{ key: 'yo', value: 'omg' }]
+                        urlencoded: [{key: 'yo', value: 'omg'}]
                     }
                 },
                 resolved = Property.replaceSubstitutionsIn(unresolvedRequest, [

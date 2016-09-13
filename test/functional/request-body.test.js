@@ -64,43 +64,43 @@ describe('RequestBody', function () {
         });
 
         it('should return true if mode is set to raw and no data is present', function () {
-            var body = new RequestBody({ mode: 'raw', raw: '' });
+            var body = new RequestBody({mode: 'raw', raw: ''});
             expect(body.isEmpty()).to.be(true);
         });
 
         it('should return true if mode is formdata and no data is present', function () {
-            var body = new RequestBody({ mode: 'formdata', formdata: [], raw: 'something' });
+            var body = new RequestBody({mode: 'formdata', formdata: [], raw: 'something'});
             expect(body.isEmpty()).to.be(true);
         });
 
         it('should return true if mode is urlencoded and no data is present', function () {
-            var body = new RequestBody({ mode: 'urlencoded', formdata: [] });
+            var body = new RequestBody({mode: 'urlencoded', formdata: []});
             expect(body.isEmpty()).to.be(true);
         });
 
         it('should return false if mode is raw and data is available', function () {
-            var body = new RequestBody({ mode: 'raw', raw: 'yo' });
+            var body = new RequestBody({mode: 'raw', raw: 'yo'});
             expect(body.isEmpty()).to.be(false);
         });
 
         it('should return false if mode is file and file src is available', function () {
-            var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt' } });
+            var body = new RequestBody({mode: 'file', file: {src: '/somewhere/file.txt'}});
             expect(body.isEmpty()).to.be(false);
         });
 
         it('should return true if mode is file and nothing is available', function () {
-            var body = new RequestBody({ mode: 'file', file: {} });
+            var body = new RequestBody({mode: 'file', file: {}});
             expect(body.isEmpty()).to.be(true);
         });
 
         it('should return false if mode is file and file src as well as content are available', function () {
-            var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt',
-                    content: new Buffer('omgomg') } });
+            var body = new RequestBody({mode: 'file', file: {src: '/somewhere/file.txt',
+                    content: new Buffer('omgomg')}});
             expect(body.isEmpty()).to.be(false);
         });
 
         it('should return false if mode is file and file content is available', function () {
-            var body = new RequestBody({ mode: 'file', file: { content: 'asjdhkashd' } });
+            var body = new RequestBody({mode: 'file', file: {content: 'asjdhkashd'}});
             expect(body.isEmpty()).to.be(false);
         });
 
@@ -120,7 +120,7 @@ describe('RequestBody', function () {
                 mode: 'urlencoded',
                 urlencoded: [{
                     key: 'haha',
-                    value: { some: 'random', javascript: 'object' }  // this functionality is used in the app
+                    value: {some: 'random', javascript: 'object'}  // this functionality is used in the app
                 }]
             });
             expect(body.isEmpty()).to.be(false);

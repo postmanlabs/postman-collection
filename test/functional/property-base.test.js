@@ -6,9 +6,9 @@ describe('PropertyBase', function () {
     describe('meta properties', function () {
         it('should return all the meta properties', function () {
             var definition = {
-                    _postman_one: { a: 'b' },
+                    _postman_one: {a: 'b'},
                     _postman_two: 'something',
-                    _three: function () {}  // No-Op
+                    _three: function () {} // eslint-disable-line no-empty-function
                 },
                 base = new PropertyBase(definition);
 
@@ -19,9 +19,9 @@ describe('PropertyBase', function () {
 
         it('should pick given meta properties', function () {
             var definition = {
-                    _postman_one: { a: 'b' },
+                    _postman_one: {a: 'b'},
                     _postman_two: 'something',
-                    _three: function () {}  // No-Op
+                    _three: function () {}  // eslint-disable-line no-empty-function
                 },
                 base = new PropertyBase(definition);
 

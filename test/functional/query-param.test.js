@@ -29,7 +29,7 @@ describe('QueryParam', function () {
     it('should url encode if explicitly asked to', function () {
         var rawQueryString = 'x=y%z',
             params = QueryParam.parse(rawQueryString),
-            paramStr = QueryParam.unparse(params, { encode: true });
+            paramStr = QueryParam.unparse(params, {encode: true});
         expect(paramStr).to.eql('x=y%25z');
     });
 });
