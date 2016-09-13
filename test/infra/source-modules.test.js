@@ -10,7 +10,7 @@ var fs = require('fs'),
 
     BASELESS_MODULES = ['Description'],
     SCHEMALESS_MODULES = ['EventList', 'FormParam', 'PropertyBase', 'PropertyList', 'Property', 'QueryParam',
-        'RequestAuth', 'RequestBody', 'VariableList'];
+        'RequestAuth', 'RequestBody', 'VariableList', 'VariableScope'];
 
 describe('collection module', function () {
     var modules = require('require-all')({
