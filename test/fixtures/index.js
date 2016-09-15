@@ -265,6 +265,11 @@ module.exports = {
         code: 200,
         body: '{"status":200}',
         header: 'HTTP/1.1 200 OK\nServer: nginx/1.8.1\nDate: Sun, 24 Jul 2016 23:16:35 GMT\nContent-Type: application/json; charset=utf-8\nContent-Length: 14\nConnection: keep-alive\nAccess-Control-Allow-Origin: \nAccess-Control-Allow-Credentials: \nAccess-Control-Allow-Methods: \nAccess-Control-Allow-Headers: \nAccess-Control-Expose-Headers: \nETag: W/"e-+3Pmmp/QERKiJq3DueGVYg"\nVary: Accept-Encoding\nset-cookie: sails.sid=s%3A5KvXh2N_L9GM7L-ZMtv7TCNbiVmNbH2_.aL8xAy5OL9F9vXEhJEIj5%2Br0bdcrpUPGUX4mB7gZ67o; Path=/; HttpOnly'
+    },
+    responseData3: {
+        code: 100,
+        body: '',
+        header: '',
     }
 };
 /* jshint ignore:end */
