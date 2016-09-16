@@ -2,7 +2,7 @@
   "name": "postman-collection",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Labs <help@getpostman.com>",
-  "version": "0.4.14",
+  "version": "0.5.0",
   "keywords": [
     "postman"
   ],
@@ -78,6 +78,8 @@
     "url": "https://github.com/postmanlabs/postman-collection/issues"
   },
   "greenkeeper": {
-    "ignore": ["hawk"]
+    "ignore": [
+      "hawk"
+    ]
   }
 }
