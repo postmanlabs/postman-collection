@@ -71,6 +71,7 @@ describe('RequestAuth', function () {
             expect(headers).to.have.property('authorization');
             expect(headers).to.have.property('content-type', request.getHeaders({ ignoreCase: true })['content-type']);
             expect(headers).to.have.property('x-amz-date');
+            expect(headers).to.have.property('x-amz-security-token');
         });
     });
 
