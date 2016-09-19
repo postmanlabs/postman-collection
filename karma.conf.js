@@ -70,7 +70,7 @@ module.exports = function (config) {
         // Pass options to the client frameworks.
         client: {
             mocha: {
-                timeout : 10000 // 10 seconds
+                timeout: 10000 // 10 seconds
             }
         }
     });

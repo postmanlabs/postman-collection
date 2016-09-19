@@ -62,7 +62,7 @@ describe('Property', function () {
                         { a: '{{delta}}', b: '{{epsilon}}', c: '{{theta}}' }
                     ],
                     seven: { a: '{{alpha}}', b: ['{{alpha}}', '{{beta}}', '{{gamma}}'], c: { a: '{{delta}}',
-                        b: '{{epsilon}}', c: '{{theta}}' }}
+                        b: '{{epsilon}}', c: '{{theta}}' } }
                 },
                 expectedResolution = {
                     one: 'arbitrary-complex-large',
@@ -84,7 +84,7 @@ describe('Property', function () {
                         { a: 'nested', b: 'JSON', c: 'property' }
                     ],
                     seven: { a: 'arbitrary', b: ['arbitrary', 'complex', 'large'], c: { a: 'nested',
-                        b: 'JSON', c: 'property' }}
+                        b: 'JSON', c: 'property' } }
                 },
                 resolved = Property.replaceSubstitutionsIn(unresolvedRequest, [
                     {

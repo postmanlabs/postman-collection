@@ -1,4 +1,5 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
     PropertyBase = require('../../lib/index.js').PropertyBase;
 
 /* global describe, it */
@@ -8,7 +9,7 @@ describe('PropertyBase', function () {
             var definition = {
                     _postman_one: { a: 'b' },
                     _postman_two: 'something',
-                    _three: function () {}  // No-Op
+                    _three: _.noop
                 },
                 base = new PropertyBase(definition);
 
@@ -21,7 +22,7 @@ describe('PropertyBase', function () {
             var definition = {
                     _postman_one: { a: 'b' },
                     _postman_two: 'something',
-                    _three: function () {}  // No-Op
+                    _three: _.noop
                 },
                 base = new PropertyBase(definition);
 
