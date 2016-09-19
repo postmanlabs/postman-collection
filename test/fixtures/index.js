@@ -109,6 +109,29 @@ module.exports = {
                 }
             }
         },
+        digestWithQueryParams: {
+            url: 'https://echo.getpostman.com/digest-auth?key=value',
+            method: 'GET',
+            header: [],
+            data: {
+                mode: 'formdata',
+                content: []
+            },
+            auth: {
+                type: 'digest',
+                digest: {
+                    username: 'postman',
+                    realm: 'Users',
+                    password: 'password',
+                    nonce: 'bcgEc5RPU1ANglyT2I0ShU0oxqPB5jXp',
+                    nonceCount: '',
+                    algorithm: 'MD5',
+                    qop: '',
+                    clientNonce: '',
+                    opaque: ''
+                }
+            }
+        },
         oauth1: {
             auth: {
                 type: 'oauth1',
