@@ -4,6 +4,10 @@
     "title": "Response",
     "description": "A response represents an HTTP response.",
     "properties": {
+        "id": {
+            "description": "A unique, user defined identifier that can  be used to refer to this response from requests.",
+            "type": "string"
+        },
         "originalRequest": {
             "$ref": "#/definitions/request"
         },

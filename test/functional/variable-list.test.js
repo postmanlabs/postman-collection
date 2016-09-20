@@ -31,7 +31,7 @@ describe('VariableList', function () {
         });
     });
 
-    it('should recursively resolve variables', function () {
+    it('should recursively resolve regular variables', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
@@ -48,6 +48,34 @@ describe('VariableList', function () {
             ]),
             resolved = mylist.substitute(unresolved);
         expect(resolved.xyz).to.eql('foo-bar');
+    });
+
+    it('should correctly resolve variables with a forward slash in their name', function () {
+        var unresolved = {
+                xyz: '{{alp/ha}}'
+            },
+            mylist = new VariableList({}, [], [
+                {
+                    'alp/ha': 'beta'
+                }
+            ]),
+            resolved = mylist.substitute(unresolved);
+        expect(resolved.xyz).to.eql('beta');
+    });
+
+    it('should correctly resolve variables with a backslash in their name', function () {
+        var unresolved = {
+                // eslint-disable-next-line no-useless-escape
+                xyz: '{{al\pha}}'
+            },
+            mylist = new VariableList({}, [], [
+                {
+                    // eslint-disable-next-line no-useless-escape
+                    'al\pha': 'beta'
+                }
+            ]),
+            resolved = mylist.substitute(unresolved);
+        expect(resolved.xyz).to.eql('beta');
     });
 
     it('should correctly handle cyclic resolution loops', function () {

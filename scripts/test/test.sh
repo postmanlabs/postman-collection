@@ -34,8 +34,8 @@ npm run test-lint;
 # run infrastructure unit tests
 npm run test-infra;
 
-# run unit tests
-npm run test-unit;
+# run integration tests
+npm run test-integration;
 
 # run browser tests
 if [ "$CI" != "true" ]; then

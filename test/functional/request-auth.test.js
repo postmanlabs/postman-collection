@@ -41,6 +41,17 @@ describe('RequestAuth', function () {
             expect(authHeader.toString()).to.eql(expectedHeader);
             expect(authHeader.system).to.be(true);
         });
+
+        it('Auth header must have uri with query params in case of request with the same', function () {
+            var request = new Request(rawRequests.digestWithQueryParams),
+                authorizedReq = Digest.authorize(request),
+                authHeader = authorizedReq.headers.one('Authorization'),
+                expectedHeader = 'Authorization: Digest username="postman", realm="Users", ' +
+                    'nonce="bcgEc5RPU1ANglyT2I0ShU0oxqPB5jXp", uri="/digest-auth?key=value", ' +
+                    'response="24dfb8851ee27e4b00252a13b1fd8ec3", opaque=""';
+
+            expect(authHeader.toString()).to.eql(expectedHeader);
+        });
     });
 
     describe('OAuth1', function () {
@@ -71,6 +82,7 @@ describe('RequestAuth', function () {
             expect(headers).to.have.property('authorization');
             expect(headers).to.have.property('content-type', request.getHeaders({ ignoreCase: true })['content-type']);
             expect(headers).to.have.property('x-amz-date');
+            expect(headers).to.have.property('x-amz-security-token');
         });
     });
 

@@ -28,7 +28,7 @@ export XUNIT_FILE="$REPORT_DIRECTORY/report.xml";
 mkdir -p "$REPORT_DIRECTORY";
 
 # run mocha tests
-echo -e "\033[93mRunning mocha unit tests...\033[0m";
+echo -e "\033[93mRunning mocha integration tests...\033[0m";
 echo -en "\033[0m\033[2mmocha `mocha --version`\033[0m";
 
 # set mocha reporter
@@ -46,4 +46,4 @@ fi
 # run test
 istanbul cover ${ISTANBUL_REPORT} --dir ./.coverage --print both _mocha -- \
   --reporter ${MOCHA_REPORTER} --reporter-options output=${XUNIT_FILE} \
-  test/unit/**/*.test.js test/functional/**/*.test.js --recursive --prof --grep "$1";
+  test/integration/**/*.test.js test/functional/**/*.test.js --recursive --prof --grep "$1";

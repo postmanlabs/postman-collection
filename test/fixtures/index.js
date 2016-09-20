@@ -23,8 +23,8 @@ module.exports = {
             query: [{ key: 'id', value: '123' }],
             variable: [
                 {
-                    "id": "resource",
-                    "value": "post"
+                    'id': 'resource',
+                    'value': 'post'
                 }
             ]
         },
@@ -109,6 +109,29 @@ module.exports = {
                 }
             }
         },
+        digestWithQueryParams: {
+            url: 'https://echo.getpostman.com/digest-auth?key=value',
+            method: 'GET',
+            header: [],
+            data: {
+                mode: 'formdata',
+                content: []
+            },
+            auth: {
+                type: 'digest',
+                digest: {
+                    username: 'postman',
+                    realm: 'Users',
+                    password: 'password',
+                    nonce: 'bcgEc5RPU1ANglyT2I0ShU0oxqPB5jXp',
+                    nonceCount: '',
+                    algorithm: 'MD5',
+                    qop: '',
+                    clientNonce: '',
+                    opaque: ''
+                }
+            }
+        },
         oauth1: {
             auth: {
                 type: 'oauth1',
@@ -155,6 +178,7 @@ module.exports = {
                     // Fake Credentials
                     accessKey: 'AKIAI53QRL',
                     secretKey: 'cr2RAfsY4IIVweutTBoBzR',
+                    sessionToken: '33Dhtnwf0RVHCFttmMPYt3dxx9zi8I07CBwTXaqupHQ=',
                     region: 'eu-west-1',
                     service: '',
                     auto: true,
@@ -183,33 +207,33 @@ module.exports = {
             description: ''
         },
         hawk: {
-            "auth": {
-                "type": "hawk",
-                "hawk": {
-                    "authId": "dh37fgj492je",
-                    "authKey": "werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn",
-                    "algorithm": "sha256",
-                    "user": "asda",
-                    "saveHelperData": true,
-                    "extraData": "skjdfklsjhdflkjhsdf",
-                    "appId": "",
-                    "delegation": ""
+            auth: {
+                type: 'hawk',
+                hawk: {
+                    authId: 'dh37fgj492je',
+                    authKey: 'werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn',
+                    algorithm: 'sha256',
+                    user: 'asda',
+                    saveHelperData: true,
+                    extraData: 'skjdfklsjhdflkjhsdf',
+                    appId: '',
+                    delegation: ''
                 }
             },
-            "url": "http://echo.getpostman.com/auth/hawk",
-            "method": "GET",
-            "header": [
+            url: 'http://echo.getpostman.com/auth/hawk',
+            method: 'GET',
+            header: [
                 {
-                    "key": "Authorization",
-                    "value": "Hawk id=\"dh37fgj492je\", ts=\"1448888081\", nonce=\"HoH6Ay\", ext=\"skjdfklsjhdflkjhsdf\", mac=\"moWleO5f/8QbvIiy7oo2zj1bmezhrYwrCkz4BsXg0M4=\"",
-                    "description": ""
+                    key: 'Authorization',
+                    value: 'Hawk id="dh37fgj492je", ts="1448888081", nonce="HoH6Ay", ext="skjdfklsjhdflkjhsdf", mac="moWleO5f/8QbvIiy7oo2zj1bmezhrYwrCkz4BsXg0M4="',
+                    description: ''
                 }
             ],
-            "body": {
-                "mode": "formdata",
-                "formdata": []
+            body: {
+                mode: 'formdata',
+                formdata: []
             },
-            "description": ""
+            description: ''
         }
     },
     samplePropertyList: [
@@ -237,19 +261,19 @@ module.exports = {
     ],
     rawCookie: 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH',
     requestData: {
-        "mode": "formdata",
-        "formdata": [
+        mode: 'formdata',
+        formdata: [
             {
-                "key": "hiya",
-                "value": "heyo"
+                key: 'hiya',
+                value: 'heyo'
             },
             {
-                "key": "alpha",
-                "value": "beta"
+                key: 'alpha',
+                value: 'beta'
             }
         ],
-        "raw": "abhijitkane",
-        "urlencoded": [
+        raw: 'abhijitkane',
+        urlencoded: [
             {
                 key: 'haha',
                 value: 'somevalue'
@@ -267,4 +291,5 @@ module.exports = {
         header: 'HTTP/1.1 200 OK\nServer: nginx/1.8.1\nDate: Sun, 24 Jul 2016 23:16:35 GMT\nContent-Type: application/json; charset=utf-8\nContent-Length: 14\nConnection: keep-alive\nAccess-Control-Allow-Origin: \nAccess-Control-Allow-Credentials: \nAccess-Control-Allow-Methods: \nAccess-Control-Allow-Headers: \nAccess-Control-Expose-Headers: \nETag: W/"e-+3Pmmp/QERKiJq3DueGVYg"\nVary: Accept-Encoding\nset-cookie: sails.sid=s%3A5KvXh2N_L9GM7L-ZMtv7TCNbiVmNbH2_.aL8xAy5OL9F9vXEhJEIj5%2Br0bdcrpUPGUX4mB7gZ67o; Path=/; HttpOnly'
     }
 };
+
 /* jshint ignore:end */
