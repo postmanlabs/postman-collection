@@ -88,6 +88,11 @@ describe('RequestBody', function () {
             expect(body.isEmpty()).to.be(false);
         });
 
+        it('should return true if mode is file and file src is not available', function () {
+            var body = new RequestBody({ mode: 'file' });
+            expect(body.isEmpty()).to.be(true);
+        });
+
         it('should return true if mode is file and nothing is available', function () {
             var body = new RequestBody({ mode: 'file', file: {} });
             expect(body.isEmpty()).to.be(true);
