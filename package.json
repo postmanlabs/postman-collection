@@ -24,7 +24,7 @@
     "publish-wiki": "scripts/publish/publish-wiki.sh",
     "publish-docs": "scripts/publish/publish-docs.sh",
     "test": "scripts/test/test.sh",
-    "test-unit": "scripts/test/test-unit.sh",
+    "test-integration": "scripts/test/test-integration.sh",
     "test-infra": "scripts/test/test-infra.sh",
     "test-browser": "scripts/test/test-browser.sh",
     "test-lint": "scripts/test/test-lint.sh"
