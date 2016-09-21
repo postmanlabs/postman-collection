@@ -58,6 +58,100 @@ describe('Request', function () {
         });
     });
 
+    describe('upsertHeader', function () {
+        it('should add a header if it does not exist', function () {
+            var rawRequest = {
+                    url: 'echo.getpostman.com',
+                    method: 'GET',
+                    header: [
+                        {
+                            key: 'some',
+                            value: 'header'
+                        },
+                        {
+                            key: 'other',
+                            value: 'otherheader',
+                            disabled: true
+                        }
+                    ]
+                },
+                request = new Request(rawRequest);
+            request.upsertHeader({ key: 'third', value: 'header' });
+            expect(request.headers.all()).to.eql([
+                {
+                    key: 'some',
+                    value: 'header'
+                },
+                {
+                    key: 'other',
+                    value: 'otherheader',
+                    disabled: true
+                },
+                { key: 'third', value: 'header' }
+            ]);
+        });
+        it('should replace the header value if it exists', function () {
+            var rawRequest = {
+                    url: 'echo.getpostman.com',
+                    method: 'GET',
+                    header: [
+                        {
+                            key: 'some',
+                            value: 'header'
+                        },
+                        {
+                            key: 'other',
+                            value: 'otherheader',
+                            disabled: true
+                        }
+                    ]
+                },
+                request = new Request(rawRequest);
+            request.upsertHeader({ key: 'other', value: 'changedvalue' });
+            expect(request.headers.all()).to.eql([
+                {
+                    key: 'some',
+                    value: 'header'
+                },
+                {
+                    key: 'other',
+                    value: 'changedvalue',
+                    disabled: true
+                }
+            ]);
+        });
+        it('should do nothing if no header is given', function () {
+            var rawRequest = {
+                    url: 'echo.getpostman.com',
+                    method: 'GET',
+                    header: [
+                        {
+                            key: 'some',
+                            value: 'header'
+                        },
+                        {
+                            key: 'other',
+                            value: 'otherheader',
+                            disabled: true
+                        }
+                    ]
+                },
+                request = new Request(rawRequest);
+            request.upsertHeader();
+            expect(request.headers.all()).to.eql([
+                {
+                    key: 'some',
+                    value: 'header'
+                },
+                {
+                    key: 'other',
+                    value: 'otherheader',
+                    disabled: true
+                }
+            ]);
+        });
+    });
+
     describe('removeQueryParams', function () {
         it('should remove query parameters from the request', function () {
             var testReq = request.clone(),
