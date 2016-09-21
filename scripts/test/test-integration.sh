@@ -46,4 +46,4 @@ fi
 # run test
 istanbul cover ${ISTANBUL_REPORT} --dir ./.coverage --print both _mocha -- \
   --reporter ${MOCHA_REPORTER} --reporter-options output=${XUNIT_FILE} \
-  test/integration/**/*.test.js test/functional/**/*.test.js --recursive --prof --grep "$1";
+  test/integration/**/*.test.js test/unit/**/*.test.js --recursive --prof --grep "$1";
