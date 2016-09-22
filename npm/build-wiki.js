@@ -9,8 +9,8 @@ require('colors');
 // Stop on first error
 set('-e');
 
-echo('Generating wiki...'.yellow.bold);
-echo('jsdoc2md'.yellow.bold);
+console.log('Generating wiki...'.yellow.bold);
+console.log('jsdoc2md'.yellow.bold);
 
 // some variables
 var OUT_DIR = 'out/wiki',
@@ -24,4 +24,4 @@ mkdir('-p', OUT_DIR);
 // execute command
 exec(`node node_modules/.bin/jsdoc2md --src lib/**/*.js > ${OUT_PATH}`);
 
-echo(` - wiki generated at ${OUT_PATH}\n`);
+console.log(` - wiki generated at ${OUT_PATH}\n`);

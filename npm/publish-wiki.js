@@ -8,13 +8,13 @@ require('colors');
 
 // Stop on first error
 set('-e');
-echo('Publishing wiki...'.yellow.bold);
+console.log('Publishing wiki...'.yellow.bold);
 
 var publishResult,
 
-    WIKI_URL = "https://github.com/postmanlabs/postman-collection.wiki.git",
-    WIKI_GIT_PATH = ".tmp/github-wiki",
-    WIKI_VERSION = "$(git describe --always)";
+    WIKI_URL = 'https://github.com/postmanlabs/postman-collection.wiki.git',
+    WIKI_GIT_PATH = '.tmp/github-wiki',
+    WIKI_VERSION = exec('git describe --always').stdout;
 
 // build the reference MD
 exec('npm run build-wiki');
@@ -36,8 +36,8 @@ exec(`git commit -m "[auto] ${WIKI_VERSION}"`);
 publishResult = exec('git push origin master');
 
 if (publishResult.code !== 0) {
-    echo('Wiki publish failed!'.red.bold);
+    console.log('Wiki publish failed!'.red.bold);
     exit(1);
 }
 
-echo(` - wiki published ${WIKI_VERSION}`);
+console.log(` - wiki published ${WIKI_VERSION}`);

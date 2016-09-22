@@ -9,7 +9,7 @@ require('colors');
 // Stop on first error
 set('-e');
 
-echo('Generating schema...'.yellow.bold);
+console.log('Generating schema...'.yellow.bold);
 
 var OUTPUT_FOLDER = './out/schema',
     OUTPUT_FILE = `${OUTPUT_FOLDER}/collection.json`;
@@ -20,4 +20,4 @@ mkdir('-p', OUTPUT_FOLDER);
 
 exec(`node node_modules/.bin/json-schema-compiler --dir "lib/schema" --root "lib/schema/collection.json" --output ${OUTPUT_FILE}`);
 
-echo(` - schema can be found at ${OUTPUT_FILE}`);
+console.log(` - schema can be found at ${OUTPUT_FILE}`);

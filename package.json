@@ -23,11 +23,11 @@
     "build-wiki": "node npm/build-wiki.js",
     "publish-wiki": "node npm/build-wiki.js",
     "publish-docs": "node npm/build-docs.js",
-    "test": "scripts/test/test.sh",
-    "test-integration": "scripts/test/test-integration.sh",
-    "test-infra": "scripts/test/test-infra.sh",
-    "test-browser": "scripts/test/test-browser.sh",
-    "test-lint": "scripts/test/test-lint.sh"
+    "test": "node npm/test.js",
+    "test-integration": "node npm/test-integration.js",
+    "test-system": "node npm/test-system.js",
+    "test-browser": "node npm/test-browser.js",
+    "test-lint": "node npm/test-lint.js"
   },
   "dependencies": {
     "atob": "2.0.3",
@@ -50,6 +50,7 @@
     "semver": "5.3.0"
   },
   "devDependencies": {
+    "async": "2.0.1",
     "browserify": "13.1.0",
     "colors": "1.1.2",
     "eslint": "3.5.0",
@@ -71,6 +72,7 @@
     "nsp": "2.6.1",
     "packity": "0.3.2",
     "postman-jsdoc-theme": "0.0.2",
+    "recursive-readdir": "2.1.0",
     "require-all": "2.0.0",
     "shelljs": "0.7.4",
     "strip-json-comments": "2.0.1",
