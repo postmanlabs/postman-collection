@@ -18,6 +18,6 @@ var OUTPUT_FOLDER = './out/schema',
 test('-d', OUTPUT_FOLDER) && test('-f', OUTPUT_FILE) && rm('-f', OUTPUT_FILE);
 mkdir('-p', OUTPUT_FOLDER);
 
-exec(`node node_modules/.bin/json-schema-compiler json-schema-compiler --dir "lib/schema" --root "lib/schema/collection.json" --output ${OUTPUT_FILE}`);
+exec(`node node_modules/.bin/json-schema-compiler --dir "lib/schema" --root "lib/schema/collection.json" --output ${OUTPUT_FILE}`);
 
 echo(` - schema can be found at ${OUTPUT_FILE}`);
