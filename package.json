@@ -18,9 +18,9 @@
     "bin": "bin"
   },
   "scripts": {
-    "build-docs": "scripts/build/build-docs.sh",
-    "build-schema": "scripts/build/build-schema.sh",
-    "build-wiki": "scripts/build/build-wiki.sh",
+    "build-docs": "node npm/build-docs.js",
+    "build-schema": "node npm/build-schema.js",
+    "build-wiki": "node npm/build-wiki.js",
     "publish-wiki": "scripts/publish/publish-wiki.sh",
     "publish-docs": "scripts/publish/publish-docs.sh",
     "test": "scripts/test/test.sh",
@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "browserify": "13.1.0",
+    "colors": "1.1.2",
     "eslint": "3.5.0",
     "eslint-plugin-jsdoc": "2.3.1",
     "eslint-plugin-lodash": "1.10.3",
@@ -65,12 +66,13 @@
     "karma-chrome-launcher": "0.2.3",
     "karma-mocha": "0.2.2",
     "karma-mocha-reporter": "2.2.0",
-    "postman-jsdoc-theme": "0.0.2",
     "mocha": "2.5.3",
     "mustache": "2.2.1",
     "nsp": "2.6.1",
     "packity": "0.3.2",
+    "postman-jsdoc-theme": "0.0.2",
     "require-all": "2.0.0",
+    "shelljs": "0.7.4",
     "strip-json-comments": "2.0.1",
     "tv4": "1.2.7",
     "watchify": "3.7.0"

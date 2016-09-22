@@ -41,36 +41,18 @@ describe('repository', function () {
         });
 
         describe('script definitions', function () {
-            it('scripts key should exist', function () {
-                expect(json.scripts).to.be.ok();
-            });
-
             it('files must exist', function () {
-                var script;
-
-                for (script in json.scripts) {
-                    expect(fs.existsSync(json.scripts[script])).to.be.ok();
-                }
-            });
-
-            it('must be defined as per standards `[script]: scripts/*/[name].sh`', function () {
-                var script,
-                    parts;
-
-                for (script in json.scripts) {
-                    parts = json.scripts[script].split('/');
-                    expect((parts[0] === 'scripts') && (parts.slice(-1)[0].match(script))).to.be.ok();
-                }
+                expect(json.scripts).to.be.ok();
+                json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
+                    expect(fs.existsSync('npm/' + scriptName + '.js')).to.be.ok();
+                });
             });
 
             it('must have the hashbang defined', function () {
-                var fileContent,
-                    script;
-
-                for (script in json.scripts) {
-                    fileContent = fs.readFileSync(json.scripts[script]).toString();
-                    expect(/^#!\/(bin\/bash|usr\/bin\/env\s(node|bash))[\r\n][\W\w]*$/g.test(fileContent)).to.be.ok();
-                }
+                json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
+                    var fileContent = fs.readFileSync('npm/' + scriptName + '.js').toString();
+                    expect(/^#!\/(bin\/bash|usr\/bin\/env\snode)[\r\n][\W\w]*$/g.test(fileContent)).to.be.ok();
+                });
             });
         });
 
