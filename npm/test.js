@@ -9,6 +9,7 @@ console.log('  \\___\\___/_|_\\___\\__|\\__|_\\___/_||_| '.yellow.bold + '|___/_
 require('async').series([
     require('./test-lint'),
     require('./test-system'),
+    require('./test-unit'),
     require('./test-integration'),
     process.env.CI ? function (done) { done(); } : require('./test-browser')
 ], function (code) {
