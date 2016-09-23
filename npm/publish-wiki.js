@@ -1,16 +1,20 @@
-#!/usr/bin/env node
 require('shelljs/global');
 require('colors');
 
 var path = require('path'),
 
-    publishResult,
-
     WIKI_URL = 'https://github.com/postmanlabs/postman-collection.wiki.git',
     WIKI_GIT_PATH = path.join(__dirname, '..', '.tmp', 'github-wiki'),
-    WIKI_VERSION = exec('git describe --always').stdout;
+    WIKI_VERSION = exec('git describe --always').stdout,
+    SUCCESS_MESSAGE = (' - wiki published ' + WIKI_VERSION).green.bold,
+    FAILURE_MESSAGE = 'Wiki publish failed!'.red.bold;
 
 module.exports = function (exit) {
+    process.on('exit', function (code) {
+        code && console.log(FAILURE_MESSAGE);
+        exit(code);
+    });
+
     console.log('Publishing wiki...'.yellow.bold);
 
     // build the reference MD
@@ -19,6 +23,8 @@ module.exports = function (exit) {
     // clone repository
     mkdir('-p', WIKI_GIT_PATH);
     rm('-rf', WIKI_GIT_PATH);
+    // @todo: Consider navigating to WIKI_GIT_PATH, setting up a new git repo there, point the remote to WIKI_GIT_URL,
+    // @todo: and push
     exec('git clone ' + WIKI_URL + ' ' + WIKI_GIT_PATH + ' --quiet');
 
     // update contents of repository
@@ -30,16 +36,11 @@ module.exports = function (exit) {
     pushd(WIKI_GIT_PATH);
     exec('git add --all');
     exec('git commit -m "[auto] ' + WIKI_VERSION + '"');
-    publishResult = exec('git push origin master');
-    popd();
-
-    if (publishResult.code) {
-        console.log('Wiki publish failed!'.red.bold);
-        exit(1);
-    }
-
-    console.log(' - wiki published ' + WIKI_VERSION);
-    exit();
+    exec('git push origin master', function (code) {
+        console.log(code ? FAILURE_MESSAGE : SUCCESS_MESSAGE);
+        popd();
+        exit(code);
+    });
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to execute all unit tests in the Chrome Browser.
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,7 +11,7 @@ var path = require('path'),
     KARMA_CONFIG_PATH = path.join(__dirname, '..', 'karma.conf');
 
 module.exports = function (exit) {
-    console.log('Running unit tests within browser...'.yellow);
+    console.log('Running unit tests within browser...'.yellow.bold);
     new Server({
         cmd: 'start',
         configFile: KARMA_CONFIG_PATH

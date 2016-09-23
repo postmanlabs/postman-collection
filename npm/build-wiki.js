@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 require('shelljs/global');
 require('colors');
 
@@ -13,8 +12,7 @@ var fs = require('fs'),
     targetStream = fs.createWriteStream(OUT_PATH);
 
 module.exports = function (exit) {
-    console.log('Generating wiki...'.yellow.bold);
-    console.log('jsdoc2md'.yellow.bold);
+    console.log('Generating wiki using jsdoc2md...'.yellow.bold);
 
     // clean directory
     test('-d', OUT_DIR) && rm('-rf', OUT_DIR);

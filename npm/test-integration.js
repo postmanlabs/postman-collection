@@ -1,7 +1,6 @@
-#!/usr/bin/env node
-// ----------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to execute all unit tests.
-// ----------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 require('shelljs/global');
 require('colors');
@@ -16,7 +15,7 @@ var path = require('path'),
 
 module.exports = function (exit) {
     // banner line
-    console.log('Running integration tests using mocha on node...'.yellow);
+    console.log('Running integration tests using mocha on node...'.yellow.bold);
 
     // add all spec files to mocha
     recursive(SPEC_SOURCE_DIR, function (err, files) {

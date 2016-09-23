@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 require('shelljs/global');
 require('colors');
 
@@ -17,12 +16,12 @@ var async = require('async'),
      * @returns {String}
      */
     loadJSON = function (file) {
-        return JSON.parse(require('fs').readFileSync(path.join(__dirname, file)).toString());
+        return JSON.parse(fs.readFileSync(path.join(__dirname, file)).toString());
     };
 
 module.exports = function (exit) {
     // banner line
-    console.log('\nRunning system tests using mocha and nsp...'.yellow);
+    console.log('\nRunning system tests using mocha and nsp...'.yellow.bold);
 
     async.series([
         // run test specs using mocha

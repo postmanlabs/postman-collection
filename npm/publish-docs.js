@@ -1,9 +1,17 @@
-#!/usr/bin/env node
 require('shelljs/global');
 
+var SUCCESS_MESSAGE = 'Documentation published successfully!'.green.bold,
+    FAILURE_MESSAGE = 'Doc publish failed!'.red.bold;
+
 module.exports = function (exit) {
+    process.on('exit', function (code) {
+        code && console.log(FAILURE_MESSAGE);
+        exit(code);
+    });
+
+    console.log('Generating and publishing documentation for postman-collection'.yellow.bold);
     // generate project documentation
-    requie('./build-docs');
+    require('./build-docs');
 
     // go to the out directory and create a *new* Git repo
     cd('out/docs');
@@ -23,8 +31,10 @@ module.exports = function (exit) {
     // will be lost, since we are overwriting it.) We silence any output to
     // hide any sensitive credential data that might otherwise be exposed.
     config.silent = true;
-    exec('git push --force "git@github.com:postmanlabs/postman-collection.git" master:gh-pages');
-    exit();
+    exec('git push --force "git@github.com:postmanlabs/postman-collection.git" master:gh-pages', function (code) {
+        console.log(code ? FAILURE_MESSAGE : SUCCESS_MESSAGE);
+        exit(code);
+    });
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run

@@ -1,20 +1,24 @@
-#!/usr/bin/env node
 require('shelljs/global');
 require('colors');
 
 var path = require('path'),
 
-    TARGET_DIR = path.join(__dirname, '..', 'out', 'docs');
+    IS_WINDOWS = (/^win/).test(process.platform),
+    TARGET_DIR = path.join(__dirname, '..', 'out', 'docs'),
+    SUCCESS_MESSAGE = ' - documentation can be found at ./out/docs',
+    FAILURE_MESSAGE = 'Documentation could not be generated!'.red.bold,
+    DOC_GENERATION_COMMAND = (IS_WINDOWS ? '' : 'node ') + path.join('node_modules', '.bin', 'jsdoc') +
+        (IS_WINDOWS ? '.cmd' : '') + ' -c .jsdoc-config.json -u docs lib';
 
 module.exports = function (exit) {
     console.log('Generating documentation...'.yellow.bold);
     // clean directory
     test('-d', TARGET_DIR) && rm('-rf', TARGET_DIR);
 
-    exec('node node_modules/.bin/jsdoc -c .jsdoc-config.json -u docs/ lib/*');
-    console.log(' - documentation can be found at ./out/docs');
-
-    exit();
+    exec(DOC_GENERATION_COMMAND, function (code) {
+        console.log(code ? FAILURE_MESSAGE : SUCCESS_MESSAGE);
+        exit(code);
+    });
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
