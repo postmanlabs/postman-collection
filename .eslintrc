@@ -1,6 +1,6 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 5
   },
   "plugins": [
     "jsdoc",
@@ -293,7 +293,7 @@
     "lodash/prefer-wrapper-method": 2,
     "lodash/preferred-alias": 2,
     "lodash/prop-shorthand": [2, "always"],
-    "lodash/unwrap": 2,
+    "lodash/unwrap": 2
 
     // Mocha
     //    "mocha/handle-done-callback": "error",

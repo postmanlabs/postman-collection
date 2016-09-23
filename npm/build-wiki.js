@@ -1,27 +1,31 @@
 #!/usr/bin/env node
-// ----------------------------------------------------------------------------------------------------------------------
-// This script is intended to generate wiki of this module
-// ----------------------------------------------------------------------------------------------------------------------
-
 require('shelljs/global');
 require('colors');
 
-// Stop on first error
-set('-e');
+var fs = require('fs'),
+    path = require('path'),
 
-console.log('Generating wiki...'.yellow.bold);
-console.log('jsdoc2md'.yellow.bold);
+    jsdoc2md = require('jsdoc-to-markdown'),
 
-// some variables
-var OUT_DIR = 'out/wiki',
-    OUT_FILE = 'REFERENCE.md',
-    OUT_PATH = `${OUT_DIR}/${OUT_FILE}`;
+    OUT_DIR = path.join(__dirname, '..', 'out', 'wiki'),
+    OUT_PATH = path.join(OUT_DIR, 'REFERENCE.md'),
 
-// clean directory
-test('-d', OUT_DIR) && rm('-rf', OUT_DIR);
-mkdir('-p', OUT_DIR);
+    targetStream = fs.createWriteStream(OUT_PATH);
 
-// execute command
-exec(`node node_modules/.bin/jsdoc2md --src lib/**/*.js > ${OUT_PATH}`);
+module.exports = function (exit) {
+    console.log('Generating wiki...'.yellow.bold);
+    console.log('jsdoc2md'.yellow.bold);
 
-console.log(` - wiki generated at ${OUT_PATH}\n`);
+    // clean directory
+    test('-d', OUT_DIR) && rm('-rf', OUT_DIR);
+    mkdir('-p', OUT_DIR);
+
+    // execute command
+    jsdoc2md({ src: 'lib/**/*.js' }).pipe(targetStream);
+
+    console.log(' - wiki generated at ' + OUT_PATH);
+    exit();
+};
+
+// ensure we run this script exports if this is a direct stdin.tty run
+!module.parent && module.exports(exit);

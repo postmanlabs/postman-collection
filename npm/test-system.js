@@ -8,7 +8,7 @@ var async = require('async'),
     path = require('path'),
     Mocha = require('mocha'),
 
-    SPEC_SOURCE_DIR = './test/system',
+    SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'system'),
 
     /**
      * Load a JSON from file synchronously

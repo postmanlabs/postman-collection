@@ -12,8 +12,8 @@ describe('repository', function () {
         var content,
             json;
 
-        it('must exist', function () {
-            expect(fs.existsSync('./package.json')).to.be.ok();
+        it('must exist', function (done) {
+            fs.stat('./package.json', done);
         });
 
         it('must have readable content', function () {
@@ -140,6 +140,38 @@ describe('repository', function () {
                 npmi = fs.readFileSync('./.npmignore').toString().replace(/#.*\n/g, '\n').replace(/\n+/g, '\n');
 
             expect(npmi.substr(-gi.length)).to.eql(gi);
+        });
+    });
+
+    describe('.eslintrc', function () {
+        var stripJSON = require('strip-json-comments'),
+
+            content,
+            json;
+
+        it('must exist', function (done) {
+            fs.stat('./.eslintrc', done);
+        });
+
+        it('must have readable content', function () {
+            expect(content = fs.readFileSync('./.eslintrc').toString()).to.be.ok();
+        });
+
+        it('must be valid JSON content', function () {
+            expect(json = JSON.parse(stripJSON(content))).to.be.ok();
+        });
+
+        it('must be ES5 compliant', function () {
+            expect(json.parserOptions.ecmaVersion).to.be(5);
+        });
+
+        it('must have appropriate plugins specified', function () {
+            expect(json.plugins).to.eql(['jsdoc', 'lodash', 'mocha', 'security']);
+        });
+
+        it('must have appropriate environments specified', function () {
+            expect(json.env.browser).to.be(true);
+            expect(json.env.node).to.be(true);
         });
     });
 });

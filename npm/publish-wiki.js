@@ -1,43 +1,46 @@
 #!/usr/bin/env node
-// ----------------------------------------------------------------------------------------------------------------------
-// This script is intended to publish wiki of this module
-// ----------------------------------------------------------------------------------------------------------------------
-
 require('shelljs/global');
 require('colors');
 
-// Stop on first error
-set('-e');
-console.log('Publishing wiki...'.yellow.bold);
+var path = require('path'),
 
-var publishResult,
+    publishResult,
 
     WIKI_URL = 'https://github.com/postmanlabs/postman-collection.wiki.git',
-    WIKI_GIT_PATH = '.tmp/github-wiki',
+    WIKI_GIT_PATH = path.join(__dirname, '..', '.tmp', 'github-wiki'),
     WIKI_VERSION = exec('git describe --always').stdout;
 
-// build the reference MD
-exec('npm run build-wiki');
+module.exports = function (exit) {
+    console.log('Publishing wiki...'.yellow.bold);
 
-// clone repository
-mkdir('-p', WIKI_GIT_PATH);
-rm('-rf', WIKI_GIT_PATH);
-exec(`git clone ${WIKI_URL} ${WIKI_GIT_PATH} --quiet`);
+    // build the reference MD
+    require('./build-wiki');
 
-// update contents of repository
-exec('node ./wiki_create_content_from_reference.js');
+    // clone repository
+    mkdir('-p', WIKI_GIT_PATH);
+    rm('-rf', WIKI_GIT_PATH);
+    exec('git clone ' + WIKI_URL + ' ' + WIKI_GIT_PATH + ' --quiet');
 
-// silence terminal output to prevent leaking sensitive information
-config.silent = true;
+    // update contents of repository
+    require('./wiki_create_content_from_reference');
 
-pushd(WIKI_GIT_PATH);
-exec('git add --all');
-exec(`git commit -m "[auto] ${WIKI_VERSION}"`);
-publishResult = exec('git push origin master');
+    // silence terminal output to prevent leaking sensitive information
+    config.silent = true;
 
-if (publishResult.code !== 0) {
-    console.log('Wiki publish failed!'.red.bold);
-    exit(1);
-}
+    pushd(WIKI_GIT_PATH);
+    exec('git add --all');
+    exec('git commit -m "[auto] ' + WIKI_VERSION + '"');
+    publishResult = exec('git push origin master');
+    popd();
 
-console.log(` - wiki published ${WIKI_VERSION}`);
+    if (publishResult.code) {
+        console.log('Wiki publish failed!'.red.bold);
+        exit(1);
+    }
+
+    console.log(' - wiki published ' + WIKI_VERSION);
+    exit();
+};
+
+// ensure we run this script exports if this is a direct stdin.tty run
+!module.parent && module.exports(exit);
