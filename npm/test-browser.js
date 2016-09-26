@@ -8,14 +8,16 @@ require('colors');
 var path = require('path'),
     Server = require('karma').Server,
 
+    INFO_MESSAGE = 'Running unit tests within browser'.yellow,
     KARMA_CONFIG_PATH = path.join(__dirname, '..', 'karma.conf');
 
-module.exports = function (exit) {
-    console.log('Running unit tests within browser...'.yellow.bold);
+module.exports = function (done) {
+    console.log(INFO_MESSAGE);
+
     new Server({
         cmd: 'start',
         configFile: KARMA_CONFIG_PATH
-    }, exit).start();
+    }, done).start();
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run

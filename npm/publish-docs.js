@@ -1,15 +1,17 @@
 require('shelljs/global');
+require('colors');
 
-var SUCCESS_MESSAGE = 'Documentation published successfully!'.green.bold,
+var INFO_MESSAGE = 'Generating and publishing documentation for postman-collection'.yellow.bold,
+    SUCCESS_MESSAGE = 'Documentation published successfully!'.green.bold,
     FAILURE_MESSAGE = 'Doc publish failed!'.red.bold;
 
-module.exports = function (exit) {
+module.exports = function (done) {
     process.on('exit', function (code) {
         code && console.log(FAILURE_MESSAGE);
-        exit(code);
+        done(code);
     });
 
-    console.log('Generating and publishing documentation for postman-collection'.yellow.bold);
+    console.log(INFO_MESSAGE);
     // generate project documentation
     require('./build-docs');
 
@@ -33,7 +35,7 @@ module.exports = function (exit) {
     config.silent = true;
     exec('git push --force "git@github.com:postmanlabs/postman-collection.git" master:gh-pages', function (code) {
         console.log(code ? FAILURE_MESSAGE : SUCCESS_MESSAGE);
-        exit(code);
+        done(code);
     });
 };
 

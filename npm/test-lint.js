@@ -10,6 +10,7 @@ require('colors');
 var async = require('async'),
     ESLintCLIEngine = require('eslint').CLIEngine,
 
+    INFO_MESSAGE = 'Linting files using ESLint...'.yellow.bold,
     LINT_SOURCE_DIRS = [
         './test',
         './index.js',
@@ -17,9 +18,9 @@ var async = require('async'),
         './npm/*.js'
     ];
 
-module.exports = function (exit) {
+module.exports = function (done) {
     // banner line
-    console.log('\nLinting files using eslint...'.yellow.bold);
+    console.log(INFO_MESSAGE);
 
     async.waterfall([
         // execute the CLI engine
@@ -33,11 +34,11 @@ module.exports = function (exit) {
             // log the result to CLI
             console.log(ESLintCLIEngine.getFormatter()(report.results));
             // log the success of the parser if it has no errors
-            (errorReport && !errorReport.length) && console.log('eslint ok!'.green);
+            (errorReport && !errorReport.length) && console.log('ESLint ok!'.green);
             // ensure that the exit code is non zero in case there was an error
             next(Number(errorReport && errorReport.length) || 0);
         }
-    ], exit);
+    ], done);
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run

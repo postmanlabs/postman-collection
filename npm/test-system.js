@@ -8,6 +8,7 @@ var async = require('async'),
     Mocha = require('mocha'),
 
     SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'system'),
+    INFO_MESSAGE = '\nRunning system tests using mocha and nsp...'.yellow.bold,
 
     /**
      * Load a JSON from file synchronously
@@ -19,9 +20,9 @@ var async = require('async'),
         return JSON.parse(fs.readFileSync(path.join(__dirname, file)).toString());
     };
 
-module.exports = function (exit) {
+module.exports = function (done) {
     // banner line
-    console.log('\nRunning system tests using mocha and nsp...'.yellow.bold);
+    console.log(INFO_MESSAGE);
 
     async.series([
         // run test specs using mocha
@@ -67,7 +68,7 @@ module.exports = function (exit) {
                     return next();
                 }
 
-                // in case an nsp vialation is found, we raise an error
+                // in case an nsp violation is found, we raise an error
                 if (result.length) {
                     console.error(nsp.formatters.default(err, result));
                     return next(1);
@@ -77,7 +78,7 @@ module.exports = function (exit) {
                 return next();
             });
         }
-    ], exit);
+    ], done);
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run

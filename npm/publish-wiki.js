@@ -6,16 +6,17 @@ var path = require('path'),
     WIKI_URL = 'https://github.com/postmanlabs/postman-collection.wiki.git',
     WIKI_GIT_PATH = path.join(__dirname, '..', '.tmp', 'github-wiki'),
     WIKI_VERSION = exec('git describe --always').stdout,
+    INFO_MESSAGE = 'Publishing wiki...'.yellow.bold,
     SUCCESS_MESSAGE = (' - wiki published ' + WIKI_VERSION).green.bold,
     FAILURE_MESSAGE = 'Wiki publish failed!'.red.bold;
 
-module.exports = function (exit) {
+module.exports = function (done) {
     process.on('exit', function (code) {
         code && console.log(FAILURE_MESSAGE);
-        exit(code);
+        done(code);
     });
 
-    console.log('Publishing wiki...'.yellow.bold);
+    console.log(INFO_MESSAGE);
 
     // build the reference MD
     require('./build-wiki');
@@ -39,7 +40,7 @@ module.exports = function (exit) {
     exec('git push origin master', function (code) {
         console.log(code ? FAILURE_MESSAGE : SUCCESS_MESSAGE);
         popd();
-        exit(code);
+        done(code);
     });
 };
 

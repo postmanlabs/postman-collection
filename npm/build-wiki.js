@@ -8,11 +8,12 @@ var fs = require('fs'),
 
     OUT_DIR = path.join(__dirname, '..', 'out', 'wiki'),
     OUT_PATH = path.join(OUT_DIR, 'REFERENCE.md'),
+    INFO_MESSAGE = 'Generating wiki using jsdoc2md...'.yellow.bold,
 
     targetStream = fs.createWriteStream(OUT_PATH);
 
-module.exports = function (exit) {
-    console.log('Generating wiki using jsdoc2md...'.yellow.bold);
+module.exports = function (done) {
+    console.log(INFO_MESSAGE);
 
     // clean directory
     test('-d', OUT_DIR) && rm('-rf', OUT_DIR);
@@ -22,7 +23,7 @@ module.exports = function (exit) {
     jsdoc2md({ src: 'lib/**/*.js' }).pipe(targetStream);
 
     console.log(' - wiki generated at ' + OUT_PATH);
-    exit();
+    done();
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
