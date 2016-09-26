@@ -11,15 +11,16 @@ var path = require('path'),
     Mocha = require('mocha'),
     recursive = require('recursive-readdir'),
 
-    SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'integration');
+    SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'integration'),
+    INFO_MESSAGE = '\nRunning integration tests using mocha on node...'.yellow.bold;
 
-module.exports = function (exit) {
+module.exports = function (done) {
     // banner line
-    console.log('Running integration tests using mocha on node...'.yellow.bold);
+    console.log(INFO_MESSAGE);
 
     // add all spec files to mocha
     recursive(SPEC_SOURCE_DIR, function (err, files) {
-        if (err) { console.error(err); return exit(1); }
+        if (err) { console.error(err); return done(1); }
 
         var mocha = new Mocha({ timeout: 1000 * 60 });
 
@@ -28,7 +29,7 @@ module.exports = function (exit) {
         }).forEach(mocha.addFile.bind(mocha));
 
         mocha.run(function (err) {
-            exit(err ? 1 : 0);
+            done(err ? 1 : 0);
         });
     });
 };

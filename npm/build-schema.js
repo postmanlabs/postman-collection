@@ -6,23 +6,20 @@ var fs = require('fs'),
 
     compiler = require('schema-compiler'),
 
+    INFO_MESSAGE = 'Generating schema...'.yellow.bold,
     OUTPUT_FOLDER = path.join(__dirname, '..', 'out', 'schema'),
     OUTPUT_FILE = path.join(OUTPUT_FOLDER, collection.json);
 
-module.exports = function (exit) {
-    console.log('Generating schema...'.yellow.bold);
+module.exports = function (done) {
+    console.log(INFO_MESSAGE);
 
     // clean directory
     test('-d', OUTPUT_FOLDER) && test('-f', OUTPUT_FILE) && rm('-f', OUTPUT_FILE);
     mkdir('-p', OUTPUT_FOLDER);
 
     fs.writeFile(OUTPUT_FILE, compiler.compile(OUTPUT_FILE, OUTPUT_FOLDER), function (err) {
-        if (err) {
-            return exit(err);
-        }
-
-        console.log(' - schema can be found at ' + OUTPUT_FILE);
-        exit();
+        !err && console.log(' - schema can be found at ' + OUTPUT_FILE);
+        done(err);
     });
 };
 
