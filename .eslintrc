@@ -1,7 +1,4 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 5
-  },
   "plugins": [
     "jsdoc",
     "lodash",
