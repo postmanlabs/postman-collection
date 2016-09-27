@@ -88,7 +88,7 @@ describe('VariableScope', function () {
         expect(scope.values.count()).be(0);
     });
 
-    describe('values syncing methods', function () {
+    describe('syncing variables from source', function () {
         it('must be able to sync values from an object (and not return crud when not specified)', function () {
             var scope = new VariableScope(),
                 crud;
@@ -197,6 +197,72 @@ describe('VariableScope', function () {
 
             expect(scope.values).not.be(list);
             expect(scope.values.one('var-1')).eql(list.one('var-1'));
+        });
+    });
+
+    describe('syncing variables to target', function () {
+        it('must be able to sync to an object', function () {
+            var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value'
+                    }]
+                }),
+
+                target = {};
+
+            scope.syncVariablesTo(target);
+
+            expect(target).have.property('var-1', 'var-1-value');
+            expect(target).have.property('var-2', 'var-2-value');
+        });
+
+        it('must retain variable type while syncing to object', function () {
+            var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value',
+                        type: 'string'
+                    }, {
+                        key: 'var-2',
+                        value: '2',
+                        type: 'number'
+                    }]
+                }),
+
+                target = {};
+
+            scope.syncVariablesTo(target);
+
+            expect(target).have.property('var-1', 'var-1-value');
+            expect(target).have.property('var-2', 2);
+        });
+
+        it('must remove extra properties from target object', function () {
+            var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value',
+                        type: 'string'
+                    }, {
+                        key: 'var-2',
+                        value: '2',
+                        type: 'number'
+                    }]
+                }),
+
+                target = {
+                    extra: 'extra-variable'
+                };
+
+            scope.syncVariablesTo(target);
+
+            expect(target).have.property('var-1', 'var-1-value');
+            expect(target).have.property('var-2', 2);
+            expect(target).not.have.property('extra');
         });
     });
 });

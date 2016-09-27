@@ -25,5 +25,23 @@ describe('Collection', function () {
             expect(collection.variables.one('var1')).be.ok();
             expect(collection.variables.one('var1').value).be('value1');
         });
+
+        it('must be able to sync variables to a target object', function () {
+            var collection = new Collection({
+                    variable: [{
+                        key: 'var1',
+                        value: '1',
+                        type: 'number'
+                    }]
+                }),
+                target = {
+                    extra: true
+                };
+
+            collection.syncVariablesTo(target);
+
+            expect(target).have.property('var1', 1);
+            expect(target).not.have.property('extra');
+        });
     });
 });
