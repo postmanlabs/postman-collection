@@ -8,29 +8,32 @@ require('colors');
 // set directories and files for test and coverage report
 var path = require('path'),
 
-    Mocha = require('mocha'),
-    recursive = require('recursive-readdir'),
-
-    SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'unit');
+    IS_WINDOWS = (/^win/).test(process.platform);
 
 module.exports = function (exit) {
+    var mochaReporter,
+        istanbulReport;
+
+    if (process.env.CI) {
+        mochaReporter = 'xunit';
+        istanbulReport = '--report cobertura';
+    }
+    else {
+        mochaReporter = 'spec';
+        istanbulReport = '';
+    }
+
     // banner line
     console.log('Running unit tests using mocha on node...'.yellow.bold);
 
-    // add all spec files to mocha
-    recursive(SPEC_SOURCE_DIR, function (err, files) {
-        if (err) { console.error(err); return exit(1); }
+    mkdir('-p', '.tmp');
+    test('-d', '.coverage') && rm('-rf', '.coverage') && mkdir('-p', '.coverage');
 
-        var mocha = new Mocha({ timeout: 1000 * 60 });
-
-        files.filter(function (file) { // extract all test files
-            return (file.substr(-8) === '.test.js');
-        }).forEach(mocha.addFile.bind(mocha));
-
-        mocha.run(function (err) {
-            exit(err ? 1 : 0);
-        });
-    });
+    // eslint-disable-next-line max-len
+    exec((IS_WINDOWS ? '' : 'node ') + '"' + path.join('node_modules', '.bin', 'istanbul') + (IS_WINDOWS ? '.cmd' : '') +
+        '" cover ' + istanbulReport + ' --dir .coverage --color --print both ' + path.join('node_modules', 'mocha', 'bin', '_mocha') +
+        ' -- --reporter ' + mochaReporter + ' --reporter-options output=' + path.join('.tmp', 'report.xml') + path.join('test', 'unit') +
+        ' --recursive --prof --colors --grep=' + (process.argv[2] || '.*'), exit);
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
