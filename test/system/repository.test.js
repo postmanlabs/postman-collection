@@ -47,6 +47,13 @@ describe('repository', function () {
                     expect(fs.existsSync('npm/' + scriptName + '.js')).to.be.ok();
                 });
             });
+
+            it('must have the hashbang defined', function () {
+                json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
+                    var fileContent = fs.readFileSync('npm/' + scriptName + '.js').toString();
+                    expect(/^#!\/(bin\/bash|usr\/bin\/env\snode)[\r\n][\W\w]*$/g.test(fileContent)).to.be.ok();
+                });
+            });
         });
 
         describe('devDependencies', function () {
@@ -152,10 +159,6 @@ describe('repository', function () {
 
         it('must be valid JSON content', function () {
             expect(json = JSON.parse(stripJSON(content))).to.be.ok();
-        });
-
-        it('must be ES5 compliant', function () {
-            expect(json.parserOptions.ecmaVersion).to.be(5);
         });
 
         it('must have appropriate plugins specified', function () {

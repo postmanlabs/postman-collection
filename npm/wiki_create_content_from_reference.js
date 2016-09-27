@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+/* eslint-env node, es6 */
+
 var SOURCE_MD = 'out/wiki/REFERENCE.md',
     HOME_MD = '.tmp/github-wiki/Home.md',
     SIDE_MD = '.tmp/github-wiki/_Sidebar.md',

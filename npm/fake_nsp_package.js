@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+/* eslint-env node, es6 */
 var resolve = require('path').resolve,
 
     loadJSON = function (file) {

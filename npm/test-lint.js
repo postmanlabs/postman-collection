@@ -1,8 +1,10 @@
+#!/usr/bin/env node
 // ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to contain all actions pertaining to code style checking, linting and normalisation.
 //
 // 1. The script executes linting routines on specific folders.
 // ---------------------------------------------------------------------------------------------------------------------
+/* eslint-env node, es6 */
 
 require('shelljs/global');
 require('colors');
