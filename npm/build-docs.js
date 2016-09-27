@@ -6,7 +6,7 @@ var path = require('path'),
     colors = require('colors/safe'),
 
     IS_WINDOWS = (/^win/).test(process.platform),
-    TARGET_DIR = path.join(__dirname, '..', 'out', 'docs');
+    TARGET_DIR = path.join('out', 'docs');
 
 module.exports = function (exit) {
     console.log(colors.yellow.bold('Generating documentation...'));
@@ -25,7 +25,7 @@ module.exports = function (exit) {
         // output status
         console.log(code ?
             colors.red.bold('unable to genereate documentation') :
-            colors.green(`documentation created at ${TARGET_DIR}`));
+            ` - documentation created at "${TARGET_DIR}"`);
         exit(code);
     });
 };

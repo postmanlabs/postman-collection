@@ -6,8 +6,10 @@ require('colors');
 var fs = require('fs'),
     path = require('path'),
 
-    OUTPUT_FOLDER = path.join(__dirname, '..', 'out', 'schema'),
-    OUTPUT_FILE = path.join(OUTPUT_FOLDER, collection.json);
+    IN_FOLDER = path.join('lib', 'schema'),
+    IN_FOLDER_ROOT = path.join(IN_FOLDER, 'collection.json'),
+    OUTPUT_FOLDER = path.join('out', 'schema'),
+    OUTPUT_FILE = path.join(OUTPUT_FOLDER, 'collection.json');
 
 module.exports = function (exit) {
     var compiler = require('schema-compiler');
@@ -24,8 +26,9 @@ module.exports = function (exit) {
         return exit(e ? 1 : 0);
     }
 
-    fs.writeFile(OUTPUT_FILE, compiler.compile(OUTPUT_FILE, OUTPUT_FOLDER), function (err) {
+    fs.writeFile(OUTPUT_FILE, JSON.stringify(compiler.compile(IN_FOLDER_ROOT, IN_FOLDER), 0, 2), function (err) {
         if (err) {
+            console.error(err.stack || err);
             return exit(err ? 1 : 0);
         }
 

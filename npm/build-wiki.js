@@ -7,10 +7,13 @@ var fs = require('fs'),
     path = require('path'),
     jsdoc2md = require('jsdoc-to-markdown'),
 
-    OUT_DIR = path.join(__dirname, '..', 'out', 'wiki'),
+    OUT_DIR = path.join('out', 'wiki'),
+    INP_DIR = path.join('lib', '**', '*.js'),
     OUT_PATH = path.join(OUT_DIR, 'REFERENCE.md');
 
 module.exports = function (exit) {
+    var errored;
+
     console.log(colors.yellow.bold('Generating wiki using jsdoc2md...'));
 
     try {
@@ -19,15 +22,23 @@ module.exports = function (exit) {
         mkdir('-p', OUT_DIR);
 
         // execute command
-        jsdoc2md({ src: 'lib/**/*.js' }).pipe(fs.createWriteStream(OUT_PATH));
+        jsdoc2md({ src: INP_DIR })
+            .on('finish', function () {
+                if (errored) { return; }
+                console.log(` - wiki generated at "${OUT_PATH}"`);
+                exit();
+            })
+            .on('error', function (e) {
+                errored = true;
+                console.error(e && e.stack || e);
+                exit(1);
+            })
+            .pipe(fs.createWriteStream(OUT_PATH));
     }
     catch (e) {
         console.error(e.stack || e);
         return exit(e ? 1 : 0);
     }
-
-    console.log(` - wiki generated at "${OUT_PATH}"`);
-    exit();
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
