@@ -2,7 +2,8 @@
  * @fileOverview This test specs runs tests on the package.json file of repository. It has a set of strict tests on the
  * content of the file as well. Any change to package.json must be accompanied by valid test case in this spec-sheet.
  */
-var expect = require('expect.js');
+var _ = require('lodash'),
+    expect = require('expect.js');
 
 /* global describe, it */
 describe('repository', function () {
@@ -12,8 +13,8 @@ describe('repository', function () {
         var content,
             json;
 
-        it('must exist', function () {
-            expect(fs.existsSync('./package.json')).to.be.ok();
+        it('must exist', function (done) {
+            fs.stat('./package.json', done);
         });
 
         it('must have readable content', function () {
@@ -33,44 +34,26 @@ describe('repository', function () {
             });
 
             it('must have a valid version string in form of <major>.<minor>.<revision>', function () {
-                /* jshint ignore:start */
                 expect(json.version).to.match(/^((\d+)\.(\d+)\.(\d+))(?:-([\dA-Za-z\-]+(?:\.[\dA-Za-z\-]+)*))?(?:\+([\dA-Za-z\-]+(?:\.[\dA-Za-z\-]+)*))?$/);
-
-                /* jshint ignore:end */
             });
         });
 
         describe('script definitions', function () {
-            it('scripts key should exist', function () {
-                expect(json.scripts).to.be.ok();
-            });
-
             it('files must exist', function () {
-                var script;
+                var scriptRegex = /^node\snpm\/.*\.js/;
 
-                for (script in json.scripts) {
-                    expect(fs.existsSync(json.scripts[script])).to.be.ok();
-                }
-            });
-
-            it('must be defined as per standards `[script]: scripts/*/[name].sh`', function () {
-                var script,
-                    parts;
-
-                for (script in json.scripts) {
-                    parts = json.scripts[script].split('/');
-                    expect((parts[0] === 'scripts') && (parts.slice(-1)[0].match(script))).to.be.ok();
-                }
+                expect(json.scripts).to.be.ok();
+                json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
+                    expect(scriptRegex.test(json.scripts[scriptName])).to.be(true);
+                    expect(fs.existsSync('npm/' + scriptName + '.js')).to.be.ok();
+                });
             });
 
             it('must have the hashbang defined', function () {
-                var fileContent,
-                    script;
-
-                for (script in json.scripts) {
-                    fileContent = fs.readFileSync(json.scripts[script]).toString();
-                    expect(/^#!\/(bin\/bash|usr\/bin\/env\s(node|bash))[\r\n][\W\w]*$/g.test(fileContent)).to.be.ok();
-                }
+                json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
+                    var fileContent = fs.readFileSync('npm/' + scriptName + '.js').toString();
+                    expect(/^#!\/(bin\/bash|usr\/bin\/env\snode)[\r\n][\W\w]*$/g.test(fileContent)).to.be.ok();
+                });
             });
         });
 
@@ -80,15 +63,15 @@ describe('repository', function () {
             });
 
             it('must have specified version for dependencies ', function () {
-                for (var item in json.devDependencies) {
-                    expect(json.devDependencies[item]).to.be.ok();
-                }
+                _.forEach(json.devDependencies, function (dep) {
+                    expect(dep).be.ok();
+                });
             });
 
             it('must point to specific package version; (*, ^, ~) not expected', function () {
-                for (var item in json.devDependencies) {
-                    expect(/^\d/.test(json.devDependencies[item])).to.be.ok();
-                }
+                _.forEach(json.devDependencies, function (dep) {
+                    expect(/^\d/.test(dep)).be.ok();
+                });
             });
         });
 
@@ -103,9 +86,9 @@ describe('repository', function () {
             });
 
             it('must point to specific package version; (*, ^, ~) not expected', function () {
-                for (var item in json.dependencies) {
-                    expect(/^\d/.test(json.dependencies[item])).to.be.ok();
-                }
+                _.forEach(json.dependencies, function (dep) {
+                    expect(/^\d/.test(dep)).be.ok();
+                });
             });
         });
 
@@ -158,6 +141,34 @@ describe('repository', function () {
                 npmi = fs.readFileSync('./.npmignore').toString().replace(/#.*\n/g, '\n').replace(/\n+/g, '\n');
 
             expect(npmi.substr(-gi.length)).to.eql(gi);
+        });
+    });
+
+    describe('.eslintrc', function () {
+        var stripJSON = require('strip-json-comments'),
+
+            content,
+            json;
+
+        it('must exist', function (done) {
+            fs.stat('./.eslintrc', done);
+        });
+
+        it('must have readable content', function () {
+            expect(content = fs.readFileSync('./.eslintrc').toString()).to.be.ok();
+        });
+
+        it('must be valid JSON content', function () {
+            expect(json = JSON.parse(stripJSON(content))).to.be.ok();
+        });
+
+        it('must have appropriate plugins specified', function () {
+            expect(json.plugins).to.eql(['jsdoc', 'lodash', 'mocha', 'security']);
+        });
+
+        it('must have appropriate environments specified', function () {
+            expect(json.env.browser).to.be(true);
+            expect(json.env.node).to.be(true);
         });
     });
 });

@@ -2,9 +2,8 @@
 ### ===============================================
 /.editorconfig
 /.gitmodules
-/.jscsrc
-/.jshintrc
-/.jsbeautifyrc
+/.eslintrc
+/.eslintignore
 /.jsdoc-config.json
 /scripts
 /test
