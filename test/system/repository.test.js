@@ -161,10 +161,6 @@ describe('repository', function () {
             expect(json = JSON.parse(stripJSON(content))).to.be.ok();
         });
 
-        it('must be ES5 compliant', function () {
-            expect(json.parserOptions.ecmaVersion).to.be(5);
-        });
-
         it('must have appropriate plugins specified', function () {
             expect(json.plugins).to.eql(['jsdoc', 'lodash', 'mocha', 'security']);
         });
