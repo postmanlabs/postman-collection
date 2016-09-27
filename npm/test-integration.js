@@ -30,6 +30,7 @@ module.exports = function (exit) {
         }).forEach(mocha.addFile.bind(mocha));
 
         mocha.run(function (err) {
+            err && console.error(err.stack || err);
             exit(err ? 1 : 0);
         });
     });

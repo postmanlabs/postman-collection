@@ -22,7 +22,7 @@ module.exports = function (exit) {
         jsdoc2md({ src: 'lib/**/*.js' }).pipe(fs.createWriteStream(OUT_PATH));
     }
     catch (e) {
-        console.error(e);
+        console.error(e.stack || e);
         return exit(e ? 1 : 0);
     }
 

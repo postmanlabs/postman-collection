@@ -30,8 +30,8 @@ module.exports = function (exit) {
                 exec('git commit -m "Deploy to GitHub Pages"');
             }
             catch (e) {
-                console.error(e);
-                return next(e);
+                console.error(e.stack || e);
+                return next(e ? 1 : 0);
             }
 
             // Force push from the current repo's master branch to the remote

@@ -20,7 +20,7 @@ module.exports = function (exit) {
         mkdir('-p', OUTPUT_FOLDER);
     }
     catch (e) {
-        console.error(e);
+        console.error(e.stack || e);
         return exit(e ? 1 : 0);
     }
 

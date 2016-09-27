@@ -11,8 +11,14 @@ var path = require('path'),
 module.exports = function (exit) {
     console.log(colors.yellow.bold('Generating documentation...'));
 
-    // clean directory
-    test('-d', TARGET_DIR) && rm('-rf', TARGET_DIR);
+    try {
+        // clean directory
+        test('-d', TARGET_DIR) && rm('-rf', TARGET_DIR);
+    }
+    catch (e) {
+        console.error(e.stack || e);
+        return exit(e ? 1 : 0);
+    }
 
     exec(`${IS_WINDOWS ? '' : 'node'} ${path.join('node_modules', '.bin', 'jsdoc')}${IS_WINDOWS ? '.cmd' : ''}` +
         ' -c .jsdoc-config.json -u docs lib', function (code) {
