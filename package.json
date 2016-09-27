@@ -66,7 +66,7 @@
     "karma-mocha": "0.2.2",
     "karma-mocha-reporter": "2.2.0",
     "postman-jsdoc-theme": "0.0.2",
-    "mocha": "2.5.3",
+    "mocha": "3.1.0",
     "mustache": "2.2.1",
     "nsp": "2.6.1",
     "packity": "0.3.2",
