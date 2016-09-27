@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var resolve = require('path').resolve,
 
     loadJSON = function (file) {

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 require('shelljs/global');
 
 var SUCCESS_MESSAGE = 'Documentation published successfully!'.green.bold,

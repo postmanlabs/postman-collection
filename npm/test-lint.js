@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to contain all actions pertaining to code style checking, linting and normalisation.
 //
