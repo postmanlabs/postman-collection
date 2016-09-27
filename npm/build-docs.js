@@ -1,24 +1,25 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 require('shelljs/global');
-require('colors');
 
 var path = require('path'),
+    colors = require('colors/safe'),
 
     IS_WINDOWS = (/^win/).test(process.platform),
-    TARGET_DIR = path.join(__dirname, '..', 'out', 'docs'),
-    SUCCESS_MESSAGE = ' - documentation can be found at ./out/docs',
-    FAILURE_MESSAGE = 'Documentation could not be generated!'.red.bold,
-    DOC_GENERATION_COMMAND = (IS_WINDOWS ? '' : 'node ') + path.join('node_modules', '.bin', 'jsdoc') +
-        (IS_WINDOWS ? '.cmd' : '') + ' -c .jsdoc-config.json -u docs lib';
+    TARGET_DIR = path.join(__dirname, '..', 'out', 'docs');
 
 module.exports = function (exit) {
-    console.log('Generating documentation...'.yellow.bold);
+    console.log(colors.yellow.bold('Generating documentation...'));
+
     // clean directory
     test('-d', TARGET_DIR) && rm('-rf', TARGET_DIR);
 
-    exec(DOC_GENERATION_COMMAND, function (code) {
-        console.log(code ? FAILURE_MESSAGE : SUCCESS_MESSAGE);
+    exec(`${IS_WINDOWS ? '' : 'node'} ${path.join('node_modules', '.bin', 'jsdoc')}${IS_WINDOWS ? '.cmd' : ''}` +
+        ' -c .jsdoc-config.json -u docs lib', function (code) {
+        // output status
+        console.log(code ?
+            colors.red.bold('unable to genereate documentation') :
+            colors.green(`documentation created at ${TARGET_DIR}`));
         exit(code);
     });
 };

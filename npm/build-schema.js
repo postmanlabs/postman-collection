@@ -6,21 +6,27 @@ require('colors');
 var fs = require('fs'),
     path = require('path'),
 
-    compiler = require('schema-compiler'),
-
     OUTPUT_FOLDER = path.join(__dirname, '..', 'out', 'schema'),
     OUTPUT_FILE = path.join(OUTPUT_FOLDER, collection.json);
 
 module.exports = function (exit) {
+    var compiler = require('schema-compiler');
+
     console.log('Generating schema...'.yellow.bold);
 
     // clean directory
-    test('-d', OUTPUT_FOLDER) && test('-f', OUTPUT_FILE) && rm('-f', OUTPUT_FILE);
-    mkdir('-p', OUTPUT_FOLDER);
+    try {
+        test('-d', OUTPUT_FOLDER) && test('-f', OUTPUT_FILE) && rm('-f', OUTPUT_FILE);
+        mkdir('-p', OUTPUT_FOLDER);
+    }
+    catch (e) {
+        console.error(e);
+        return exit(e ? 1 : 0);
+    }
 
     fs.writeFile(OUTPUT_FILE, compiler.compile(OUTPUT_FILE, OUTPUT_FOLDER), function (err) {
         if (err) {
-            return exit(err);
+            return exit(err ? 1 : 0);
         }
 
         console.log(' - schema can be found at ' + OUTPUT_FILE);

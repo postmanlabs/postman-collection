@@ -9,8 +9,6 @@ require('colors');
 
 // set directories and files for test and coverage report
 var path = require('path'),
-
-    Mocha = require('mocha'),
     recursive = require('recursive-readdir'),
 
     SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'integration');
@@ -18,6 +16,8 @@ var path = require('path'),
 module.exports = function (exit) {
     // banner line
     console.log('Running integration tests using mocha on node...'.yellow.bold);
+
+    var Mocha = require('mocha');
 
     // add all spec files to mocha
     recursive(SPEC_SOURCE_DIR, function (err, files) {

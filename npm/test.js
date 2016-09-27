@@ -1,20 +1,23 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 require('shelljs/global');
-require('colors');
 
-console.log('   ___     _ _        _   _           '.yellow.bold + ' ___ ___  _  __ '.green.bold);
-console.log('  / __|___| | |___ __| |_(_)___ _ _   '.yellow.bold + '/ __|   \\| |/ / '.green.bold);
-console.log(' | (__/ _ \\ | / -_) _|  _| / _ \\ \' \\  '.yellow.bold + '\\__ \\ |) | \' <  '.green.bold);
-console.log('  \\___\\___/_|_\\___\\__|\\__|_\\___/_||_| '.yellow.bold + '|___/___/|_|\\_\\ '.green.bold);
+var async = require('async'),
+    colors = require('colors/safe');
 
-require('async').series([
+console.log(colors.yellow.bold('  ___     _ _        _   _           ') + colors.green.bold(' ___ ___  _  __ '));
+console.log(colors.yellow.bold(' / __|___| | |___ __| |_(_)___ _ _   ') + colors.green.bold('/ __|   \\| |/ / '));
+console.log(colors.yellow.bold('| (__/ _ \\ | / -_) _|  _| / _ \\ \' \\  ') + colors.green.bold('\\__ \\ |) | \' < '));
+console.log(colors.yellow.bold(' \\___\\___/_|_\\___\\__|\\__|_\\___/_||_| ') + colors.green.bold('|___/___/|_|\\_\\'));
+
+async.series([
     require('./test-lint'),
     require('./test-system'),
     require('./test-unit'),
     require('./test-integration'),
-    process.env.CI ? function (done) { done(); } : require('./test-browser')
+    // run the browser tests locally and not on CI
+    process.env.CI ? async.constant() : require('./test-browser')
 ], function (code) {
-    !code && console.log('\npostman-collection tests: all ok!'.green);
+    !code && console.log(colors.green('\npostman-collection tests: all ok!'));
     exit(code);
 });

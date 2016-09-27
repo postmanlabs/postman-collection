@@ -5,19 +5,20 @@
 /* eslint-env node, es6 */
 
 require('shelljs/global');
-require('colors');
 
-var path = require('path'),
-    Server = require('karma').Server,
+var colors = require('colors/safe'),
+    path = require('path'),
 
     KARMA_CONFIG_PATH = path.join(__dirname, '..', 'karma.conf');
 
 module.exports = function (exit) {
-    console.log('Running unit tests within browser...'.yellow.bold);
-    new Server({
+    console.log(colors.yellow.bold('Running unit tests within browser...'));
+
+    var KarmaServer = require('karma').Server;
+    (new KarmaServer({ // eslint-disable no-new
         cmd: 'start',
         configFile: KARMA_CONFIG_PATH
-    }, exit).start();
+    }, exit)).start();
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run

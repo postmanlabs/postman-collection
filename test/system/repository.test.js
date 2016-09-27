@@ -2,7 +2,8 @@
  * @fileOverview This test specs runs tests on the package.json file of repository. It has a set of strict tests on the
  * content of the file as well. Any change to package.json must be accompanied by valid test case in this spec-sheet.
  */
-var expect = require('expect.js');
+var _ = require('lodash'),
+    expect = require('expect.js');
 
 /* global describe, it */
 describe('repository', function () {
@@ -62,15 +63,15 @@ describe('repository', function () {
             });
 
             it('must have specified version for dependencies ', function () {
-                for (var item in json.devDependencies) {
-                    expect(json.devDependencies[item]).to.be.ok();
-                }
+                _.forEach(json.devDependencies, function (dep) {
+                    expect(dep).be.ok();
+                });
             });
 
             it('must point to specific package version; (*, ^, ~) not expected', function () {
-                for (var item in json.devDependencies) {
-                    expect(/^\d/.test(json.devDependencies[item])).to.be.ok();
-                }
+                _.forEach(json.devDependencies, function (dep) {
+                    expect(/^\d/.test(dep)).be.ok();
+                });
             });
         });
 
@@ -85,9 +86,9 @@ describe('repository', function () {
             });
 
             it('must point to specific package version; (*, ^, ~) not expected', function () {
-                for (var item in json.dependencies) {
-                    expect(/^\d/.test(json.dependencies[item])).to.be.ok();
-                }
+                _.forEach(json.dependencies, function (dep) {
+                    expect(/^\d/.test(dep)).be.ok();
+                });
             });
         });
 

@@ -1,25 +1,24 @@
 #!/usr/bin/env node
+/* eslint-env node, es6 */
+
 // ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to contain all actions pertaining to code style checking, linting and normalisation.
-//
-// 1. The script executes linting routines on specific folders.
 // ---------------------------------------------------------------------------------------------------------------------
-/* eslint-env node, es6 */
 
 require('shelljs/global');
 require('colors');
 
 var async = require('async'),
-    ESLintCLIEngine = require('eslint').CLIEngine,
-
     LINT_SOURCE_DIRS = [
-        './test',
+        './test/**/*.js',
         './index.js',
-        './lib',
-        './npm/*.js'
+        './lib/**/*.js',
+        './npm/**/*.js'
     ];
 
 module.exports = function (exit) {
+    var ESLintCLIEngine = require('eslint').CLIEngine;
+
     // banner line
     console.log('\nLinting files using eslint...'.yellow.bold);
 
