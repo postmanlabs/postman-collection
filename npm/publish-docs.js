@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-env node, es6 */
 require('shelljs/global');
 
 var SUCCESS_MESSAGE = 'Documentation published successfully!'.green.bold,

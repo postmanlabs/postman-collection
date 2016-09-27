@@ -4,6 +4,7 @@
 //
 // 1. The script executes linting routines on specific folders.
 // ---------------------------------------------------------------------------------------------------------------------
+/* eslint-env node, es6 */
 
 require('shelljs/global');
 require('colors');
