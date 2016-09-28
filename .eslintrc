@@ -132,7 +132,7 @@
     "comma-spacing": [2, { "before": false, "after": true }],
     "comma-style": ["error", "last"],
     "computed-property-spacing": "error",
-    "consistent-this": "warn",
+    // "consistent-this": "warn",
     "eol-last": "error",
     "func-names": "off",
     "func-style": "off",
@@ -290,7 +290,7 @@
     "lodash/prefer-wrapper-method": 2,
     "lodash/preferred-alias": 2,
     "lodash/prop-shorthand": [2, "always"],
-    "lodash/unwrap": 2,
+    "lodash/unwrap": 2
 
     // Mocha
     //    "mocha/handle-done-callback": "error",
