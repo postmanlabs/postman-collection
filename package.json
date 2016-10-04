@@ -71,7 +71,7 @@
     "karma-mocha-reporter": "2.2.0",
     "mocha": "3.1.0",
     "mustache": "2.2.1",
-    "nsp": "2.6.1",
+    "nsp": "2.6.2",
     "packity": "0.3.2",
     "postman-jsdoc-theme": "0.0.2",
     "recursive-readdir": "2.1.0",
