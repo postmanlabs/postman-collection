@@ -54,7 +54,7 @@
     "async": "2.0.1",
     "browserify": "13.1.0",
     "colors": "1.1.2",
-    "eslint": "3.6.1",
+    "eslint": "3.7.1",
     "eslint-plugin-jsdoc": "2.3.1",
     "eslint-plugin-lodash": "1.10.3",
     "eslint-plugin-mocha": "4.6.0",
