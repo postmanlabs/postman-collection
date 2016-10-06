@@ -12,7 +12,7 @@ describe('Cookie', function () {
             expect(jsonified.domain).to.eql(rawCookie.domain);
             expect(jsonified.httpOnly).to.eql(rawCookie.httpOnly);
             expect(jsonified.hostOnly).to.eql(rawCookie.hostOnly);
-            expect(jsonified.name).to.eql(rawCookie.name);
+            expect(jsonified.key).to.eql(rawCookie.key);
             expect(jsonified.path).to.eql(rawCookie.path);
             expect(jsonified.expires).to.eql(rawCookie.expires.toString());
             expect(jsonified.secure).to.eql(rawCookie.secure);
@@ -26,7 +26,7 @@ describe('Cookie', function () {
         it('should be parsed properly', function () {
             var parsed = Cookie.parse(rawCookie),
                 ext;
-            expect(parsed).to.have.property('name', 'GAPS');
+            expect(parsed).to.have.property('key', 'GAPS');
             expect(parsed).to.have.property('value', 'lol');
             expect(parsed).to.have.property('expires', 'Sun, 04-Feb-2018 14:18:27 GMT');
             expect(parsed.secure).to.be(true);
