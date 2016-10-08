@@ -17,7 +17,7 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm cache clean
-  - npm install
+  - appveyor-retry npm install
 
 build: off # Disable MSBuilds, not related to the regular build process
 
