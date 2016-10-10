@@ -69,7 +69,7 @@
     "karma-chrome-launcher": "0.2.3",
     "karma-mocha": "1.2.0",
     "karma-mocha-reporter": "2.2.0",
-    "mocha": "3.1.0",
+    "mocha": "3.1.1",
     "mustache": "2.2.1",
     "nsp": "2.6.2",
     "packity": "0.3.2",
