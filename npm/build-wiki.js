@@ -9,36 +9,28 @@ var fs = require('fs'),
 
     OUT_DIR = path.join('out', 'wiki'),
     INP_DIR = path.join('lib', '**', '*.js'),
-    OUT_PATH = path.join(OUT_DIR, 'REFERENCE.md');
+    OUT_PATH = path.join(OUT_DIR, 'REFERENCE.md'),
+    SUCCESS_MESSAGE = colors.green.bold(`- wiki generated at "${OUT_PATH}"`);
 
 module.exports = function (exit) {
-    var errored;
-
     console.log(colors.yellow.bold('Generating wiki using jsdoc2md...'));
 
-    try {
-        // clean directory
-        test('-d', OUT_DIR) && rm('-rf', OUT_DIR);
-        mkdir('-p', OUT_DIR);
+    // clean directory
+    test('-d', OUT_DIR) && rm('-rf', OUT_DIR);
+    mkdir('-p', OUT_DIR);
 
-        // execute command
-        jsdoc2md({ src: INP_DIR })
-            .on('finish', function () {
-                if (errored) { return; }
-                console.log(` - wiki generated at "${OUT_PATH}"`);
-                exit();
-            })
-            .on('error', function (e) {
-                errored = true;
-                console.error(e && e.stack || e);
-                exit(1);
-            })
-            .pipe(fs.createWriteStream(OUT_PATH));
-    }
-    catch (e) {
-        console.error(e.stack || e);
-        return exit(e ? 1 : 0);
-    }
+    // execute command
+    jsdoc2md.render({ files: INP_DIR })
+        .then(function (markdown) {
+            fs.writeFile(OUT_PATH, markdown, function (err) {
+                console.info(err ? err : SUCCESS_MESSAGE);
+                exit(err ? 1 : 0);
+            });
+        })
+        .catch(function (err) {
+            console.error(err);
+            exit(1);
+        });
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
