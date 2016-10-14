@@ -286,7 +286,7 @@ describe('Url', function () {
             expect(url.toString(true)).to.eql(urlstring);
         });
 
-        it('should not add a protocol if asked to but one already exists', function () {
+        it('should not add a protocol if not asked to', function () {
             var urlstring = 'httpbin.org/get?a=1',
                 url = new Url(urlstring);
             expect(url.toString()).to.eql(urlstring);
