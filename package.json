@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "atob": "2.0.3",
-    "aws4": "1.4.1",
+    "aws4": "1.5.0",
     "btoa": "1.1.2",
     "crypto-js": "3.1.6",
     "escape-html": "1.0.3",
