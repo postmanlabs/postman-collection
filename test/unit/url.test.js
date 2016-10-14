@@ -273,6 +273,24 @@ describe('Url', function () {
                 url = new Url(urlstring);
             expect(url.toString()).to.eql(urlstring);
         });
+
+        it('should add a protocol if asked to', function () {
+            var urlstring = 'httpbin.org/get?a=1',
+                url = new Url(urlstring);
+            expect(url.toString(true)).to.eql('http://' + urlstring);
+        });
+
+        it('should not add a protocol if asked to but one already exists', function () {
+            var urlstring = 'https://httpbin.org/get?a=1',
+                url = new Url(urlstring);
+            expect(url.toString(true)).to.eql(urlstring);
+        });
+
+        it('should not add a protocol if not asked to', function () {
+            var urlstring = 'httpbin.org/get?a=1',
+                url = new Url(urlstring);
+            expect(url.toString()).to.eql(urlstring);
+        });
     });
 
     describe('OAuth1 Base Url', function () {

@@ -164,17 +164,19 @@ describe('response mime', function () {
         });
     });
 
-    it.skip('must detect mime from body', function () {
-        var response = new Response({
-            header: [{
-                key: 'content-type',
-                value: 'machine/samaritan'
-            }],
+    // @todo: update the test block when we decide to drop Node v4 support
+    it('must detect mime from body', function () {
+        var isNode4 = (/^v4\./).test(process.version),
+            sampleArray = [0xFF, 0xD8, 0xFF, 0x62, 0x75, 0x66, 0x66, 0x65, 0x72],
+            response = new Response({
+                header: [{
+                    key: 'content-type',
+                    value: 'machine/samaritan'
+                }],
 
-            // todo load real file content here (maybe 1x1 px bmp)
-            stream: Buffer.from ?
-                Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72]) : new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
-        });
+                // todo load real file content here (maybe 1x1 px bmp)
+                stream: isNode4 ? new Buffer(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
+            });
 
         expect(response.mime()).be.eql({
             type: 'unknown',
@@ -187,6 +189,13 @@ describe('response mime', function () {
             filename: 'response',
             source: 'header',
             detected: {
+                _accuratelyDetected: true,
+                _originalContentType: 'image/jpeg',
+                _sanitisedContentType: 'image/jpeg',
+                ext: 'jpeg',
+                filename: 'response.jpeg',
+                format: 'image',
+                name: 'response',
                 type: 'image'
             }
         });
