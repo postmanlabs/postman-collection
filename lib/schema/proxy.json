@@ -1,0 +1,31 @@
+{
+    "id": "#/definitions/proxy",
+    "title": "Proxy",
+    "description": "Using the Proxy, you can configure your custom proxy into the postman for particular url",
+    "type": "object",
+    "properties": {
+        "url": {
+            "description": "The Url for which the pariticular proxy needs to be taken care, Wild cards are also supported",
+            "type": "string"
+        },
+        "protocol": {
+            "description": "The protocol of the proxy server connecting to"
+        },
+        "host": {
+            "description": "The host of the proxy server",
+            "type": "string"
+        },
+        "port": {
+            "description": "The port to the proxy server",
+            "type": "string"
+        },
+        "tunnel": {
+          "description": "This ensures whether the tunneling need to be done while applying the proxy",
+          "type": "boolean"
+        },
+        "direct": {
+          "description": "This ensures there won't be any proxy applied to the url",
+          "type": "boolean"
+        }
+    }
+}
