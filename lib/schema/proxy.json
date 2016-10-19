@@ -22,6 +22,10 @@
         "tunnel": {
           "description": "This ensures whether the tunneling need to be done while applying the proxy",
           "type": "boolean"
+        },
+        "direct": {
+          "description": "This ensures there won't be any proxy applied to the url",
+          "type": "boolean"
         }
     }
 }

@@ -2,15 +2,12 @@ var expect = require('expect.js'),
     Proxy = require('../../lib/index.js').Proxy;
 
 /* global describe, it */
-describe('Proxy', function () {
+describe.only('Proxy', function () {
     it('should initialize the values to their defaults', function () {
         var p = new Proxy();
-
         expect(p.url).to.be('*');
         expect(p.protocol).to.be('http');
-        expect(p.host).to.be('');
-        expect(p.port).to.be('80');
-        expect(p.tunnel).to.be(true);
+        expect(p.direct).to.be(false);
     });
 
     it('should prepopulate the values when pass through the constructor', function () {
@@ -25,7 +22,7 @@ describe('Proxy', function () {
         expect(p.protocol).to.be('http');
         expect(p.host).to.be('proxy.com');
         expect(p.port).to.be('8080');
-        expect(p.tunnel).to.be(true);
+        expect(p.direct).to.be(false);
     });
 
     it('Should parse the proxy string provided', function () {
@@ -35,13 +32,15 @@ describe('Proxy', function () {
         expect(p.protocol).to.be('http');
         expect(p.host).to.be('proxy.com');
         expect(p.port).to.be('8080');
-        expect(p.tunnel).to.be(true);
+        expect(p.direct).to.be(false);
     });
 
     it('Should parse the proxy string provided With DIRECT value where the host must be empty', function () {
         var p = new Proxy('DIRECT', 'http://example.com');
 
         expect(p.host).to.be('');
+        expect(p.direct).to.be(true);
+        expect(p.tunnel).to.be(false);
     });
 
 
