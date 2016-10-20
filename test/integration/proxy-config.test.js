@@ -5,7 +5,7 @@ var expect = require('expect.js'),
 describe('Proxy Config', function () {
     it('should initialize the values to their defaults', function () {
         var p = new ProxyConfig();
-        
+
         expect(p.match).to.be('*');
         expect(p.tunnel).to.be(false);
     });
