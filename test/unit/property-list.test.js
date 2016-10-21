@@ -143,6 +143,95 @@ describe('PropertyList', function () {
         expect(Object.keys(list.reference)).to.eql(['yoLoLo2']);
     });
 
+    describe('upserting behavior', function () {
+        it('should add an item if one does not exist', function () {
+            var FakeType,
+                list;
+
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+                this.extra = options.extra;
+                this.something = options.something;
+            };
+
+            FakeType._postman_propertyIndexKey = 'keyAttr';
+            // FakeType._postman_propertyIndexCaseInsensitive = false; // this is default
+
+            list = new PropertyList(FakeType, {}, [
+                { keyAttr: 'yoLoLo1', value: 'what', extra: 1, something: new Date() },
+                { keyAttr: 'yoLoLo2', value: 'where', extra: 2, something: new Date('October 13, 2016 11:13:00') }
+            ]);
+
+            expect(list.count()).to.be(2);
+
+            list.upsert({
+                keyAttr: 'yoLoLo3',
+                value: 'how',
+                extra: 3,
+                something: new Date('October 13, 2015 11:13:00')
+            });
+            expect(list.count()).to.be(3);
+
+            // item should be typed
+            list.members.forEach(function (item) {
+                expect(item.constructor).to.be(FakeType);
+            });
+
+            // three separate keys
+            expect(Object.keys(list.reference)).to.eql(['yoLoLo1', 'yoLoLo2', 'yoLoLo3']);
+        });
+
+        it('should update an item if one already exists', function () {
+            var FakeType,
+                list,
+
+                updated = {
+                    keyAttr: 'yoLoLo2',
+                    value: 'how',
+                    extra: 3,
+                    something: new Date('October 13, 2015 11:13:00')
+                };
+
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+                this.extra = options.extra;
+                this.something = options.something;
+            };
+
+            FakeType._postman_propertyIndexKey = 'keyAttr';
+            // FakeType._postman_propertyIndexCaseInsensitive = false; // this is default
+
+            list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'yoLoLo1',
+                value: 'what',
+                extra: 1,
+                something: new Date()
+            }, {
+                keyAttr: 'yoLoLo2',
+                value: 'where',
+                extra: 2,
+                something: new Date('October 13, 2016 11:13:00')
+            }]);
+
+            expect(list.count()).to.be(2);
+            list.upsert(updated);
+
+            expect(list.count()).to.be(2);
+
+            // item should be typed
+            list.members.forEach(function (item) {
+                expect(item.constructor).to.be(FakeType);
+            });
+
+            // three separate keys
+            expect(Object.keys(list.reference)).to.eql(['yoLoLo1', 'yoLoLo2']);
+
+            expect(list.one('yoLoLo2')).to.eql(updated);
+        });
+    });
+
     describe('reordering method', function () {
         // We create two variables that we would usually deal within these tests to insert and remove stuff
         var enterprise,
