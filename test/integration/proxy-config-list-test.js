@@ -3,6 +3,17 @@ var expect = require('expect.js'),
 
 /* global describe, it */
 describe('Proxy Config List', function () {
+    it('Assigns, <all_urls> as match pattern and resolves any url provided', function () {
+        var parent = {},
+            list = new ProxyConfigList(parent,
+                [
+                    { server: 'https://proxy.com/', tunnel: true }
+                ]
+            );
+        expect(list.resolve('http://www.google.com/').server.getHost()).to.eql('proxy.com');
+        expect(list.resolve('http://example.org/foo/bar.html').server.getHost()).to.eql('proxy.com');
+    });
+
     it('Matches any URL that uses the http protocol', function () {
         var parent = {},
             list = new ProxyConfigList(parent,
