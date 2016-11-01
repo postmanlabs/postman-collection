@@ -436,5 +436,17 @@ describe('Url', function () {
                 expect(url.getRemote(options)).to.eql('echo.getpostman.com:80');
             });
         });
+
+        describe('isUrl', function () {
+            it('Should return true for the ProxyConfigList constructor', function () {
+                var url = new Url({}, []);
+                expect(Url.isUrl(url)).to.eql(true);
+            });
+
+            it('Should return false for the invalid ProxyConfigList', function () {
+                var url = { _postman_propertyName: 'Url' };
+                expect(Url.isUrl(url)).to.eql(false);
+            });
+        });
     });
 });

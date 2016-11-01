@@ -114,7 +114,7 @@ describe('Proxy Config List', function () {
         var parent = {},
             list = new ProxyConfigList(parent,
                 [
-                    { match: 'http://foo.*.bar/baz ', server: 'https://proxy.com/', tunnel: true }
+                    { match: 'http://foo.*.bar/baz', server: 'https://proxy.com/', tunnel: true }
                 ]
             );
         expect(list.resolve('http://foo.z.bar/baz')).to.eql(undefined);
