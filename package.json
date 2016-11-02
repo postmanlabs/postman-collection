@@ -13,9 +13,10 @@
     "url": "git+https://github.com/postmanlabs/postman-collection.git"
   },
   "directories": {
+    "doc": "docs",
     "example": "examples",
-    "test": "test",
-    "bin": "bin"
+    "lib": "lib",
+    "test": "test"
   },
   "scripts": {
     "build-docs": "node npm/build-docs.js",
