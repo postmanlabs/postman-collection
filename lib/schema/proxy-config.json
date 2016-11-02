@@ -1,0 +1,19 @@
+{
+    "id": "#/definitions/proxy-config",
+    "title": "Proxy Config",
+    "description": "Using the Proxy, you can configure your custom proxy into the postman for particular url match",
+    "type": "object",
+    "properties": {
+        "match": {
+            "description": "The Url match for which the proxy config is defined",
+            "type": "string"
+        },
+        "server": {
+            "description": "The proxy server url"
+        },
+        "tunnel": {
+            "description": "The tunneling details for the proxy config",
+            "type": "boolean"
+        }
+    }
+}

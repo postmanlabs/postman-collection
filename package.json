@@ -2,7 +2,7 @@
   "name": "postman-collection",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Labs <help@getpostman.com>",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "keywords": [
     "postman"
   ],
@@ -13,9 +13,10 @@
     "url": "git+https://github.com/postmanlabs/postman-collection.git"
   },
   "directories": {
+    "doc": "docs",
     "example": "examples",
-    "test": "test",
-    "bin": "bin"
+    "lib": "lib",
+    "test": "test"
   },
   "scripts": {
     "build-docs": "node npm/build-docs.js",
@@ -32,11 +33,11 @@
   },
   "dependencies": {
     "atob": "2.0.3",
-    "aws4": "1.4.1",
+    "aws4": "1.5.0",
     "btoa": "1.1.2",
-    "crypto-js": "3.1.6",
+    "crypto-js": "3.1.7",
     "escape-html": "1.0.3",
-    "file-type": "3.8.0",
+    "file-type": "3.9.0",
     "hawk": "3.1.3",
     "http-reasons": "0.1.0",
     "liquid-json": "0.3.1",
@@ -52,11 +53,11 @@
   },
   "devDependencies": {
     "async": "2.0.1",
-    "browserify": "13.1.0",
+    "browserify": "13.1.1",
     "colors": "1.1.2",
     "eslint": "3.7.1",
     "eslint-plugin-jsdoc": "2.3.1",
-    "eslint-plugin-lodash": "1.10.3",
+    "eslint-plugin-lodash": "2.1.6",
     "eslint-plugin-mocha": "4.7.0",
     "eslint-plugin-security": "1.2.0",
     "expect.js": "0.3.1",
@@ -73,10 +74,11 @@
     "mustache": "2.2.1",
     "nsp": "2.6.2",
     "packity": "0.3.2",
+    "parse-gitignore": "0.3.1",
     "postman-jsdoc-theme": "0.0.2",
     "recursive-readdir": "2.1.0",
     "require-all": "2.0.0",
-    "shelljs": "0.7.4",
+    "shelljs": "0.7.5",
     "strip-json-comments": "2.0.1",
     "tv4": "1.2.7",
     "watchify": "3.7.0"
