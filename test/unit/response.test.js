@@ -1,4 +1,7 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
+    request = require('postman-request'),
+
     fixtures = require('../fixtures'),
     Response = require('../../lib/index.js').Response,
     Header = require('../../lib/index.js').Header;
@@ -119,6 +122,45 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
             expect(response.size().body).to.eql(20);
+        });
+    });
+
+    ((typeof window === 'undefined') ? describe : describe.skip)('fromModule helper', function () {
+        var response;
+
+        before(function (done) {
+            request.get('https://echo.getpostman.com/get', function (err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                response = new Response(Response.fromModule(res)).toJSON();
+                done();
+            });
+        });
+
+        it('should correctly return the processed response', function () {
+            var body = JSON.parse(response.body);
+
+            expect(response.status).to.be('OK');
+            expect(response.code).to.be(200);
+
+            expect(body).to.be.an(Object);
+            expect(body.args).to.be.an(Object);
+            expect(body.headers).to.be.an(Object);
+            expect(body.url).to.be.a('string');
+
+            expect(response.header).to.be.an(Array);
+            _.forEach(response.header, function (header) {
+                expect(header.key).to.be.a('string');
+                expect(header.value).to.be.a('string');
+            });
+
+            expect(response.cookie).to.be.an(Array);
+            _.forEach(response.cookie, function (cookie) {
+                expect(cookie.key).to.be.a('string');
+                expect(cookie.value).to.be.a('string');
+            });
         });
     });
 });
