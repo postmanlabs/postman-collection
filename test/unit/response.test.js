@@ -1,4 +1,5 @@
-var _ = require('lodash'),
+var fs = require('fs'),
+    _ = require('lodash'),
     expect = require('expect.js'),
     request = require('postman-request'),
 
@@ -125,41 +126,229 @@ describe('Response', function () {
         });
     });
 
-    ((typeof window === 'undefined') ? describe : describe.skip)('fromModule helper', function () {
-        var response;
+    ((typeof window === 'undefined') ? describe : describe.skip)('createFromRequest', function () {
+        var baseUrl = 'https://echo.getpostman.com',
+            validateResponse = function (response) {
+                expect(response.header).to.be.an(Array);
+                _.forEach(response.header, function (header) {
+                    expect(header.key).to.be.a('string');
+                    expect(header.value).to.be.a('string');
+                });
 
-        before(function (done) {
-            request.get('https://echo.getpostman.com/get', function (err, res) {
+                expect(response.cookie).to.be.an(Array);
+                _.forEach(response.cookie, function (cookie) {
+                    expect(cookie.key).to.be.a('string');
+                    expect(cookie.value).to.be.a('string');
+                });
+            };
+
+        it('should correctly return a GET response', function (done) {
+            request.get(baseUrl + '/get', function (err, res) {
                 if (err) {
                     return done(err);
                 }
 
-                response = new Response(Response.fromModule(res)).toJSON();
+                var response = Response.createFromRequest(res).toJSON();
+                validateResponse(response);
                 done();
             });
         });
 
-        it('should correctly return the processed response', function () {
-            var body = JSON.parse(response.body);
+        describe('POST', function () {
+            it('should correctly return a response for form-data', function (done) {
+                var sampleArray = [1, 2, 3],
+                    isNode4 = (/^v4\./).test(process.version);
 
-            expect(response.status).to.be('OK');
-            expect(response.code).to.be(200);
+                request.post({
+                    url: baseUrl + '/post',
+                    form: {
+                        alpha: 'foo',
+                        beta: 'bar',
+                        buffer: isNode4 ? new Buffer(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
+                    }
+                }, function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
 
-            expect(body).to.be.an(Object);
-            expect(body.args).to.be.an(Object);
-            expect(body.headers).to.be.an(Object);
-            expect(body.url).to.be.a('string');
+                    var response = Response.createFromRequest(res).toJSON(),
+                        body = JSON.parse(response.body);
 
-            expect(response.header).to.be.an(Array);
-            _.forEach(response.header, function (header) {
-                expect(header.key).to.be.a('string');
-                expect(header.value).to.be.a('string');
+                    expect(body.form.alpha).to.be('foo');
+                    expect(body.form.beta).to.be('bar');
+                    expect(body.form.buffer).to.be('\u0001\u0002\u0003');
+
+                    validateResponse(response);
+                    done();
+                });
             });
 
-            expect(response.cookie).to.be.an(Array);
-            _.forEach(response.cookie, function (cookie) {
-                expect(cookie.key).to.be.a('string');
-                expect(cookie.value).to.be.a('string');
+            it('should correctly return a response for file uploads', function (done) {
+                var file = fs.createReadStream('test/fixtures/icon.png'),
+                    req = request.post({
+                        url: baseUrl + '/post'
+                    }, function (err, res) {
+                        if (err) {
+                            return done(err);
+                        }
+
+                        var response = Response.createFromRequest(res).toJSON(),
+                            body = JSON.parse(response.body);
+
+                        expect(body.files['icon.png']).to.match(/^data:application\/octet-stream;base64,/);
+
+                        validateResponse(response);
+                        done();
+                    }),
+                    form = req.form();
+
+                form.append('file', file);
+            });
+        });
+
+        it('should correctly return response headers', function (done) {
+            request.get(baseUrl + '/response-headers?foo=bar&foo=bar2&bar=foo', function (err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                var response = Response.createFromRequest(res).toJSON();
+
+                expect(Header.headerValue(response.header, 'bar')).to.be('foo');
+                expect(Header.headerValue(response.header, 'foo')).to.be('bar, bar2');
+
+                validateResponse(response);
+                done();
+            });
+        });
+
+        describe('cookies', function () {
+            var cookieUrl = baseUrl + '/cookies',
+                stringify = function (cookies) {
+                    return _.reduce(cookies, function (result, value, key) {
+                        return result + key + '=' + value + ';';
+                    }, '');
+                };
+
+            it('should correctly provide all cookies', function (done) {
+                request.get({
+                    url: cookieUrl,
+                    jar: true
+                }, function (err, res, body) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var cookieObject = JSON.parse(body).cookies,
+                        stringifiedCookies = stringify(cookieObject),
+                        response = Response.createFromRequest(res, stringifiedCookies).toJSON();
+
+                    expect(response.cookie).to.eql([]);
+                    validateResponse(response);
+                    done();
+                });
+            });
+
+            it('should correctly set a cookie', function (done) {
+                request.get({
+                    url: cookieUrl + '/set?foo=bar',
+                    jar: true
+                }, function (err, res, body) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var cookieObject = JSON.parse(body).cookies,
+                        stringifiedCookies = stringify(cookieObject),
+                        response = Response.createFromRequest(res, stringifiedCookies).toJSON();
+
+                    expect(response.cookie).to.eql([{
+                        key: 'foo',
+                        hostOnly: true,
+                        value: 'bar',
+                        extensions: [{ key: '', value: true }]
+                    }]);
+                    validateResponse(response);
+                    done();
+                });
+            });
+
+            it('should correctly delete a previously set cookie', function (done) {
+                request.get({
+                    url: cookieUrl + '/delete?foo',
+                    jar: true
+                }, function (err, res, body) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var cookieObject = JSON.parse(body).cookies,
+                        stringifiedCookies = stringify(cookieObject),
+                        response = Response.createFromRequest(res, stringifiedCookies).toJSON();
+
+                    expect(response.cookie).to.eql([]);
+                    validateResponse(response);
+                    done();
+                });
+            });
+        });
+
+        describe('miscellaneous requests', function () {
+            it('should return a valid gzipped response', function (done) {
+                request.get({
+                    uri: baseUrl + '/gzip',
+                    gzip: true
+                }, function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var response = Response.createFromRequest(res).toJSON(),
+                        body = JSON.parse(response.body);
+
+                    expect(body.gzipped).to.be(true);
+                    expect(Header.headerValue(response.header, 'content-encoding')).to.be('gzip');
+
+                    validateResponse(response);
+                    done();
+                });
+            });
+
+            it('should return a valid deflated response', function (done) {
+                request.get({
+                    uri: baseUrl + '/deflate',
+                    gzip: true
+                }, function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var response = Response.createFromRequest(res).toJSON(),
+                        body = JSON.parse(response.body);
+
+                    expect(body.deflated).to.be(true);
+
+                    validateResponse(response);
+                    done();
+                });
+            });
+
+            it('should return a valid utf-8 encoded response', function (done) {
+                request.get({
+                    uri: baseUrl + '/encoding/utf8'
+                }, function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var response = Response.createFromRequest(res).toJSON();
+
+                    expect(Header.headerValue(response.header, 'content-type')).to.match(/^text\/html/);
+                    expect(response.body).to.match(/<html>.*/);
+
+                    validateResponse(response);
+                    done();
+                });
             });
         });
     });
