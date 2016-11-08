@@ -4,6 +4,7 @@ var fs = require('fs'),
     request = require('postman-request'),
 
     fixtures = require('../fixtures'),
+    Cookie = require('../../lib/index.js').Cookie,
     Response = require('../../lib/index.js').Response,
     Header = require('../../lib/index.js').Header;
 
@@ -128,19 +129,33 @@ describe('Response', function () {
 
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
-        var baseUrl = 'https://echo.getpostman.com',
-            validateResponse = function (response) {
-                expect(response.header).to.be.an(Array);
-                _.forEach(response.header, function (header) {
-                    expect(header.key).to.be.a('string');
-                    expect(header.value).to.be.a('string');
-                });
+        var isNode4 = (/^v4\./).test(process.version),
+            baseUrl = 'https://echo.getpostman.com',
+            isHeader = Header.isHeader.bind(Header),
+            isCookie = Cookie.isCookie.bind(Cookie),
 
-                expect(response.cookie).to.be.an(Array);
-                _.forEach(response.cookie, function (cookie) {
-                    expect(cookie.key).to.be.a('string');
-                    expect(cookie.value).to.be.a('string');
-                });
+            getBuffer = function (array) {
+                return isNode4 ? new Buffer(array) : Buffer.from(new Uint32Array(array));
+            },
+
+            validateResponse = function (response) {
+                var json = response.toJSON(),
+                    buffer = getBuffer(json.stream.data);
+
+                expect(json.code).to.be.a('number');
+                expect(json.status).to.be.a('string');
+                expect(json.responseSize).to.be.a('number');
+
+                expect(json.stream).to.be.an('object');
+                expect(json.stream.type).to.be('Buffer');
+                expect(json.stream.data).to.be.an('array');
+                expect(buffer.toString()).to.be(response.body);
+
+                expect(json.header).to.be.an('array');
+                expect(json.cookie).to.be.an('array');
+
+                expect(_.every(response.headers.members, isHeader)).to.be(true);
+                expect(_.every(response.cookies.members, isCookie)).to.be(true);
             };
 
         it('should correctly return a GET response', function (done) {
@@ -152,7 +167,7 @@ describe('Response', function () {
                     return done(err);
                 }
 
-                var response = Response.createFromNode(res).toJSON();
+                var response = Response.createFromNode(res);
                 validateResponse(response);
                 done();
             });
@@ -160,8 +175,7 @@ describe('Response', function () {
 
         describe('POST', function () {
             it('should correctly return a response for form-data', function (done) {
-                var sampleArray = [1, 2, 3],
-                    isNode4 = (/^v4\./).test(process.version);
+                var sampleArray = [1, 2, 3];
 
                 request.post({
                     url: baseUrl + '/post',
@@ -169,15 +183,15 @@ describe('Response', function () {
                     form: {
                         alpha: 'foo',
                         beta: 'bar',
-                        buffer: isNode4 ? new Buffer(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
+                        buffer: getBuffer(sampleArray)
                     }
                 }, function (err, res) {
                     if (err) {
                         return done(err);
                     }
 
-                    var response = Response.createFromNode(res).toJSON(),
-                        body = JSON.parse(response.body);
+                    var response = Response.createFromNode(res),
+                        body = JSON.parse(response.toJSON().body);
 
                     expect(body.form.alpha).to.be('foo');
                     expect(body.form.beta).to.be('bar');
@@ -198,8 +212,8 @@ describe('Response', function () {
                             return done(err);
                         }
 
-                        var response = Response.createFromNode(res).toJSON(),
-                            body = JSON.parse(response.body);
+                        var response = Response.createFromNode(res),
+                            body = JSON.parse(response.toJSON().body);
 
                         expect(body.files['icon.png']).to.match(/^data:application\/octet-stream;base64,/);
 
@@ -221,10 +235,11 @@ describe('Response', function () {
                     return done(err);
                 }
 
-                var response = Response.createFromNode(res).toJSON();
+                var response = Response.createFromNode(res),
+                    body = response.toJSON();
 
-                expect(Header.headerValue(response.header, 'bar')).to.be('foo');
-                expect(Header.headerValue(response.header, 'foo')).to.be('bar, bar2');
+                expect(Header.headerValue(body.header, 'bar')).to.be('foo');
+                expect(Header.headerValue(body.header, 'foo')).to.be('bar, bar2');
 
                 validateResponse(response);
                 done();
@@ -338,7 +353,7 @@ describe('Response', function () {
                     expect(Header.headerValue(json.header, 'content-encoding')).to.be('gzip');
 
                     checkMime(mime);
-                    validateResponse(json);
+                    validateResponse(response);
                     done();
                 });
             });
@@ -353,8 +368,8 @@ describe('Response', function () {
                         return done(err);
                     }
 
-                    var response = Response.createFromNode(res).toJSON(),
-                        body = JSON.parse(response.body);
+                    var response = Response.createFromNode(res),
+                        body = JSON.parse(response.toJSON().body);
 
                     expect(body.deflated).to.be(true);
 
@@ -383,7 +398,7 @@ describe('Response', function () {
                     expect(json.body).to.match(/<html>.*/);
 
                     checkMime(mime);
-                    validateResponse(json);
+                    validateResponse(response);
                     done();
                 });
             });
