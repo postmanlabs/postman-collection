@@ -41,7 +41,7 @@
     "hawk": "3.1.3",
     "http-reasons": "0.1.0",
     "liquid-json": "0.3.1",
-    "lodash": "4.16.4",
+    "lodash": "4.17.1",
     "marked": "0.3.6",
     "mime-format": "1.0.2",
     "mime-types": "2.1.12",
