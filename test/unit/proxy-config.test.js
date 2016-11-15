@@ -5,9 +5,11 @@ var expect = require('expect.js'),
 describe('Proxy Config', function () {
     describe('globPatternToRegexp', function () {
         var pc = new ProxyConfig();
-        it('should escapes the regex releated characters', function () {
+        it('should escape the regex related characters', function () {
             var pattern = '[.+^${}()[]',
                 convertedPattern = pc.globPatternToRegexp(pattern);
+            // @todo: Consider re-looking into the RegEx below, to avoid useless character escapes
+            // eslint-disable-next-line no-useless-escape
             expect(convertedPattern).to.eql(/^\[\.\+\^\$\{\}\(\)\[\]$/);
         });
 
