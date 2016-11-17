@@ -39,12 +39,12 @@ module.exports = function (exit) {
         //      node_modules\mocha\bin\_mocha -- --reporter spec --reporter-options output=
         //      .tmp\report.xml test\unit --recursive --prof --colors --grep=.*
         exec(`node_modules\\.bin\\istanbul.cmd cover ${istanbulReport} --dir ${COV_REPORT_PATH} --colors ` +
-            `--print both node_modules\\mocha\\bin\\_mocha -- ${SPEC_SOURCES} --reporter ${mochaReporter} ` +
+            `--print both node_modules\\mocha\\bin\\_mocha -- ${SPEC_SOURCES} --reporter ${mochaReporter} --timeout 10000 ` +
             `--reporter-options output=${REPORT_PATH} --recursive --prof --colors --grep=${specPattern}`, exit);
     }
     else {
         exec(`./node_modules/.bin/istanbul cover ${istanbulReport} --dir ${COV_REPORT_PATH} --colors ` +
-            `--print both node_modules/mocha/bin/_mocha -- ${SPEC_SOURCES} --reporter ${mochaReporter} ` +
+            `--print both node_modules/mocha/bin/_mocha -- ${SPEC_SOURCES} --reporter ${mochaReporter} --timeout 10000 ` +
             `--reporter-options output=${REPORT_PATH} --recursive --prof --colors --grep=${specPattern}`, exit);
     }
 };
