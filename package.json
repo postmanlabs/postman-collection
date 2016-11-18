@@ -44,7 +44,7 @@
     "lodash": "4.16.4",
     "marked": "0.3.6",
     "mime-format": "1.0.2",
-    "mime-types": "2.1.12",
+    "mime-types": "2.1.13",
     "node-oauth1": "1.2.0",
     "node-uuid": "1.4.7",
     "sanitize-html": "1.13.0",
