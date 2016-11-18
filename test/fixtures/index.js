@@ -141,7 +141,7 @@ module.exports = {
                     token: '',
                     tokenSecret: '',
                     signatureMethod: 'HMAC-SHA1',
-                    timeStamp: '1453890475',
+                    timestamp: '1453890475',
                     nonce: 'yly1UR',
                     version: '1.0',
                     realm: 'oauthrealm',
