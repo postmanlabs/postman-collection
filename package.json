@@ -46,10 +46,10 @@
     "mime-format": "1.0.2",
     "mime-types": "2.1.13",
     "node-oauth1": "1.2.0",
-    "node-uuid": "1.4.7",
     "sanitize-html": "1.13.0",
     "schema-compiler": "0.0.3",
-    "semver": "5.3.0"
+    "semver": "5.3.0",
+    "uuid": "^3.0.0"
   },
   "devDependencies": {
     "async": "2.0.1",
