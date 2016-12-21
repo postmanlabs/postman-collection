@@ -14,6 +14,16 @@ describe('Proxy Config List', function () {
         expect(list.resolve('http://example.org/foo/bar.html').server.getHost()).to.eql('proxy.com');
     });
 
+    it('Assigns, <all_urls> as match pattern and respect the disabled prop in the congfig', function () {
+        var parent = {},
+            list = new ProxyConfigList(parent,
+                [
+                    { server: 'https://proxy.com/', tunnel: true, disabled: true }
+                ]
+            );
+        expect(list.resolve('foo://www.foo/bar')).to.eql(undefined);
+    });
+
     it('Matches any URL that uses the http protocol', function () {
         var parent = {},
             list = new ProxyConfigList(parent,
