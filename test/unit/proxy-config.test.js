@@ -8,7 +8,7 @@ describe('Proxy Config', function () {
         it('should escapes the regex releated characters', function () {
             var pattern = '[.+^${}()[]',
                 convertedPattern = pc.globPatternToRegexp(pattern);
-            expect(convertedPattern).to.eql(/^\[\.\+\^\$\{\}\(\)\[\]$/);
+            expect(convertedPattern).to.eql(/^\[\.\+\^\$\{\}\(\)\[\]$/); // eslint-disable-line no-useless-escape
         });
 
         it('should change ? to .', function () {
