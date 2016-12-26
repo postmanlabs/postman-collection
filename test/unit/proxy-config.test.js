@@ -24,10 +24,10 @@ describe('Proxy Config', function () {
         });
     });
 
-    describe('validateMatchPattern', function () {
+    describe('createMatchPattern', function () {
         it('should parse any URL that uses the http protocol', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://*/*');
+                matchPatternObject = pc.createMatchPattern('http://*/*');
             expect(matchPatternObject.protocol).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*');
             expect(matchPatternObject.path).to.eql(/^\/.*$/);
@@ -35,7 +35,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the http protocol, on any host, with path starts with /foo', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://*/foo*');
+                matchPatternObject = pc.createMatchPattern('http://*/foo*');
             expect(matchPatternObject.protocol).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*');
             expect(matchPatternObject.path).to.eql(/^\/foo.*$/);
@@ -43,7 +43,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the https protocol, is on a google.com host', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://*.google.com/foo*bar');
+                matchPatternObject = pc.createMatchPattern('http://*.google.com/foo*bar');
             expect(matchPatternObject.protocol).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*.google.com');
             expect(matchPatternObject.path).to.eql(/^\/foo.*bar$/);
@@ -51,7 +51,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the http protocol and is on the host 127.0.0.1', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://127.0.0.1/*');
+                matchPatternObject = pc.createMatchPattern('http://127.0.0.1/*');
             expect(matchPatternObject.protocol).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('127.0.0.1');
             expect(matchPatternObject.path).to.eql(/^\/.*$/);
@@ -59,7 +59,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the http protocol and is on the host ends with 0.0.1', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://*.0.0.1/');
+                matchPatternObject = pc.createMatchPattern('http://*.0.0.1/');
             expect(matchPatternObject.protocol).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*.0.0.1');
             expect(matchPatternObject.path).to.eql(/^\/$/);
@@ -67,7 +67,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL which has host mail.google.com', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('*://mail.google.com/*');
+                matchPatternObject = pc.createMatchPattern('*://mail.google.com/*');
             expect(matchPatternObject.protocol).to.eql(['http', 'https']);
             expect(matchPatternObject.host).to.eql('mail.google.com');
             expect(matchPatternObject.path).to.eql(/^\/.*$/);
@@ -75,39 +75,39 @@ describe('Proxy Config', function () {
 
         it('Bad Match pattern [No Path]', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://www.google.com');
-            expect(matchPatternObject).to.eql({});
+                matchPatternObject = pc.createMatchPattern('http://www.google.com');
+            expect(matchPatternObject).to.eql(undefined);
         });
 
         it('Bad Match pattern ["*" in the host can be followed only by a "." or "/"]', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://*foo/bar');
-            expect(matchPatternObject).to.eql({});
+                matchPatternObject = pc.createMatchPattern('http://*foo/bar');
+            expect(matchPatternObject).to.eql(undefined);
         });
 
         it('Bad Match pattern [If "*" is in the host, it must be the first character]', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http://foo.*.bar/baz');
-            expect(matchPatternObject).to.eql({});
+                matchPatternObject = pc.createMatchPattern('http://foo.*.bar/baz');
+            expect(matchPatternObject).to.eql(undefined);
         });
 
         it('Bad Match pattern [Missing protocol separator ("/" should be "//")]', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('http:/bar');
-            expect(matchPatternObject).to.eql({});
+                matchPatternObject = pc.createMatchPattern('http:/bar');
+            expect(matchPatternObject).to.eql(undefined);
         });
 
         it('Bad Match pattern [Invalid protocol', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('foo://*');
-            expect(matchPatternObject).to.eql({});
+                matchPatternObject = pc.createMatchPattern('foo://*');
+            expect(matchPatternObject).to.eql(undefined);
         });
     });
 
     describe('protocolMatched', function () {
         it('should check for protocol in matchPatternObject [both https and http]', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('*://*/*'),
+                matchPatternObject = pc.createMatchPattern('*://*/*'),
                 httpsMatched = pc.protocolMatched(matchPatternObject, 'https'),
                 httpMatched = pc.protocolMatched(matchPatternObject, 'http');
             expect(httpsMatched).to.eql(true);
@@ -116,14 +116,14 @@ describe('Proxy Config', function () {
 
         it('should check for protocol in matchPatternObject and returns false for http', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('https://*/*'),
+                matchPatternObject = pc.createMatchPattern('https://*/*'),
                 httpMatched = pc.protocolMatched(matchPatternObject, 'http');
             expect(httpMatched).to.eql(false);
         });
 
         it('should check for protocol which is not http or https', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('*://*/*'),
+                matchPatternObject = pc.createMatchPattern('*://*/*'),
                 ftpMatched = pc.protocolMatched(matchPatternObject, 'ftp');
             expect(ftpMatched).to.eql(false);
         });
@@ -132,28 +132,28 @@ describe('Proxy Config', function () {
     describe('hostMatched', function () {
         it('should match any host', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('*://*/*'),
+                matchPatternObject = pc.createMatchPattern('*://*/*'),
                 anyhost = pc.hostMatched(matchPatternObject, new Url('randomhost.com'));
             expect(anyhost).to.eql(true);
         });
 
         it('should match host starts with any and have suffix as if in the pattern', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('https://*.foo.com/*'),
+                matchPatternObject = pc.createMatchPattern('https://*.foo.com/*'),
                 hostMatched = pc.hostMatched(matchPatternObject, new Url('bar.foo.com'));
             expect(hostMatched).to.eql(true);
         });
 
         it('should match host ends with a suffix as if in the pattern', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('https://*.foo.com/*'),
+                matchPatternObject = pc.createMatchPattern('https://*.foo.com/*'),
                 hostMatched = pc.hostMatched(matchPatternObject, new Url('foo.com'));
             expect(hostMatched).to.eql(true);
         });
 
         it('should match host with exact as like in match', function () {
             var pc = new ProxyConfig({}),
-                matchPatternObject = pc.validateMatchPattern('*://foo.com/*'),
+                matchPatternObject = pc.createMatchPattern('*://foo.com/*'),
                 hostMatched = pc.hostMatched(matchPatternObject, new Url('foo.com'));
             expect(hostMatched).to.eql(true);
         });
