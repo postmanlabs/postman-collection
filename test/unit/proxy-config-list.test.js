@@ -13,10 +13,12 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://www.google.com/', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
 
             list.resolve('http://example.org/foo/bar.html', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
         });
@@ -29,10 +31,12 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://www.google.com/', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
 
             list.resolve(new Url('http://example.org/foo/bar.html'), function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
         });
@@ -45,6 +49,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://example.com/foo/bar.html', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
 
@@ -61,9 +66,11 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://www.google.com/foo/baz/bar', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
             list.resolve('http://docs.google.com/foobar', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
         });
@@ -76,6 +83,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://example.org/foo/bar.html', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
         });
@@ -88,6 +96,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://127.0.0.1/', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
 
@@ -104,10 +113,12 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://127.0.0.1/', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
 
             list.resolve('http://125.0.0.1/', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
         });
@@ -120,10 +131,12 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://mail.google.com/foo/baz/bar', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
 
             list.resolve('https://mail.google.com/foobar', function (err, config) {
+                expect(err).to.eql(null);
                 expect(config.server.getHost()).to.eql('proxy.com');
             });
         });
@@ -136,6 +149,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://www.google.com', function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
@@ -148,6 +162,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://www.foo/bar', function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
@@ -160,6 +175,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http://foo.z.bar/baz', function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
@@ -172,6 +188,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('http:/bar', function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
@@ -184,6 +201,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('foo://www.foo/bar', function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
@@ -196,6 +214,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve('', function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
@@ -208,6 +227,7 @@ describe('Proxy Config List', function () {
                     ]
                 );
             list.resolve({ remote: 'random remote' }, function (err, config) {
+                expect(err).to.not.eql(null);
                 expect(config).to.eql(undefined);
             });
         });
