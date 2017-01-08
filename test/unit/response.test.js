@@ -173,6 +173,16 @@ describe('Response', function () {
             });
         });
 
+        it('should parse encoded response stream as text based on the charset(Shift_JIS)', function () {
+            expect((new Response({
+                header: [{
+                    key: 'content-type',
+                    value: 'text/html; charset=Shift_JIS'
+                }],
+                stream: fs.readFileSync('test/fixtures/japaneseCharacter.txt')
+            })).text()).to.be('ハローポストマン\n'); // Harōposutoman
+        });
+
         describe('POST', function () {
             it('should correctly return a response for form-data', function (done) {
                 var sampleArray = [1, 2, 3];
