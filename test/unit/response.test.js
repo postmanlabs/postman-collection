@@ -173,14 +173,36 @@ describe('Response', function () {
             });
         });
 
-        it('should parse encoded response stream as text based on the charset(Shift_JIS)', function () {
-            expect((new Response({
-                header: [{
-                    key: 'content-type',
-                    value: 'text/html; charset=Shift_JIS'
-                }],
-                stream: fs.readFileSync('test/fixtures/japaneseCharacter.txt')
-            })).text()).to.be('ハローポストマン\n'); // Harōposutoman
+        describe('Should decode the response stream as text based on header charset', function () {
+            it('charset(Shift_JIS) - Japanese', function () {
+                expect((new Response({
+                    header: [{
+                        key: 'content-type',
+                        value: 'text/html; charset=Shift_JIS'
+                    }],
+                    stream: fs.readFileSync('test/fixtures/japaneseCharacters.txt')
+                })).text()).to.be('ハローポストマン\n'); // Harōposutoman
+            });
+
+            it('charset(windows-1251)- Cyrillic', function () {
+                expect((new Response({
+                    header: [{
+                        key: 'content-type',
+                        value: 'text/html; charset=windows-1251'
+                    }],
+                    stream: fs.readFileSync('test/fixtures/russianCharacters.txt')
+                })).text()).to.be('Привет почтальон\n'); // Privet pochtal'on
+            });
+
+            it('Fallback to utf8, if it is not supported by iconvlite, say (ISO-8859-1)', function () {
+                expect((new Response({
+                    header: [{
+                        key: 'content-type',
+                        value: 'text/html; charset=ISO-8859-1'
+                    }],
+                    stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
+                })).text()).to.be('buffer');
+            });
         });
 
         describe('POST', function () {
