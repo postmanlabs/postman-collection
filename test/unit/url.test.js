@@ -245,6 +245,15 @@ describe('Url', function () {
             }]);
             expect(subject.hash).to.be(undefined);
         });
+
+        it('must parse url hosts having dots within variables', function () {
+            var subject = Url.parse('127.0.{{ip.subnet}}.1/get');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['127', '0', '{{ip.subnet}}', '1']);
+            expect(subject.port).to.be(undefined);
+            expect(subject.path).to.eql(['get']);
+        });
     });
     describe('unparsing', function () {
         rawUrls.forEach(function (rawUrl) {
