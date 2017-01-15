@@ -47,7 +47,7 @@
     "mime-format": "2.0.0",
     "mime-types": "2.1.14",
     "node-oauth1": "1.2.1",
-    "sanitize-html": "1.13.0",
+    "sanitize-html": "1.14.0",
     "schema-compiler": "0.0.3",
     "semver": "5.3.0",
     "uuid": "3.0.1"
