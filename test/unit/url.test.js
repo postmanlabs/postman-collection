@@ -297,7 +297,7 @@ describe('Url', function () {
         it('should be generated properly', function () {
             var rawUrl = rawUrls[8],
                 url = new Url(rawUrl);
-            expect(url.getOAuth1BaseUrl()).to.eql('http://example.com/resource');
+            expect(url.getOAuth1BaseUrl()).to.eql('http://example.com/Resource');
         });
     });
 
