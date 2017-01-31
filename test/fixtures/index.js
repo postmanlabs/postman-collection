@@ -14,7 +14,7 @@ module.exports = {
         '{{url}}/awesomestuff/endpoint?a=1&b=ghj',
         '{{url}}/somepath/{{alpha}}/{{version}}?yo={{awesome}}&gg=wp#{{fragment}}',
         'someone@postman.xyz/asdasd',
-        'HTTP://Example.com:80/resource?id=123', // This is intentionally having caps.
+        'HTTP://Example.com:80/Resource?id=123', // This is intentionally having caps.
         {
             protocol: 'http',
             host: 'echo.getpostman.com',
