@@ -271,6 +271,14 @@ describe('Url', function () {
             expect(subject.host).to.eql(['127', '0', '{{ip', 'subnet', '1']);
             expect(subject.port).to.be(undefined);
         });
+
+        it('must parse url hosts with multiple variables with dots', function () {
+            var subject = Url.parse('{{ip.network_identifier}}.{{ip.subnet}}.1');
+            expect(subject.protocol).to.be(undefined);
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['{{ip.network_identifier}}', '{{ip.subnet}}', '1']);
+            expect(subject.port).to.be(undefined);
+        });
     });
     describe('unparsing', function () {
         rawUrls.forEach(function (rawUrl) {
