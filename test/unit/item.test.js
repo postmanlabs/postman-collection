@@ -1,11 +1,12 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    Item = require('../../lib/index.js').Item;
+    Sdk = require('../../lib/index.js');
 
 /* global describe, it */
 describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
-        item = new Item(rawItem);
+        item = new Sdk.Item(rawItem);
 
     describe('json representation', function () {
         it('must match what the item was initialized with', function () {
@@ -18,6 +19,23 @@ describe('Item', function () {
             expect(jsonified).to.have.property('request');
             expect(jsonified).to.have.property('response');
             expect(jsonified).to.have.property('event');
+        });
+    });
+
+    describe('.parentOf', function () {
+        it('must return a falsy result for a standalone item', function () {
+            expect(item.parentOf()).to.not.be.ok();
+        });
+
+        it('must correctly return the parent for a provided item', function () {
+            var collection = new Sdk.Collection(fixtures.collectionV2);
+
+            _.forEach(collection.items.members, function (item) {
+                var parent = item.parentOf();
+
+                expect(parent.id).to.be(collection.id);
+                expect(parent.name).to.be(collection.name);
+            });
         });
     });
 });
