@@ -1,4 +1,5 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
     fixtures = require('../fixtures'),
     Collection = require('../../lib/index.js').Collection;
 
@@ -20,12 +21,21 @@ describe('ItemGroup', function () {
             var collection = new Collection(fixtures.nestedCollectionV2);
 
             collection.forEachItemGroup(function (group) {
-                var parent = group.parentOf();
+                var groupIds = [],
+                    parentIds = [],
+                    parent = group.parentOf();
 
                 while (parent) {
+                    parentIds.push(parent.id);
                     expect(parent).to.have.keys(['description', 'id', 'name', 'items', 'events']);
                     parent = parent.parentOf();
                 }
+
+                collection.forEachItemGroup(function (item) {
+                    groupIds.push(item.id);
+                });
+
+                expect(_.intersection(parentIds, groupIds).length <= parentIds.length).to.be.ok();
             });
         });
     });

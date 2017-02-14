@@ -1,5 +1,4 @@
-var _ = require('lodash'),
-    expect = require('expect.js'),
+var expect = require('expect.js'),
     fixtures = require('../fixtures'),
     Sdk = require('../../lib/index.js');
 
@@ -33,8 +32,10 @@ describe('Item', function () {
             collection.forEachItem(function (item) {
                 var parent = item.parentOf();
 
-                expect(parent.id).to.be(collection.id);
-                expect(parent.name).to.be(collection.name);
+                if (!parent.parentOf()) {
+                    expect(parent.id).to.be.ok(collection.id);
+                    expect(parent.name).to.be(collection.name);
+                }
             });
         });
     });
