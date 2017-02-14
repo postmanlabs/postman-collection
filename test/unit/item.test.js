@@ -30,7 +30,7 @@ describe('Item', function () {
         it('must correctly return the parent for a provided item', function () {
             var collection = new Sdk.Collection(fixtures.collectionV2);
 
-            _.forEach(collection.items.members, function (item) {
+            collection.forEachItem(function (item) {
                 var parent = item.parentOf();
 
                 expect(parent.id).to.be(collection.id);
