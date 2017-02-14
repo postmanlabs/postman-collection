@@ -32,10 +32,16 @@ describe('ItemGroup', function () {
                 }
 
                 collection.forEachItemGroup(function (item) {
-                    groupIds.push(item.id);
+                    groupIds.unshift(item.id);
                 });
 
-                expect(_.intersection(parentIds, groupIds).length <= parentIds.length).to.be.ok();
+                // The top most parent is always the collection, check that here
+                expect(parentIds.pop()).to.be(collection.id);
+
+                // Check that the parents returned by .parentOf are in the same order as those of the itemGroup list
+                _.forEach(parentIds, function (id, index) {
+                    expect(id).to.be(groupIds[index]);
+                });
             });
         });
     });
