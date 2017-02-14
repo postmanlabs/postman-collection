@@ -37,7 +37,7 @@ describe('Request', function () {
     describe('getHeaders', function () {
         it('should get only enabled headers', function () {
             var rawRequest = {
-                    url: 'echo.getpostman.com',
+                    url: 'postman-echo.com',
                     method: 'GET',
                     header: [
                         {
@@ -61,7 +61,7 @@ describe('Request', function () {
     describe('upsertHeader', function () {
         it('should add a header if it does not exist', function () {
             var rawRequest = {
-                    url: 'echo.getpostman.com',
+                    url: 'postman-echo.com',
                     method: 'GET',
                     header: [
                         {
@@ -92,7 +92,7 @@ describe('Request', function () {
         });
         it('should replace the header value if it exists', function () {
             var rawRequest = {
-                    url: 'echo.getpostman.com',
+                    url: 'postman-echo.com',
                     method: 'GET',
                     header: [
                         {
@@ -122,7 +122,7 @@ describe('Request', function () {
         });
         it('should do nothing if no header is given', function () {
             var rawRequest = {
-                    url: 'echo.getpostman.com',
+                    url: 'postman-echo.com',
                     method: 'GET',
                     header: [
                         {
