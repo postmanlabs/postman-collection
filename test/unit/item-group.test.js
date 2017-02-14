@@ -14,4 +14,19 @@ describe('ItemGroup', function () {
         });
         expect(groups.length).to.be(4);
     });
+
+    describe('.parentOf checks', function () {
+        it('should work correctly for nested collections', function () {
+            var collection = new Collection(fixtures.nestedCollectionV2);
+
+            collection.forEachItemGroup(function (group) {
+                var parent = group.parentOf();
+
+                while (parent) {
+                    expect(parent).to.have.keys(['description', 'id', 'name', 'items', 'events']);
+                    parent = parent.parentOf();
+                }
+            });
+        });
+    });
 });
