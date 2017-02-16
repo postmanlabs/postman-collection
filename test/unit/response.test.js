@@ -1,6 +1,7 @@
 var fs = require('fs'),
     _ = require('lodash'),
     expect = require('expect.js'),
+    util = require('../../lib/util'),
     request = require('postman-request'),
 
     fixtures = require('../fixtures'),
@@ -23,10 +24,20 @@ describe('Response', function () {
             expect(jsonified).to.have.property('cookie');
         });
 
+        it('must retain Buffer nature on stream property after new Response(response.toJSON())', function () {
+            var rawResponse = {
+                    body: 'response body',
+                    stream: new Buffer([114, 101, 115, 112, 111, 110, 115, 101, 32, 98, 111, 100, 121])
+                },
+                response = new Response(rawResponse),
+                jsonified = response.toJSON(),
+                reconstructedResponse = new Response(jsonified);
+            expect(util.bufferOrArrayBufferToString(reconstructedResponse.stream)).to.eql(util.bufferOrArrayBufferToString(rawResponse.stream));
+        });
         it('must infer the http response reason phrase from the status code', function () {
             var rawResponse = {
                     name: 'a sample response',
-                    originalRequest: 'http://echo.getpostman.com/status/200',
+                    originalRequest: 'http://postman-echo.com/status/200',
                     code: 410,
                     body: 'response body'
                 },
@@ -130,7 +141,7 @@ describe('Response', function () {
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
         var isNode4 = (/^v4\./).test(process.version),
-            baseUrl = 'https://echo.getpostman.com',
+            baseUrl = 'https://postman-echo.com',
             isHeader = Header.isHeader.bind(Header),
             isCookie = Cookie.isCookie.bind(Cookie),
 

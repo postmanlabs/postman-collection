@@ -3,7 +3,7 @@ var expect = require('expect.js'),
 
 /* global describe, it */
 describe('Url', function () {
-    var rawUrl = 'https://user:pass@echo.getpostman.com/get?a=1&b=2#heading',
+    var rawUrl = 'https://user:pass@postman-echo.com/get?a=1&b=2#heading',
         url = new Url(rawUrl);
 
     it('parsed successfully', function () {
