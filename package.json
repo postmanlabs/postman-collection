@@ -52,7 +52,7 @@
     "uuid": "3.0.1"
   },
   "devDependencies": {
-    "async": "2.1.4",
+    "async": "2.1.5",
     "browserify": "13.1.1",
     "colors": "1.1.2",
     "eslint": "3.11.1",
