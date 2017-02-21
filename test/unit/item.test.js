@@ -22,21 +22,32 @@ describe('Item', function () {
     });
 
     describe('.parent', function () {
+        var collection = new Sdk.Collection(fixtures.nestedCollectionV2);
+
         it('must return a falsy result for a standalone item', function () {
             expect(item.parent()).to.not.be.ok();
         });
 
-        it('must correctly return the parent for a provided item', function () {
-            var collection = new Sdk.Collection(fixtures.collectionV2);
+        it('must work correctly for a nested item', function () {
+            var nestedItem = collection.items.members[1].items.members[0].items.members[0],
+                parent = nestedItem.parent();
 
-            collection.forEachItem(function (item) {
-                var parent = item.parent();
+            expect(parent.name).to.be('F2.F3');
+        });
 
-                if (!parent.parent()) {
-                    expect(parent.id).to.be.ok(collection.id);
-                    expect(parent.name).to.be(collection.name);
-                }
-            });
+        it('must work correctly for a regular folder item', function () {
+            var f1 = collection.items.members[0],
+                r1 = f1.items.members[0],
+                parent = r1.parent();
+
+            expect(parent.name).to.be(f1.name);
+        });
+
+        it('must work correctly for a first level item', function () {
+            var firstLevelItem = collection.items.members[2], // root level request R1
+                parent = firstLevelItem.parent();
+
+            expect(parent.name).to.be(collection.name);
         });
     });
 });

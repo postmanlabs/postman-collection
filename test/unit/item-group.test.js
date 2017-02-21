@@ -17,9 +17,9 @@ describe('ItemGroup', function () {
     });
 
     describe('.parent checks', function () {
-        it('should work correctly for nested collections', function () {
-            var collection = new Collection(fixtures.nestedCollectionV2);
+        var collection = new Collection(fixtures.nestedCollectionV2);
 
+        it('should work correctly for nested collections', function () {
             collection.forEachItemGroup(function (group) {
                 var groupIds = [],
                     parentIds = [],
@@ -43,6 +43,21 @@ describe('ItemGroup', function () {
                     expect(id).to.be(groupIds[index]);
                 });
             });
+        });
+
+        it('must work correctly for a nested itemGroup', function () {
+            var f2 = collection.items.members[1],
+                f3 = f2.items.members[0],
+                parent = f3.parent();
+
+            expect(parent.name).to.be(f2.name);
+        });
+
+        it('must work correctly for a first level itemGroup', function () {
+            var f1 = collection.items.members[0],
+                parent = f1.parent();
+
+            expect(parent.name).to.be(collection.name);
         });
     });
 });
