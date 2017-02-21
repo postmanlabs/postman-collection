@@ -16,19 +16,19 @@ describe('ItemGroup', function () {
         expect(groups.length).to.be(4);
     });
 
-    describe('.parentOf checks', function () {
+    describe('.parent checks', function () {
         it('should work correctly for nested collections', function () {
             var collection = new Collection(fixtures.nestedCollectionV2);
 
             collection.forEachItemGroup(function (group) {
                 var groupIds = [],
                     parentIds = [],
-                    parent = group.parentOf();
+                    parent = group.parent();
 
                 while (parent) {
                     parentIds.push(parent.id);
                     expect(parent).to.have.keys(['description', 'id', 'name', 'items', 'events']);
-                    parent = parent.parentOf();
+                    parent = parent.parent();
                 }
 
                 collection.forEachItemGroup(function (item) {
@@ -38,7 +38,7 @@ describe('ItemGroup', function () {
                 // The top most parent is always the collection, check that here
                 expect(parentIds.pop()).to.be(collection.id);
 
-                // Check that the parents returned by .parentOf are in the same order as those of the itemGroup list
+                // Check that the parents returned by .parent are in the same order as those of the itemGroup list
                 _.forEach(parentIds, function (id, index) {
                     expect(id).to.be(groupIds[index]);
                 });

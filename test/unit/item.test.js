@@ -21,18 +21,18 @@ describe('Item', function () {
         });
     });
 
-    describe('.parentOf', function () {
+    describe('.parent', function () {
         it('must return a falsy result for a standalone item', function () {
-            expect(item.parentOf()).to.not.be.ok();
+            expect(item.parent()).to.not.be.ok();
         });
 
         it('must correctly return the parent for a provided item', function () {
             var collection = new Sdk.Collection(fixtures.collectionV2);
 
             collection.forEachItem(function (item) {
-                var parent = item.parentOf();
+                var parent = item.parent();
 
-                if (!parent.parentOf()) {
+                if (!parent.parent()) {
                     expect(parent.id).to.be.ok(collection.id);
                     expect(parent.name).to.be(collection.name);
                 }
