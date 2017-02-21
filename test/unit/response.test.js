@@ -37,7 +37,7 @@ describe('Response', function () {
         it('must infer the http response reason phrase from the status code', function () {
             var rawResponse = {
                     name: 'a sample response',
-                    originalRequest: 'http://echo.getpostman.com/status/200',
+                    originalRequest: 'http://postman-echo.com/status/200',
                     code: 410,
                     body: 'response body'
                 },
@@ -141,7 +141,7 @@ describe('Response', function () {
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
         var isNode4 = (/^v4\./).test(process.version),
-            baseUrl = 'https://echo.getpostman.com',
+            baseUrl = 'https://postman-echo.com',
             isHeader = Header.isHeader.bind(Header),
             isCookie = Cookie.isCookie.bind(Cookie),
 

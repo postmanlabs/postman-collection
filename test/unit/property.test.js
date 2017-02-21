@@ -16,7 +16,7 @@ describe('Property', function () {
                 },
                 expectedResolution = {
                     method: 'POST',
-                    url: 'echo.getpostman.com:80/post',
+                    url: 'postman-echo.com:80/post',
                     header: [{ key: 'Content-Type', value: 'application/json' }],
                     body: {
                         mode: 'urlencoded',
@@ -29,7 +29,7 @@ describe('Property', function () {
                         greeting_value: 'omg'
                     },
                     {
-                        host: 'echo.getpostman.com',
+                        host: 'postman-echo.com',
                         port: '80',
                         path: 'post'
                     },

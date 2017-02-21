@@ -337,7 +337,7 @@ describe('Url', function () {
 
     describe('Function variables', function () {
         it('should be unparsed properly', function () {
-            var rawUrl = 'https://echo.getpostman.com/post?a={{$guid}}',
+            var rawUrl = 'https://postman-echo.com/post?a={{$guid}}',
                 url = new Url(rawUrl);
             expect(url.toString()).to.eql(rawUrl);
         });
@@ -376,71 +376,71 @@ describe('Url', function () {
 
     describe('URL Encoding', function () {
         it('should be disabled by default', function () {
-            var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+            var rawUrl = 'https://postman-echo.com/get?w=x%y',
                 url = new Url(rawUrl);
 
-            expect(url.toString()).to.eql('https://echo.getpostman.com/get?w=x%y');
+            expect(url.toString()).to.eql('https://postman-echo.com/get?w=x%y');
         });
 
         it.skip('should be enabled if explicitly specified', function () {
-            var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+            var rawUrl = 'https://postman-echo.com/get?w=x%y',
                 url = new Url(rawUrl);
 
             expect(url.toString({
                 encode: true
-            })).to.eql('https://echo.getpostman.com/get?w=x%25y');
+            })).to.eql('https://postman-echo.com/get?w=x%25y');
         });
     });
 
     describe('getRemote', function () {
         describe('default', function () {
             it('should get the correct remote when port is specified', function () {
-                var rawUrl = 'https://echo.getpostman.com:8999/get?w=x%y',
+                var rawUrl = 'https://postman-echo.com:8999/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com:8999');
+                expect(url.getRemote()).to.eql('postman-echo.com:8999');
             });
 
             it('should get the correct remote when port is not specified and protocol is "http"', function () {
-                var rawUrl = 'http://echo.getpostman.com/get?w=x%y',
+                var rawUrl = 'http://postman-echo.com/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com');
+                expect(url.getRemote()).to.eql('postman-echo.com');
             });
 
             it('should get the correct remote when port is not specified and protocol is "https"', function () {
-                var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+                var rawUrl = 'https://postman-echo.com/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com');
+                expect(url.getRemote()).to.eql('postman-echo.com');
             });
 
             it('should get the correct remote when port is specified and protocol is "http"', function () {
-                var rawUrl = 'http://echo.getpostman.com:22/get?w=x%y',
+                var rawUrl = 'http://postman-echo.com:22/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com:22');
+                expect(url.getRemote()).to.eql('postman-echo.com:22');
             });
 
             it('should get the correct remote when port is specified and protocol is "https"', function () {
-                var rawUrl = 'https://echo.getpostman.com:3344/get?w=x%y',
+                var rawUrl = 'https://postman-echo.com:3344/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com:3344');
+                expect(url.getRemote()).to.eql('postman-echo.com:3344');
             });
 
             it('should get the correct remote when port is specified and protocol is not specified', function () {
-                var rawUrl = 'echo.getpostman.com:8999/get?w=x%y',
+                var rawUrl = 'postman-echo.com:8999/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com:8999');
+                expect(url.getRemote()).to.eql('postman-echo.com:8999');
             });
 
             it('should get the correct remote when port is not specified and protocol is not specified', function () {
-                var rawUrl = 'echo.getpostman.com/get?w=x%y',
+                var rawUrl = 'postman-echo.com/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote()).to.eql('echo.getpostman.com');
+                expect(url.getRemote()).to.eql('postman-echo.com');
             });
         });
 
@@ -450,24 +450,24 @@ describe('Url', function () {
             };
 
             it('should get the correct remote when port is not specified and protocol is "http"', function () {
-                var rawUrl = 'http://echo.getpostman.com/get?w=x%y',
+                var rawUrl = 'http://postman-echo.com/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote(options)).to.eql('echo.getpostman.com:80');
+                expect(url.getRemote(options)).to.eql('postman-echo.com:80');
             });
 
             it('should get the correct remote when port is not specified and protocol is "https"', function () {
-                var rawUrl = 'https://echo.getpostman.com/get?w=x%y',
+                var rawUrl = 'https://postman-echo.com/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote(options)).to.eql('echo.getpostman.com:443');
+                expect(url.getRemote(options)).to.eql('postman-echo.com:443');
             });
 
             it('should get the correct remote when port is not specified and protocol is not specified', function () {
-                var rawUrl = 'echo.getpostman.com/get?w=x%y',
+                var rawUrl = 'postman-echo.com/get?w=x%y',
                     url = new Url(rawUrl);
 
-                expect(url.getRemote(options)).to.eql('echo.getpostman.com:80');
+                expect(url.getRemote(options)).to.eql('postman-echo.com:80');
             });
         });
 

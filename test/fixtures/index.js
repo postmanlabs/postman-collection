@@ -8,10 +8,10 @@ module.exports = {
     rawUrls: [
         // If adding to this list, add to the END, or you'll break a lot of tests which
         // use indexes to access particular URLs.
-        'https://user:pass@echo.getpostman.com/get/?a=1&b=2#heading',
+        'https://user:pass@postman-echo.com/get/?a=1&b=2#heading',
         'http://google.com/',
-        'https://echo.getpostman.com:9090/',
-        'echo.getpostman.com/something/somethingelse#yo',
+        'https://postman-echo.com:9090/',
+        'postman-echo.com/something/somethingelse#yo',
         'http://postman.tech/?a=b&b={{c}}#{{fragment}}',
         '{{url}}/awesomestuff/endpoint?a=1&b=ghj',
         '{{url}}/somepath/{{alpha}}/{{version}}?yo={{awesome}}&gg=wp#{{fragment}}',
@@ -19,7 +19,7 @@ module.exports = {
         'HTTP://Example.com:80/Resource?id=123', // This is intentionally having caps.
         {
             protocol: 'http',
-            host: 'echo.getpostman.com',
+            host: 'postman-echo.com',
             port: '80',
             path: '/:resource',
             query: [{ key: 'id', value: '123' }],
@@ -32,7 +32,7 @@ module.exports = {
         },
         {
             protocol: 'http',
-            host: 'echo.getpostman.com',
+            host: 'postman-echo.com',
             port: '80',
             path: '/:method',
             variable: [
@@ -44,7 +44,7 @@ module.exports = {
         },
         {
             protocol: 'http',
-            host: 'echo.getpostman.com',
+            host: 'postman-echo.com',
             port: '80',
             path: '/:method',
             variable: [
@@ -89,7 +89,7 @@ module.exports = {
             description: ''
         },
         digest: {
-            url: 'https://echo.getpostman.com/digest-auth',
+            url: 'https://postman-echo.com/digest-auth',
             method: 'GET',
             header: [],
             data: {
@@ -112,7 +112,7 @@ module.exports = {
             }
         },
         digestWithQueryParams: {
-            url: 'https://echo.getpostman.com/digest-auth?key=value',
+            url: 'https://postman-echo.com/digest-auth?key=value',
             method: 'GET',
             header: [],
             data: {
@@ -152,7 +152,7 @@ module.exports = {
                     addEmptyParamsToSign: false
                 }
             },
-            url: 'https://echo.getpostman.com/oauth1?hi=hello&yo=true',
+            url: 'https://postman-echo.com/oauth1?hi=hello&yo=true',
             method: 'POST',
             header: [
                 {
@@ -222,7 +222,7 @@ module.exports = {
                     delegation: ''
                 }
             },
-            url: 'http://echo.getpostman.com/auth/hawk',
+            url: 'http://postman-echo.com/auth/hawk',
             method: 'GET',
             header: [
                 {
