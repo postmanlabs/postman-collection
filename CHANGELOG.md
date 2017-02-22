@@ -75,7 +75,7 @@
 * Turned off the unit test cobertura reporter on CI. This would now allow to see full build report on Travis
 * Rename 'name' to 'key' to make our cookie compatible with tough cookie
 
-### 0.5.3 (September 28, 2016)
+#### 0.5.3 (September 28, 2016)
 * AppVeyor + system tests
 * Ported scripts to Shelljs (#130)
 * Sync scope to object
@@ -83,7 +83,7 @@
 * Added function in VariableList to sync it's members to an object
 * Updated `marked` dependency to 0.3.6 to patch security issue
 
-### 0.5.2 (September 21, 2016)
+#### 0.5.2 (September 21, 2016)
 * Ensure that AWS Auth *updates* headers if they already exist
 * Create/Update header functionality
 * Do not remove aws sha256 header
@@ -225,7 +225,7 @@
 * Don't unnecessarily create a new object while unparsing URLs
 * Optimized query parameter unparsing and added tests for it
 
-# 0.4.0 (June 28, 2016)
+#### 0.4.0 (June 28, 2016)
 * Ensure that btoa is called directly, otherwise Chrome throws an illeg…
 * Response body conversion sugar function
 * Ensure that btoa is called directly, otherwise Chrome throws an illegal invocation error
@@ -261,7 +261,7 @@
 * Fix iteration, move string constructors to constants
 * Fixed hawk auth nonce generation
 
-### 0.2.1 (June 8, 2016)
+#### 0.2.1 (June 8, 2016)
 * Correctly add oauth1 params to the request body
 * Correctly add oauth1 params to the request body
 * Added a hash map for accurate text type detection from mime
