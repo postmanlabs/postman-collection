@@ -70,7 +70,7 @@
 #### 0.5.4 (October 5, 2016)
 * Handle empty session token in aws auth
 * If the app sends us an empty session token, do not give it to the library
-* Corrected _.merge discrepancy
+* Corrected `_.merge` discrepancy
 * Replaced deprecated fs.existsSync calls in system tests
 * Turned off the unit test cobertura reporter on CI. This would now allow to see full build report on Travis
 * Rename 'name' to 'key' to make our cookie compatible with tough cookie
@@ -145,7 +145,7 @@
 * Fix collection constructor `info` block description parsing
 * Ensure that meta keywords of base constructor "merges" the properties instead of deleting them.
 * Updated propertyBase to pick description from `info` block if provided
-* Updated the _.createDefined util function to accept a fallback parameter to set default
+* Updated the `_.createDefined` util function to accept a fallback parameter to set default
 
 #### 0.4.12 (August 11, 2016)
 * Added a method to get the remote from a url
@@ -253,7 +253,7 @@
 * Added ability in PropertyList to do case insensitive lookup and remove. Also added tests.
 * Update index.js
 * Updated mime lookup function in mime-format to exclude extra parameters in content type
-* Made PropertyList call its super_ and throw error if type parameter is missing
+* Made PropertyList call its `super_` and throw error if type parameter is missing
 * Added util function to get a property on object if it is defined else, return a default value.
 
 #### 0.2.2 (June 9, 2016)
@@ -276,7 +276,7 @@
 * Mime type detection in Response object
 * Added ability to return data URI from string, buffer or array buffer
 * Added mime and dataURI functions to Response property
-* Added _postman_propertyIndexKey key in Properties
+* Added `_postman_propertyIndexKey` key in Properties
 * Added ability to populate from an object
 
 #### 0.1.4 (June 6, 2016)
@@ -284,7 +284,7 @@
 * The description tag now allows markdown to have HTML
 * Moved Base64 to a separate ignored util file and documented the return of Response#mime()
 * Mime type detection from buffer body
-* Added _postman_propertyIndexKey key in Properties to be used for reading in PropertyList to decide the indexing key name
+* Added `_postman_propertyIndexKey` key in Properties to be used for reading in PropertyList to decide the indexing key name
 * Added functional test that checks header parsing and load from list in various formats
 * Added Header.create and updated the constructor to accept value, key as construction parameter
 * Updated PropertyList#populate function to accept an object as well and treat individual keys in them as separate items to be sent to PropertyList.add(). This allows simple object to be used as propertylist source for properties that support Property.create
@@ -337,7 +337,7 @@
 * Added ability to substitute function variables, and tests
 * Removed unnecessary addition of function to allowed types, use Date.now() instead of getTime()
 * Corrected the implementation, and moved the default function variables to the right location.
-* Add _.find in SDK for property List
+* Add `_.find` in SDK for property List
 * added a test for finding in a list
 * Added support for function variables
 * Remove double quotes from everywhere
@@ -362,7 +362,7 @@
 * Updated VariableList to use variable substitution logic from PropertyBase instead of within itself
 * Added function to recursively substitute variables in an object from PropertyBase.replaceSubstitutionsIn
 * Added replaceSubstitutions function in PropertyBase to replace variable substitutions directly from Property instead of VariableList
-* Updated util._.findValue to also accept VariableList as a data source. This will allow for easier usage of this utility function while using from a place that cannot refer to VariableList. (One caveat is that this now uses `_postman_propertyName` to detect VariableList and a note has been added to ensure that this is not changed)
+* Updated `util._.findValue` to also accept VariableList as a data source. This will allow for easier usage of this utility function while using from a place that cannot refer to VariableList. (One caveat is that this now uses `_postman_propertyName` to detect VariableList and a note has been added to ensure that this is not changed)
 * Documentation typo fixes in Description property
 * Added fake nsp scripts to exclude "marked" vulnerability. Also added infra tests for the same
 
@@ -431,22 +431,22 @@
 * Removed extra property in Item prototype
 * Renamed snake cased `_postman_property_name` to `_postman_propertyName`
 * More infra tests
-* Updated the `isPropertyX` static functions to use _postman_property_name in super chain to determine validity of property
+* Updated the `isPropertyX` static functions to use `_postman_property_name` in super chain to determine validity of property
 * Added `_postman_property_name` to all Properties that has an isX static function
 * Added utility function that finds equality of a variable through the super chain
 * Added tests for schema file existence
 * Used the schema-compiler package to compile schema via npm run build-schema
 * Private environment access API
-* Added todo for future improvement of VariableList#env
-* Add VariableList#env private function to perform environment manipulation (also test updated since .environments array was made private)
+* Added todo for future improvement of `VariableList#env`
+* Add `VariableList#env` private function to perform environment manipulation (also test updated since .environments array was made private)
 * Fixed documentation of PropertyList.insertAfter and made `_postman_isGroup` as private
 * Added Schema files to this repository
 * Fined breaking documentation generation due to blank example tag in property-base
 * Added form param to the sdk exports
 * Ensure that all modules are exported
 * Added infra test for Module Inheritance
-* Made PropertyList inherit from Base
-* Fix issue where Version was not being inherited from Property Base
+* Made `PropertyList` inherit from `Base`
+* Fix issue where `Version` was not being inherited from `PropertyBase`
 * Fix issue where new collection without options was throwing an error
 
 #### 0.0.8 (March 14, 2016)
