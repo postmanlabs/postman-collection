@@ -377,15 +377,15 @@
 #### 0.0.12-beta.1 (April 2, 2016)
 * Added ability of Property.toObjectResolved to accept additional override sources
 * Removed the duplicate "disabled" processing of Event and elaborated the documentation
-* Somewhat elaborated the documentation of PropertyBase (at least the items that gets inherited)
-* Fix issue with the newly added private _nocast parameter to Variable#valueType function
+* Somewhat elaborated the documentation of `PropertyBase` (at least the items that gets inherited)
+* Fix issue with the newly added private `_nocast` parameter to `Variable#valueType` function
 * Adds definition, examples and other documentation to Item property
-* Updated Item property to proceed with construction even when no definition object is provided
-* ItemGroup construction definition documentation added
-* Allowed ItemGroup to be initialised without a construction object
-* Updated Property.toObjectResolved to accept and forward an additional `overrides` parameter to the substitution function of variable replacement
+* Updated `Item` property to proceed with construction even when no definition object is provided
+* `ItemGroup` construction definition documentation added
+* Allowed `ItemGroup` to be initialised without a construction object
+* Updated `Property.toObjectResolved` to accept and forward an additional `overrides` parameter to the substitution function of variable replacement
 * Updated the .replace and .substitute to accept an additional `overrides` parameter to accept an array of objects for additional variable resolution lookup
-* Added lodash utility function _.findValue that returns the value of a key within an array of objects
+* Added lodash utility function `_.findValue` that returns the value of a key within an array of objects
 * Renamed the internal `_postman_isGroup` flag to match the other flag names. Now it is called `_postman_propertyIsList`
 * Added variable constructor definition typeDef in documentation
 * Added collection constructor definition typeDef in documentation
@@ -429,7 +429,7 @@
 * Better `isPropertyX`
 * Added property name to all constructors and a test to ensure it is present
 * Removed extra property in Item prototype
-* Renamed snake cased _postman_property_name to _postman_propertyName
+* Renamed snake cased `_postman_property_name` to `_postman_propertyName`
 * More infra tests
 * Updated the `isPropertyX` static functions to use _postman_property_name in super chain to determine validity of property
 * Added `_postman_property_name` to all Properties that has an isX static function
@@ -439,7 +439,7 @@
 * Private environment access API
 * Added todo for future improvement of VariableList#env
 * Add VariableList#env private function to perform environment manipulation (also test updated since .environments array was made private)
-* Fixed documentation of PropertyList.insertAfter and made _postman_isGroup as private
+* Fixed documentation of PropertyList.insertAfter and made `_postman_isGroup` as private
 * Added Schema files to this repository
 * Fined breaking documentation generation due to blank example tag in property-base
 * Added form param to the sdk exports
@@ -453,19 +453,19 @@
 * Implementation of a generic toJSON
 * Added test for installation of packages.
 * Added test for installation of packages.
-* Added a custom clone method, removed import of PropertyList from PropertyBase
+* Added a custom clone method, removed import of `PropertyList` from `PropertyBase`
 * Added a check for null values
 * Reverting change to example code
-* Inherit FormParam and QueryParam from Property
-* Added a root toJSON for PropertyList as well
+* Inherit `FormParam` and `QueryParam` from `Property`
+* Added a root `toJSON` for `PropertyList` as well
 * Reformatted file for easy comparison
-* Added a generic toJSON function
-* Removing all toJSON methods, to consolidate them into a single one
+* Added a generic `toJSON` function
+* Removing all `toJSON` methods, to consolidate them into a single one
 * Inherit FormParam and QueryParam from Property
 * Added unit tests that checks the description related functionalities of a property
 * Added documentation to the `Description` constructor
 * Added `.describe` helper function in Property
-* Added `.update` function to Description property. Also added isDescription to Description static methods.
+* Added `.update` function to `Description` property. Also added `isDescription` to `Description` static methods.
 
 #### 0.0.7 (February 29, 2016)
 * Additional renames in auth helpers
