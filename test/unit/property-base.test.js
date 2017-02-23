@@ -48,10 +48,9 @@ describe('PropertyBase', function () {
 
         it('should return the collection as well when required', function () {
             var chain = [],
-                expectedOrder = ['F2', 'F2.F3'];
+                expectedOrder = ['multi-level-folders-v2', 'F2', 'F2.F3'];
 
             item.forEachParent({ withRoot: true }, chain.unshift.bind(chain));
-            expect(chain.shift().id).to.be(fixtures.nestedCollectionV2.info._postman_id);
             expect(_.map(chain, 'name')).to.eql(expectedOrder);
         });
     });
