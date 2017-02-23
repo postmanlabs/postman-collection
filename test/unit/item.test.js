@@ -1,11 +1,11 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    Sdk = require('../../lib/index.js');
+    sdk = require('../../lib/index.js');
 
 /* global describe, it */
 describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
-        item = new Sdk.Item(rawItem);
+        item = new sdk.Item(rawItem);
 
     describe('json representation', function () {
         it('must match what the item was initialized with', function () {
@@ -22,7 +22,7 @@ describe('Item', function () {
     });
 
     describe('.parent', function () {
-        var collection = new Sdk.Collection(fixtures.nestedCollectionV2);
+        var collection = new sdk.Collection(fixtures.nestedCollectionV2);
 
         it('must return a falsy result for a standalone item', function () {
             expect(item.parent()).to.not.be.ok();
