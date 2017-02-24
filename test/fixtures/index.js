@@ -3,6 +3,8 @@
 
 module.exports = {
     collectionV2: require('../../examples/collection-v2.json'),
+    nestedCollectionV2: require('../../examples/nested-v2-collection.json'),
+
     rawUrls: [
         // If adding to this list, add to the END, or you'll break a lot of tests which
         // use indexes to access particular URLs.
