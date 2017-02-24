@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### 0.5.13 (February 24, 2017)
+* Added helper functions for traversing parent properties (`.parent()` & `.forEachParent()`)
+
 #### 0.5.12 (February 16, 2017)
 * Migrated code from echo.getpostman.com to postman-echo.com
 * Allow options.stream to be a new Buffer().toJSON()
