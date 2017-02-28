@@ -1,0 +1,42 @@
+{
+    "id": "#/definitions/certificate",
+    "title": "Certificate",
+    "description": "A representation of an ssl certificate",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "A name for the certificate for user reference",
+            "type": "string"
+        },
+        "matches": {
+            "description": "A list of Url match pattern strings, to identify Urls this certificate can be used for.",
+            "type": "array",
+            "item": {
+              "type": "string",
+              "description": "An Url match pattern string"
+            }
+        },
+        "key": {
+            "description": "An object containing path to file containing private key, on the file system",
+            "type": "object",
+            "properties": {
+                "src": {
+                    "description": "The path to file containing key for certificate, on the file system"
+                }
+            }
+        },
+        "cert": {
+            "description": "An object containing path to file certificate, on the file system",
+            "type": "object",
+            "properties": {
+                "src": {
+                    "description": "The path to file containing key for certificate, on the file system"
+                }
+            }
+        },
+        "passphrase": {
+            "description": "The passphrase for the certificate",
+            "type": "string"
+        }
+    }
+}
