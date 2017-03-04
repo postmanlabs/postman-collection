@@ -16,6 +16,7 @@ describe('Request', function () {
             expect(jsonified.header).to.eql(rawRequest.header);
             expect(jsonified.body).to.eql(rawRequest.body);
             expect(jsonified.description).to.eql(rawRequest.description);
+            expect(jsonified.proxy).to.eql(rawRequest.proxy);
         });
     });
 
