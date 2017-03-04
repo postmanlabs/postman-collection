@@ -98,7 +98,11 @@
                         "exec": "console.log(\"hello\");"
                     }
                 }
-            ]
+            ],
+            "proxy": {
+                "match": "https://*.getpostman.com/*",
+                "server": "https://proxy.com"
+            }
         },
         {
             "id": "request-200-post",
