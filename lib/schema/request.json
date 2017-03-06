@@ -17,6 +17,9 @@
                 "proxy": {
                     "$ref": "#/definitions/proxy-config"
                 },
+                "certificate": {
+                    "$ref": "#/definitions/certificate"
+                },
                 "method": {
                     "description": "The HTTP method associated with this request.",
                     "type": "string",
