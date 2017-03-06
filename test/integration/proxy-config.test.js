@@ -6,7 +6,7 @@ describe('Proxy Config', function () {
     it('should initialize the values to their defaults', function () {
         var p = new ProxyConfig();
 
-        expect(p.match).to.be('<all_urls>');
+        expect(p.match.pattern).to.be('<all_urls>');
         expect(p.tunnel).to.be(false);
     });
 
@@ -18,7 +18,7 @@ describe('Proxy Config', function () {
             disabled: true
         });
 
-        expect(p.match).to.be('http://example.com');
+        expect(p.match.pattern).to.be('http://example.com');
         expect(p.server.protocol).to.be('http');
         expect(p.server.getHost()).to.be('proxy.com');
         expect(p.tunnel).to.be(true);
@@ -31,6 +31,6 @@ describe('Proxy Config', function () {
             server: 'http://proxy.com'
         });
 
-        expect(p.match).to.be('<all_urls>');
+        expect(p.match.pattern).to.be('<all_urls>');
     });
 });
