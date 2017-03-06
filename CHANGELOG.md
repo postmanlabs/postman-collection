@@ -1,5 +1,11 @@
 # Postman Collection SDK Changelog
 
+#### 1.0.0 (March 06, 2017)
+* Added proxy and certificate properties to request model
+* Added UrlMatchPattern, UrlMatchPatternList classes
+* Added Certificate and CertificateList classes for certificate information
+* Fixed a bug in `PropertyList` which caused members to not be JSONified correctly
+
 #### 0.5.13 (February 24, 2017)
 * Added helper functions for traversing parent properties (`.parent()` & `.forEachParent()`)
 
