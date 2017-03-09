@@ -80,7 +80,7 @@
     "recursive-readdir": "2.1.1",
     "require-all": "2.2.0",
     "schema-compiler": "0.0.3",
-    "shelljs": "0.7.5",
+    "shelljs": "0.7.7",
     "strip-json-comments": "2.0.1",
     "tv4": "1.2.7",
     "watchify": "3.9.0"
