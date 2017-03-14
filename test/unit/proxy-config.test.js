@@ -104,7 +104,7 @@ describe('Proxy Config', function () {
         });
     });
 
-    describe.only('isProxyConfig', function() {
+    describe('isProxyConfig', function() {
         it('should correctly identify ProxyConfig objects', function() {
             var rawConfig = { match: 'http://*/*', server: 'https://proxy.com/', tunnel: true, disabled: false },
                 proxyConfig = new ProxyConfig(rawConfig);
