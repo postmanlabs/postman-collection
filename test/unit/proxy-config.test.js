@@ -103,4 +103,17 @@ describe('Proxy Config', function () {
             expect(serialisedConfig.disabled).to.eql(rawConfig.disabled);
         });
     });
+
+    describe('isProxyConfig', function() {
+        it('should correctly identify ProxyConfig objects', function() {
+            var rawConfig = { match: 'http://*/*', server: 'https://proxy.com/', tunnel: true, disabled: false },
+                proxyConfig = new ProxyConfig(rawConfig);
+
+            expect(ProxyConfig.isProxyConfig(proxyConfig)).to.eql(true);
+        });
+
+        it('correctly identify non ProxyConfig objects', function() {
+            expect(ProxyConfig.isProxyConfig({})).to.eql(false);
+        });
+    });
 });
