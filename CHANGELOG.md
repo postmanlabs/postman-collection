@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### 1.0.1 (March 14, 2017)
+* Added a helper function, `isProxyConfig`
+
 #### 1.0.0 (March 06, 2017)
 * Added proxy and certificate properties to request model
 * Added UrlMatchPattern, UrlMatchPatternList classes

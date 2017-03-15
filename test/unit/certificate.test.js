@@ -53,5 +53,22 @@ describe('Certificate', function () {
             expect(serialisedCertificate.passphrase).to.eql(rawCert.passphrase);
         });
 
+        it('should not contain key value', function () {
+            var rawCert = {
+                    matches: ['https://postman-echo.com/*', 'https://bla.com/*'],
+                    key: { src: '/Users/here' },
+                    cert: { src: '/Users/here' },
+                    passphrase: 'iamhere'
+                },
+                certificate = new Certificate(rawCert),
+                serialisedCertificate;
+
+            certificate.key.value = 'something';
+            certificate.cert.value = 'something-else';
+            serialisedCertificate = certificate.toJSON();
+
+            expect(serialisedCertificate.key).to.not.have.property('value');
+            expect(serialisedCertificate.cert).to.not.have.property('value');
+        });
     });
 });
