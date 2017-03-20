@@ -56,7 +56,7 @@
     "browserify": "13.1.1",
     "colors": "1.1.2",
     "eslint": "3.17.1",
-    "eslint-plugin-jsdoc": "2.4.0",
+    "eslint-plugin-jsdoc": "3.0.0",
     "eslint-plugin-lodash": "2.3.6",
     "eslint-plugin-mocha": "4.7.0",
     "eslint-plugin-security": "1.3.0",
