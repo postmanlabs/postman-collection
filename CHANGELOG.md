@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### 1.0.2 (March 21, 2017)
+* Downgraded `file-type` to v3.9.0, which is browserify compatible
+
 #### 1.0.1 (March 14, 2017)
 * Added a helper function, `isProxyConfig`
 
