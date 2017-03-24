@@ -11,7 +11,7 @@ var fs = require('fs'),
 
 /* global describe, it */
 describe('Response', function () {
-    describe.only('isResponse', function () {
+    describe('isResponse', function () {
         it('must distinguish between collections and other objects', function () {
             var response = new Response(),
                 nonResponse = {};
