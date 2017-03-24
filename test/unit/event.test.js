@@ -26,35 +26,35 @@ describe('Event', function () {
         });
     });
 
-    describe('udpate', function () {
+    describe('update', function () {
         var script = 'console.log("This is a test log");';
 
         it('must work with script instance definitions', function () {
-            var eventObj = new Event(rawEvent);
+            var event = new Event(rawEvent);
 
-            eventObj.update({ script: new Script({ exec: script }) });
-            expect(eventObj.toJSON().script.exec).to.eql([script]);
+            event.update({ script: new Script({ exec: script }) });
+            expect(event.toJSON().script.exec).to.eql([script]);
         });
 
         it('must work with script strings', function () {
-            var eventObj = new Event(rawEvent);
+            var event = new Event(rawEvent);
 
-            eventObj.update({ script: script });
-            expect(eventObj.toJSON().script.exec).to.eql([script]);
+            event.update({ script: script });
+            expect(event.toJSON().script.exec).to.eql([script]);
         });
 
         it('must work with script arrays', function () {
-            var eventObj = new Event(rawEvent);
+            var event = new Event(rawEvent);
 
-            eventObj.update({ script: [script] });
-            expect(eventObj.toJSON().script.exec).to.eql([script]);
+            event.update({ script: [script] });
+            expect(event.toJSON().script.exec).to.eql([script]);
         });
 
         it('must correctly handle invalid/undefined script input', function () {
-            var eventObj = new Event(rawEvent);
+            var event = new Event(rawEvent);
 
-            eventObj.update();
-            expect(eventObj.toJSON().script.exec).to.eql([rawEvent.script.exec]);
+            event.update();
+            expect(event.toJSON().script.exec).to.eql([rawEvent.script.exec]);
         });
     });
 });
