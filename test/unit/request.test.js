@@ -8,7 +8,7 @@ describe('Request', function () {
         request = new Request(rawRequest);
 
     describe('isRequest', function () {
-        it('must distinguish between collections and other objects', function () {
+        it('must distinguish between requests and other objects', function () {
             var request = new Request(),
                 nonRequest = {};
 

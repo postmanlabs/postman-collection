@@ -12,7 +12,7 @@ var fs = require('fs'),
 /* global describe, it */
 describe('Response', function () {
     describe('isResponse', function () {
-        it('must distinguish between collections and other objects', function () {
+        it('must distinguish between responses and other objects', function () {
             var response = new Response(),
                 nonResponse = {};
 
