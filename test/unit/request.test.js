@@ -10,10 +10,10 @@ describe('Request', function () {
     describe('isRequest', function () {
         it('must distinguish between collections and other objects', function () {
             var request = new Request(),
-                nonCollection = {};
+                nonRequest = {};
 
             expect(Request.isRequest(request)).to.be(true);
-            expect(Request.isRequest(nonCollection)).to.be(false);
+            expect(Request.isRequest(nonRequest)).to.be(false);
         });
     });
 

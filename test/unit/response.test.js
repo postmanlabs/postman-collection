@@ -11,6 +11,16 @@ var fs = require('fs'),
 
 /* global describe, it */
 describe('Response', function () {
+    describe('isResponse', function () {
+        it('must distinguish between collections and other objects', function () {
+            var response = new Response(),
+                nonResponse = {};
+
+            expect(Response.isResponse(response)).to.be(true);
+            expect(Response.isResponse(nonResponse)).to.be(false);
+        });
+    });
+
     describe('json representation', function () {
         it('must match what the response was initialized with', function () {
             var rawResponse = fixtures.collectionV2.item[0].response[0],
