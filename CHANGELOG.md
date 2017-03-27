@@ -3,6 +3,7 @@
 #### 1.1.0-beta.x (March 24, 2017)
 * Fixed a script resolution bug in `Event#update`.
 * Added `Request.isRequest`, `Response.isResponse` and `Script.isScript` helpers
+* Added `Response#details` helper to retain custom server HTTP reasons.
 
 #### 1.0.2 (March 21, 2017)
 * Downgraded `file-type` to v3.9.0, which is browserify compatible
