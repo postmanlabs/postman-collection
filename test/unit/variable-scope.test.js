@@ -361,5 +361,63 @@ describe('VariableScope', function () {
                 expect(scope.values.count()).to.be(0);
             });
         });
+
+        describe('syncVariablesFromScope', function () {
+            var scopeJson = new VariableScope({
+                values: [{
+                    key: 'var-1',
+                    value: 'var-1-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value'
+                }]
+            }).toJSON();
+
+            it('must correctly sync variables from a JSONified VariableScope instance', function () {
+                var newScope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'old-var-1-value'
+                    }, {
+                        key: 'var-2',
+                        value: 'old-var-2-value'
+                    }]
+                });
+
+                newScope.syncVariablesFromScope(scopeJson);
+                expect(newScope.toJSON().values).to.eql([
+                    { type: 'any', value: 'var-1-value', key: 'var-1' },
+                    { type: 'any', value: 'var-2-value', key: 'var-2' }
+                ]);
+            });
+
+            it('must correctly overwrite pre-existing values', function () {
+                var newScope = new VariableScope();
+
+                newScope.syncVariablesFromScope(scopeJson);
+                expect(newScope.toJSON().values).to.eql([
+                    { type: 'any', value: 'var-1-value', key: 'var-1' },
+                    { type: 'any', value: 'var-2-value', key: 'var-2' }
+                ]);
+            });
+
+            it('must correctly remove non-existent source values from the target', function () {
+                var newScope = new VariableScope({
+                    values: [{
+                        key: 'foo',
+                        value: 'bar'
+                    }, {
+                        key: 'foo2',
+                        value: 'bar2'
+                    }]
+                });
+
+                newScope.syncVariablesFromScope(scopeJson);
+                expect(newScope.toJSON().values).to.eql([
+                    { type: 'any', value: 'var-1-value', key: 'var-1' },
+                    { type: 'any', value: 'var-2-value', key: 'var-2' }
+                ]);
+            });
+        });
     });
 });
