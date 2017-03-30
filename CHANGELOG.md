@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### 1.1.0-beta.5 (March 30, 2017)
+* Removed Response details `fromServer` flag.
+* Added Response details `standardName` property.
+
 #### 1.1.0-beta.4 (March 29, 2017)
 * Added `set`, `get`, `unset` and `clear `helpers to `VariableScope`.
 * Fixed a bug in `PropertyList#clear` which caused only the first property of a list to be removed.
