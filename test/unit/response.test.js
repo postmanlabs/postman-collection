@@ -67,17 +67,18 @@ describe('Response', function () {
         it('should correctly accept provided details', function () {
             expect(new Response({ code: 200 }).details()).to.eql({
                 name: 'OK',
+                standardName: 'OK',
                 detail: reason.lookup(200).detail,
                 code: 200
             });
         });
 
         it('should correctly set a flag for server reasons', function () {
-            expect(new Response({ code: 200, reason: true }).details()).to.eql({
+            expect(new Response({ code: 200 }).details()).to.eql({
                 name: 'OK',
+                standardName: 'OK',
                 detail: reason.lookup(200).detail,
-                code: 200,
-                fromServer: true
+                code: 200
             });
         });
 
@@ -86,6 +87,7 @@ describe('Response', function () {
 
             expect(response.details()).to.eql({
                 name: 'OK',
+                standardName: 'OK',
                 detail: reason.lookup(200).detail,
                 code: 200
             });
@@ -94,9 +96,9 @@ describe('Response', function () {
 
             expect(response.details()).to.eql({
                 name: 'Created',
+                standardName: 'Created',
                 detail: reason.lookup('201').detail,
-                code: 201,
-                fromServer: true
+                code: 201
             });
         });
 
@@ -107,6 +109,7 @@ describe('Response', function () {
 
             expect(response.details()).to.eql({
                 name: 'Created',
+                standardName: 'Created',
                 detail: reason.lookup(201).detail,
                 code: 201
             });
