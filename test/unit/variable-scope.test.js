@@ -365,19 +365,32 @@ describe('VariableScope', function () {
         describe('syncVariablesFromScope', function () {
             var scopeJson = new VariableScope({
                 values: [{
+                    type: 'string',
                     key: 'var-1',
                     value: 'var-1-value'
                 }, {
+                    type: 'string',
                     key: 'var-2',
                     value: 'var-2-value'
                 }]
             }).toJSON();
 
             it('must correctly sync variables from a JSONified VariableScope instance', function () {
+                var newScope = new VariableScope();
+
+                newScope.syncVariablesFromScope(scopeJson);
+                expect(newScope.toJSON().values).to.eql([
+                    { type: 'string', value: 'var-1-value', key: 'var-1' },
+                    { type: 'string', value: 'var-2-value', key: 'var-2' }
+                ]);
+            });
+
+            it('must correctly overwrite pre-existing values', function () {
                 var newScope = new VariableScope({
                     values: [{
+                        type: 'number',
                         key: 'var-1',
-                        value: 'old-var-1-value'
+                        value: 1
                     }, {
                         key: 'var-2',
                         value: 'old-var-2-value'
@@ -386,18 +399,8 @@ describe('VariableScope', function () {
 
                 newScope.syncVariablesFromScope(scopeJson);
                 expect(newScope.toJSON().values).to.eql([
-                    { type: 'any', value: 'var-1-value', key: 'var-1' },
-                    { type: 'any', value: 'var-2-value', key: 'var-2' }
-                ]);
-            });
-
-            it('must correctly overwrite pre-existing values', function () {
-                var newScope = new VariableScope();
-
-                newScope.syncVariablesFromScope(scopeJson);
-                expect(newScope.toJSON().values).to.eql([
-                    { type: 'any', value: 'var-1-value', key: 'var-1' },
-                    { type: 'any', value: 'var-2-value', key: 'var-2' }
+                    { type: 'string', value: 'var-1-value', key: 'var-1' },
+                    { type: 'string', value: 'var-2-value', key: 'var-2' }
                 ]);
             });
 
@@ -414,8 +417,8 @@ describe('VariableScope', function () {
 
                 newScope.syncVariablesFromScope(scopeJson);
                 expect(newScope.toJSON().values).to.eql([
-                    { type: 'any', value: 'var-1-value', key: 'var-1' },
-                    { type: 'any', value: 'var-2-value', key: 'var-2' }
+                    { type: 'string', value: 'var-1-value', key: 'var-1' },
+                    { type: 'string', value: 'var-2-value', key: 'var-2' }
                 ]);
             });
         });
