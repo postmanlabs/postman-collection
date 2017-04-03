@@ -128,7 +128,7 @@ describe('Header', function () {
                 value: 'value2'
             }]);
         });
-        it('must load a plain header key:value object, with values being an array', function () {
+        it.skip('must load a plain header key:value object, with values being an array', function () {
             var list = new PropertyList(Header, {}, {
                 name1: ['value1', 'value2'],
                 name2: 'value3'
