@@ -128,6 +128,24 @@ describe('Header', function () {
                 value: 'value2'
             }]);
         });
+
+        // @todo - this is not supported yet, unskip this test when this method of header construction is supported
+        it.skip('must load a plain header key:value object, with values being an array', function () {
+            var list = new PropertyList(Header, {}, {
+                name1: ['value1', 'value2'],
+                name2: 'value3'
+            });
+            expect(list.all()).to.eql([{
+                key: 'name1',
+                value: 'value1'
+            }, {
+                key: 'name1',
+                value: 'value2'
+            }, {
+                key: 'name2',
+                value: 'value3'
+            }]);
+        });
         it('must load headers with empty values', function () {
             var list = new PropertyList(Header, {}, {
                 name1: 'value1',
