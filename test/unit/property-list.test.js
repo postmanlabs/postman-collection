@@ -349,12 +349,12 @@ describe('PropertyList', function () {
 
             expect(Object.keys(list.reference)).to.eql(['key1', 'key2']);
 
-            expect(list.reference['key1']).to.eql([
+            expect(list.reference.key1).to.eql([
                 { keyAttr: 'key1', value: 'val1' },
                 { keyAttr: 'key1', value: 'val2' }
             ]);
 
-            expect(list.reference['key2']).to.eql({ keyAttr: 'key2', value: 'val3' });
+            expect(list.reference.key2).to.eql({ keyAttr: 'key2', value: 'val3' });
         });
 
         describe('methods', function () {
@@ -382,7 +382,7 @@ describe('PropertyList', function () {
                     value: 'val3'
                 }]);
 
-                expect(list.reference['key1']).to.eql([
+                expect(list.reference.key1).to.eql([
                     { keyAttr: 'key1', value: 'val1' },
                     { keyAttr: 'key1', value: 'val2' }
                 ]);
@@ -394,7 +394,7 @@ describe('PropertyList', function () {
 
             it('.remove() should remove all associated values with the key', function () {
                 list.remove('key1');
-                expect(list.reference['key1']).to.be(undefined);
+                expect(list.reference.key1).to.be(undefined);
             });
 
             afterEach(function () {
