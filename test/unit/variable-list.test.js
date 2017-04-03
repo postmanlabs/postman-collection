@@ -1,5 +1,7 @@
 var expect = require('expect.js'),
-    VariableList = require('../../').VariableList,
+    sdk = require('../../'),
+    VariableList = sdk.VariableList,
+    PropertyList = sdk.PropertyList,
     rawEnvironments = require('../fixtures/index').environments;
 
 /* global describe, it */
@@ -154,5 +156,44 @@ describe('VariableList', function () {
             ]),
             resolved = polyChainList.substitute(unresolved);
         expect(resolved.xyz).to.eql('delta');
+    });
+
+    describe('static helpers', function () {
+        var variableList = new VariableList({}, [], [
+            {
+                alpha: 'foo',
+                beta: 'bar',
+                gamma: 'len',
+                delta: 'may'
+            }
+        ]);
+
+        it('should work correctly for isVariableList', function () {
+            expect(VariableList.isVariableList(variableList)).to.be.ok();
+            expect(VariableList.isVariableList({})).to.not.be.ok();
+        });
+
+        it('should work correctly for listify', function () {
+            var list = VariableList.listify({ foo: 'alpha', bar: 'beta' });
+
+            expect(PropertyList.isPropertyList(list)).to.be.ok();
+            expect(list.map()).to.eql([{ type: 'any', value: 'alpha', key: 'foo' },
+                { type: 'any', value: 'beta', key: 'bar' }]);
+        });
+
+        it('should work correctly for proxy', function () {
+            var result = VariableList.proxy({ a: 'zen' }, { foo: 'bar' });
+
+            expect(result.a).to.be('zen');
+            expect(result.foo).to.be('bar');
+        });
+
+        it('should work correctly for objectify', function () {
+            var result = { alpha: { type: 'any', value: 1, key: 'alpha' }, bar: { type: 'any', value: 1, key: 'bar' } };
+
+            expect(VariableList.objectify([{ key: 'alpha', value: 1 }, { key: 'bar', value: 1 }])).to.eql(result);
+            expect(VariableList.objectify({ alpha: { key: 'alpha', value: 1 }, bar: { key: 'bar', value: 1 } })).to
+                .eql(result);
+        });
     });
 });
