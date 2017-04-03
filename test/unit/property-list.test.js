@@ -143,6 +143,31 @@ describe('PropertyList', function () {
         expect(Object.keys(list.reference)).to.eql(['yoLoLo2']);
     });
 
+    it('should remove all items correctly', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        // FakeType._postman_propertyIndexCaseInsensitive = false; // this is default
+
+        list = new PropertyList(FakeType, {}, [{
+            keyAttr: 'yoLoLo1',
+            value: 'what'
+        }, {
+            keyAttr: 'yoLoLo2',
+            value: 'where'
+        }]);
+
+        list.clear();
+
+        expect(list.count()).to.be(0);
+    });
+
     describe('reordering method', function () {
         // We create two variables that we would usually deal within these tests to insert and remove stuff
         var enterprise,
