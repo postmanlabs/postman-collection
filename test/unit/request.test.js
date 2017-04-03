@@ -7,6 +7,16 @@ describe('Request', function () {
     var rawRequest = fixtures.collectionV2.item[1].request,
         request = new Request(rawRequest);
 
+    describe('isRequest', function () {
+        it('must distinguish between requests and other objects', function () {
+            var request = new Request(),
+                nonRequest = {};
+
+            expect(Request.isRequest(request)).to.be(true);
+            expect(Request.isRequest(nonRequest)).to.be(false);
+        });
+    });
+
     describe('json representation', function () {
         it('must match what the request was initialized with', function () {
             var jsonified = request.toJSON();

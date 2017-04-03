@@ -2,7 +2,7 @@
   "name": "postman-collection",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Labs <help@getpostman.com>",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "keywords": [
     "postman"
   ],
@@ -45,14 +45,14 @@
     "lodash": "4.17.2",
     "marked": "0.3.6",
     "mime-format": "2.0.0",
-    "mime-types": "2.1.14",
+    "mime-types": "2.1.15",
     "node-oauth1": "1.2.1",
     "sanitize-html": "1.14.1",
     "semver": "5.3.0",
     "uuid": "3.0.1"
   },
   "devDependencies": {
-    "async": "2.1.5",
+    "async": "2.3.0",
     "browserify": "13.1.1",
     "colors": "1.1.2",
     "eslint": "3.17.1",
@@ -74,7 +74,7 @@
     "mustache": "2.3.0",
     "nsp": "2.6.3",
     "packity": "0.3.2",
-    "parse-gitignore": "0.3.1",
+    "parse-gitignore": "0.4.0",
     "postman-jsdoc-theme": "0.0.2",
     "postman-request": "2.80.1-postman.1",
     "recursive-readdir": "2.1.1",

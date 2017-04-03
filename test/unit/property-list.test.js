@@ -143,6 +143,31 @@ describe('PropertyList', function () {
         expect(Object.keys(list.reference)).to.eql(['yoLoLo2']);
     });
 
+    it('should remove all items correctly', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        // FakeType._postman_propertyIndexCaseInsensitive = false; // this is default
+
+        list = new PropertyList(FakeType, {}, [{
+            keyAttr: 'yoLoLo1',
+            value: 'what'
+        }, {
+            keyAttr: 'yoLoLo2',
+            value: 'where'
+        }]);
+
+        list.clear();
+
+        expect(list.count()).to.be(0);
+    });
+
     describe('reordering method', function () {
         // We create two variables that we would usually deal within these tests to insert and remove stuff
         var enterprise,
@@ -319,6 +344,90 @@ describe('PropertyList', function () {
                 enterprise.insertAfter(maverick, goose);
 
                 expect(enterprise.map(extractId)).to.eql(['goose', 'maverick', 'stinger']);
+            });
+        });
+    });
+
+    describe('items allowing multiple values', function () {
+        it('should hold multiple items with the same key as an array', function () {
+            var FakeType,
+                list;
+
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+            };
+
+            FakeType._postman_propertyIndexKey = 'keyAttr';
+            FakeType._postman_propertyAllowsMultipleValues = true;
+
+            list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(Object.keys(list.reference)).to.eql(['key1', 'key2']);
+
+            expect(list.reference.key1).to.eql([
+                { keyAttr: 'key1', value: 'val1' },
+                { keyAttr: 'key1', value: 'val2' }
+            ]);
+
+            expect(list.reference.key2).to.eql({ keyAttr: 'key2', value: 'val3' });
+        });
+
+        describe('methods', function () {
+            var list;
+
+            beforeEach(function () {
+                var FakeType;
+
+                FakeType = function (options) {
+                    this.keyAttr = options.keyAttr;
+                    this.value = options.value;
+                };
+
+                FakeType._postman_propertyIndexKey = 'keyAttr';
+                FakeType._postman_propertyAllowsMultipleValues = true;
+
+                list = new PropertyList(FakeType, {}, [{
+                    keyAttr: 'key1',
+                    value: 'val1'
+                }, {
+                    keyAttr: 'key1',
+                    value: 'val2'
+                }, {
+                    keyAttr: 'key2',
+                    value: 'val3'
+                }]);
+
+                expect(list.reference.key1).to.eql([
+                    { keyAttr: 'key1', value: 'val1' },
+                    { keyAttr: 'key1', value: 'val2' }
+                ]);
+            });
+
+            it('.one() should always the last item inserted, even if multiple are present', function () {
+                expect(list.one('key1')).to.eql({ keyAttr: 'key1', value: 'val2' });
+            });
+
+            it('.one() should return undefined if item is not found', function () {
+                expect(list.one('asdjhaks')).to.be(undefined);
+            });
+
+            it('.remove() should remove all associated values with the key', function () {
+                list.remove('key1');
+                expect(list.reference.key1).to.be(undefined);
+            });
+
+            afterEach(function () {
+                list = undefined;
             });
         });
     });

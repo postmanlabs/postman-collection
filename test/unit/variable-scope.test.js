@@ -265,4 +265,101 @@ describe('VariableScope', function () {
             expect(target).not.have.property('extra');
         });
     });
+
+    describe('PM API helpers', function () {
+        describe('get', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'var-1',
+                    value: 'var-1-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value'
+                }]
+            });
+
+            it('must correctly return the specified value', function () {
+                expect(scope.get('var-1')).to.be('var-1-value');
+            });
+
+            it('must return undefined for ', function () {
+                expect(scope.get('random')).to.be(undefined);
+            });
+        });
+
+        describe('set', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'var-1',
+                    value: 'var-1-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value'
+                }]
+            });
+
+            it('must correctly update an existing value', function () {
+                scope.set('var-1', 'new-var-1-value');
+                expect(scope.get('var-1')).to.be('new-var-1-value');
+            });
+
+            it('must create a new variable if non-existent', function () {
+                scope.set('var-3', 'var-3-value');
+
+                expect(scope.values.count()).to.be(3);
+                expect(scope.get('var-3')).to.be('var-3-value');
+            });
+        });
+
+        describe('unset', function () {
+            it('must correctly remove an existing variable', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value'
+                    }]
+                });
+
+                scope.unset('var-1');
+
+                expect(scope.values.count()).to.be(1);
+                expect(scope.get('var-1')).to.be(undefined);
+            });
+
+            it('must leave the scope untouched for an invalid key', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value'
+                    }]
+                });
+
+                scope.unset('random');
+                expect(scope.values.count()).to.be(2);
+            });
+        });
+
+        describe('clear', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'var-1',
+                    value: 'var-1-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value'
+                }]
+            });
+
+            it('must correctly remove all variables', function () {
+                scope.clear();
+                expect(scope.values.count()).to.be(0);
+            });
+        });
+    });
 });
