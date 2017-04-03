@@ -1,6 +1,7 @@
 var fs = require('fs'),
     _ = require('lodash'),
     expect = require('expect.js'),
+    reason = require('http-reasons'),
     util = require('../../lib/util'),
     request = require('postman-request'),
 
@@ -11,6 +12,16 @@ var fs = require('fs'),
 
 /* global describe, it */
 describe('Response', function () {
+    describe('isResponse', function () {
+        it('must distinguish between responses and other objects', function () {
+            var response = new Response(),
+                nonResponse = {};
+
+            expect(Response.isResponse(response)).to.be(true);
+            expect(Response.isResponse(nonResponse)).to.be(false);
+        });
+    });
+
     describe('json representation', function () {
         it('must match what the response was initialized with', function () {
             var rawResponse = fixtures.collectionV2.item[0].response[0],
@@ -49,6 +60,59 @@ describe('Response', function () {
 
             // Skip cookie tests, because cookies are tested independently.
             expect(jsonified).to.have.property('cookie');
+        });
+    });
+
+    describe('details', function () {
+        it('should correctly accept provided details', function () {
+            expect(new Response({ code: 200 }).details()).to.eql({
+                name: 'OK',
+                standardName: 'OK',
+                detail: reason.lookup(200).detail,
+                code: 200
+            });
+        });
+
+        it('should correctly set a flag for server reasons', function () {
+            expect(new Response({ code: 200 }).details()).to.eql({
+                name: 'OK',
+                standardName: 'OK',
+                detail: reason.lookup(200).detail,
+                code: 200
+            });
+        });
+
+        it('should correctly update the reason and response code where applicable', function () {
+            var response = new Response({ code: 200 });
+
+            expect(response.details()).to.eql({
+                name: 'OK',
+                standardName: 'OK',
+                detail: reason.lookup(200).detail,
+                code: 200
+            });
+
+            response.update({ code: 201, reason: true });
+
+            expect(response.details()).to.eql({
+                name: 'Created',
+                standardName: 'Created',
+                detail: reason.lookup('201').detail,
+                code: 201
+            });
+        });
+
+        it('should correctly check for response code disparities', function () {
+            var response = new Response();
+
+            response.code = 201; // hijacked update
+
+            expect(response.details()).to.eql({
+                name: 'Created',
+                standardName: 'Created',
+                detail: reason.lookup(201).detail,
+                code: 201
+            });
         });
     });
 

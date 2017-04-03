@@ -1,5 +1,23 @@
 # Postman Collection SDK Changelog
 
+#### 1.1.0-beta.5 (March 30, 2017)
+* Removed Response details `fromServer` flag.
+* Added Response details `standardName` property.
+
+#### 1.1.0-beta.4 (March 29, 2017)
+* Added `set`, `get`, `unset` and `clear `helpers to `VariableScope`.
+* Fixed a bug in `PropertyList#clear` which caused only the first property of a list to be removed.
+
+#### 1.1.0-beta.3 (March 27, 2017)
+* Added `Response#details` helper to retain custom server HTTP reasons.
+
+#### 1.1.0-beta.2 (March 24, 2017)
+* Fixed a script resolution bug in `Event#update`.
+* Added `Response.isResponse` and `Script.isScript` helpers
+
+#### 1.1.0-beta.1 (March 24, 2017)
+* Added `Request.isRequest` helper
+
 #### 1.0.2 (March 21, 2017)
 * Downgraded `file-type` to v3.9.0, which is browserify compatible
 
