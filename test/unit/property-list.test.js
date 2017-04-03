@@ -392,6 +392,10 @@ describe('PropertyList', function () {
                 expect(list.one('key1')).to.eql({ keyAttr: 'key1', value: 'val2' });
             });
 
+            it('.one() should return undefined if item is not found', function () {
+                expect(list.one('asdjhaks')).to.be(undefined);
+            });
+
             it('.remove() should remove all associated values with the key', function () {
                 list.remove('key1');
                 expect(list.reference.key1).to.be(undefined);
