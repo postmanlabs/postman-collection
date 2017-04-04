@@ -1,7 +1,9 @@
 var _ = require('lodash'),
     expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    Collection = require('../../lib/index.js').Collection;
+    sdk = require('../../lib/index.js'),
+    Item = sdk.Item,
+    Collection = sdk.Collection;
 
 /* global describe, it */
 describe('ItemGroup', function () {
@@ -14,6 +16,19 @@ describe('ItemGroup', function () {
             groups.push(group);
         });
         expect(groups.length).to.be(4);
+    });
+
+    it('should not cast incoming items/item groups', function () {
+        var collection = new Collection(),
+            url = 'https://www.random.org:443/integers/?num=1&min=0&max=255&col=16&base=10&format=plain&rnd=new';
+
+        collection.items.add(new Item({
+            request: {
+                method: 'GET',
+                url: url
+            }
+        }));
+        expect(collection.toJSON().item[0].request.url).to.be(url);
     });
 
     describe('.parent checks', function () {
