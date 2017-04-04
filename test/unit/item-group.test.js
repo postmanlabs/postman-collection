@@ -3,6 +3,7 @@ var _ = require('lodash'),
     fixtures = require('../fixtures'),
     sdk = require('../../lib/index.js'),
     Item = sdk.Item,
+    ItemGroup = sdk.ItemGroup,
     Collection = sdk.Collection;
 
 /* global describe, it */
@@ -29,6 +30,38 @@ describe('ItemGroup', function () {
             }
         }));
         expect(collection.toJSON().item[0].request.url).to.be(url);
+    });
+
+    it('should correctly handle incoming items/item groups and/or plain objects', function () {
+        var plain = ItemGroup._createNewGroupOrItem({
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    method: 'GET'
+                }
+            }),
+            item = ItemGroup._createNewGroupOrItem(new sdk.Item({
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    method: 'GET'
+                }
+            })),
+            group = ItemGroup._createNewGroupOrItem(new sdk.ItemGroup({ name: 'Blank folder' }));
+
+        expect(plain).to.be.ok();
+        expect(plain.events).to.be.ok();
+        expect(plain.responses).to.be.ok();
+        expect(plain.request).to.have.property('method', 'GET');
+        expect(plain.request.url.path).to.eql(['get']);
+        expect(plain.request.url.host).to.eql(['postman-echo', 'com']);
+
+        expect(item).to.be.ok();
+        expect(item.events).to.be.ok();
+        expect(item.responses).to.be.ok();
+        expect(item.request).to.have.property('method', 'GET');
+        expect(item.request.url.path).to.eql(['get']);
+        expect(item.request.url.host).to.eql(['postman-echo', 'com']);
+
+        expect(_.omit(group.toJSON(), 'id')).to.eql({ name: 'Blank folder', item: [], event: [] });
     });
 
     describe('.parent checks', function () {
