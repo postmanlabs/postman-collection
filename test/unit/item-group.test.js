@@ -1,7 +1,10 @@
 var _ = require('lodash'),
     expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    Collection = require('../../lib/index.js').Collection;
+    sdk = require('../../lib/index.js'),
+    Item = sdk.Item,
+    ItemGroup = sdk.ItemGroup,
+    Collection = sdk.Collection;
 
 /* global describe, it */
 describe('ItemGroup', function () {
@@ -14,6 +17,51 @@ describe('ItemGroup', function () {
             groups.push(group);
         });
         expect(groups.length).to.be(4);
+    });
+
+    it('should not cast incoming items/item groups', function () {
+        var collection = new Collection(),
+            url = 'https://www.random.org:443/integers/?num=1&min=0&max=255&col=16&base=10&format=plain&rnd=new';
+
+        collection.items.add(new Item({
+            request: {
+                method: 'GET',
+                url: url
+            }
+        }));
+        expect(collection.toJSON().item[0].request.url).to.be(url);
+    });
+
+    it('should correctly handle incoming items/item groups and/or plain objects', function () {
+        var plain = ItemGroup._createNewGroupOrItem({
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    method: 'GET'
+                }
+            }),
+            item = ItemGroup._createNewGroupOrItem(new sdk.Item({
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    method: 'GET'
+                }
+            })),
+            group = ItemGroup._createNewGroupOrItem(new sdk.ItemGroup({ name: 'Blank folder' }));
+
+        expect(plain).to.be.ok();
+        expect(plain.events).to.be.ok();
+        expect(plain.responses).to.be.ok();
+        expect(plain.request).to.have.property('method', 'GET');
+        expect(plain.request.url.path).to.eql(['get']);
+        expect(plain.request.url.host).to.eql(['postman-echo', 'com']);
+
+        expect(item).to.be.ok();
+        expect(item.events).to.be.ok();
+        expect(item.responses).to.be.ok();
+        expect(item.request).to.have.property('method', 'GET');
+        expect(item.request.url.path).to.eql(['get']);
+        expect(item.request.url.host).to.eql(['postman-echo', 'com']);
+
+        expect(_.omit(group.toJSON(), 'id')).to.eql({ name: 'Blank folder', item: [], event: [] });
     });
 
     describe('.parent checks', function () {
