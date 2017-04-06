@@ -160,4 +160,20 @@ describe('Header', function () {
             }]);
         });
     });
+
+    describe('isHeader', function () {
+        var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="\n';
+
+        it('should return true for a Header instance', function () {
+            expect(Header.isHeader(new Header(rawHeader))).to.be(true);
+        });
+
+        it('should return false for a raw Header object', function () {
+            expect(Header.isHeader(rawHeader)).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(Header.isHeader()).to.be(false);
+        });
+    });
 });
