@@ -171,6 +171,7 @@ describe('VariableList', function () {
         it('should work correctly for isVariableList', function () {
             expect(VariableList.isVariableList(variableList)).to.be.ok();
             expect(VariableList.isVariableList({})).to.not.be.ok();
+            expect(VariableList.isVariableList()).to.not.be.ok();
         });
 
         it('should work correctly for listify', function () {
