@@ -108,4 +108,18 @@ describe('ItemGroup', function () {
             expect(parent.name).to.be(collection.name);
         });
     });
+
+    describe('isItemGroup', function () {
+        it('should return true for a ItemGroup instance', function () {
+            expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be(true);
+        });
+
+        it('should return false for a raw ItemGroup object', function () {
+            expect(sdk.ItemGroup.isItemGroup(fixtures.collectionV2.item)).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(sdk.ItemGroup.isItemGroup()).to.be(false);
+        });
+    });
 });
