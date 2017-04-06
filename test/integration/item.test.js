@@ -1,5 +1,6 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
+    Request = require('../../lib/index.js').Request,
     Item = require('../../lib/index.js').Item;
 
 /* global describe, it */
@@ -65,8 +66,7 @@ describe('Item', function () {
 
             it('request', function () {
                 expect(item).to.have.property('request');
-                expect(item.request).to.be.an('object');
-                expect(item.request).to.be.empty();
+                expect(item.request).to.be.a(Request);
             });
         });
     });
