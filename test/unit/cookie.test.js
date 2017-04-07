@@ -39,4 +39,31 @@ describe('Cookie', function () {
             expect(ext.value).to.be('HIGH');
         });
     });
+
+    describe('isCookie', function () {
+        var rawCookie = {
+            domain: '.httpbin.org',
+            expires: 1502442248,
+            hostOnly: false,
+            httpOnly: false,
+            key: '_ga',
+            path: '/',
+            secure: false,
+            session: false,
+            _postman_storeId: '0',
+            value: 'GA1.2.113558537.1435817423'
+        };
+
+        it('should return true for a cookie instance', function () {
+            expect(Cookie.isCookie(new Cookie(rawCookie))).to.be(true);
+        });
+
+        it('should return false for a raw cookie object', function () {
+            expect(Cookie.isCookie(rawCookie)).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(Cookie.isCookie()).to.be(false);
+        });
+    });
 });

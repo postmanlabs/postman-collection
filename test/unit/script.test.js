@@ -13,6 +13,7 @@ describe('Script', function () {
                 nonScript = {};
 
             expect(Script.isScript(script)).to.be(true);
+            expect(Script.isScript({})).to.be(false);
             expect(Script.isScript(nonScript)).to.be(false);
         });
     });

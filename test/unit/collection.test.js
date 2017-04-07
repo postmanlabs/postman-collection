@@ -9,6 +9,7 @@ describe('Collection', function () {
                 nonCollection = {};
 
             expect(Collection.isCollection(collection)).to.be(true);
+            expect(Collection.isCollection()).to.be(false);
             expect(Collection.isCollection(nonCollection)).to.be(false);
         });
     });

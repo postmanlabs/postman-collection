@@ -50,4 +50,20 @@ describe('Item', function () {
             expect(parent.name).to.be(collection.name);
         });
     });
+
+    describe('isItem', function () {
+        var rawItem = fixtures.collectionV2.item[0];
+
+        it('should return true for a Item instance', function () {
+            expect(sdk.Item.isItem(new sdk.Item(rawItem))).to.be(true);
+        });
+
+        it('should return false for a raw Item object', function () {
+            expect(sdk.Item.isItem(rawItem)).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(sdk.Item.isItem()).to.be(false);
+        });
+    });
 });
