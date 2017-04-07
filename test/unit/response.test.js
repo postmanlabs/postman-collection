@@ -18,6 +18,7 @@ describe('Response', function () {
                 nonResponse = {};
 
             expect(Response.isResponse(response)).to.be(true);
+            expect(Response.isResponse({})).to.be(false);
             expect(Response.isResponse(nonResponse)).to.be(false);
         });
     });

@@ -49,6 +49,7 @@ describe('CertificateList', function () {
         it('should return true for CertificateList instance', function() {
             var certificateList = new CertificateList({}, [{ matches: [] }]);
 
+            expect(CertificateList.isCertificateList()).to.eql(false);
             expect(CertificateList.isCertificateList(certificateList)).to.eql(true);
             expect(CertificateList.isCertificateList({})).to.eql(false);
             expect(CertificateList.isCertificateList({ _postman_propertyName: 'CertificateList' })).to.eql(false);
