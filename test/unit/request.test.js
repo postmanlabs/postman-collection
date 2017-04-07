@@ -16,6 +16,7 @@ describe('Request', function () {
 
             expect(Request.isRequest(request)).to.be(true);
             expect(Request.isRequest(nonRequest)).to.be(false);
+            expect(Request.isRequest()).to.be(false);
         });
     });
 

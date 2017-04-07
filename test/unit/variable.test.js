@@ -62,4 +62,18 @@ describe('Variable', function () {
         v.valueType('number');
         expect(v.get()).to.be(3.142);
     });
+
+    describe('isVariable', function () {
+        it('should return true for a valid Variable instance', function () {
+            expect(Variable.isVariable(new Variable({ type: 'string', key: 'foo', value: 'bar' }))).to.be(true);
+        });
+
+        it('should return false for a raw variable object', function () {
+            expect(Variable.isVariable({ type: 'string', key: 'foo', value: 'bar' })).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(Variable.isVariable()).to.be(false);
+        });
+    });
 });

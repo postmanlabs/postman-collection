@@ -362,4 +362,28 @@ describe('VariableScope', function () {
             });
         });
     });
+
+    describe('isVariableScope', function () {
+        var rawVariableScope = {
+            values: [{
+                key: 'var-1',
+                value: 'var-1-value'
+            }, {
+                key: 'var-2',
+                value: 'var-2-value'
+            }]
+        };
+
+        it('should return true for a VariableScope instance', function () {
+            expect(VariableScope.isVariableScope(new VariableScope(rawVariableScope))).to.be(true);
+        });
+
+        it('should return false for a raw VariableScope object', function () {
+            expect(VariableScope.isVariableScope(rawVariableScope)).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(VariableScope.isVariableScope()).to.be(false);
+        });
+    });
 });

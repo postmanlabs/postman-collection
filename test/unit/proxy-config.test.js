@@ -115,5 +115,9 @@ describe('Proxy Config', function () {
         it('correctly identify non ProxyConfig objects', function() {
             expect(ProxyConfig.isProxyConfig({})).to.eql(false);
         });
+
+        it('should return false when called without arguments', function() {
+            expect(ProxyConfig.isProxyConfig()).to.eql(false);
+        });
     });
 });
