@@ -1,5 +1,7 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
+    PropertyList = require('../../lib/index.js').PropertyList,
+    Url = require('../../lib/index.js').Url,
     Request = require('../../lib/index.js').Request;
 
 /* global describe, it */
@@ -14,6 +16,7 @@ describe('Request', function () {
 
             expect(Request.isRequest(request)).to.be(true);
             expect(Request.isRequest(nonRequest)).to.be(false);
+            expect(Request.isRequest()).to.be(false);
         });
     });
 
@@ -66,6 +69,11 @@ describe('Request', function () {
             expect(request.getHeaders({ enabled: true })).to.eql({
                 some: 'header'
             });
+        });
+
+        it('should return an empty object for empty requests', function () {
+            var request = new Request();
+            expect(request.getHeaders()).to.eql({});
         });
     });
 
@@ -184,6 +192,31 @@ describe('Request', function () {
                 expect(param.key).to.eql(secondParam.key);
                 expect(param.value).to.eql(secondParam.value);
             });
+        });
+    });
+
+    describe('empty requests', function () {
+
+        it('should have a url', function () {
+            var r = new Request();
+
+            expect(r).to.have.property('url');
+            expect(r.url).to.be.a(Url);
+        });
+
+        it('should have a method', function () {
+            var r = new Request();
+
+            expect(r).to.have.property('method');
+            expect(r.method).to.be('GET');
+        });
+
+        it('should have an empty property-list of headers', function () {
+            var r = new Request();
+
+            expect(r).to.have.property('headers');
+            expect(r.headers).to.be.a(PropertyList);
+            expect(r.headers.count()).to.be(0);
         });
     });
 });

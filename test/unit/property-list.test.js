@@ -168,6 +168,39 @@ describe('PropertyList', function () {
         expect(list.count()).to.be(0);
     });
 
+    it('should repopulate a list', function () {
+        var FakeType,
+            list;
+
+        FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        // FakeType._postman_propertyIndexCaseInsensitive = false; // this is default
+
+        list = new PropertyList(FakeType, {}, [{
+            keyAttr: 'yoLoLo1',
+            value: 'what'
+        }, {
+            keyAttr: 'yoLoLo2',
+            value: 'where'
+        }]);
+
+        list.repopulate([{
+            keyAttr: 'yoLoLo3',
+            value: 'what'
+        }, {
+            keyAttr: 'yoLoLo4',
+            value: 'where'
+        }]);
+
+        expect(list.count()).to.be(2);
+
+        expect(list.map('keyAttr')).to.eql(['yoLoLo3', 'yoLoLo4']);
+    });
+
     describe('reordering method', function () {
         // We create two variables that we would usually deal within these tests to insert and remove stuff
         var enterprise,
@@ -429,6 +462,41 @@ describe('PropertyList', function () {
             afterEach(function () {
                 list = undefined;
             });
+        });
+    });
+
+    describe('isPropertyList', function () {
+        var list,
+            rawList = [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }],
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+            };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyAllowsMultipleValues = true;
+
+        list = new PropertyList(FakeType, {}, rawList);
+
+        it('should return true for a PropertyList instance', function () {
+            expect(PropertyList.isPropertyList(list)).to.be(true);
+        });
+
+        it('should return false for a raw PropertyList object', function () {
+            expect(PropertyList.isPropertyList(rawList)).to.be(false);
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(PropertyList.isPropertyList()).to.be(false);
         });
     });
 });

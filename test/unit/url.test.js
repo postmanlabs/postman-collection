@@ -1,10 +1,29 @@
 var expect = require('expect.js'),
     _ = require('lodash'),
     Url = require('../../').Url,
+    PropertyList = require('../../').PropertyList,
+    VariableList = require('../../').VariableList,
     rawUrls = require('../fixtures/').rawUrls;
 
 /* global describe, it */
 describe('Url', function () {
+
+    describe('Constructor', function () {
+        it('should be able to construct a URL from empty string', function () {
+            var u = new Url('');
+
+            expect(u.auth).to.be(undefined);
+            expect(u.protocol).to.be(undefined);
+            expect(u.port).to.be(undefined);
+            expect(u.path).to.be(undefined);
+            expect(u.hash).to.be(undefined);
+            expect(u.host).to.be(undefined);
+
+            expect(u.query).to.be.a(PropertyList);
+            expect(u.variables).to.be.a(VariableList);
+        });
+    });
+
     describe('.parse()', function () {
         it('must parse bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1');
@@ -280,6 +299,7 @@ describe('Url', function () {
             expect(subject.port).to.be(undefined);
         });
     });
+
     describe('unparsing', function () {
         rawUrls.forEach(function (rawUrl) {
             _.isString(rawUrl) && describe(rawUrl, function () {

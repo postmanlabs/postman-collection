@@ -173,5 +173,9 @@ describe('Proxy Config List', function () {
             var list = { _postman_propertyName: 'ProxyConfigList' };
             expect(ProxyConfigList.isProxyConfigList(list)).to.eql(false);
         });
+
+        it('should return false when called witohut arguments', function () {
+            expect(ProxyConfigList.isProxyConfigList()).to.eql(false);
+        });
     });
 });
