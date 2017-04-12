@@ -1,5 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### Unreleased
+* Ensure that `Xyz.isXyz()` functions always return a boolean
+* Fixed a bug which caused `Request` to not initialize headers
+
+#### 1.1.0 (April 03, 2017)
 * Enhanced the `PropertyList` to allow keys with multiple values
 * Removed Response details `fromServer` flag
 * Added Response details `standardName` property
