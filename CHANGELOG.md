@@ -1,6 +1,8 @@
 # Postman Collection SDK Changelog
 
 #### Unreleased
+* Added support for variable types via VariableScope `.set` function
+* Added `VariableScope~variables` to access all variables as a plain object
 * Ensure that `Xyz.isXyz()` functions always return a boolean
 * Fixed a bug which caused `Request` to not initialize headers
 
