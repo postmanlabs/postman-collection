@@ -22,7 +22,7 @@ describe('RequestAuthBase', function () {
             sdkRequest = new Request(reqData),
             request;
 
-        _.set(sdkRequest._, 'postman_auth_metaProperty', 'some-random-stuff');
+        _.set(sdkRequest, 'auth.oauth1._.postman_auth_metaProperty', 'some-random-stuff');
 
         request = sdkRequest.toJSON();
 

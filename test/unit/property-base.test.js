@@ -32,6 +32,19 @@ describe('PropertyBase', function () {
             expect(base.meta('postman_one')).to.not.have.property('postman_two');
             expect(base.meta('postman_one')).to.not.have.property('three');
         });
+
+        it('should be a part of toJSON', function () {
+            var definition = {
+                    _postman_one: { a: 'b' },
+                    _postman_two: 'something',
+                    _three: _.noop
+                },
+                base = new sdk.PropertyBase(definition);
+
+            expect(base).to.have.property('_');
+            expect(base._).to.have.property('postman_one');
+            expect(base._).to.have.property('postman_two');
+        });
     });
 
     describe('forEachParent helper', function () {
