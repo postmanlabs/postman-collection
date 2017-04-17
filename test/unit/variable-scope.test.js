@@ -309,6 +309,16 @@ describe('VariableScope', function () {
                 expect(scope.values.count()).to.be(3);
                 expect(scope.get('var-3')).to.be('var-3-value');
             });
+
+            it('must correctly update type of existing value', function () {
+                scope.set('var-1', 3.142, 'number');
+                expect(scope.get('var-1')).to.be(3.142);
+            });
+
+            it('must correctly create a new typed value', function () {
+                scope.set('var-4', 3.142, 'boolean');
+                expect(scope.get('var-4')).to.be(true);
+            });
         });
 
         describe('unset', function () {
