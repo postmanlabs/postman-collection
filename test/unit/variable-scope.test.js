@@ -386,4 +386,30 @@ describe('VariableScope', function () {
             expect(VariableScope.isVariableScope()).to.be(false);
         });
     });
+
+    describe('.variables()', function () {
+        var scope = new VariableScope({
+            values: [{
+                key: 'var1',
+                value: 'one'
+            }, {
+                key: 'var2',
+                value: 2,
+                type: 'number'
+            }, {
+                key: 'var3',
+                value: true,
+                type: 'boolean'
+            }]
+        });
+
+        it('must return a copy of all variables in an object form', function () {
+            expect(scope.variables()).be.an('object');
+            expect(scope.variables()).be.eql({
+                var1: 'one',
+                var2: 2,
+                var3: true
+            });
+        });
+    });
 });
