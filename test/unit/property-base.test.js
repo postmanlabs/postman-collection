@@ -4,7 +4,7 @@ var _ = require('lodash'),
 
     fixtures = require('../fixtures');
 
-/* global describe, it */
+/* global describe, it, beforeEach */
 describe('PropertyBase', function () {
     describe('meta properties', function () {
         it('should return all the meta properties', function () {
@@ -47,7 +47,7 @@ describe('PropertyBase', function () {
         });
     });
 
-    describe('forEachParent helper', function () {
+    describe('.forEachParent()', function () {
         var collection = new sdk.Collection(fixtures.nestedCollectionV2),
             item = collection.items.members[1].items.members[0].items.members[0];
 
@@ -65,6 +65,62 @@ describe('PropertyBase', function () {
 
             item.forEachParent({ withRoot: true }, chain.unshift.bind(chain));
             expect(_.map(chain, 'name')).to.eql(expectedOrder);
+        });
+    });
+
+    describe('.lookup()', function () {
+        var util = require('../../lib/util'),
+            FakeType,
+            // See below for why these are named this way ;-)
+            ggggp,
+            gggp,
+            ggp,
+            gp,
+            p,
+            c;
+
+        FakeType = function (level, value) {
+            FakeType.super_.apply(this, arguments);
+            this.level = level;
+            this.value = value;
+        };
+
+        util.lodash.inherit(FakeType, sdk.PropertyBase);
+
+        beforeEach(function () {
+            ggggp = new FakeType('great-great-great-grandparent');
+            gggp = new FakeType('great-great-grandparent');
+            ggp = new FakeType('great-grandparent', 'yo1');
+            gp = new FakeType('grandparent');
+            p = new FakeType('parent', 'yo2');
+            c = new FakeType('child');
+
+            c.__parent = p;
+            p.__parent = gp;
+            gp.__parent = ggp;
+        });
+
+        afterEach(function () {
+            ggp = null;
+            gp = null;
+            p = null;
+            c = null;
+        });
+
+        it('should be able to look up values from the parent', function () {
+            expect(c.lookup('value')).to.eql('yo2');
+        });
+
+        it('should be able retrieve the value if stored locally', function () {
+            expect(p.lookup('value')).to.eql('yo2');
+        });
+
+        it('should return undefined if no value was found', function () {
+            expect(gggp.lookup('value')).to.be(undefined);
+        });
+
+        it('should return undefined if a random property is provided for lookup', function () {
+            expect(gggp.lookup('some-randome-stuff')).to.be(undefined);
         });
     });
 });
