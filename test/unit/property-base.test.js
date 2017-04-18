@@ -125,21 +125,21 @@ describe('PropertyBase', function () {
             });
         });
 
-        describe('.lookupOwner()', function () {
+        describe('.findParentContaining()', function () {
             it('should be able to look up owner when it is the parent', function () {
-                expect(c.lookupOwner('value')).to.be(p);
+                expect(c.findParentContaining('value')).to.be(p);
             });
 
             it('should be able retrieve the owner when property exists locally', function () {
-                expect(p.lookupOwner('value')).to.be(p);
+                expect(p.findParentContaining('value')).to.be(p);
             });
 
             it('should return undefined if no value was found', function () {
-                expect(gggp.lookupOwner('value')).to.be(undefined);
+                expect(gggp.findParentContaining('value')).to.be(undefined);
             });
 
             it('should return undefined if a random property is provided for lookup', function () {
-                expect(c.lookupOwner('some-randome-stuff')).to.be(undefined);
+                expect(c.findParentContaining('some-randome-stuff')).to.be(undefined);
             });
         });
     });
