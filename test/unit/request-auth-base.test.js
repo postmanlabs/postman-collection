@@ -1,8 +1,6 @@
-var _ = require('lodash'),
-    expect = require('expect.js'),
+var expect = require('expect.js'),
 
     Request = require('../../').Request,
-    RequestAuthBase = require('../../').RequestAuthBase,
     rawRequests = require('../fixtures/index').authRequests;
 
 /* global describe, it */

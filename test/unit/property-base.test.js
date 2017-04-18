@@ -68,11 +68,10 @@ describe('PropertyBase', function () {
         });
     });
 
-    describe('.lookup()', function () {
+    describe('parent lookups', function () {
         var util = require('../../lib/util'),
             FakeType,
             // See below for why these are named this way ;-)
-            ggggp,
             gggp,
             ggp,
             gp,
@@ -88,7 +87,6 @@ describe('PropertyBase', function () {
         util.lodash.inherit(FakeType, sdk.PropertyBase);
 
         beforeEach(function () {
-            ggggp = new FakeType('great-great-great-grandparent');
             gggp = new FakeType('great-great-grandparent');
             ggp = new FakeType('great-grandparent', 'yo1');
             gp = new FakeType('grandparent');
@@ -98,85 +96,51 @@ describe('PropertyBase', function () {
             c.__parent = p;
             p.__parent = gp;
             gp.__parent = ggp;
+            ggp.__parent = gggp;
         });
 
         afterEach(function () {
+            gggp = null;
             ggp = null;
             gp = null;
             p = null;
             c = null;
         });
 
-        it('should be able to look up values from the parent', function () {
-            expect(c.lookup('value')).to.eql('yo2');
+        describe('.lookup()', function () {
+            it('should be able to look up values from the parent', function () {
+                expect(c.lookup('value')).to.eql('yo2');
+            });
+
+            it('should be able retrieve the value if stored locally', function () {
+                expect(p.lookup('value')).to.eql('yo2');
+            });
+
+            it('should return undefined if no value was found', function () {
+                expect(gggp.lookup('value')).to.be(undefined);
+            });
+
+            it('should return undefined if a random property is provided for lookup', function () {
+                expect(c.lookup('some-randome-stuff')).to.be(undefined);
+            });
         });
 
-        it('should be able retrieve the value if stored locally', function () {
-            expect(p.lookup('value')).to.eql('yo2');
-        });
+        describe('.lookupOwner()', function () {
+            it('should be able to look up owner when it is the parent', function () {
+                expect(c.lookupOwner('value')).to.be(p);
+            });
 
-        it('should return undefined if no value was found', function () {
-            expect(gggp.lookup('value')).to.be(undefined);
-        });
+            it('should be able retrieve the owner when property exists locally', function () {
+                expect(p.lookupOwner('value')).to.be(p);
+            });
 
-        it('should return undefined if a random property is provided for lookup', function () {
-            expect(c.lookup('some-randome-stuff')).to.be(undefined);
-        });
-    });
+            it('should return undefined if no value was found', function () {
+                expect(gggp.lookupOwner('value')).to.be(undefined);
+            });
 
-    describe('.lookupOwner()', function () {
-        var util = require('../../lib/util'),
-            FakeType,
-            // See below for why these are named this way ;-)
-            ggggp,
-            gggp,
-            ggp,
-            gp,
-            p,
-            c;
-
-        FakeType = function (level, value) {
-            FakeType.super_.apply(this, arguments);
-            this.level = level;
-            this.value = value;
-        };
-
-        util.lodash.inherit(FakeType, sdk.PropertyBase);
-
-        beforeEach(function () {
-            ggggp = new FakeType('great-great-great-grandparent');
-            gggp = new FakeType('great-great-grandparent');
-            ggp = new FakeType('great-grandparent', 'yo1');
-            gp = new FakeType('grandparent');
-            p = new FakeType('parent', 'yo2');
-            c = new FakeType('child');
-
-            c.__parent = p;
-            p.__parent = gp;
-            gp.__parent = ggp;
-        });
-
-        afterEach(function () {
-            ggp = null;
-            gp = null;
-            p = null;
-            c = null;
-        });
-
-        it('should be able to look up owner when it is the parent', function () {
-            expect(c.lookupOwner('value')).to.be(p);
-        });
-
-        it('should be able retrieve the owner when property exists locally', function () {
-            expect(p.lookupOwner('value')).to.be(p);
-        });
-
-        it('should return undefined if no value was found', function () {
-            expect(gggp.lookupOwner('value')).to.be(undefined);
-        });
-
-        it('should return undefined if a random property is provided for lookup', function () {
-            expect(c.lookupOwner('some-randome-stuff')).to.be(undefined);
+            it('should return undefined if a random property is provided for lookup', function () {
+                expect(c.lookupOwner('some-randome-stuff')).to.be(undefined);
+            });
         });
     });
 });
