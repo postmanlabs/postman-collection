@@ -12,7 +12,7 @@ describe('Cookie', function () {
             expect(jsonified.domain).to.eql(rawCookie.domain);
             expect(jsonified.httpOnly).to.eql(rawCookie.httpOnly);
             expect(jsonified.hostOnly).to.eql(rawCookie.hostOnly);
-            expect(jsonified.key).to.eql(rawCookie.key);
+            expect(jsonified.name).to.eql(rawCookie.key);
             expect(jsonified.path).to.eql(rawCookie.path);
             expect(jsonified.expires).to.eql(rawCookie.expires.toString());
             expect(jsonified.secure).to.eql(rawCookie.secure);
