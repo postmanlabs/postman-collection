@@ -502,9 +502,10 @@ describe('PropertyList', function () {
 
     describe('toObject', function () {
         var FakeType = function (options) {
-                this.keyAttr = options.keyAttr;
-                this.value = options.value;
-            };
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            this.disabled = options.disabled;
+        };
 
         FakeType._postman_propertyIndexKey = 'keyAttr';
         FakeType._postman_propertyIndexCaseInsensitive = true;
@@ -537,16 +538,36 @@ describe('PropertyList', function () {
                 value: 'val1'
             }, {
                 keyAttr: 'KEY1',
-                value: 'val2'
+                value: 'val2',
+                disabled: true
             }, {
                 keyAttr: 'key2',
                 value: 'val3'
             }]);
 
-            expect(list.toObject(true)).to.eql({
+            expect(list.toObject(null, true)).to.eql({
                 key1: 'val1',
                 KEY1: 'val2',
                 key2: 'val3'
+            });
+        });
+
+        it('should be able to exclude disabled items return a pojo', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2',
+                disabled: true
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.toObject(true)).to.eql({
+                key1: 'val1',
+                key3: 'val3'
             });
         });
     });
