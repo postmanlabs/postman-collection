@@ -7,6 +7,7 @@ var _ = require('lodash'),
     Hawk = require('../../lib/collection/request-auth/hawk'),
 
     Request = require('../../').Request,
+    RequestAuth = require('../../').RequestAuth,
     rawRequests = require('../fixtures/index').authRequests;
 
 /* global describe, it */
@@ -107,6 +108,19 @@ describe('RequestAuth', function () {
             expect(authorizedReq.auth).to.be.ok();
             expect(_.get(authorizedReq, 'auth.hawk.nonce')).to.be.a('string');
             expect(_.get(authorizedReq, 'auth.hawk.timestamp')).to.be.a('number');
+        });
+    });
+
+    describe('.current()', function () {
+        it('must return the auth which is currently selected', function () {
+            var requestAuth = new RequestAuth(rawRequests.hawk.auth);
+
+            expect(requestAuth.current()).to.be(requestAuth.hawk);
+        });
+
+        it('must undefined if no auth method is selected', function () {
+            var requestAuth = new RequestAuth();
+            expect(requestAuth.current()).to.be(undefined);
         });
     });
 });
