@@ -5,6 +5,12 @@
 * Added `VariableScope~variables` to access all variables as a plain object
 * Ensure that `Xyz.isXyz()` functions always return a boolean
 * Fixed a bug which caused `Request` to not initialize headers
+* `RequestAuthBase` inherits from `PropertyBase`
+* All auth definitions inherit from `RequestAuthBase` (through a dynamic intermediate class)
+* Added `Item.getAuth()` which returns an instance of the currently selected auth-type (searches parent folders as well)
+* Added `PropertyBase.findInParents` which finds a given property in the closest parent.
+* Added `PropertyBase.findParentContaining` which finds the closest parent containing the given property.
+* Added `RequestAuth.current()` which returns an instance of the currently selected auth.
 
 #### 1.1.0 (April 03, 2017)
 * Enhanced the `PropertyList` to allow keys with multiple values
