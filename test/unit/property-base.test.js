@@ -107,21 +107,21 @@ describe('PropertyBase', function () {
             c = null;
         });
 
-        describe('.findInParent()', function () {
+        describe('.findInParents()', function () {
             it('should be able to look up values from the parent', function () {
-                expect(c.findInParent('value')).to.eql('yo2');
+                expect(c.findInParents('value')).to.eql('yo2');
             });
 
             it('should be able retrieve the value if stored locally', function () {
-                expect(p.findInParent('value')).to.eql('yo2');
+                expect(p.findInParents('value')).to.eql('yo2');
             });
 
             it('should return undefined if no value was found', function () {
-                expect(gggp.findInParent('value')).to.be(undefined);
+                expect(gggp.findInParents('value')).to.be(undefined);
             });
 
             it('should return undefined if a random property is provided for lookup', function () {
-                expect(c.findInParent('some-randome-stuff')).to.be(undefined);
+                expect(c.findInParents('some-randome-stuff')).to.be(undefined);
             });
         });
 

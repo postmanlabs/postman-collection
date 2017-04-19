@@ -8,7 +8,7 @@
 * `RequestAuthBase` inherits from `PropertyBase`
 * All auth definitions inherit from `RequestAuthBase` (through a dynamic intermediate class)
 * Added `Item.getAuth()` which returns an instance of the currently selected auth-type (searches parent folders as well)
-* Added `PropertyBase.findInParent` which finds a given property in the closest parent.
+* Added `PropertyBase.findInParents` which finds a given property in the closest parent.
 * Added `PropertyBase.findParentContaining` which finds the closest parent containing the given property.
 * Added `RequestAuth.current()` which returns an instance of the currently selected auth.
 
