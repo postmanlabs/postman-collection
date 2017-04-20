@@ -51,6 +51,82 @@ describe('Item', function () {
         });
     });
 
+    describe('.getAuth()', function () {
+        var item,
+            folder,
+            collection,
+            itemWithAuth,
+            folderWithAuth,
+            collectionWithAuth;
+
+        // Create building blocks which we can use in different combinations for the tests.
+        beforeEach(function () {
+            collection = new sdk.Collection();
+            collectionWithAuth = new sdk.Collection({
+                auth: { type: 'basic', basic: { username: 'c', password: 'd' } }
+            });
+            item = new sdk.Item({ name: 'item1', request: 'https://postman-echo.com/get' });
+            folder = new sdk.ItemGroup({ name: 'folder1' });
+            itemWithAuth = new sdk.Item({
+                name: 'item2',
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    auth: { type: 'basic', basic: { username: 'a', password: 'b' } }
+                }
+            });
+            folderWithAuth = new sdk.ItemGroup({ name: 'folder2', auth: { type: 'hawk', hawk: {} } });
+        });
+
+        afterEach(function () {
+            collection = null;
+            item = null;
+            folder = null;
+            itemWithAuth = null;
+            folderWithAuth = null;
+        });
+
+        it('should lookup auth method from parent folder', function () {
+            folderWithAuth.items.add(item);
+            collection.items.add(folderWithAuth);
+
+            var auth = item.getAuth();
+
+            expect(auth.constructor.name).to.eql('HawkAuth');
+        });
+
+        it('should lookup auth method from collection, if absent in folder and item', function () {
+            folder.items.add(item);
+            collectionWithAuth.items.add(folder);
+
+            var auth = item.getAuth();
+
+            expect(auth.username).to.eql('c');
+            expect(auth.password).to.eql('d');
+            expect(auth.constructor.name).to.eql('BasicAuth');
+        });
+
+
+        it('should lookup auth method, if present in item', function () {
+            folder.items.add(itemWithAuth);
+            collectionWithAuth.items.add(folder);
+
+            var auth = itemWithAuth.getAuth();
+
+            expect(auth.username).to.eql('a');
+            expect(auth.password).to.eql('b');
+            expect(auth.constructor.name).to.eql('BasicAuth');
+        });
+
+        it('should return undefined if no auth is present', function () {
+            folder.items.add(item);
+            collection.items.add(folder);
+
+            var auth = item.getAuth();
+
+            expect(auth).to.be(undefined);
+        });
+    });
+
     describe('isItem', function () {
         var rawItem = fixtures.collectionV2.item[0];
 
