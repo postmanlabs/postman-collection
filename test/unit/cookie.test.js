@@ -12,7 +12,7 @@ describe('Cookie', function () {
             expect(jsonified.domain).to.eql(rawCookie.domain);
             expect(jsonified.httpOnly).to.eql(rawCookie.httpOnly);
             expect(jsonified.hostOnly).to.eql(rawCookie.hostOnly);
-            expect(jsonified.key).to.eql(rawCookie.key);
+            expect(jsonified.name).to.eql(rawCookie.key);
             expect(jsonified.path).to.eql(rawCookie.path);
             expect(jsonified.expires).to.eql(rawCookie.expires.toString());
             expect(jsonified.secure).to.eql(rawCookie.secure);
@@ -64,6 +64,15 @@ describe('Cookie', function () {
 
         it('should return false when called without arguments', function () {
             expect(Cookie.isCookie()).to.be(false);
+        });
+    });
+
+    describe('value', function () {
+        it('should be returned by valueOf function', function () {
+            expect((new Cookie({
+                name: 'blah',
+                value: 'this is a cookie value'
+            })).valueOf()).to.eql('this is a cookie value');
         });
     });
 });

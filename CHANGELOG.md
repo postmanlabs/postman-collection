@@ -5,6 +5,9 @@
 * Added `VariableScope~variables` to access all variables as a plain object
 * Ensure that `Xyz.isXyz()` functions always return a boolean
 * Fixed a bug which caused `Request` to not initialize headers
+* Fixed issue with Cookie constructor misbehaving when constructor definition was missing
+* Fixed issue with `Cookie~update` function causing previosuly defined properties from being overwritten
+* Updated Cookie to behave properly in lists (`name` is now the key and it is multi-value case insensitive)
 * `RequestAuthBase` inherits from `PropertyBase`
 * All auth definitions inherit from `RequestAuthBase` (through a dynamic intermediate class)
 * Added `Item.getAuth()` which returns an instance of the currently selected auth-type (searches parent folders as well)
