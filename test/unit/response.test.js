@@ -8,7 +8,8 @@ var fs = require('fs'),
     fixtures = require('../fixtures'),
     Cookie = require('../../lib/index.js').Cookie,
     Response = require('../../lib/index.js').Response,
-    Header = require('../../lib/index.js').Header;
+    Header = require('../../lib/index.js').Header,
+    HeaderList = require('../../lib/index.js').HeaderList;
 
 /* global describe, it */
 describe('Response', function () {
@@ -344,10 +345,11 @@ describe('Response', function () {
                 }
 
                 var response = Response.createFromNode(res),
-                    body = response.toJSON();
+                    body = response.toJSON(),
+                    headers = new HeaderList(null, body.header);
 
-                expect(Header.headerValue(body.header, 'bar')).to.be('foo');
-                expect(Header.headerValue(body.header, 'foo')).to.be('bar, bar2');
+                expect(headers.get('bar')).to.be('foo');
+                expect(headers.get('foo')).to.be('bar, bar2');
 
                 validateResponse(response);
                 done();
@@ -452,13 +454,14 @@ describe('Response', function () {
                     var response = Response.createFromNode(res),
                         json = response.toJSON(),
                         body = JSON.parse(json.body),
-                        mime = response.mime();
+                        mime = response.mime(),
+                        headers = new HeaderList(null, json.header);
 
                     expect(mime._originalContentType).to.be('application/json');
                     expect(mime._sanitisedContentType).to.be('application/json');
 
                     expect(body.gzipped).to.be(true);
-                    expect(Header.headerValue(json.header, 'content-encoding')).to.be('gzip');
+                    expect(headers.get('content-encoding')).to.be('gzip');
 
                     checkMime(mime);
                     validateResponse(response);
@@ -502,7 +505,7 @@ describe('Response', function () {
                     expect(mime._originalContentType).to.be('text/html; charset=utf-8');
                     expect(mime._sanitisedContentType).to.be('text/html');
 
-                    expect(Header.headerValue(json.header, 'content-type')).to.match(/^text\/html/);
+                    expect((new HeaderList(null, json.header)).get('content-type')).to.match(/^text\/html/);
                     expect(json.body).to.match(/<html>.*/);
 
                     checkMime(mime);
