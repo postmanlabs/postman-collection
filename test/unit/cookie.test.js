@@ -66,4 +66,13 @@ describe('Cookie', function () {
             expect(Cookie.isCookie()).to.be(false);
         });
     });
+
+    describe('value', function () {
+        it('should be returned by valueOf function', function () {
+            expect((new Cookie({
+                name: 'blah',
+                value: 'this is a cookie value'
+            })).valueOf()).to.eql('this is a cookie value');
+        });
+    });
 });
