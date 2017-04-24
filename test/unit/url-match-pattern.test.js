@@ -280,7 +280,6 @@ describe('UrlMatchPattern', function () {
             expect(urlMatched).to.eql(true);
 
             matchPattern.update({ pattern: 'http://foo.com/bar*' });
-            console.log(matchPattern._matchPatternObject, matchPattern.pattern);
             urlMatched = matchPattern.test('http://foo.com');
             expect(urlMatched).to.eql(false);
             urlMatched = matchPattern.test('http://foo.com/bar');
