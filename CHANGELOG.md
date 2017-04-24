@@ -1,6 +1,6 @@
 # Postman Collection SDK Changelog
 
-#### Unreleased
+#### 1.2.0 (April 24, 2017) 
 * Added support for variable types via VariableScope `.set` function
 * Added `VariableScope~variables` to access all variables as a plain object
 * Ensure that `Xyz.isXyz()` functions always return a boolean
