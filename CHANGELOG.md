@@ -1,5 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### 1.2.1 (April 25, 2017)
+* Improved documentation
+* Added a new property, `CookieList`
+* Fixed a bug in the `RequestAuth` implementation which caused authorization step to be skipped
+
 #### 1.2.0 (April 24, 2017) 
 * Added support for variable types via VariableScope `.set` function
 * Added `VariableScope~variables` to access all variables as a plain object
