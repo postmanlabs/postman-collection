@@ -1,0 +1,9 @@
+{
+    "id": "#/definitions/cookie-list",
+    "title": "Certificate List",
+    "description": "A representation of a list of cookies",
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/cookie"
+    }
+}
