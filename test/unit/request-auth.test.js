@@ -123,4 +123,18 @@ describe('RequestAuth', function () {
             expect(requestAuth.current()).to.be(undefined);
         });
     });
+
+    describe('.authorize (Static function)', function () {
+        it('must return the auth which is currently selected', function () {
+            var request = new Request(rawRequests.basic);
+
+            // Should not contain the auth header to being with
+            expect(request.headers.one('authorization')).to.not.be.ok();
+
+            RequestAuth.authorize(request);  // This mutates the request.
+
+            // Should contain the auth header after authorizing
+            expect(request.headers.one('authorization')).to.be.ok();
+        });
+    });
 });
