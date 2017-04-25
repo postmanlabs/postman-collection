@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 require('shelljs/global');
-require('colors');
 
 var path = require('path'),
     fs = require('fs'),
+    colors = require('colors'),
     async = require('async'),
 
     WIKI_URL = 'https://github.com/postmanlabs/postman-collection.wiki.git',
@@ -74,7 +74,7 @@ module.exports = function (exit) {
     ], function (code) {
         console.log(code ?
             colors.red.bold('\nwiki publish failed.') :
-            colors.green(`\nwiki published successfully for "${WIKI_VERSION}".`));
+            colors.green(`\nwiki published successfully for ${WIKI_VERSION}`));
         exit(code);
     });
 };
