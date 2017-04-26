@@ -152,6 +152,7 @@ describe('PropertyBase', function () {
 
             base.setParent(parent);
 
+            expect(base.__parent).to.eql(parent);
             expect(Object.getOwnPropertyDescriptor(base, '__parent')).to.eql({
                 value: parent,
                 writable: true,
