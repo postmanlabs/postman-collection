@@ -145,18 +145,29 @@ describe('PropertyBase', function () {
     });
 
     describe('.setParent()', function () {
+        var parent = { foo: 'bar' };
+
         it('should set a provided parent correctly', function () {
-            var parent = { foo: 'bar' },
-                base = new sdk.PropertyBase();
+            var base = new sdk.PropertyBase();
 
             base.setParent(parent);
 
             expect(Object.getOwnPropertyDescriptor(base, '__parent')).to.eql({
                 value: parent,
-                writable: false,
+                writable: true,
                 enumerable: false,
-                configurable: false
+                configurable: true
             });
+        });
+
+        it('should overwrite existing parents', function () {
+            var newParent = { alpha: 'beta' },
+                base = new sdk.PropertyBase();
+
+            base.setParent(parent);
+
+            base.setParent(newParent);
+            expect(base.__parent).to.eql(newParent);
         });
     });
 });
