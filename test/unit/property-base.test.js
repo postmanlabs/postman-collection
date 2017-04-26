@@ -143,4 +143,20 @@ describe('PropertyBase', function () {
             });
         });
     });
+
+    describe('.setParent()', function () {
+        it('should set a provided parent correctly', function () {
+            var parent = { foo: 'bar' },
+                base = new sdk.PropertyBase();
+
+            base.setParent(parent);
+
+            expect(Object.getOwnPropertyDescriptor(base, '__parent')).to.eql({
+                value: parent,
+                writable: false,
+                enumerable: false,
+                configurable: false
+            });
+        });
+    });
 });
