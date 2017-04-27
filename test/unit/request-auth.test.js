@@ -1,10 +1,5 @@
 var _ = require('lodash'),
     expect = require('expect.js'),
-    Basic = require('../../lib/collection/request-auth/basic'),
-    Digest = require('../../lib/collection/request-auth/digest'),
-    OAuth1 = require('../../lib/collection/request-auth/oauth1'),
-    Awsv4 = require('../../lib/collection/request-auth/awsv4'),
-    Hawk = require('../../lib/collection/request-auth/hawk'),
 
     Request = require('../../').Request,
     RequestAuth = require('../../').RequestAuth,
@@ -15,7 +10,7 @@ describe('RequestAuth', function () {
     describe('Basic', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.basic),
-                authorizedReq = Basic.authorize(request),
+                authorizedReq = request.auth.basic.authorize(request),
                 headers = authorizedReq.headers.all(),
                 authHeader;
             expect(headers.length).to.eql(1);
@@ -29,7 +24,7 @@ describe('RequestAuth', function () {
     describe('Digest', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.digest),
-                authorizedReq = Digest.authorize(request),
+                authorizedReq = request.auth.digest.authorize(request),
                 headers = authorizedReq.headers.all(),
                 expectedHeader = 'Authorization: Digest username="postman", realm="Users", ' +
                     'nonce="bcgEc5RPU1ANglyT2I0ShU0oxqPB5jXp", uri="/digest-auth", ' +
@@ -45,7 +40,7 @@ describe('RequestAuth', function () {
 
         it('Auth header must have uri with query params in case of request with the same', function () {
             var request = new Request(rawRequests.digestWithQueryParams),
-                authorizedReq = Digest.authorize(request),
+                authorizedReq = request.auth.digest.authorize(request),
                 authHeader = authorizedReq.headers.one('Authorization'),
                 expectedHeader = 'Authorization: Digest username="postman", realm="Users", ' +
                     'nonce="bcgEc5RPU1ANglyT2I0ShU0oxqPB5jXp", uri="/digest-auth?key=value", ' +
@@ -58,7 +53,7 @@ describe('RequestAuth', function () {
     describe('OAuth1', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.oauth1),
-                authorizedReq = OAuth1.authorize(request),
+                authorizedReq = request.auth.oauth1.authorize(request),
                 headers = authorizedReq.headers.all(),
                 authHeader;
 
@@ -75,7 +70,7 @@ describe('RequestAuth', function () {
         // TODO: fix this
         (typeof window === 'undefined' ? it : it.skip)('Required headers must be added', function () {
             var request = new Request(rawRequests.awsv4),
-                authorizedReq = Awsv4.authorize(request),
+                authorizedReq = request.auth.awsv4.authorize(request),
                 headers = authorizedReq.getHeaders({ ignoreCase: true });
 
             // Ensure that the required headers have been added.
@@ -90,7 +85,7 @@ describe('RequestAuth', function () {
     describe('Hawk', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.hawk),
-                authorizedReq = Hawk.authorize(request),
+                authorizedReq = request.auth.hawk.authorize(request),
                 headers = authorizedReq.getHeaders({ ignoreCase: true });
 
             // Ensure that the required headers have been added.
@@ -99,7 +94,7 @@ describe('RequestAuth', function () {
 
         it('Authorized request must contain the generated timestamp and nonce', function () {
             var request = new Request(rawRequests.hawk),
-                authorizedReq = Hawk.authorize(request);
+                authorizedReq = request.auth.hawk.authorize(request);
 
             // Original request should not have the timestamp and nonce
             expect(_.get(rawRequests.hawk, 'auth.hawk.nonce')).to.not.be.ok();
