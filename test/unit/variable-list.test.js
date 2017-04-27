@@ -1,32 +1,89 @@
 var expect = require('expect.js'),
     sdk = require('../../'),
-    VariableList = sdk.VariableList,
-    PropertyList = sdk.PropertyList,
-    rawEnvironments = require('../fixtures/index').environments;
+    VariableList = sdk.VariableList;
 
 /* global describe, it */
-describe('VariableList', function () {
-    var parent = {},
-        list = new VariableList(parent, [], rawEnvironments);
-
+describe.only('VariableList', function () {
     it('should resolve a single reference properly', function () {
+        var list = new VariableList(null, [{
+            key: 'somevar',
+            value: 'asdasd'
+        }, {
+            key: 'root',
+            value: 'one'
+        }], [[{ // overrides
+            key: 'somevar',
+            value: '2nd layer override'
+        }, {
+            key: 'hi',
+            value: 'hello'
+        }], [{
+            key: 'somevar',
+            value: '3rd layer override'
+        }, {
+            key: 'third',
+            value: 'in 3rd layer'
+        }]]);
+
         expect(list.one('root').valueOf()).to.eql('one');
     });
 
     it('should override variables in the lower layers', function () {
-        expect(list.one('somevar').valueOf()).to.eql('3rd layer override');
+        var list = new VariableList(null, [{
+            key: 'somevar',
+            value: 'asdasd'
+        }, {
+            key: 'root',
+            value: 'one'
+        }], [[{ // overrides
+            key: 'somevar',
+            value: '2nd layer override'
+        }, {
+            key: 'hi',
+            value: 'hello'
+        }], [{
+            key: 'somevar',
+            value: '3rd layer override'
+        }, {
+            key: 'third',
+            value: 'in 3rd layer'
+        }]]);
+
+        expect(list.one('somevar').valueOf()).to.eql('asdasd');
+        expect(list.one('third').valueOf()).to.eql('in 3rd layer');
     });
 
     it('must support function variables', function () {
-        var unresolved = {
-                xyz: '{{$guid}}\n{{$timestamp}}\n{{somevar}}'
+        var list = new VariableList(null, [{
+                key: 'somevar',
+                value: 'asdasd'
+            }, {
+                key: 'root',
+                value: 'one'
+            }], [[{ // overrides
+                key: 'somevar',
+                value: '2nd layer override'
+            }, {
+                key: 'hi',
+                value: 'hello'
+            }], [{
+                key: 'somevar',
+                value: '3rd layer override'
+            }, {
+                key: 'third',
+                value: 'in 3rd layer'
+            }]]),
+
+            unresolved = {
+                xyz: '{{$guid}}\n{{$timestamp}}\n{{somevar}}\n{{third}}'
             },
             resolved = list.substitute(unresolved),
             values = resolved.xyz.split('\n'),
             expectations = [
                 /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i, // GUID
                 /^\d+$/, // A number, without decimals
-                /3rd layer override/
+                /asdasd/,
+                /in 3rd layer/
             ];
         expectations.forEach(function (regex, index) {
             expect(regex.test(values[index])).to.be(true);
@@ -37,17 +94,16 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            mylist = new VariableList({}, [], [
-                {
-                    alpha: '{{beta}}-bar'
-                },
-                {
-                    beta: '{{name}}'
-                },
-                {
-                    name: 'foo'
-                }
-            ]),
+            mylist = new VariableList(null, [{
+                key: 'alpha',
+                value: '{{beta}}-bar'
+            }, {
+                key: 'beta',
+                value: '{{name}}'
+            }, {
+                key: 'name',
+                value: 'foo'
+            }]),
             resolved = mylist.substitute(unresolved);
         expect(resolved.xyz).to.eql('foo-bar');
     });
@@ -56,11 +112,10 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{alp/ha}}'
             },
-            mylist = new VariableList({}, [], [
-                {
-                    'alp/ha': 'beta'
-                }
-            ]),
+            mylist = new VariableList(null, [{
+                key: 'alp/ha',
+                value: 'beta'
+            }]),
             resolved = mylist.substitute(unresolved);
         expect(resolved.xyz).to.eql('beta');
     });
@@ -70,12 +125,10 @@ describe('VariableList', function () {
                 // eslint-disable-next-line no-useless-escape
                 xyz: '{{al\pha}}'
             },
-            mylist = new VariableList({}, [], [
-                {
-                    // eslint-disable-next-line no-useless-escape
-                    'al\pha': 'beta'
-                }
-            ]),
+            mylist = new VariableList(null, [{
+                key: 'al\pha', // eslint-disable-line no-useless-escape
+                value: 'beta'
+            }]),
             resolved = mylist.substitute(unresolved);
         expect(resolved.xyz).to.eql('beta');
     });
@@ -84,14 +137,19 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            cyclicList = new VariableList({}, [], [
-                {
-                    alpha: '{{beta}}',
-                    beta: '{{gamma}}',
-                    gamma: '{{delta}}',
-                    delta: '{{beta}}'
-                }
-            ]),
+            cyclicList = new VariableList(null, [{
+                key: 'alpha',
+                value: '{{beta}}'
+            }, {
+                key: 'beta',
+                value: '{{gamma}}'
+            }, {
+                key: 'gamma',
+                value: '{{delta}}'
+            }, {
+                key: 'delta',
+                value: '{{beta}}'
+            }]),
             resolved = cyclicList.substitute(unresolved);
         expect(resolved.xyz).to.eql('{{beta}}');
     });
@@ -100,13 +158,16 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            polyChainList = new VariableList({}, [], [
-                {
-                    alpha: '{{beta-{{gamma}}}}',
-                    gamma: 'delta',
-                    'beta-delta': 'epsilon'
-                }
-            ]),
+            polyChainList = new VariableList(null, [{
+                key: 'alpha',
+                value: '{{beta-{{gamma}}}}'
+            }, {
+                key: 'gamma',
+                value: 'delta'
+            }, {
+                key: 'beta-delta',
+                value: 'epsilon'
+            }]),
             resolved = polyChainList.substitute(unresolved);
         expect(resolved.xyz).to.eql('epsilon');
     });
@@ -115,13 +176,16 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            polyChainList = new VariableList({}, [], [
-                {
-                    alpha: '{{beta-{{gamma}}}}',
-                    gamma: 'delta',
-                    'beta-delta': '{{gamma}}'
-                }
-            ]),
+            polyChainList = new VariableList(null, [{
+                key: 'alpha',
+                value: '{{beta-{{gamma}}}}'
+            }, {
+                key: 'gamma',
+                value: 'delta'
+            }, {
+                key: 'beta-delta',
+                value: '{{gamma}}'
+            }]),
             resolved = polyChainList.substitute(unresolved);
         expect(resolved.xyz).to.eql('delta');
     });
@@ -130,15 +194,22 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{a}}'
             },
-            polyChainList = new VariableList({}, [], [
-                {
-                    a: '{{b{{c{{d}}}}}}',
-                    d: 'e',
-                    ce: 'f',
-                    b: 'g',
-                    bf: 'z'
-                }
-            ]),
+            polyChainList = new VariableList(null, [{
+                key: 'a',
+                value: '{{b{{c{{d}}}}}}'
+            }, {
+                key: 'd',
+                value: 'e'
+            }, {
+                key: 'ce',
+                value: 'f'
+            }, {
+                key: 'b',
+                value: 'g'
+            }, {
+                key: 'bf',
+                value: 'z'
+            }]),
             resolved = polyChainList.substitute(unresolved);
         expect(resolved.xyz).to.eql('z');
     });
@@ -147,7 +218,7 @@ describe('VariableList', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            polyChainList = new VariableList({}, [], [
+            polyChainList = new VariableList(null, [], [
                 {
                     alpha: '{{be{t}a}}',
                     'be{t}a': 'gamma',
@@ -159,42 +230,12 @@ describe('VariableList', function () {
     });
 
     describe('static helpers', function () {
-        var variableList = new VariableList({}, [], [
-            {
-                alpha: 'foo',
-                beta: 'bar',
-                gamma: 'len',
-                delta: 'may'
-            }
-        ]);
+        var variableList = new VariableList();
 
         it('should work correctly for isVariableList', function () {
             expect(VariableList.isVariableList(variableList)).to.be(true);
             expect(VariableList.isVariableList({})).to.be(false);
             expect(VariableList.isVariableList()).to.be(false);
-        });
-
-        it('should work correctly for listify', function () {
-            var list = VariableList.listify({ foo: 'alpha', bar: 'beta' });
-
-            expect(PropertyList.isPropertyList(list)).to.be.ok();
-            expect(list.map()).to.eql([{ type: 'any', value: 'alpha', key: 'foo' },
-                { type: 'any', value: 'beta', key: 'bar' }]);
-        });
-
-        it('should work correctly for proxy', function () {
-            var result = VariableList.proxy({ a: 'zen' }, { foo: 'bar' });
-
-            expect(result.a).to.be('zen');
-            expect(result.foo).to.be('bar');
-        });
-
-        it('should work correctly for objectify', function () {
-            var result = { alpha: { type: 'any', value: 1, key: 'alpha' }, bar: { type: 'any', value: 1, key: 'bar' } };
-
-            expect(VariableList.objectify([{ key: 'alpha', value: 1 }, { key: 'bar', value: 1 }])).to.eql(result);
-            expect(VariableList.objectify({ alpha: { key: 'alpha', value: 1 }, bar: { key: 'bar', value: 1 } })).to
-                .eql(result);
         });
     });
 });
