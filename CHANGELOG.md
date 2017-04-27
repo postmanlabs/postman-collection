@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### 1.2.2 (April 26, 2017)
+* Updated signing logic to support inherited auth parameters
+* Added a new helper function, `setParent` to `PropertyBase`
+
 #### 1.2.1 (April 25, 2017)
 * Improved documentation
 * Added a new property, `CookieList`
