@@ -238,29 +238,6 @@ module.exports = {
             description: ''
         }
     },
-    samplePropertyList: [
-        {
-            keyAttr: 'heyo',
-            value: 'what'
-        },
-        {
-            keyAttr: 'somethingidk',
-            value: 'oops'
-        }
-    ],
-    environments: [
-        {
-            somevar: 'asdasd',
-            root: 'one'
-        },
-        {
-            somevar: '2nd layer override',
-            hi: 'hello'
-        },
-        {
-            somevar: '3rd layer override'
-        }
-    ],
     rawCookie: 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH',
     requestData: {
         mode: 'formdata',
