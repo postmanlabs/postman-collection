@@ -3,7 +3,7 @@ var expect = require('expect.js'),
     VariableList = sdk.VariableList;
 
 /* global describe, it */
-describe.only('VariableList', function () {
+describe('VariableList', function () {
     it('should resolve a single reference properly', function () {
         var list = new VariableList(null, [{
             key: 'somevar',
@@ -11,46 +11,9 @@ describe.only('VariableList', function () {
         }, {
             key: 'root',
             value: 'one'
-        }], [[{ // overrides
-            key: 'somevar',
-            value: '2nd layer override'
-        }, {
-            key: 'hi',
-            value: 'hello'
-        }], [{
-            key: 'somevar',
-            value: '3rd layer override'
-        }, {
-            key: 'third',
-            value: 'in 3rd layer'
-        }]]);
+        }]);
 
         expect(list.one('root').valueOf()).to.eql('one');
-    });
-
-    it('should override variables in the lower layers', function () {
-        var list = new VariableList(null, [{
-            key: 'somevar',
-            value: 'asdasd'
-        }, {
-            key: 'root',
-            value: 'one'
-        }], [[{ // overrides
-            key: 'somevar',
-            value: '2nd layer override'
-        }, {
-            key: 'hi',
-            value: 'hello'
-        }], [{
-            key: 'somevar',
-            value: '3rd layer override'
-        }, {
-            key: 'third',
-            value: 'in 3rd layer'
-        }]]);
-
-        expect(list.one('somevar').valueOf()).to.eql('asdasd');
-        expect(list.one('third').valueOf()).to.eql('in 3rd layer');
     });
 
     it('must support function variables', function () {
@@ -60,19 +23,10 @@ describe.only('VariableList', function () {
             }, {
                 key: 'root',
                 value: 'one'
-            }], [[{ // overrides
-                key: 'somevar',
-                value: '2nd layer override'
-            }, {
-                key: 'hi',
-                value: 'hello'
-            }], [{
-                key: 'somevar',
-                value: '3rd layer override'
             }, {
                 key: 'third',
                 value: 'in 3rd layer'
-            }]]),
+            }]),
 
             unresolved = {
                 xyz: '{{$guid}}\n{{$timestamp}}\n{{somevar}}\n{{third}}'
