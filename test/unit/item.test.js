@@ -51,6 +51,59 @@ describe('Item', function () {
         });
     });
 
+    describe('.setRequest', function () {
+        var rawRequest = fixtures.collectionV2.item[1].request;
+
+        it('should set the request correctly from a raw object', function () {
+            var item = new sdk.Item(rawItem);
+
+            item.setRequest(rawRequest);
+            console.log(item.request);
+
+            expect(sdk.Request.isRequest(item.request)).to.be(true);
+        });
+
+        it('should set the request correctly from a Request instance', function () {
+            var item = new sdk.Item(rawItem),
+                request = new sdk.Request(rawRequest);
+
+            item.setRequest(request);
+            expect(sdk.Request.isRequest(item.request)).to.be(true);
+        });
+
+        it('should handle falsy input correctly', function () {
+            var item = new sdk.Item(rawItem);
+
+            item.setRequest();
+            expect(sdk.Request.isRequest(item.request)).to.be(true);
+        });
+    });
+
+    describe('.setResponses', function () {
+        var rawResponse = fixtures.collectionV2.item[0].response[0];
+
+        it('should set the responses correctly from a raw object', function () {
+            var item = new sdk.Item(rawItem);
+
+            item.setResponses(rawResponse);
+            expect(sdk.PropertyList.isPropertyList(item.responses)).to.be(true);
+        });
+
+        it('should set the responses correctly from a set of responses', function () {
+            var item = new sdk.Item(rawItem);
+
+            item.setResponses(new sdk.Response(rawResponse));
+            expect(sdk.PropertyList.isPropertyList(item.responses)).to.be(true);
+        });
+
+        it('should handle falsy input correctly', function () {
+            var item = new sdk.Item(rawItem);
+
+            item.setResponses();
+            expect(sdk.PropertyList.isPropertyList(item.responses)).to.be(true);
+        });
+    });
+
     describe('.getAuth()', function () {
         var item,
             folder,
