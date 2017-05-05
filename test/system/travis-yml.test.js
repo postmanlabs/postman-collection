@@ -22,7 +22,7 @@ describe('travis.yml', function () {
         expect(travisYAMLError && travisYAMLError.message || travisYAMLError).to.not.be.ok();
     });
 
-    describe('strucure', function () {
+    describe('structure', function () {
         it('language must be set to node', function () {
             expect(travisYAML.language).to.be('node_js');
             expect(travisYAML.node_js).to.eql(['4', '6']);
