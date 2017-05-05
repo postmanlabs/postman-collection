@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### UNRELEASED
+* `Header` now inherits from `Property` instead of `PropertyBase`.
+
 #### 1.2.2 (April 26, 2017)
 * Updated signing logic to support inherited auth parameters
 * Added a new helper function, `setParent` to `PropertyBase`
