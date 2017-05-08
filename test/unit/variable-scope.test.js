@@ -423,7 +423,7 @@ describe('VariableScope', function () {
         });
     });
 
-    describe('._addLayer()', function () {
+    describe('.addLayer()', function () {
         var layerOne = new VariableList({}, [{
                 key: 'var-1-layerOne',
                 value: 'var-1-layerOne-value'
@@ -439,12 +439,22 @@ describe('VariableScope', function () {
                 value: 'var-2-layerTwo-value'
             }]);
 
-        it('adds a variable list to the current scope', function () {
+        it('accepts an instance of VariableList as its only argument', function () {
             var scope = new VariableScope(layerOne);
-            scope._addLayer(layerTwo);
+            scope.addLayer({
+                key: 'key',
+                value: 'value'
+            });
 
-            expect(scope.layers.length).to.be(1);
-            expect(VariableList.isVariableList(scope.layers[0])).to.be.ok();
+            expect(scope._layers).to.be(undefined);
+        });
+
+        it('adds a variable list to the current instance', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+
+            expect(scope._layers.length).to.be(1);
+            expect(VariableList.isVariableList(scope._layers[0])).to.be.ok();
         });
     });
 
@@ -484,15 +494,15 @@ describe('VariableScope', function () {
 
         it('retrieves the value of a variable from parent scopes', function () {
             var scope = new VariableScope(layerOne);
-            scope._addLayer(layerTwo);
+            scope.addLayer(layerTwo);
 
             expect(scope.get('var-1-layerTwo')).to.be('var-1-layerTwo-value');
         });
 
         it('retrieves the first occurence of a value should duplicates exist', function () {
             var scope = new VariableScope(layerOne);
-            scope._addLayer(layerTwo);
-            scope._addLayer(layerThree);
+            scope.addLayer(layerTwo);
+            scope.addLayer(layerThree);
 
             expect(scope.get('var-3')).to.be('var-3-layerTwo-value');
         });
