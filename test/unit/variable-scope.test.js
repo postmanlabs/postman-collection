@@ -422,4 +422,79 @@ describe('VariableScope', function () {
             });
         });
     });
+
+    describe('._addLayer()', function () {
+        var layerOne = new VariableList({}, [{
+                key: 'var-1-layerOne',
+                value: 'var-1-layerOne-value'
+            }, {
+                key: 'var-2-layerOne',
+                value: 'var-2-layerOne-value'
+            }]),
+            layerTwo = new VariableList({}, [{
+                key: 'var-1-layerTwo',
+                value: 'var-1-layerTwo-value'
+            }, {
+                key: 'var-2-layerTwo',
+                value: 'var-2-layerTwo-value'
+            }]);
+
+        it('adds a variable list to the current scope', function () {
+            var scope = new VariableScope(layerOne);
+            scope._addLayer(layerTwo);
+
+            expect(scope.layers.length).to.be(1);
+            expect(VariableList.isVariableList(scope.layers[0])).to.be.ok();
+        });
+    });
+
+    describe('multi level variable resolution', function() {
+        var layerOne = new VariableList({}, [{
+                key: 'var-1-layerOne',
+                value: 'var-1-layerOne-value'
+            }, {
+                key: 'var-2-layerOne',
+                value: 'var-2-layerOne-value'
+            }]),
+            layerTwo = new VariableList({}, [{
+                key: 'var-1-layerTwo',
+                value: 'var-1-layerTwo-value'
+            }, {
+                key: 'var-2-layerTwo',
+                value: 'var-2-layerTwo-value'
+            }, {
+                key: 'var-3',
+                value: 'var-3-layerTwo-value'
+            }]),
+            layerThree = new VariableList({}, [{
+                key: 'var-1-layer',
+                value: 'var-1-layerThree-value'
+            }, {
+                key: 'var-2-layer',
+                value: 'var-2-layerThree-value'
+            }, {
+                key: 'var-3',
+                value: 'var-3-layerThree-value'
+            }]);
+
+        it('retrieves the value from the current scope', function () {
+            var scope = new VariableScope(layerOne);
+            expect(scope.get('var-1-layerOne')).to.be('var-1-layerOne-value');
+        });
+
+        it('retrieves the value of a variable from parent scopes', function () {
+            var scope = new VariableScope(layerOne);
+            scope._addLayer(layerTwo);
+
+            expect(scope.get('var-1-layerTwo')).to.be('var-1-layerTwo-value');
+        });
+
+        it('retrieves the first occurence of a value should duplicates exist', function () {
+            var scope = new VariableScope(layerOne);
+            scope._addLayer(layerTwo);
+            scope._addLayer(layerThree);
+
+            expect(scope.get('var-3')).to.be('var-3-layerTwo-value');
+        });
+    });
 });
