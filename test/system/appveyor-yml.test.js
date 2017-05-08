@@ -23,7 +23,7 @@ describe('appveyor.yml', function () {
         expect(appveyorYAMLError && appveyorYAMLError.message || appveyorYAMLError).to.not.be.ok();
     });
 
-    describe('strucure', function () {
+    describe('structure', function () {
         it('init script must exist', function () {
             expect(appveyorYAML.init[0]).to.be('git config --global core.autocrlf input');
         });
