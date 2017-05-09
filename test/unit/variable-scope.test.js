@@ -479,10 +479,13 @@ describe('VariableScope', function () {
 
         it('accepts additional variable list instances via the constructor', function () {
             var scope = new VariableScope({}, [layerOne, layerTwo]),
-                scp = new VariableScope({}, layerOne);
+                scopeOne = new VariableScope({}, layerOne),
+                scopeTwo = new VariableScope({}, undefined);
+
 
             expect(scope._layers.length).to.be(2);
-            expect(scp._layers.length).to.be(1);
+            expect(scopeOne._layers.length).to.be(1);
+            expect(scopeTwo._layers.length).to.be(0);
         });
 
         it('requires instance(s) of VariableList for increasing search area', function () {
