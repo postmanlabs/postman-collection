@@ -1,6 +1,9 @@
 # Postman Collection SDK Changelog
 
-#### 1.2.3 (May 8, 2017)
+#### 1.2.4 (May 09, 2017)
+* Fixed a bug in the response size computation which was caused due to reliance on a hidden property
+
+#### 1.2.3 (May 08, 2017)
 * `Header` now inherits from `Property` instead of `PropertyBase`.
 * Authorization helper fixes.
 * Descriptions have been shifted to `Property` from `PropertyBase`.
