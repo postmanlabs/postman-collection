@@ -422,4 +422,122 @@ describe('VariableScope', function () {
             });
         });
     });
+
+    describe('.addLayer()', function () {
+        var layerOne = new VariableList({}, [{
+                key: 'var-1-layerOne',
+                value: 'var-1-layerOne-value'
+            }, {
+                key: 'var-2-layerOne',
+                value: 'var-2-layerOne-value'
+            }]),
+            layerTwo = new VariableList({}, [{
+                key: 'var-1-layerTwo',
+                value: 'var-1-layerTwo-value'
+            }, {
+                key: 'var-2-layerTwo',
+                value: 'var-2-layerTwo-value'
+            }]);
+
+        it('adds a variable list to the current instance', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+
+            expect(scope._layers.length).to.be(1);
+            expect(VariableList.isVariableList(scope._layers[0])).to.be.ok();
+        });
+    });
+
+    describe('multiple level variable resolution', function() {
+        var layerOne = new VariableList({}, [{
+                key: 'var-1-layerOne',
+                value: 'var-1-layerOne-value'
+            }, {
+                key: 'var-2-layerOne',
+                value: 'var-2-layerOne-value'
+            }]),
+            layerTwo = new VariableList({}, [{
+                key: 'var-1-layerTwo',
+                value: 'var-1-layerTwo-value'
+            }, {
+                key: 'var-2-layerTwo',
+                value: 'var-2-layerTwo-value'
+            }, {
+                key: 'var-3',
+                value: 'var-3-layerTwo-value'
+            }]),
+            layerThree = new VariableList({}, [{
+                key: 'var-1-layer',
+                value: 'var-1-layerThree-value'
+            }, {
+                key: 'var-2-layer',
+                value: 'var-2-layerThree-value'
+            }, {
+                key: 'var-3',
+                value: 'var-3-layerThree-value'
+            }]);
+
+        it('ensures an array of variable list instances is provided via the constructor', function () {
+            var scope = new VariableScope({}, [layerOne, layerTwo]),
+                scopeOne = new VariableScope({}, undefined);
+
+
+            expect(scope._layers.length).to.be(2);
+            scope._layers.forEach(function (list) {
+                expect(VariableList.isVariableList(list)).to.be(true);
+            });
+
+            expect(scopeOne._layers.length).to.be(0);
+        });
+
+        it('the additional variable list is cast to an array if it is not already', function () {
+            var scope = new VariableScope({}, layerOne);
+
+            expect(scope._layers.length).to.be(1);
+        });
+
+        it('requires instance(s) of VariableList for increasing search area', function () {
+            var scope = new VariableScope({}, [{
+                key: 'key-1',
+                value: 'value-1'
+            }]);
+
+            expect(scope._layers.length).to.be(0);
+        });
+
+        it('retrieves the value from the current scope', function () {
+            var scope = new VariableScope(layerOne);
+            expect(scope.get('var-1-layerOne')).to.be('var-1-layerOne-value');
+        });
+
+        it('retrieves the value of a variable from parent scopes', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+
+            expect(scope.get('var-1-layerTwo')).to.be('var-1-layerTwo-value');
+        });
+
+        it('retrieves the first occurence of a value should duplicates exist', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+            scope.addLayer(layerThree);
+
+            expect(scope.get('var-3')).to.be('var-3-layerTwo-value');
+        });
+    });
+
+    describe('.toJSON()', function () {
+        it('does not expose the concept of layers', function () {
+            var list = new VariableList({}, [{
+                    key: 'var-1-layerOne',
+                    value: 'var-1-layerOne-value'
+                }, {
+                    key: 'var-2-layerOne',
+                    value: 'var-2-layerOne-value'
+                }]),
+                scope = new VariableScope({}, list);
+
+            expect(scope.toJSON()._layers).to.be(undefined);
+        });
+    });
 });
