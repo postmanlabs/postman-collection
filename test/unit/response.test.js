@@ -202,6 +202,16 @@ describe('Response', function () {
                 response = new Response(rawResponse);
             expect(response.size().body).to.eql(20);
         });
+
+        it('must use byteLength from buffer if provided', function () {
+            var rawResponse = {
+                    code: 200,
+                    header: 'Transfer-Encoding: chunked',
+                    stream: new Buffer('something nice')
+                },
+                response = new Response(rawResponse);
+            expect(response.size().body).to.eql(14);
+        });
     });
 
     // skip this test sub-suite in the browser
