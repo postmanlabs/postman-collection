@@ -439,16 +439,6 @@ describe('VariableScope', function () {
                 value: 'var-2-layerTwo-value'
             }]);
 
-        it('accepts an instance of VariableList as its only argument', function () {
-            var scope = new VariableScope(layerOne);
-            scope.addLayer({
-                key: 'key',
-                value: 'value'
-            });
-
-            expect(scope._layers).to.be(undefined);
-        });
-
         it('adds a variable list to the current instance', function () {
             var scope = new VariableScope(layerOne);
             scope.addLayer(layerTwo);
@@ -458,7 +448,7 @@ describe('VariableScope', function () {
         });
     });
 
-    describe('multi level variable resolution', function() {
+    describe('multiple level variable resolution', function() {
         var layerOne = new VariableList({}, [{
                 key: 'var-1-layerOne',
                 value: 'var-1-layerOne-value'
@@ -486,6 +476,23 @@ describe('VariableScope', function () {
                 key: 'var-3',
                 value: 'var-3-layerThree-value'
             }]);
+
+        it('accepts additional variable list instances via the constructor', function () {
+            var scope = new VariableScope({}, [layerOne, layerTwo]),
+                scp = new VariableScope({}, layerOne);
+
+            expect(scope._layers.length).to.be(2);
+            expect(scp._layers.length).to.be(1);
+        });
+
+        it('requires instance(s) of VariableList for increasing search area', function () {
+            var scope = new VariableScope({}, [{
+                key: 'key-1',
+                value: 'value-1'
+            }]);
+
+            expect(scope._layers.length).to.be(0);
+        });
 
         it('retrieves the value from the current scope', function () {
             var scope = new VariableScope(layerOne);
