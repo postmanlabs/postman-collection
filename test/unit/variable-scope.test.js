@@ -562,5 +562,18 @@ describe('VariableScope', function () {
                 'key3': 'val3'
             });
         });
+
+        it('uses the last found key-val pair should a duplicate key exists', function () {
+            var scope = new VariableScope(keyVals.concat({
+                key: 'key3',
+                value: 'duplicate-val3'
+            }));
+
+            expect(scope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2',
+                'key3': 'duplicate-val3'
+            });
+        });
     });
 });
