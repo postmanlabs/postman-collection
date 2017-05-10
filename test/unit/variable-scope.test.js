@@ -540,4 +540,27 @@ describe('VariableScope', function () {
             expect(scope.toJSON()._layers).to.be(undefined);
         });
     });
+
+    describe('.toObject()', function () {
+        var keyVals = [{
+            key: 'key1',
+            value: 'val1'
+        }, {
+            key: 'key2',
+            value: 'val2'
+        }, {
+            key: 'key3',
+            value: 'val3'
+        }];
+
+        it('should return a pojo', function () {
+            var scope = new VariableScope(keyVals);
+
+            expect(scope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2',
+                'key3': 'val3'
+            });
+        });
+    });
 });
