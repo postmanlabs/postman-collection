@@ -1,5 +1,19 @@
 # Postman Collection SDK Changelog
 
+#### 1.2.5 (May 11, 2017)
+* Added support for multi-layered variable resolution
+* Added convenience method, `VariableScope.toObject()`
+* `VariableScope.variables()` is now deprecated in favor of above
+
+#### 1.2.4 (May 09, 2017)
+* Fixed a bug in the response size computation which was caused due to reliance on a hidden property
+
+#### 1.2.3 (May 08, 2017)
+* `Header` now inherits from `Property` instead of `PropertyBase`.
+* Authorization helper fixes.
+* Descriptions have been shifted to `Property` from `PropertyBase`.
+* Header size is sent is zero if no headers are present.
+
 #### 1.2.2 (April 26, 2017)
 * Updated signing logic to support inherited auth parameters
 * Added a new helper function, `setParent` to `PropertyBase`
