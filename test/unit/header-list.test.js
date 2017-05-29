@@ -23,12 +23,4 @@ describe('HeaderList', function () {
         var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
         expect(hl.contentSize(200, 'OK')).eql(38);
     });
-
-    describe('.contains()', function () {
-        it('should return true if the header list contains given headers', function () {
-            var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
-
-
-        });
-    });
 });
