@@ -1,5 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### 1.2.6 (May 29, 2017)
+* Enhanced `Url.toString()` to handle non-string path variable values
+* Enhanced `PropertyList.has()` to also check for values (optionally)
+* Added a data structure for NTLM authentication mechanism 
+
 #### 1.2.5 (May 11, 2017)
 * Added support for multi-layered variable resolution
 * Added convenience method, `VariableScope.toObject()`
