@@ -7,7 +7,7 @@ var _ = require('lodash'),
 
 /* global describe, it */
 describe('RequestAuth', function () {
-    describe('Basic', function () {
+    describe('basic', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.basic),
                 authorizedReq = request.auth.basic.authorize(request),
@@ -21,7 +21,7 @@ describe('RequestAuth', function () {
         });
     });
 
-    describe('Digest', function () {
+    describe('digest', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.digest),
                 authorizedReq = request.auth.digest.authorize(request),
@@ -50,7 +50,7 @@ describe('RequestAuth', function () {
         });
     });
 
-    describe('OAuth1', function () {
+    describe('oauth1', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.oauth1),
                 authorizedReq = request.auth.oauth1.authorize(request),
@@ -65,7 +65,7 @@ describe('RequestAuth', function () {
         });
     });
 
-    describe('AWSv4', function () {
+    describe('awsv4', function () {
         // querystring.unescape is not available in browserify's querystring module, so this goes to hell
         // TODO: fix this
         (typeof window === 'undefined' ? it : it.skip)('Required headers must be added', function () {
@@ -82,7 +82,7 @@ describe('RequestAuth', function () {
         });
     });
 
-    describe('Hawk', function () {
+    describe('hawk', function () {
         it('Auth header must be added', function () {
             var request = new Request(rawRequests.hawk),
                 authorizedReq = request.auth.hawk.authorize(request),
@@ -103,6 +103,28 @@ describe('RequestAuth', function () {
             expect(authorizedReq.auth).to.be.ok();
             expect(_.get(authorizedReq, 'auth.hawk.nonce')).to.be.a('string');
             expect(_.get(authorizedReq, 'auth.hawk.timestamp')).to.be.a('number');
+        });
+    });
+
+    describe('ntlm', function () {
+        it('should be able to load all parameters from a request', function () {
+            var data = {
+                    auth: {
+                        type: 'ntlm',
+                        ntlm: {
+                            username: 'testuser',
+                            password: 'testpass',
+                            domain: 'testdomain',
+                            workstation: 'sample.work'
+                        }
+                    },
+                    url: 'httpbin.org/get'
+                },
+                ntlmRequest = new Request(data);
+
+            expect(ntlmRequest.auth).to.have.property('type', 'ntlm');
+            expect(ntlmRequest.auth.ntlm).to.be.a(RequestAuth.types.ntlm);
+            expect(ntlmRequest.auth.toJSON()).to.eql(data.auth);
         });
     });
 
