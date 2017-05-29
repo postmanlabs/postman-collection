@@ -409,7 +409,7 @@ describe('Url', function () {
                 ]
             });
 
-            expect(url.getPath()).to.eql('/get');
+            expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
         });
     });
 
