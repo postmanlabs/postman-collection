@@ -392,6 +392,25 @@ describe('Url', function () {
                 url = new Url(rawUrl);
             expect(url.getPath()).to.eql('/get');
         });
+
+        it('should ignore non string valued path variables correctly', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta/:gamma/:delta/:epsilon/:phi',
+                variable: [
+                    { id: 'alpha', value: 'get' },
+                    { id: 'beta', value: null },
+                    { id: 'gamma', value: NaN },
+                    { id: 'gamma', value: undefined },
+                    { id: 'epsilon', value: [] },
+                    { id: 'phi', value: {} }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
+        });
     });
 
     describe('URL Encoding', function () {
