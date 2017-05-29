@@ -465,7 +465,7 @@ describe('PropertyList', function () {
         });
     });
 
-    describe('isPropertyList', function () {
+    describe('.isPropertyList()', function () {
         var list,
             rawList = [{
                 keyAttr: 'key1',
@@ -500,7 +500,7 @@ describe('PropertyList', function () {
         });
     });
 
-    describe('toObject', function () {
+    describe('.toObject()', function () {
         var FakeType = function (options) {
             this.keyAttr = options.keyAttr;
             this.value = options.value;
@@ -572,7 +572,7 @@ describe('PropertyList', function () {
         });
     });
 
-    describe('.get', function () {
+    describe('.get()', function () {
         var FakeType = function (options) {
             this.keyAttr = options.keyAttr;
             this.value = options.value;
@@ -599,6 +599,149 @@ describe('PropertyList', function () {
             }]);
 
             expect(list.get('key1')).to.eql('val2');
+        });
+    });
+
+    describe('.has()', function () {
+        var FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            this.disabled = options.disabled;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = true;
+        FakeType._postman_propertyAllowsMultipleValues = true;
+        FakeType.prototype.valueOf = function () {
+            return this.value;
+        };
+
+        it('should check if given key exists in the property list', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key1')).to.eql(true);
+        });
+
+        it('should return a falsey value if the key does not exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('something')).to.eql(false);
+        });
+
+        it('should handle if a key has multiple values', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key1')).to.eql(true);
+        });
+
+        it('should handle if a particular value is provided for lookup', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key1',
+                value: 'val3'
+            }, {
+                keyAttr: 'key2',
+                value: 'val4'
+            }]);
+
+            expect(list.has('key1', 'val1')).to.eql(true);
+            expect(list.has('key1', 'val2')).to.eql(true);
+            expect(list.has('key1', 'val3')).to.eql(true);
+        });
+
+        it('should return false if a particular value is provided for lookup but does not exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key1',
+                value: 'val3'
+            }, {
+                keyAttr: 'key2',
+                value: 'val4'
+            }]);
+
+            expect(list.has('key1', 'val4')).to.eql(false);
+        });
+
+        it('should return a falsey value if the key does not exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key4', 'val3')).to.eql(false);
+        });
+
+        it('should return true if the item is provided', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has(list.members[0])).to.eql(true);
+        });
+
+        it('should return true if key and value exist, but no duplicate values exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key1', 'val1')).to.eql(true);
         });
     });
 });
