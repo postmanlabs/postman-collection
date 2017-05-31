@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### v1.2.8 (May 31, 2017)
+* Fixed a bug where converting `QueryParam` and `FormParam` lists to objects was not working
+
 #### v1.2.7 (May 30, 2017)
 * Fixed path variable data representations to work correctly with `id` as well as `key`.
 
