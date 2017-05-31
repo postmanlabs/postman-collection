@@ -522,4 +522,11 @@ describe('Url', function () {
             });
         });
     });
+
+    describe('Query parameters', function () {
+        it('must be able to convert query params to object', function () {
+            var url = new Url('http://127.0.0.1/hello/world/?query=param&query2=param2#test-api');
+            expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
+        });
+    });
 });
