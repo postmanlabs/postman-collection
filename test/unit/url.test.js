@@ -411,6 +411,25 @@ describe('Url', function () {
 
             expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
         });
+
+        it('should work correctly without the id field as well', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta/:gamma/:delta/:epsilon/:phi',
+                variable: [
+                    { key: 'alpha', value: 'get' },
+                    { key: 'beta', value: null },
+                    { key: 'gamma', value: NaN },
+                    { key: 'gamma', value: undefined },
+                    { key: 'epsilon', value: [] },
+                    { key: 'phi', value: {} }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
+        });
     });
 
     describe('URL Encoding', function () {
