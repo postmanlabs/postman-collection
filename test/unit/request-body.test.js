@@ -57,6 +57,27 @@ describe('RequestBody', function () {
         expect(reqData.file).to.have.property('src', rawBody.file);
     });
 
+    it('should allow converting form parameters to an object', function () {
+        var rawBody = {
+                mode: 'formdata',
+                formdata: [
+                    {
+                        key: 'hiya',
+                        value: 'heyo'
+                    },
+                    {
+                        key: 'alpha',
+                        value: 'beta'
+                    }
+                ]
+            },
+            reqData = new RequestBody(rawBody);
+        expect(reqData.formdata.toObject()).to.eql({
+            hiya: 'heyo',
+            alpha: 'beta'
+        });
+    });
+
     describe('isEmpty', function () {
         it('should return true if no request body is set', function () {
             var body = new RequestBody();
