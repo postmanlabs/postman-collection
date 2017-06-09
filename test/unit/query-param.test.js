@@ -84,12 +84,14 @@ describe('QueryParam', function () {
         };
 
         _.forOwn(testCases, function (array, string) {
-            it('parsing - ' + string, function () {
-                expect(QueryParam.parse(string)).to.eql(array);
-            });
+            describe(string, function () {
+                it('parse', function () {
+                    expect(QueryParam.parse(string)).to.eql(array);
+                });
 
-            it('unparsing - ' + string, function () {
-                expect(QueryParam.unparse(array)).to.eql(string);
+                it('unparse', function () {
+                    expect(QueryParam.unparse(array)).to.eql(string);
+                });
             });
         });
     });
