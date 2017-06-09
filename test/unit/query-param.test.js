@@ -1,4 +1,5 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
     QueryParam = require('../../').QueryParam,
     rawQueryStrings = require('../fixtures/index').rawQueryStrings;
 
@@ -33,103 +34,78 @@ describe('QueryParam', function () {
         expect(paramStr).to.eql('x=y%25z');
     });
 
-    describe('parsing', function () {
-        it('"a=b&c"', function () {
-            var str = 'a=b&c';
-            expect(QueryParam.parse(str)).to.eql([
+    describe('integrity', function () {
+        var testCases = {
+            'a=b&c': [
                 { key: 'a', value: 'b' },
                 { key: 'c', value: null }
-            ]);
-        });
-
-        it('"a=b&c="', function () {
-            var str = 'a=b&c=';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&c=': [
                 { key: 'a', value: 'b' },
                 { key: 'c', value: '' }
-            ]);
-        });
-
-        it('"a=b&c=&d=e"', function () {
-            var str = 'a=b&c=&d=e';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&c=&d=e': [
                 { key: 'a', value: 'b' },
                 { key: 'c', value: '' },
                 { key: 'd', value: 'e' }
-            ]);
-        });
-
-        it('"a=b&c&d=e"', function () {
-            var str = 'a=b&c&d=e';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&c&d=e': [
                 { key: 'a', value: 'b' },
                 { key: 'c', value: null },
                 { key: 'd', value: 'e' }
-            ]);
-        });
-
-        it('"a=b&a=c"', function () {
-            var str = 'a=b&a=c';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&a=c': [
                 { key: 'a', value: 'b' },
                 { key: 'a', value: 'c' }
-            ]);
-        });
-
-        it('"a=b&a"', function () {
-            var str = 'a=b&a';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&a': [
                 { key: 'a', value: 'b' },
                 { key: 'a', value: null }
-            ]);
-        });
-
-        it('"a=b&=cd"', function () {
-            var str = 'a=b&=cd';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&=cd': [
                 { key: 'a', value: 'b' },
                 { key: '', value: 'cd' }
-            ]);
-        });
-
-        it('"a=b&=&"', function () {
-            var str = 'a=b&=&';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&=&': [
                 { key: 'a', value: 'b' },
                 { key: '', value: '' },
                 { key: '', value: null }
-            ]);
-        });
-
-        it('"a=b&&"', function () {
-            var str = 'a=b&&';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&&': [
                 { key: 'a', value: 'b' },
                 { key: null, value: null },
                 { key: '', value: null }
-            ]);
-        });
-
-        it('"a=b&&c=d"', function () {
-            var str = 'a=b&&c=d';
-            expect(QueryParam.parse(str)).to.eql([
+            ],
+            'a=b&&c=d': [
                 { key: 'a', value: 'b' },
                 { key: null, value: null },
                 { key: 'c', value: 'd' }
-            ]);
+            ]
+        };
+
+        _.forOwn(testCases, function (array, string) {
+            it('parsing - ' + string, function () {
+                expect(QueryParam.parse(string)).to.eql(array);
+            });
+
+            it('unparsing - ' + string, function () {
+                expect(QueryParam.unparse(array)).to.eql(string);
+            });
         });
     });
 
-    describe('unparsing', function () {
-        it('"a=b&c=d"', function () {
+    describe('encoding', function () {
+        it('a=b{{c}}', function () {
             var parsed = [
-                { key: 'a', value: 'b' },
+                { key: 'a', value: 'c{{b}}' },
                 { key: 'c', value: 'd' }
             ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&c=d');
+            expect(QueryParam.unparse(parsed, {
+                encode: true
+            })).to.be('a=c{{b}}&c=d');
         });
 
-        it('"a=обязательный&c=d"', function () {
+        it('a=обязательный&c=d', function () {
             var parsed = [
                 { key: 'a', value: 'обязательный' },
                 { key: 'c', value: 'd' }
@@ -139,96 +115,7 @@ describe('QueryParam', function () {
             })).to.be('a=%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9&c=d');
         });
 
-        it('"a=b&c"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: 'c', value: null }
-            ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&c');
-        });
-
-        it('"a=b&c="', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: 'c', value: '' }
-            ];
-
-            expect(QueryParam.unparse(parsed)).to.be('a=b&c=');
-        });
-
-        it('"a=b&c=&d=e"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: 'c', value: '' },
-                { key: 'd', value: 'e' }
-            ];
-
-            expect(QueryParam.unparse(parsed)).to.be('a=b&c=&d=e');
-        });
-
-        it('"a=b&c&d=e"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: 'c', value: null },
-                { key: 'd', value: 'e' }
-            ];
-
-            expect(QueryParam.unparse(parsed)).to.be('a=b&c&d=e');
-        });
-
-        it('"a=b&a=c"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: 'a', value: 'c' }
-            ];
-
-            expect(QueryParam.unparse(parsed)).to.be('a=b&a=c');
-        });
-
-        it('"a=b&a"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: 'a', value: null }
-            ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&a');
-        });
-
-        it('"a=b&=cd"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: '', value: 'cd' }
-            ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&=cd');
-        });
-
-        it('"a=b&=&"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: '', value: '' },
-                { key: '', value: null }
-            ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&=&');
-        });
-
-        it('"a=b&&"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: null, value: null },
-                { key: '', value: null }
-            ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&&');
-        });
-
-        it('"a=b&&c=d"', function () {
-            var parsed = [
-                { key: 'a', value: 'b' },
-                { key: null, value: null },
-                { key: 'c', value: 'd' }
-            ];
-            expect(QueryParam.unparse(parsed)).to.be('a=b&&c=d');
-        });
-
-        it('"email=foo+bar-xyz@gmail.com"', function () {
+        it('email=foo+bar-xyz@gmail.com', function () {
             var parsed = [
                 { key: 'email', value: 'foo+bar-xyz@gmail.com' }
             ];
@@ -267,7 +154,7 @@ describe('QueryParam', function () {
             })).to.be('multibyte=%25foo');
         });
 
-        it('"a[0]=foo&a[1]=bar"', function () {
+        it('a[0]=foo&a[1]=bar', function () {
             var parsed = [
                 { key: 'a[0]', value: 'foo' },
                 { key: 'a[1]', value: 'bar' }
