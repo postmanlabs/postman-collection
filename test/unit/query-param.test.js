@@ -5,6 +5,19 @@ var _ = require('lodash'),
 
 /* global describe, it */
 describe('QueryParam', function () {
+    describe('construction', function () {
+        var qp = new QueryParam({
+            key: null,
+            value: null
+        });
+
+        expect(qp).to.be.ok();
+        expect(qp).to.have.property('key', null);
+        expect(qp).to.have.property('value', null);
+
+        expect(qp.toString()).to.be('');
+    });
+
     rawQueryStrings.forEach(function (rawQueryString) {
         describe(rawQueryString, function () {
             it('should be parsed properly', function () {
