@@ -34,7 +34,17 @@ describe('QueryParam', function () {
         expect(paramStr).to.eql('x=y%25z');
     });
 
+    it('should be able to unparse when values are given as an object', function () {
+        var params = {
+            a: 'a',
+            b: 'b'
+        };
+
+        expect(QueryParam.unparse(params)).to.eql('a=a&b=b');
+    });
+
     describe('integrity', function () {
+        // key is what the string representation should be, value is the parsed representation.
         var testCases = {
             'a=b&c': [
                 { key: 'a', value: 'b' },
