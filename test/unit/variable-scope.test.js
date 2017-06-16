@@ -604,7 +604,7 @@ describe('VariableScope', function () {
             });
         });
 
-        it.only('gives local scope highest order of precedence when resolving layers', function () {
+        it('gives local scope highest order of precedence when resolving layers', function () {
             var localValues = [{
                     key: 'key3',
                     value: 'val3'
