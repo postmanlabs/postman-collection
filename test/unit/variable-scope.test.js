@@ -575,5 +575,52 @@ describe('VariableScope', function () {
                 'key3': 'duplicate-val3'
             });
         });
+
+        it('should return a pojo from all layers of scope', function () {
+            var globalScope = new VariableList(null, keyVals[0]),
+                envScope = new VariableList(null, keyVals[1]),
+                localScope = new VariableScope([keyVals[2]], [envScope, globalScope]);
+
+            expect(localScope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2',
+                'key3': 'val3'
+            });
+        });
+
+        it('returns only local scope values if layers are not provided', function () {
+            var localValues = [{
+                    key: 'key1',
+                    value: 'val1'
+                }, {
+                    key: 'key2',
+                    value: 'val2'
+                }],
+                scope = new VariableScope(localValues);
+
+            expect(scope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2'
+            });
+        });
+
+        it.only('gives local scope highest order of precedence when resolving layers', function () {
+            var localValues = [{
+                    key: 'key3',
+                    value: 'val3'
+                }, {
+                    key: 'key1',
+                    value: 'duplicated_key'
+                }],
+                globalScope = new VariableList(null, keyVals[0]),
+                envScope = new VariableList(null, keyVals[1]),
+                localScope = new VariableScope(localValues, [envScope, globalScope]);
+
+            expect(localScope.toObject()).to.eql({
+                'key1': 'duplicated_key',
+                'key2': 'val2',
+                'key3': 'val3'
+            });
+        });
     });
 });
