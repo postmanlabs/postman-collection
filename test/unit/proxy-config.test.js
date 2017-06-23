@@ -47,7 +47,7 @@ describe('Proxy Config', function () {
         });
 
         it('should parse any URL which has host mail.google.com', function () {
-            var pc = new ProxyConfig({ match: '*://mail.google.com/*', server: 'https://proxy.com/' });
+            var pc = new ProxyConfig({ match: '*://mail.google.com/*', server: 'https://proxy.com/', protocols: ['http', 'https'] });
             expect(pc.test('http://mail.google.com/foo/baz/bar')).to.eql(true);
             expect(pc.test('https://mail.google.com/foobar')).to.eql(true);
         });
@@ -94,11 +94,11 @@ describe('Proxy Config', function () {
 
     describe('toJSON', function() {
         it('should retain properties from original json', function() {
-            var rawConfig = { match: 'http://*/*', server: 'https://proxy.com/', tunnel: true, disabled: false },
+            var rawConfig = { match: 'http://*/*', parsedMatch: '://*/*', server: 'https://proxy.com/', tunnel: true, disabled: false },
                 proxyConfig = new ProxyConfig(rawConfig),
                 serialisedConfig = proxyConfig.toJSON();
 
-            expect(serialisedConfig.match).to.eql({ pattern: rawConfig.match });
+            expect(serialisedConfig.match).to.eql({ pattern: rawConfig.parsedMatch });
             expect(serialisedConfig.tunnel).to.eql(rawConfig.tunnel);
             expect(serialisedConfig.disabled).to.eql(rawConfig.disabled);
         });
