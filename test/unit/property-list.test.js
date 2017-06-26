@@ -578,6 +578,26 @@ describe('PropertyList', function () {
                 key3: 'val3'
             });
         });
+
+        it('should return multiple values as array', function () {
+            FakeType._postman_propertyAllowsMultipleValues = true;
+
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.toObject()).to.eql({
+                key1: ['val1', 'val2'],
+                key2: 'val3'
+            });
+        });
     });
 
     describe('.get()', function () {
