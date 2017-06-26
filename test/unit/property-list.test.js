@@ -501,18 +501,26 @@ describe('PropertyList', function () {
     });
 
     describe('.toObject()', function () {
-        var FakeType = function (options) {
-            this.keyAttr = options.keyAttr;
-            this.value = options.value;
-            this.disabled = options.disabled;
-        };
+        var FakeType;
 
-        FakeType._postman_propertyIndexKey = 'keyAttr';
-        FakeType._postman_propertyIndexCaseInsensitive = true;
-        FakeType._postman_propertyAllowsMultipleValues = true;
-        FakeType.prototype.valueOf = function () {
-            return this.value;
-        };
+        beforeEach(function () {
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+                this.disabled = options.disabled;
+            };
+
+            FakeType._postman_propertyIndexKey = 'keyAttr';
+            FakeType._postman_propertyIndexCaseInsensitive = true;
+            FakeType._postman_propertyAllowsMultipleValues = false;
+            FakeType.prototype.valueOf = function () {
+                return this.value;
+            };
+        });
+
+        afterEach(function () {
+            FakeType = null;
+        });
 
         it('should return a pojo', function () {
             var list = new PropertyList(FakeType, {}, [{
