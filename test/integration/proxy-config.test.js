@@ -12,7 +12,7 @@ describe('Proxy Config', function () {
 
     it('should prepopulate the values when pass through the constructor', function () {
         var p = new ProxyConfig({
-            match: 'http://example.com',
+            match: 'http://*.google.com/foo*bar',
             host: 'proxy.com',
             port: 8080,
             protocols: ['http'],
@@ -20,7 +20,9 @@ describe('Proxy Config', function () {
             disabled: true
         });
 
-        expect(p.match.pattern).to.be('://example.com');
+        expect(p.match.pattern).to.be('*.google.com/foo*bar');
+        expect(p.test('http://mail.google.com/foo/baz/bar')).to.be(true);
+        expect(p.test('http://docs.google.com/foobar')).to.be(true);
         expect(p.protocols).to.be.eql(['http']);
         expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(true);
