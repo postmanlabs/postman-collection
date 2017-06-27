@@ -447,7 +447,7 @@ describe('PropertyList', function () {
                 ]);
             });
 
-            it('.one() should always the last item inserted, even if multiple are present', function () {
+            it('.one() should always return the last item inserted, even if multiple are present', function () {
                 expect(list.one('key1')).to.eql({ keyAttr: 'key1', value: 'val2' });
             });
 
