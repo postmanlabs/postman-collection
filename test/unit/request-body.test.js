@@ -146,7 +146,7 @@ describe('RequestBody', function () {
                 mode: 'urlencoded',
                 urlencoded: [{
                     key: 'haha',
-                    value: { some: 'random', javascript: 'object' }  // this functionality is used in the app
+                    value: { some: 'random', javascript: 'object' } // this functionality is used in the app
                 }]
             });
             expect(body.isEmpty()).to.be(false);
