@@ -25,7 +25,6 @@
     "publish-wiki": "node npm/publish-wiki.js",
     "publish-docs": "node npm/publish-docs.js",
     "test": "node npm/test.js",
-    "test-integration": "node npm/test-integration.js",
     "test-system": "node npm/test-system.js",
     "test-browser": "node npm/test-browser.js",
     "test-lint": "node npm/test-lint.js",
