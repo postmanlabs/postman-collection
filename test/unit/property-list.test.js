@@ -718,7 +718,7 @@ describe('PropertyList', function () {
             });
 
             // should have removed the array of values
-            expect(list.reference.key1).to.be(undefined);
+            expect(list.reference).to.not.have.property('key1');
         });
     });
 
