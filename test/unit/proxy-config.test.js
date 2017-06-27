@@ -3,6 +3,39 @@ var expect = require('expect.js'),
     Url = require('../../lib/index.js').Url;
 
 describe('Proxy Config', function () {
+    describe('sanity', function () {
+        it('should initialize the values to their defaults', function () {
+            var p = new ProxyConfig();
+
+            expect(p.match.pattern).to.be('<all_urls>');
+            expect(p.tunnel).to.be(false);
+        });
+
+        it('should prepopulate the values when pass through the constructor', function () {
+            var p = new ProxyConfig({
+                match: 'http://example.com',
+                server: 'http://proxy.com',
+                tunnel: true,
+                disabled: true
+            });
+
+            expect(p.match.pattern).to.be('http://example.com');
+            expect(p.server.protocol).to.be('http');
+            expect(p.server.getHost()).to.be('proxy.com');
+            expect(p.tunnel).to.be(true);
+            expect(p.disabled).to.be(true);
+        });
+
+
+        it('should prepopulate the values of match to * if it is not provided', function () {
+            var p = new ProxyConfig({
+                server: 'http://proxy.com'
+            });
+
+            expect(p.match.pattern).to.be('<all_urls>');
+        });
+    });
+
     describe('test', function () {
         it('should match all urls provided', function () {
             var pc = new ProxyConfig({ server: 'https://proxy.com/', tunnel: true });
