@@ -501,18 +501,26 @@ describe('PropertyList', function () {
     });
 
     describe('.toObject()', function () {
-        var FakeType = function (options) {
-            this.keyAttr = options.keyAttr;
-            this.value = options.value;
-            this.disabled = options.disabled;
-        };
+        var FakeType;
 
-        FakeType._postman_propertyIndexKey = 'keyAttr';
-        FakeType._postman_propertyIndexCaseInsensitive = true;
-        FakeType._postman_propertyAllowsMultipleValues = true;
-        FakeType.prototype.valueOf = function () {
-            return this.value;
-        };
+        beforeEach(function () {
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+                this.disabled = options.disabled;
+            };
+
+            FakeType._postman_propertyIndexKey = 'keyAttr';
+            FakeType._postman_propertyIndexCaseInsensitive = true;
+            FakeType._postman_propertyAllowsMultipleValues = false;
+            FakeType.prototype.valueOf = function () {
+                return this.value;
+            };
+        });
+
+        afterEach(function () {
+            FakeType = null;
+        });
 
         it('should return a pojo', function () {
             var list = new PropertyList(FakeType, {}, [{
@@ -568,6 +576,26 @@ describe('PropertyList', function () {
             expect(list.toObject(true)).to.eql({
                 key1: 'val1',
                 key3: 'val3'
+            });
+        });
+
+        it('should return multiple values as array', function () {
+            FakeType._postman_propertyAllowsMultipleValues = true;
+
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.toObject()).to.eql({
+                key1: ['val1', 'val2'],
+                key2: 'val3'
             });
         });
     });
