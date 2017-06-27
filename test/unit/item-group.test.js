@@ -109,7 +109,7 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('.one()', function () {
+    describe('.oneDeep()', function () {
         var itemGroupData = {
                 id: 'F0',
                 name: 'F0-name',
@@ -164,13 +164,13 @@ describe('ItemGroup', function () {
         describe('should fetch items', function () {
             describe('in the root', function () {
                 it('by id', function () {
-                    var r = itemGroup.one('R1');
+                    var r = itemGroup.oneDeep('R1');
                     expect(Item.isItem(r)).to.be(true);
                     expect(r).to.have.property('name', 'R1-name');
                 });
 
                 it('by name', function () {
-                    var r = itemGroup.one('R1-name');
+                    var r = itemGroup.oneDeep('R1-name');
                     expect(Item.isItem(r)).to.be(true);
                     expect(r).to.have.property('id', 'R1');
                 });
@@ -178,13 +178,13 @@ describe('ItemGroup', function () {
 
             describe('in an immediate sub-group', function () {
                 it('by id', function () {
-                    var r = itemGroup.one('R2');
+                    var r = itemGroup.oneDeep('R2');
                     expect(Item.isItem(r)).to.be(true);
                     expect(r).to.have.property('name', 'R2-name');
                 });
 
                 it('by name', function () {
-                    var r = itemGroup.one('R2-name');
+                    var r = itemGroup.oneDeep('R2-name');
                     expect(Item.isItem(r)).to.be(true);
                     expect(r).to.have.property('id', 'R2');
                 });
@@ -192,13 +192,13 @@ describe('ItemGroup', function () {
 
             describe('in a nested subgroup', function () {
                 it('by id', function () {
-                    var r = itemGroup.one('R4');
+                    var r = itemGroup.oneDeep('R4');
                     expect(Item.isItem(r)).to.be(true);
                     expect(r).to.have.property('name', 'R4-name');
                 });
 
                 it('by name', function () {
-                    var r = itemGroup.one('R4-name');
+                    var r = itemGroup.oneDeep('R4-name');
                     expect(Item.isItem(r)).to.be(true);
                     expect(r).to.have.property('id', 'R4');
                 });
@@ -210,11 +210,11 @@ describe('ItemGroup', function () {
                 it('by id', function () {
                     var f1, f2;
 
-                    f1 = itemGroup.one('F2');
+                    f1 = itemGroup.oneDeep('F2');
                     expect(ItemGroup.isItemGroup(f1)).to.be(true);
                     expect(f1).to.have.property('name', 'F2-name');
 
-                    f2 = itemGroup.one('F5');
+                    f2 = itemGroup.oneDeep('F5');
                     expect(ItemGroup.isItemGroup(f2)).to.be(true);
                     expect(f2).to.have.property('name', 'F5-name');
                 });
@@ -222,11 +222,11 @@ describe('ItemGroup', function () {
                 it('by name', function () {
                     var f1, f2;
 
-                    f1 = itemGroup.one('F2-name');
+                    f1 = itemGroup.oneDeep('F2-name');
                     expect(ItemGroup.isItemGroup(f1)).to.be(true);
                     expect(f1).to.have.property('id', 'F2');
 
-                    f2 = itemGroup.one('F5-name');
+                    f2 = itemGroup.oneDeep('F5-name');
                     expect(ItemGroup.isItemGroup(f2)).to.be(true);
                     expect(f2).to.have.property('id', 'F5');
                 });
@@ -236,7 +236,7 @@ describe('ItemGroup', function () {
                 it('by id', function () {
                     var f1;
 
-                    f1 = itemGroup.one('F3');
+                    f1 = itemGroup.oneDeep('F3');
                     expect(ItemGroup.isItemGroup(f1)).to.be(true);
                     expect(f1).to.have.property('name', 'F3-name');
                 });
@@ -244,7 +244,7 @@ describe('ItemGroup', function () {
                 it('by name', function () {
                     var f1;
 
-                    f1 = itemGroup.one('F3-name');
+                    f1 = itemGroup.oneDeep('F3-name');
                     expect(ItemGroup.isItemGroup(f1)).to.be(true);
                     expect(f1).to.have.property('id', 'F3');
                 });
@@ -254,7 +254,7 @@ describe('ItemGroup', function () {
                 it('by id', function () {
                     var f1;
 
-                    f1 = itemGroup.one('F4');
+                    f1 = itemGroup.oneDeep('F4');
                     expect(ItemGroup.isItemGroup(f1)).to.be(true);
                     expect(f1).to.have.property('name', 'F4-name');
                 });
@@ -262,7 +262,7 @@ describe('ItemGroup', function () {
                 it('by name', function () {
                     var f1;
 
-                    f1 = itemGroup.one('F4-name');
+                    f1 = itemGroup.oneDeep('F4-name');
                     expect(ItemGroup.isItemGroup(f1)).to.be(true);
                     expect(f1).to.have.property('id', 'F4');
                 });
@@ -272,7 +272,7 @@ describe('ItemGroup', function () {
         it('should return `undefined` if the item does not exist', function () {
             var i;
 
-            i = itemGroup.one('non-existent');
+            i = itemGroup.oneDeep('non-existent');
 
             expect(i).to.be(undefined);
         });
