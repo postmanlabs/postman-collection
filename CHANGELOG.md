@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+## Unreleased
+* Updated the ProxyConfig & UrlMatchPattern to support multiple protocols
+
 #### v1.2.8 (May 31, 2017)
 * Fixed a bug where converting `QueryParam` and `FormParam` lists to objects was not working
 
