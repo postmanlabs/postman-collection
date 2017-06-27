@@ -2,6 +2,7 @@
 
 ## Unreleased
 * Added support to allow duplicate indexed items to be exported as array via PropertyList.prototype.toObject
+* Added a helper, `ItemGroup.one()` to recursively look for an `Item` in an `ItemGroup`
 * Updated the ProxyConfig & UrlMatchPattern to support multiple protocols
 
 #### v1.2.8 (May 31, 2017)
