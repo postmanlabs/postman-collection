@@ -2,7 +2,8 @@
 
 ## Unreleased
 * Added support to allow duplicate indexed items to be exported as array via PropertyList.prototype.toObject
-* Added a helper, `ItemGroup.one()` to recursively look for an `Item` in an `ItemGroup`
+* Added a helper, `ItemGroup.oneDeep()` to recursively look for an `Item` in an `ItemGroup`
+* Fixed a bug which caused `PropertyList.remove()` to remove uncalled for elements from internal reference
 
 #### v1.2.8 (May 31, 2017)
 * Fixed a bug where converting `QueryParam` and `FormParam` lists to objects was not working
