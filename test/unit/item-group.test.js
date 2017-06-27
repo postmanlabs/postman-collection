@@ -109,6 +109,175 @@ describe('ItemGroup', function () {
         });
     });
 
+    describe('.oneDeep()', function () {
+        var itemGroupData = {
+                id: 'F0',
+                name: 'F0-name',
+                item: [{
+                    id: 'R1',
+                    name: 'R1-name',
+                    request: 'postman-echo.com'
+                }, {
+                    id: 'F2',
+                    name: 'F2-name',
+                    item: [{
+                        id: 'R2',
+                        name: 'R2-name',
+                        request: 'postman-echo.com'
+                    }, {
+                        id: 'R3',
+                        name: 'R3-name',
+                        request: 'postman-echo.com'
+                    }, {
+                        id: 'F3',
+                        name: 'F3-name',
+                        item: [{
+                            id: 'R4',
+                            name: 'R4-name',
+                            request: 'postman-echo.com'
+                        }, {
+                            id: 'F4',
+                            name: 'F4-name',
+                            item: []
+                        }]
+                    }]
+                }, {
+                    id: 'R5',
+                    name: 'R5-name',
+                    request: 'postman-echo.com'
+                }, {
+                    id: 'F5',
+                    name: 'F5-name',
+                    item: []
+                }]
+            },
+            itemGroup;
+
+        beforeEach(function () {
+            itemGroup = new ItemGroup(itemGroupData);
+        });
+
+        afterEach(function () {
+            itemGroup = undefined;
+        });
+
+        describe('should fetch items', function () {
+            describe('in the root', function () {
+                it('by id', function () {
+                    var r = itemGroup.oneDeep('R1');
+                    expect(Item.isItem(r)).to.be(true);
+                    expect(r).to.have.property('name', 'R1-name');
+                });
+
+                it('by name', function () {
+                    var r = itemGroup.oneDeep('R1-name');
+                    expect(Item.isItem(r)).to.be(true);
+                    expect(r).to.have.property('id', 'R1');
+                });
+            });
+
+            describe('in an immediate sub-group', function () {
+                it('by id', function () {
+                    var r = itemGroup.oneDeep('R2');
+                    expect(Item.isItem(r)).to.be(true);
+                    expect(r).to.have.property('name', 'R2-name');
+                });
+
+                it('by name', function () {
+                    var r = itemGroup.oneDeep('R2-name');
+                    expect(Item.isItem(r)).to.be(true);
+                    expect(r).to.have.property('id', 'R2');
+                });
+            });
+
+            describe('in a nested subgroup', function () {
+                it('by id', function () {
+                    var r = itemGroup.oneDeep('R4');
+                    expect(Item.isItem(r)).to.be(true);
+                    expect(r).to.have.property('name', 'R4-name');
+                });
+
+                it('by name', function () {
+                    var r = itemGroup.oneDeep('R4-name');
+                    expect(Item.isItem(r)).to.be(true);
+                    expect(r).to.have.property('id', 'R4');
+                });
+            });
+        });
+
+        describe('should fetch itemgroups', function () {
+            describe('in the root', function () {
+                it('by id', function () {
+                    var f1, f2;
+
+                    f1 = itemGroup.oneDeep('F2');
+                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(f1).to.have.property('name', 'F2-name');
+
+                    f2 = itemGroup.oneDeep('F5');
+                    expect(ItemGroup.isItemGroup(f2)).to.be(true);
+                    expect(f2).to.have.property('name', 'F5-name');
+                });
+
+                it('by name', function () {
+                    var f1, f2;
+
+                    f1 = itemGroup.oneDeep('F2-name');
+                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(f1).to.have.property('id', 'F2');
+
+                    f2 = itemGroup.oneDeep('F5-name');
+                    expect(ItemGroup.isItemGroup(f2)).to.be(true);
+                    expect(f2).to.have.property('id', 'F5');
+                });
+            });
+
+            describe('in an immediate sub-group', function () {
+                it('by id', function () {
+                    var f1;
+
+                    f1 = itemGroup.oneDeep('F3');
+                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(f1).to.have.property('name', 'F3-name');
+                });
+
+                it('by name', function () {
+                    var f1;
+
+                    f1 = itemGroup.oneDeep('F3-name');
+                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(f1).to.have.property('id', 'F3');
+                });
+            });
+
+            describe('in a nested subgroup', function () {
+                it('by id', function () {
+                    var f1;
+
+                    f1 = itemGroup.oneDeep('F4');
+                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(f1).to.have.property('name', 'F4-name');
+                });
+
+                it('by name', function () {
+                    var f1;
+
+                    f1 = itemGroup.oneDeep('F4-name');
+                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(f1).to.have.property('id', 'F4');
+                });
+            });
+        });
+
+        it('should return `undefined` if the item does not exist', function () {
+            var i;
+
+            i = itemGroup.oneDeep('non-existent');
+
+            expect(i).to.be(undefined);
+        });
+    });
+
     describe('isItemGroup', function () {
         it('should return true for a ItemGroup instance', function () {
             expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be(true);
