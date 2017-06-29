@@ -12,15 +12,19 @@ describe('Proxy Config', function () {
 
     it('should prepopulate the values when pass through the constructor', function () {
         var p = new ProxyConfig({
-            match: 'http://example.com',
-            server: 'http://proxy.com',
+            match: 'http://*.google.com/foo*bar',
+            host: 'proxy.com',
+            port: 8080,
+            protocols: ['http'],
             tunnel: true,
             disabled: true
         });
 
-        expect(p.match.pattern).to.be('http://example.com');
-        expect(p.server.protocol).to.be('http');
-        expect(p.server.getHost()).to.be('proxy.com');
+        expect(p.match.pattern).to.be('*.google.com/foo*bar');
+        expect(p.test('http://mail.google.com/foo/baz/bar')).to.be(true);
+        expect(p.test('http://docs.google.com/foobar')).to.be(true);
+        expect(p.protocols).to.be.eql(['http']);
+        expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(true);
         expect(p.disabled).to.be(true);
     });
@@ -28,9 +32,13 @@ describe('Proxy Config', function () {
 
     it('should prepopulate the values of match to * if it is not provided', function () {
         var p = new ProxyConfig({
-            server: 'http://proxy.com'
+            host: 'http://proxy.com'
         });
 
         expect(p.match.pattern).to.be('<all_urls>');
+        expect(p.protocols).to.be.eql(['http']);
+        expect(p.host).to.be('proxy.com');
+        expect(p.tunnel).to.be(false);
+        expect(p.disabled).to.not.be.ok();
     });
 });
