@@ -88,6 +88,16 @@ var expect = require('expect.js'),
             var matchPattern = getTargetForSpec('foo://*');
             expect(matchPattern.test('foo://www.google.com')).to.eql(false);
         });
+
+        it('should extract multiple protocols', function() {
+            var matchPatternObject = new UrlMatchPattern('http+https+ftp+file://*/*').createMatchPattern();
+            expect(matchPatternObject.protocols).to.eql(['http', 'https', 'ftp', 'file']);
+        });
+
+        it('should not match if any one of multiple protocols are invalid', function() {
+            var matchPatternObject = new UrlMatchPattern('http+foo+ftp://*/*').createMatchPattern();
+            expect(matchPatternObject).to.eql(undefined);
+        });
     };
 
 describe('UrlMatchPattern', function () {
@@ -148,16 +158,6 @@ describe('UrlMatchPattern', function () {
             expect(matchPatternObject.protocols).to.eql(['file']);
             matchPatternObject = new UrlMatchPattern('*://*/*').createMatchPattern();
             expect(matchPatternObject.protocols).to.eql(['*']);
-        });
-
-        it('should extract multiple protocols', function() {
-            var matchPatternObject = new UrlMatchPattern('http+https+ftp+file://*/*').createMatchPattern();
-            expect(matchPatternObject.protocols).to.eql(['http', 'https', 'ftp', 'file']);
-        });
-
-        it('should not match if any one of multiple protocols are invalid', function() {
-            var matchPatternObject = new UrlMatchPattern('http+foo+ftp://*/*').createMatchPattern();
-            expect(matchPatternObject).to.eql(undefined);
         });
 
         it('should parse any URL that uses the http protocol', function () {
