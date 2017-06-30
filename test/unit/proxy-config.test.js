@@ -7,7 +7,7 @@ describe('Proxy Config', function () {
         it('should match all urls provided', function () {
             var pc = new ProxyConfig({ host: 'proxy.com', tunnel: true });
             expect(pc.test('http://www.google.com/')).to.eql(true);
-            expect(pc.test('http://foo.bar.com/')).to.eql(true);
+            expect(pc.test('foo.bar.com/')).to.eql(true);
         });
 
         it('should match all sdk Url provided', function () {
@@ -19,7 +19,7 @@ describe('Proxy Config', function () {
         it('should parse any URL that uses the http protocol', function () {
             var pc = new ProxyConfig({ match: 'http://*/*', host: 'proxy.com' });
             expect(pc.test('http://www.google.com/')).to.eql(true);
-            expect(pc.test('http://foo.bar.com/')).to.eql(true);
+            expect(pc.test('foo.bar.com/')).to.eql(true);
         });
 
         it('should parse any URL that uses the http protocol, on any host, with path starts with /foo', function () {
