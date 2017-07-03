@@ -14,7 +14,7 @@ describe('Proxy Config', function () {
         var p = new ProxyConfig({
             match: 'http://*.google.com/foo*bar',
             host: 'proxy.com',
-            port: 8080,
+            port: 9090,
             tunnel: true,
             disabled: true
         });
@@ -23,6 +23,7 @@ describe('Proxy Config', function () {
         expect(p.test('http://mail.google.com/foo/baz/bar')).to.be(true);
         expect(p.test('http://docs.google.com/foobar')).to.be(true);
         expect(p.getProtocols()).to.be.eql(['http']);
+        expect(p.getProxyUrl()).to.be.eql('http://proxy.com:9090');
         expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(true);
         expect(p.disabled).to.be(true);
@@ -36,6 +37,7 @@ describe('Proxy Config', function () {
 
         expect(p.match.pattern).to.be('<all_urls>');
         expect(p.getProtocols()).to.be.eql([]);
+        expect(p.getProxyUrl()).to.be.eql('http://proxy.com:8080');
         expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(false);
         expect(p.disabled).to.not.be.ok();
