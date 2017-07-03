@@ -1,5 +1,74 @@
 # Postman Collection SDK Changelog
 
+#### v2.0.0 (July 3, 2017)
+* **Breaking Change**  Updated the `ProxyConfig` & `UrlMatchPattern` to support multiple protocols.
+* `ProxyConfig` and `ProxyConfigList` now accept the `host` and `port` keys instead of `server`. The `match` property also takes in multiple protocols:
+```js
+// v1.2.9
+var proxyConfig = new ProxyConfig({
+    match: 'http://*/foo',
+    server: 'https://proxy.com:8080', // This has been split into host and port in v2.0.0
+    tunnel: true
+});
+var proxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'http://*/foo',
+        server: 'https://proxy.com:8080', // This has been split into host and port in v2.0.0
+        tunnel: true
+    }
+]);
+
+// v2.0.0
+var proxyConfig = new ProxyConfig({
+    match: 'http+ftp://*/foo', // match now supports multiple plus(`+`) separated protocols
+    host: 'proxy.com', // In v1.2.9, `host` and `port` were combined into `server`
+    port: 8080,
+    tunnel: true
+});
+
+var ProxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'http+ftp://*/foo', // `match` now supports multiple plus(`+`) separated protocols
+        host: 'proxy.com', // In v1.2.9, `host` and `port` were combined into `server`
+        port: 8080,
+        tunnel: true
+    }
+]);
+```
+* `UrlMatchPattern` now returns an array of protocol strings:
+```js
+// v1.2.9
+var matchPattern = new UrlMatchPattern('http://*/*').createMatchPattern();
+matchPattern.protocol // 'http'
+
+// v2.0.0
+var matchPattern = new UrlMatchPattern('http://*/*').createMatchPattern();
+matchPattern.protocols // ['http'] (The singular protocol key has been replaced with the plural protocols in v2.0.0)
+
+var anotherMatchPattern = new UrlMatchPattern('http+https+ftp+file://').createMatchPattern();
+anotherMatchPatter.protocols // ['http', 'https', 'ftp', 'file']
+```
+* `ProxyConfig#server` has been removed in favour of the new host format:
+```js
+// v1.2.9
+var proxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'https://*/*',
+        host: 'proxy.com'
+    }
+]);
+proxyConfigList.resolve('https://www.google.com').server.getHost(); // `proxy.com`
+
+// v2.0.0
+var proxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'https://*/*',
+        host: 'proxy.com'
+    }
+]);
+proxyConfigList.resolve('https://www.google.com').host // `proxy.com`
+```
+
 #### v1.2.9 (June 27, 2017)
 * Added support to allow duplicate indexed items to be exported as array via `PropertyList.prototype.toObject`
 * Added a helper, `ItemGroup.oneDeep()` to recursively look for an `Item` in an `ItemGroup`

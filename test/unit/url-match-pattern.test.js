@@ -88,6 +88,16 @@ var expect = require('expect.js'),
             var matchPattern = getTargetForSpec('foo://*');
             expect(matchPattern.test('foo://www.google.com')).to.eql(false);
         });
+
+        it('should extract multiple protocols', function() {
+            var matchPatternObject = new UrlMatchPattern('http+https+ftp+file://*/*').createMatchPattern();
+            expect(matchPatternObject.protocols).to.eql(['http', 'https', 'ftp', 'file']);
+        });
+
+        it('should not match if any one of multiple protocols are invalid', function() {
+            var matchPatternObject = new UrlMatchPattern('http+foo+ftp://*/*').createMatchPattern();
+            expect(matchPatternObject).to.eql(undefined);
+        });
     };
 
 describe('UrlMatchPattern', function () {
@@ -137,57 +147,57 @@ describe('UrlMatchPattern', function () {
             expect(matchPatternObject).to.eql(undefined);
         });
 
-        it('should extract http, https, ftp, file and * from protocol', function() {
+        it('should extract single protocol', function() {
             var matchPatternObject = new UrlMatchPattern('http://*/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('http');
+            expect(matchPatternObject.protocols).to.eql(['http']);
             matchPatternObject = new UrlMatchPattern('https://*/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('https');
+            expect(matchPatternObject.protocols).to.eql(['https']);
             matchPatternObject = new UrlMatchPattern('ftp://*/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('ftp');
+            expect(matchPatternObject.protocols).to.eql(['ftp']);
             matchPatternObject = new UrlMatchPattern('file://*/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('file');
+            expect(matchPatternObject.protocols).to.eql(['file']);
             matchPatternObject = new UrlMatchPattern('*://*/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('*');
+            expect(matchPatternObject.protocols).to.eql(['*']);
         });
 
         it('should parse any URL that uses the http protocol', function () {
             var matchPatternObject = new UrlMatchPattern('http://*/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('http');
+            expect(matchPatternObject.protocols).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*');
             expect(matchPatternObject.path).to.eql(/^\/.*$/);
         });
 
         it('should parse any URL that uses the http protocol, on any host, with path starts with /foo', function () {
             var matchPatternObject = new UrlMatchPattern('http://*/foo*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('http');
+            expect(matchPatternObject.protocols).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*');
             expect(matchPatternObject.path).to.eql(/^\/foo.*$/);
         });
 
         it('should parse any URL that uses the https protocol, is on a google.com host', function () {
             var matchPatternObject = new UrlMatchPattern('http://*.google.com/foo*bar').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('http');
+            expect(matchPatternObject.protocols).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*.google.com');
             expect(matchPatternObject.path).to.eql(/^\/foo.*bar$/);
         });
 
         it('should parse any URL that uses the http protocol and is on the host 127.0.0.1', function () {
             var matchPatternObject = new UrlMatchPattern('http://127.0.0.1/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('http');
+            expect(matchPatternObject.protocols).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('127.0.0.1');
             expect(matchPatternObject.path).to.eql(/^\/.*$/);
         });
 
         it('should parse any URL that uses the http protocol and is on the host ends with 0.0.1', function () {
             var matchPatternObject = new UrlMatchPattern('http://*.0.0.1/').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('http');
+            expect(matchPatternObject.protocols).to.eql(['http']);
             expect(matchPatternObject.host).to.eql('*.0.0.1');
             expect(matchPatternObject.path).to.eql(/^\/$/);
         });
 
         it('should parse any URL which has host mail.google.com', function () {
             var matchPatternObject = new UrlMatchPattern('*://mail.google.com/*').createMatchPattern();
-            expect(matchPatternObject.protocol).to.eql('*');
+            expect(matchPatternObject.protocols).to.eql(['*']);
             expect(matchPatternObject.host).to.eql('mail.google.com');
             expect(matchPatternObject.path).to.eql(/^\/.*$/);
         });
