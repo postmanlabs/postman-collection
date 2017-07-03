@@ -1,6 +1,7 @@
 var expect = require('expect.js'),
-    ProxyConfig = require('../../lib/index.js').ProxyConfig,
-    DEFAULT_PATTERN = 'http+https://*/*',
+    ProxyConfig = require('../../lib/collection/proxy-config').ProxyConfig,
+    AllOWED_PROTOCOLS = require('../../lib/collection/proxy-config').AllOWED_PROTOCOLS,
+    DEFAULT_PATTERN = require('../../lib/collection/proxy-config').DEFAULT_PATTERN,
     DEFAULT_HOST = '',
     DEFAULT_PORT = 8080;
 
@@ -40,8 +41,8 @@ describe('Proxy Config', function () {
             host: 'http://proxy.com'
         });
 
-        expect(p.match.pattern).to.be('http+https://*/*');
-        expect(p.getProtocols()).to.be.eql(['http', 'https']);
+        expect(p.match.pattern).to.be(DEFAULT_PATTERN);
+        expect(p.getProtocols()).to.be.eql(AllOWED_PROTOCOLS);
         expect(p.getProxyUrl()).to.be.eql('http://proxy.com:8080');
         expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(false);
@@ -80,7 +81,7 @@ describe('Proxy Config', function () {
 
     it('should update the protocols alone after filtering for valid protocols and taking unique', function () {
         var p1 = new ProxyConfig(),
-            protocols = ['http', 'https'],
+            protocols = AllOWED_PROTOCOLS,
             newProtocols = 'http',
             newProtocolsAfterUpdate = ['http'];
 
