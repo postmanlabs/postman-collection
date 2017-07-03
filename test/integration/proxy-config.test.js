@@ -77,4 +77,30 @@ describe('Proxy Config', function () {
         expect(p1.port).to.be(newPort);
         expect(p1.tunnel).to.be(true);
     });
+
+    it('should update the protocols alone after filtering for valid protocols and taking unique', function () {
+        var p1 = new ProxyConfig(),
+            protocols = ['http', 'https'],
+            newProtocols = ['http', 'foo', 'http'],
+            newProtocolsAfterUpdate = ['http'];
+
+        expect(p1.getProtocols()).to.be.eql(protocols);
+        expect(p1.match.pattern).to.be.eql(DEFAULT_PATTERN);
+
+        p1.updateProtocols(newProtocols);
+        expect(p1.getProtocols()).to.be.eql(newProtocolsAfterUpdate);
+        expect(p1.match.pattern).to.be.eql('http://*/*');
+
+        p1 = new ProxyConfig({ match: 'https://google.com/*' });
+        protocols = ['https'];
+        newProtocols = ['https', 'foo', 'https', 'http'];
+        newProtocolsAfterUpdate = ['http', 'https'];
+
+        expect(p1.getProtocols()).to.be.eql(protocols);
+        expect(p1.match.pattern).to.be.eql('https://google.com/*');
+
+        p1.updateProtocols(newProtocols);
+        expect(p1.getProtocols()).to.be.eql(newProtocolsAfterUpdate);
+        expect(p1.match.pattern).to.be.eql('http+https://google.com/*');
+    });
 });
