@@ -1,12 +1,13 @@
 var expect = require('expect.js'),
-    ProxyConfig = require('../../lib/index.js').ProxyConfig;
+    ProxyConfig = require('../../lib/index.js').ProxyConfig,
+    DEFAULT_PATTERN = 'http+https://*/*';
 
 /* global describe, it */
 describe('Proxy Config', function () {
     it('should initialize the values to their defaults', function () {
         var p = new ProxyConfig();
 
-        expect(p.match.pattern).to.be('<all_urls>');
+        expect(p.match.pattern).to.be(DEFAULT_PATTERN);
         expect(p.tunnel).to.be(false);
     });
 
@@ -35,8 +36,8 @@ describe('Proxy Config', function () {
             host: 'http://proxy.com'
         });
 
-        expect(p.match.pattern).to.be('<all_urls>');
-        expect(p.getProtocols()).to.be.eql([]);
+        expect(p.match.pattern).to.be('http+https://*/*');
+        expect(p.getProtocols()).to.be.eql(['http', 'https']);
         expect(p.getProxyUrl()).to.be.eql('http://proxy.com:8080');
         expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(false);
