@@ -81,7 +81,7 @@ describe('Proxy Config', function () {
     it('should update the protocols alone after filtering for valid protocols and taking unique', function () {
         var p1 = new ProxyConfig(),
             protocols = ['http', 'https'],
-            newProtocols = ['http', 'foo', 'http'],
+            newProtocols = 'http',
             newProtocolsAfterUpdate = ['http'];
 
         expect(p1.getProtocols()).to.be.eql(protocols);
