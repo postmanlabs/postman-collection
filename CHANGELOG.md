@@ -1,7 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### v2.0.1 (July 3, 2017)
+* Updated `ProxyConfig` to match all protocols, hosts and paths by default. #402
+
 #### v2.0.0 (July 3, 2017)
-* **Breaking Change**  Updated the `ProxyConfig` & `UrlMatchPattern` to support multiple protocols.
+* **Breaking Change:**  Updated the `ProxyConfig` & `UrlMatchPattern` to support multiple protocols.
 * `ProxyConfig` and `ProxyConfigList` now accept the `host` and `port` keys instead of `server`. The `match` property also takes in multiple protocols:
 ```js
 // v1.2.9
