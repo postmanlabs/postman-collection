@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+## Unreleased
+* Updated the ProxyConfig & UrlMatchPattern to support multiple protocols
+
 #### v1.2.9 (June 27, 2017)
 * Added support to allow duplicate indexed items to be exported as array via `PropertyList.prototype.toObject`
 * Added a helper, `ItemGroup.oneDeep()` to recursively look for an `Item` in an `ItemGroup`
