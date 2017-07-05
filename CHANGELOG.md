@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### v2.0.2 (July 5, 2017)
+* :bug: Fixed typo in the `ALLOWED_PROTOCOLS` variable #403
+
 #### v2.0.1 (July 3, 2017)
 * Updated `ProxyConfig` to match all protocols, hosts and paths by default. #402
 
