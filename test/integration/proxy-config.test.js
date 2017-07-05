@@ -1,6 +1,6 @@
 var expect = require('expect.js'),
     ProxyConfig = require('../../lib/collection/proxy-config').ProxyConfig,
-    AllOWED_PROTOCOLS = require('../../lib/collection/proxy-config').AllOWED_PROTOCOLS,
+    ALLOWED_PROTOCOLS = require('../../lib/collection/proxy-config').ALLOWED_PROTOCOLS,
     DEFAULT_PATTERN = require('../../lib/collection/proxy-config').DEFAULT_PATTERN,
     DEFAULT_HOST = '',
     DEFAULT_PORT = 8080;
@@ -42,7 +42,7 @@ describe('Proxy Config', function () {
         });
 
         expect(p.match.pattern).to.be(DEFAULT_PATTERN);
-        expect(p.getProtocols()).to.be.eql(AllOWED_PROTOCOLS);
+        expect(p.getProtocols()).to.be.eql(ALLOWED_PROTOCOLS);
         expect(p.getProxyUrl()).to.be.eql('http://proxy.com:8080');
         expect(p.host).to.be('proxy.com');
         expect(p.tunnel).to.be(false);
@@ -81,7 +81,7 @@ describe('Proxy Config', function () {
 
     it('should update the protocols alone after filtering for valid protocols and taking unique', function () {
         var p1 = new ProxyConfig(),
-            protocols = AllOWED_PROTOCOLS,
+            protocols = ALLOWED_PROTOCOLS,
             newProtocols = 'http',
             newProtocolsAfterUpdate = ['http'];
 
@@ -95,6 +95,18 @@ describe('Proxy Config', function () {
         p1 = new ProxyConfig({ match: 'https://google.com/*' });
         protocols = ['https'];
         newProtocols = ['https', 'foo', 'https', 'http'];
+        newProtocolsAfterUpdate = ['http', 'https'];
+
+        expect(p1.getProtocols()).to.be.eql(protocols);
+        expect(p1.match.pattern).to.be.eql('https://google.com/*');
+
+        p1.updateProtocols(newProtocols);
+        expect(p1.getProtocols()).to.be.eql(newProtocolsAfterUpdate);
+        expect(p1.match.pattern).to.be.eql('http+https://google.com/*');
+
+        p1 = new ProxyConfig({ match: 'https://google.com/*' });
+        protocols = ['https'];
+        newProtocols = [];
         newProtocolsAfterUpdate = ['http', 'https'];
 
         expect(p1.getProtocols()).to.be.eql(protocols);
