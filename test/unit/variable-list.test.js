@@ -183,6 +183,42 @@ describe('VariableList', function () {
         expect(resolved.xyz).to.eql('delta');
     });
 
+    describe('sanity', function () {
+        it('constructor must be exported', function () {
+            expect(VariableList).to.be.a('function');
+        });
+
+        it('should create a new instance', function () {
+            var parent = {},
+                v = new VariableList(parent, [{
+                    key: 'somevar',
+                    value: 'asdasd'
+                }, {
+                    key: 'root',
+                    value: 'one'
+                }, {
+                    key: 'third',
+                    value: 'in 3rd layer'
+                }]);
+            expect(v instanceof VariableList).to.be.ok();
+        });
+
+        it('should store variables as an object as well', function () {
+            var parent = {},
+                v = new VariableList(parent, [{
+                    key: 'somevar',
+                    value: 'asdasd'
+                }, {
+                    key: 'root',
+                    value: 'one'
+                }, {
+                    key: 'third',
+                    value: 'in 3rd layer'
+                }]);
+            expect(v.reference).to.be.an('object');
+        });
+    });
+
     describe('static helpers', function () {
         var variableList = new VariableList();
 

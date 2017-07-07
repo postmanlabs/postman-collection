@@ -1,9 +1,32 @@
 var expect = require('expect.js'),
+    fixtures = require('../fixtures'),
     Header = require('../../lib/index.js').Header,
     PropertyList = require('../../lib/index.js').PropertyList;
 
 /* global describe, it */
 describe('Header', function () {
+    describe('sanity', function () {
+        var rawHeaders = fixtures.collectionV2.item[0].response[0].header,
+            headers = (new PropertyList(Header, undefined, rawHeaders)).all();
+
+        it('initialize successfully', function () {
+            expect(headers).to.be.ok();
+            expect(headers).to.be.an('array');
+        });
+
+        describe('each contain property', function () {
+            var header = headers[0];
+
+            it('key', function () {
+                expect(header).to.have.property('key', 'Content-Type');
+            });
+
+            it('value', function () {
+                expect(header).to.have.property('value', 'application/json');
+            });
+        });
+    });
+
     it('must have a .create to create new instamce', function () {
         expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date')).to.eql({
             key: 'Date',

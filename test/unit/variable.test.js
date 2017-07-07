@@ -63,6 +63,17 @@ describe('Variable', function () {
         expect(v.get()).to.be(3.142);
     });
 
+    describe('sanity', function () {
+        it('constructor must be exported', function () {
+            expect(Variable).to.be.a('function');
+        });
+
+        it('should create a new instance', function () {
+            var v = new Variable();
+            expect(v instanceof Variable).to.be.ok();
+        });
+    });
+
     describe('isVariable', function () {
         it('should return true for a valid Variable instance', function () {
             expect(Variable.isVariable(new Variable({ type: 'string', key: 'foo', value: 'bar' }))).to.be(true);
