@@ -45,4 +45,36 @@ describe('Collection', function () {
             expect(target).not.have.property('extra');
         });
     });
+
+    describe('events', function () {
+        it('should allow adding events with a multitude of script definition format', function () {
+            var collection = new Collection();
+
+            collection.events.add({
+                listen: 'test',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("Random");']
+                }
+            });
+            collection.events.add({
+                listen: 'prerequest',
+                script: ['console.log("A little less random");']
+            });
+
+            expect(collection.events.toJSON()).to.eql([{
+                listen: 'test',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("Random");']
+                }
+            }, {
+                listen: 'prerequest',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("A little less random");']
+                }
+            }]);
+        });
+    });
 });
