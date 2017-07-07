@@ -54,6 +54,43 @@ describe('Script', function () {
         });
     });
 
+    describe('Variadic formats', function () {
+        it('should support non-wrapped strings', function () {
+            var script = new Script('console.log("This is a line of test script code");');
+
+            expect(script.toJSON()).to.eql({
+                type: 'text/javascript',
+                exec: ['console.log("This is a line of test script code");']
+            });
+        });
+
+        it('should support non-wrapped arrays', function () {
+            var script = new Script(['console.log("This is a line of test script code");']);
+
+            expect(script.toJSON()).to.eql({
+                type: 'text/javascript',
+                exec: ['console.log("This is a line of test script code");']
+            });
+        });
+    });
+
+    describe('.toSource', function () {
+        it('should correctly unparse an array of exec strings', function () {
+            var script = new Script({
+                type: 'text/javascript',
+                exec: ['console.log("Foo isn\'t bar!");']
+            });
+
+            expect(script.toSource()).to.be('console.log("Foo isn\'t bar!");');
+        });
+
+        it('should return undefined for a malformed script', function () {
+            var script = new Script({ type: 'text/javascript' });
+
+            expect(script.toSource()).to.be(undefined);
+        });
+    });
+
     describe('json representation', function () {
         it('must match what the script was initialized with', function () {
             var jsonified = script.toJSON();
