@@ -55,7 +55,7 @@ describe('Property', function () {
             expect(resolved).to.eql(expectedResolution);
         });
 
-        it('must resolve variables accurately', function () {
+        it('must resolve variables in complex nested objects correctly', function () {
             var unresolvedRequest = {
                     one: '{{alpha}}-{{beta}}-{{gamma}}',
                     two: { a: '{{alpha}}', b: '{{beta}}', c: '{{gamma}}' },

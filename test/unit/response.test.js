@@ -94,7 +94,9 @@ describe('Response', function () {
                 response = new Response(rawResponse),
                 jsonified = response.toJSON(),
                 reconstructedResponse = new Response(jsonified);
-            expect(util.bufferOrArrayBufferToString(reconstructedResponse.stream)).to.eql(util.bufferOrArrayBufferToString(rawResponse.stream));
+
+            expect(util.bufferOrArrayBufferToString(reconstructedResponse.stream)).to
+                .eql(util.bufferOrArrayBufferToString(rawResponse.stream));
         });
         it('must infer the http response reason phrase from the status code', function () {
             var rawResponse = {

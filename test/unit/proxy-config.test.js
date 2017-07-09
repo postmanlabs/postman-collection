@@ -214,8 +214,8 @@ describe('Proxy Config', function () {
         });
     });
 
-    describe('toJSON', function() {
-        it('should retain properties from original json', function() {
+    describe('toJSON', function () {
+        it('should retain properties from original json', function () {
             var rawConfig = { match: 'http+https://*/*', host: 'proxy.com', tunnel: true, disabled: false },
                 proxyConfig = new ProxyConfig(rawConfig),
                 serialisedConfig = proxyConfig.toJSON();
@@ -226,19 +226,19 @@ describe('Proxy Config', function () {
         });
     });
 
-    describe('isProxyConfig', function() {
-        it('should correctly identify ProxyConfig objects', function() {
+    describe('isProxyConfig', function () {
+        it('should correctly identify ProxyConfig objects', function () {
             var rawConfig = { match: 'http://*/*', host: 'proxy.com', tunnel: true, disabled: false },
                 proxyConfig = new ProxyConfig(rawConfig);
 
             expect(ProxyConfig.isProxyConfig(proxyConfig)).to.eql(true);
         });
 
-        it('correctly identify non ProxyConfig objects', function() {
+        it('correctly identify non ProxyConfig objects', function () {
             expect(ProxyConfig.isProxyConfig({})).to.eql(false);
         });
 
-        it('should return false when called without arguments', function() {
+        it('should return false when called without arguments', function () {
             expect(ProxyConfig.isProxyConfig()).to.eql(false);
         });
     });
