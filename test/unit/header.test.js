@@ -185,6 +185,7 @@ describe('Header', function () {
     });
 
     describe('isHeader', function () {
+        // eslint-disable-next-line max-len
         var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="\n';
 
         it('should return true for a Header instance', function () {

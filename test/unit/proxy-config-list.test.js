@@ -67,7 +67,7 @@ describe('Proxy Config List', function () {
             expect(list.resolve('https://example.org/foo/bar.html').host).to.eql('proxy.com');
         });
 
-        it('Matches any URL that uses the http protocol, on any host, as long as the path starts with /foo', function () {
+        it('Matches any URL using the http protocol, on any host, as long as the path starts with /foo', function () {
             var parent = {},
                 list = new ProxyConfigList(parent,
                     [
@@ -211,7 +211,7 @@ describe('Proxy Config List', function () {
             expect(list.resolve(new Url('http://example.org/foo/bar.html')).host).to.eql('proxy.com');
         });
 
-        it('Matches any URL that uses the http protocol, on any host, as long as the path starts with /foo', function () {
+        it('Matches any URL using the http protocol, on any host, as long as the path starts with /foo', function () {
             var parent = {},
                 list = new ProxyConfigList(parent,
                     [
@@ -267,11 +267,9 @@ describe('Proxy Config List', function () {
 
         it('Matches any URL which has host mail.google.com', function () {
             var parent = {},
-                list = new ProxyConfigList(parent,
-                    [
-                        { match: '*://mail.google.com/*', host: 'proxy.com', protocols: ['http', 'https'], tunnel: true }
-                    ]
-                );
+                list = new ProxyConfigList(parent, [{
+                    match: '*://mail.google.com/*', host: 'proxy.com', protocols: ['http', 'https'], tunnel: true
+                }]);
             expect(list.resolve('http://mail.google.com/foo/baz/bar').host).to.eql('proxy.com');
             expect(list.resolve('https://mail.google.com/foobar').host).to.eql('proxy.com');
         });
