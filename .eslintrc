@@ -2,10 +2,10 @@
   "plugins": [
     "jsdoc",
     "security",
-    "lodash",
-    "mocha"
+    "lodash"
   ],
   "env": {
+    "browser": true,
     "node": true,
     "es6": true
   },

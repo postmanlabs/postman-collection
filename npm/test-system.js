@@ -31,6 +31,7 @@ module.exports = function (exit) {
         function (next) {
             var mocha = new Mocha();
 
+            console.log(SPEC_SOURCE_DIR);
             fs.readdir(SPEC_SOURCE_DIR, function (err, files) {
                 if (err) { return next(err); }
 
@@ -72,7 +73,7 @@ module.exports = function (exit) {
                     return next();
                 }
 
-                // in case an nsp vialation is found, we raise an error
+                // in case an nsp violation is found, we raise an error
                 if (result.length) {
                     console.error(nsp.formatters.default(err, result));
                     return next(1);
