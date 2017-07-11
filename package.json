@@ -63,7 +63,7 @@
     "expect.js": "0.3.1",
     "istanbul": "0.4.5",
     "js-yaml": "3.9.0",
-    "jsdoc": "3.5.0",
+    "jsdoc": "3.5.1",
     "jsdoc-to-markdown": "3.0.0",
     "karma": "1.7.0",
     "karma-browserify": "5.1.1",
