@@ -265,6 +265,38 @@ describe('Response', function () {
         });
     });
 
+    describe('toJSON', function () {
+        it('should correctly return a plain JSON response object without _details', function () {
+            var response = new Response({
+                    name: 'a sample response',
+                    originalRequest: 'https://postman-echo.com/get',
+                    code: 200,
+                    body: '{"foo":"bar"}'
+                }),
+                responseJson = response.toJSON();
+
+            expect(responseJson.id).to.match(/^[a-z0-9]{8}(-[a-z0-9]{4}){4}[a-z0-9]{8}$/);
+            expect(_.omit(responseJson, 'id')).to.eql({
+                name: 'a sample response',
+                status: 'OK',
+                code: 200,
+                originalRequest: {
+                    url: 'https://postman-echo.com/get',
+                    method: 'GET',
+                    header: undefined,
+                    body: undefined,
+                    auth: undefined,
+                    proxy: undefined,
+                    certificate: undefined,
+                    description: undefined
+                },
+                header: [],
+                body: '{"foo":"bar"}',
+                cookie: []
+            });
+        });
+    });
+
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
         var isNode4 = (/^v4\./).test(process.version),
