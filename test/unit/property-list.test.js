@@ -819,7 +819,7 @@ describe('PropertyList', function () {
             expect(list.has('key1', 'val4')).to.eql(false);
         });
 
-        it('should return a falsey value if the key does not exist', function () {
+        it('should return false if the key-value pair does not exist', function () {
             var list = new PropertyList(FakeType, {}, [{
                 keyAttr: 'key1',
                 value: 'val1'

@@ -13,6 +13,55 @@ var fs = require('fs'),
 
 /* global describe, it */
 describe('Response', function () {
+    describe('sanity', function () {
+        var rawResponse = fixtures.collectionV2.item[0].response[0],
+            response = new Response(rawResponse);
+
+        it('initializes successfully', function () {
+            expect(response).to.be.ok();
+        });
+
+        describe('has property', function () {
+            it('code', function () {
+                expect(response).to.have.property('code', rawResponse.code);
+            });
+
+            it('cookies', function () {
+                expect(response).to.have.property('cookies');
+                expect(response.cookies.all()).to.be.an('array');
+            });
+
+            it('body', function () {
+                expect(response).to.have.property('body', rawResponse.body);
+            });
+
+            it('header', function () {
+                expect(response).to.have.property('headers');
+                expect(response.headers.all()).to.be.an('array');
+            });
+
+            it('name', function () {
+                expect(response).to.have.property('name', rawResponse.name);
+            });
+
+            it('originalRequest', function () {
+                expect(response).to.have.property('originalRequest');
+                expect(response.originalRequest.url.getRaw()).to.eql(rawResponse.originalRequest);
+            });
+
+            it('status', function () {
+                expect(response).to.have.property('status', rawResponse.status);
+            });
+        });
+
+        describe('has function', function () {
+            it('update', function () {
+                expect(response.update).to.be.ok();
+                expect(response.update).to.be.a('function');
+            });
+        });
+    });
+
     describe('isResponse', function () {
         it('must distinguish between responses and other objects', function () {
             var response = new Response(),
@@ -45,7 +94,9 @@ describe('Response', function () {
                 response = new Response(rawResponse),
                 jsonified = response.toJSON(),
                 reconstructedResponse = new Response(jsonified);
-            expect(util.bufferOrArrayBufferToString(reconstructedResponse.stream)).to.eql(util.bufferOrArrayBufferToString(rawResponse.stream));
+
+            expect(util.bufferOrArrayBufferToString(reconstructedResponse.stream)).to
+                .eql(util.bufferOrArrayBufferToString(rawResponse.stream));
         });
         it('must infer the http response reason phrase from the status code', function () {
             var rawResponse = {
@@ -211,6 +262,38 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
             expect(response.size().body).to.eql(14);
+        });
+    });
+
+    describe('toJSON', function () {
+        it('should correctly return a plain JSON response object without _details', function () {
+            var response = new Response({
+                    name: 'a sample response',
+                    originalRequest: 'https://postman-echo.com/get',
+                    code: 200,
+                    body: '{"foo":"bar"}'
+                }),
+                responseJson = response.toJSON();
+
+            expect(responseJson.id).to.match(/^[a-z0-9]{8}(-[a-z0-9]{4}){4}[a-z0-9]{8}$/);
+            expect(_.omit(responseJson, 'id')).to.eql({
+                name: 'a sample response',
+                status: 'OK',
+                code: 200,
+                originalRequest: {
+                    url: 'https://postman-echo.com/get',
+                    method: 'GET',
+                    header: undefined,
+                    body: undefined,
+                    auth: undefined,
+                    proxy: undefined,
+                    certificate: undefined,
+                    description: undefined
+                },
+                header: [],
+                body: '{"foo":"bar"}',
+                cookie: []
+            });
         });
     });
 

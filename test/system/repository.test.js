@@ -35,6 +35,7 @@ describe('repository', function () {
             });
 
             it('must have a valid version string in form of <major>.<minor>.<revision>', function () {
+                // eslint-disable-next-line max-len
                 expect(json.version).to.match(/^((\d+)\.(\d+)\.(\d+))(?:-([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?(?:\+([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?$/);
             });
         });
@@ -171,7 +172,7 @@ describe('repository', function () {
         });
 
         it('must have appropriate plugins specified', function () {
-            expect(json.plugins).to.eql(['jsdoc', 'lodash', 'mocha', 'security']);
+            expect(json.plugins).to.eql(['jsdoc', 'security', 'lodash']);
         });
 
         it('must have appropriate environments specified', function () {

@@ -448,7 +448,7 @@ describe('VariableScope', function () {
         });
     });
 
-    describe('multiple level variable resolution', function() {
+    describe('multiple level variable resolution', function () {
         var layerOne = new VariableList({}, [{
                 key: 'var-1-layerOne',
                 value: 'var-1-layerOne-value'

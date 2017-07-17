@@ -14,7 +14,6 @@ async.series([
     require('./test-lint'),
     require('./test-system'),
     require('./test-unit'),
-    require('./test-integration'),
     require('./test-browser')
 ], function (code) {
     !code && console.log(colors.green('\npostman-collection tests: all ok!'));
