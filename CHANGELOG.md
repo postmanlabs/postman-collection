@@ -1,7 +1,10 @@
 # Postman Collection SDK Changelog
 
-## Unreleased
-* Updated ProxyConfig.getProxyURL to always return proxy URL with HTTP protocol
+#### v2.1.0 (July 18, 2017)
+* Updated `ProxyConfig#getProxyURL` to always return proxy URL with HTTP protocol #417
+* Prevented `_details` from showing up in `Response#toJSON` results #411
+* The `Script` constructor now accepts script arrays and strings as well #404
+* `VariableScope#toObject` now returns data across multiple layers as well #384
 
 #### v2.0.2 (July 5, 2017)
 * :bug: Fixed typo in the `ALLOWED_PROTOCOLS` variable #403
