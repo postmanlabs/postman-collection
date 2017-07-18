@@ -26,4 +26,46 @@ describe('EventList', function () {
             expect(EventList.isEventList()).to.be(false);
         });
     });
+
+    describe('#add', function () {
+        it('should correctly handle variadic script formats', function () {
+            var eventList = new EventList({}, [{
+                listen: 'test',
+                id: 'my-test-script-1',
+                script: {
+                    type: 'text/javascript',
+                    exec: 'console.log("hello");'
+                }
+            }]);
+
+            expect(eventList.toJSON()).to.eql([{
+                listen: 'test',
+                id: 'my-test-script-1',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("hello");']
+                }
+            }]);
+
+            eventList.add({
+                listen: 'prerequest',
+                script: 'console.log("Nothing to see here, move along...");'
+            });
+
+            expect(eventList.toJSON()).to.eql([{
+                listen: 'test',
+                id: 'my-test-script-1',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("hello");']
+                }
+            }, {
+                listen: 'prerequest',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("Nothing to see here, move along...");']
+                }
+            }]);
+        });
+    });
 });

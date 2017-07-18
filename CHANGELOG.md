@@ -1,5 +1,11 @@
 # Postman Collection SDK Changelog
 
+#### v2.1.0 (July 18, 2017)
+* Updated `ProxyConfig#getProxyURL` to always return proxy URL with HTTP protocol #417
+* Prevented `_details` from showing up in `Response#toJSON` results #411
+* The `Script` constructor now accepts script arrays and strings as well #404
+* `VariableScope#toObject` now returns data across multiple layers as well #384
+
 #### v2.0.2 (July 5, 2017)
 * :bug: Fixed typo in the `ALLOWED_PROTOCOLS` variable #403
 
@@ -89,7 +95,7 @@ proxyConfigList.resolve('https://www.google.com').host // `proxy.com`
 #### 1.2.6 (May 29, 2017)
 * Enhanced `Url.toString()` to handle non-string path variable values
 * Enhanced `PropertyList.has()` to also check for values (optionally)
-* Added a data structure for NTLM authentication mechanism 
+* Added a data structure for NTLM authentication mechanism
 
 #### 1.2.5 (May 11, 2017)
 * Added support for multi-layered variable resolution
@@ -114,7 +120,7 @@ proxyConfigList.resolve('https://www.google.com').host // `proxy.com`
 * Added a new property, `CookieList`
 * Fixed a bug in the `RequestAuth` implementation which caused authorization step to be skipped
 
-#### 1.2.0 (April 24, 2017) 
+#### 1.2.0 (April 24, 2017)
 * Added support for variable types via VariableScope `.set` function
 * Added `VariableScope~variables` to access all variables as a plain object
 * Ensure that `Xyz.isXyz()` functions always return a boolean

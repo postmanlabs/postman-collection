@@ -89,29 +89,29 @@ var expect = require('expect.js'),
             expect(matchPattern.test('foo://www.google.com')).to.eql(false);
         });
 
-        it('should extract multiple protocols', function() {
+        it('should extract multiple protocols', function () {
             var matchPatternObject = new UrlMatchPattern('http+https+ftp+file://*/*').createMatchPattern();
             expect(matchPatternObject.protocols).to.eql(['http', 'https', 'ftp', 'file']);
         });
 
-        it('should not match if any one of multiple protocols are invalid', function() {
+        it('should not match if any one of multiple protocols are invalid', function () {
             var matchPatternObject = new UrlMatchPattern('http+foo+ftp://*/*').createMatchPattern();
             expect(matchPatternObject).to.eql(undefined);
         });
     };
 
 describe('UrlMatchPattern', function () {
-    describe('constructor', function() {
-        it('should set match pattern to <all_urls> when called with no arguments', function() {
+    describe('constructor', function () {
+        it('should set match pattern to <all_urls> when called with no arguments', function () {
             var matchPattern = new UrlMatchPattern();
             expect(matchPattern.toString()).to.eql('<all_urls>');
         });
-        it('should accept match pattern as string', function() {
+        it('should accept match pattern as string', function () {
             var pattern = 'http://example.com/*',
                 matchPattern = new UrlMatchPattern(pattern);
             expect(matchPattern.toString()).to.eql(pattern);
         });
-        it('should accept match pattern as object', function() {
+        it('should accept match pattern as object', function () {
             var pattern = 'http://example.com/*',
                 constructorOptions = { pattern: pattern },
                 matchPattern = new UrlMatchPattern(constructorOptions);
@@ -147,7 +147,7 @@ describe('UrlMatchPattern', function () {
             expect(matchPatternObject).to.eql(undefined);
         });
 
-        it('should extract single protocol', function() {
+        it('should extract single protocol', function () {
             var matchPatternObject = new UrlMatchPattern('http://*/*').createMatchPattern();
             expect(matchPatternObject.protocols).to.eql(['http']);
             matchPatternObject = new UrlMatchPattern('https://*/*').createMatchPattern();
@@ -298,13 +298,13 @@ describe('UrlMatchPattern', function () {
         });
     });
 
-    describe('toString', function() {
-        it('should have same match pattern', function() {
+    describe('toString', function () {
+        it('should have same match pattern', function () {
             var pattern = 'https://example.com/*',
                 matchPattern = new UrlMatchPattern(pattern);
             expect(matchPattern.toString()).to.eql(pattern);
         });
-        it('should always return string', function() {
+        it('should always return string', function () {
             var matchPattern = new UrlMatchPattern(undefined);
             expect(typeof matchPattern.toString()).to.eql('string');
             matchPattern = new UrlMatchPattern({});
@@ -318,8 +318,8 @@ describe('UrlMatchPattern', function () {
         });
     });
 
-    describe('toJSON', function() {
-        it('should retain match pattern after toJSON', function() {
+    describe('toJSON', function () {
+        it('should retain match pattern after toJSON', function () {
             var pattern = 'https://example.com/*',
                 matchPattern = new UrlMatchPattern(pattern);
             expect(matchPattern.toJSON()).to.eql({ pattern: pattern });
