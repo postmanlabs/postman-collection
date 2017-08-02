@@ -27,7 +27,7 @@ describe('Header', function () {
         });
     });
 
-    it('must have a .create to create new instamce', function () {
+    it('must have a .create to create new instance', function () {
         expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date')).to.eql({
             key: 'Date',
             value: 'Mon, 25 Jul 2016 13:11:41 GMT'
@@ -47,6 +47,30 @@ describe('Header', function () {
         expect(Header.create('name: my: value:is this')).to.eql({
             key: 'name',
             value: 'my: value:is this'
+        });
+        expect(Header.create({ key: '', value: 'foo' })).to.eql({});
+    });
+
+    describe('.update', function () {
+        it('should not override a header with incoming blank keys', function () {
+            var rawHeader = { key: 'foo', value: 'bar' },
+                header = new Header(rawHeader);
+            expect(header.toJSON()).to.eql(rawHeader);
+
+            header.update({ key: '', value: 'new-val' });
+            expect(header.toJSON()).to.eql(rawHeader);
+        });
+
+        it('should use an empty string as a default header value', function () {
+            var rawHeader = { key: 'foo' },
+                header = new Header(rawHeader);
+            expect(header.toJSON()).to.eql({ key: 'foo', value: '' });
+        });
+
+        it('should use the system and disabled properties when provided', function () {
+            var rawHeader = { key: 'foo', value: 'bar', system: true, disabled: true },
+                header = new Header(rawHeader);
+            expect(header.toJSON()).to.eql(rawHeader);
         });
     });
 
@@ -181,6 +205,24 @@ describe('Header', function () {
                 key: 'name2',
                 value: ''
             }]);
+        });
+
+        it('must NOT load headers with empty keys', function () {
+            var list = new PropertyList(Header, {}, {
+                '': 'value1',
+                name2: ''
+            });
+            expect(list.all()).to.eql([{
+                key: 'name2',
+                value: ''
+            }]);
+        });
+
+        it('must NOT allow adding headers with empty keys', function () {
+            var list = new PropertyList(Header, {}, { alpha: 'foo' });
+
+            list.add({ key: '', value: 'bar' });
+            expect(list.all()).to.eql([{ key: 'alpha', value: 'foo' }]);
         });
     });
 
