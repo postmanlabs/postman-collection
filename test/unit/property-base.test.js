@@ -66,6 +66,10 @@ describe('PropertyBase', function () {
             item.forEachParent({ withRoot: true }, chain.unshift.bind(chain));
             expect(_.map(chain, 'name')).to.eql(expectedOrder);
         });
+
+        it('should not blow up for invalid arguments', function () {
+            expect(item.forEachParent.bind(item)).withArgs({ withRoot: true }, 'random').to.not.throwError();
+        });
     });
 
     describe('parent lookups', function () {
