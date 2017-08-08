@@ -480,6 +480,27 @@ describe('Url', function () {
 
             expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
         });
+
+        it('should not resolve path variables when unresolved is set to false', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta/:gamma/:delta/:epsilon/:phi',
+                variable: [
+                    { key: 'alpha', value: '1' },
+                    { key: 'beta', value: '2' },
+                    { key: 'gamma', value: '3' },
+                    { key: 'gamma', value: '4' },
+                    { key: 'epsilon', value: '5' },
+                    { key: 'phi', value: '6' }
+                ]
+            });
+
+            expect(url.getPath({
+                unresolved: true
+            })).to.eql('/:alpha/:beta/:gamma/:delta/:epsilon/:phi');
+        });
     });
 
     describe('URL Encoding', function () {
@@ -592,7 +613,65 @@ describe('Url', function () {
         });
     });
 
+    describe('.getHost', function () {
+        it('should handle string based hosts correctly', function () {
+            var url = new Url('postman-echo.com');
+
+            expect(url.getHost()).to.be('postman-echo.com');
+
+            url.host = url.host.join('.'); // hijack the host form to ensure sanity in the next assertion
+            expect(url.getHost()).to.be('postman-echo.com');
+        });
+    });
+
+    describe('.getOAuth1BaseUrl', function () {
+        it('should use the default protocol of http', function () {
+            var url = new Url('https://postman-echo.com/auth/oauth1');
+
+            delete url.protocol;
+            expect(url.getOAuth1BaseUrl()).to.be('http://postman-echo.com/auth/oauth1');
+        });
+
+        it('should use the the port if one is provided', function () {
+            var url = new Url('https://postman-echo.com:8443/auth/oauth1');
+
+            expect(url.getOAuth1BaseUrl()).to.be('https://postman-echo.com:8443/auth/oauth1');
+        });
+
+        it('should not append superfluous protocol separators', function () {
+            var url = new Url('https://postman-echo.com/auth/oauth1');
+
+            url.protocol = 'https://';
+            expect(url.getOAuth1BaseUrl()).to.be('https://postman-echo.com/auth/oauth1');
+        });
+    });
+
     describe('Query parameters', function () {
+        it('should correctly add a string of query params to an existing Url instance', function () {
+            var url = new Url();
+            url.addQueryParams('alpha=foo&beta=bar');
+
+            expect(url.toJSON().query).to.eql([
+                { key: 'alpha', value: 'foo' },
+                { key: 'beta', value: 'bar' }
+            ]);
+        });
+
+        it('should correctly remove a list of query params from an existing Url instance', function () {
+            var url = new Url('https://postman-echo.com/get?alpha=foo&beta=bar&gamma=baz');
+
+            url.removeQueryParams([{ key: 'alpha' }, { key: 'gamma' }]);
+            expect(url.toJSON().query).to.eql([
+                { key: 'beta', value: 'bar' }
+            ]);
+        });
+
+        it('should return an empty string if there are no query parameters', function () {
+            var url = new Url('https://postman-echo.com/getbaz');
+
+            expect(url.getQueryString()).to.be('');
+        });
+
         it('must be able to convert query params to object', function () {
             var url = new Url('http://127.0.0.1/hello/world/?query=param&query2=param2#test-api');
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
