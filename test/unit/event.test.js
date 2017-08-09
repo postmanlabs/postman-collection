@@ -103,5 +103,19 @@ describe('Event', function () {
             event.update();
             expect(event.toJSON().script.exec).to.eql([rawEvent.script.exec]);
         });
+
+        it('must correctly handle non-compliant script input', function () {
+            var event = new Event(rawEvent);
+
+            event.update({});
+            expect(event.toJSON()).to.eql({
+                id: 'my-global-script-1',
+                listen: 'test',
+                script: {
+                    type: 'text/javascript',
+                    exec: ['console.log("hello");']
+                }
+            });
+        });
     });
 });
