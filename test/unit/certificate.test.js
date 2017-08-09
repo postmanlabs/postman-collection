@@ -9,6 +9,14 @@ describe('Certificate', function () {
             expect(certificate).to.not.eql(undefined);
             expect(certificate._postman_propertyName).to.not.eql('Certificate');
         });
+
+        it('should correctly identify Certificate instances', function () {
+            var certificate = new Certificate();
+
+            expect(Certificate.isCertificate(certificate)).to.be(true);
+            expect(Certificate.isCertificate({})).to.be(false);
+            expect(Certificate.isCertificate({ _postman_propertyName: 'certificate' })).to.be(false);
+        });
     });
 
     describe('canApplyTo', function () {
