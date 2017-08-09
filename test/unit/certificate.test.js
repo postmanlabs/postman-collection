@@ -1,5 +1,6 @@
 var expect = require('expect.js'),
-    Certificate = require('../../lib/index.js').Certificate;
+    sdk = require('../../lib/index.js'),
+    Certificate = sdk.Certificate;
 
 describe('Certificate', function () {
     describe('constructor', function () {
@@ -11,18 +12,26 @@ describe('Certificate', function () {
     });
 
     describe('canApplyTo', function () {
+        it('should return false for empty target URLs', function () {
+            var certificate = new Certificate({ matches: ['https://google.com/*'] });
+            expect(certificate.canApplyTo('')).to.eql(false);
+            expect(certificate.canApplyTo(new sdk.Url())).to.eql(false);
+        });
+
         it('should return true only when tested with a match', function () {
             var certificate = new Certificate({ matches: ['https://google.com/*'] });
             expect(certificate.canApplyTo('https://www.google.com')).to.eql(false);
             expect(certificate.canApplyTo('https://example.com')).to.eql(false);
             expect(certificate.canApplyTo('https://google.com')).to.eql(true);
         });
+
         it('should return true when tested with a match on any of the allowed matches', function () {
             var certificate = new Certificate({ matches: ['https://google.com/*', 'https://*.example.com/*'] });
             expect(certificate.canApplyTo('https://twitter.com')).to.eql(false);
             expect(certificate.canApplyTo('https://foo.example.com')).to.eql(true);
             expect(certificate.canApplyTo('https://google.com')).to.eql(true);
         });
+
         it('should disallow test string with protocol not http or https', function () {
             var certificate = new Certificate({ matches: ['http://*'], server: 'https://proxy.com/' });
             expect(certificate.canApplyTo('foo://www.google.com')).to.eql(false);
