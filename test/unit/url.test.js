@@ -395,6 +395,13 @@ describe('Url', function () {
                 url = new Url(urlstring);
             expect(url.toString()).to.eql(urlstring);
         });
+
+        it('must handle falsy input correctly', function () {
+            expect(new Url().toString()).to.be('');
+            expect(new Url('').toString()).to.be('');
+            expect(new Url(null).toString()).to.be('');
+            expect(new Url(undefined).toString()).to.be('');
+        });
     });
 
     describe('OAuth1 Base Url', function () {
