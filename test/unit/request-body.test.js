@@ -87,6 +87,7 @@ describe('RequestBody', function () {
             });
             expect(reqData).to.be.ok();
             expect(reqData).to.have.property('mode', 'raw');
+            expect(reqData).to.have.property('raw', 'This is supposed to be a raw body. Do not cook it.');
         });
 
         it('should support stringified urlencoded bodies', function () {

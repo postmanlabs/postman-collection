@@ -722,7 +722,7 @@ describe('PropertyList', function () {
         });
 
         it('should correctly remove an element by direct reference', function () {
-            var entity = new FakeType({ keyAttr: 'key', valeu: 'val' }),
+            var entity = new FakeType({ keyAttr: 'key', value: 'val' }),
                 list = new PropertyList(FakeType, {}, [entity]);
 
             list.remove(entity);
@@ -744,6 +744,8 @@ describe('PropertyList', function () {
             ]);
 
             expect(pList.each.bind(pList)).withArgs({ foo: 'bar' }).to.not.throwError();
+            expect(pList.each.bind(pList)).withArgs(undefined).to.not.throwError();
+            expect(pList.each.bind(pList)).to.not.throwError();
         });
     });
 
@@ -757,6 +759,8 @@ describe('PropertyList', function () {
             var pList = new PropertyList(FakeType, {}, []);
 
             expect(pList.eachParent.bind(pList)).withArgs('random').to.not.throwError();
+            expect(pList.eachParent.bind(pList)).withArgs(undefined).to.not.throwError();
+            expect(pList.eachParent.bind(pList)).to.not.throwError();
         });
 
         it('should correctly bind the context to the iterator if one is provided', function () {
