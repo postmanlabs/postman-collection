@@ -6,16 +6,77 @@ var _ = require('lodash'),
 /* global describe, it */
 describe('QueryParam', function () {
     describe('construction', function () {
-        var qp = new QueryParam({
-            key: null,
-            value: null
+        it('should handle null keys and values correctly', function () {
+            var qp = new QueryParam({
+                key: null,
+                value: null
+            });
+
+            expect(qp).to.be.ok();
+            expect(qp).to.have.property('key', null);
+            expect(qp).to.have.property('value', null);
+
+            expect(qp.toString()).to.be('');
+            expect(qp.valueOf()).to.be('');
         });
 
-        expect(qp).to.be.ok();
-        expect(qp).to.have.property('key', null);
-        expect(qp).to.have.property('value', null);
+        it('should handle string input correctly', function () {
+            var qp = new QueryParam('foo=bar');
 
-        expect(qp.toString()).to.be('');
+            expect(qp).to.be.ok();
+            expect(qp).to.have.property('key', 'foo');
+            expect(qp).to.have.property('value', 'bar');
+        });
+    });
+
+    describe('static helpers', function () {
+        describe('.parse', function () {
+            it('should return an empty array for non string arguments', function () {
+                expect(QueryParam.parse()).to.eql([]);
+                expect(QueryParam.parse([])).to.eql([]);
+                expect(QueryParam.parse({})).to.eql([]);
+                expect(QueryParam.parse(null)).to.eql([]);
+            });
+        });
+
+        describe('.parseSingle', function () {
+            it('should return null as a value if the query param string does not contain `=`', function () {
+                var result = QueryParam.parseSingle({
+                    value: 'foo',
+                    substr: function () {
+                        return this.value;
+                    }
+                });
+
+                expect(result).to.eql({
+                    key: 'foo',
+                    value: null
+                });
+            });
+        });
+
+        describe('.unparse', function () {
+            it('should bail out of the provided set of params is falsy', function () {
+                expect(QueryParam.unparse()).to.be('');
+            });
+        });
+
+        describe('.unparseSingle', function () {
+            it('should return an empty string for non object arguments', function () {
+                expect(QueryParam.unparseSingle()).to.be('');
+                expect(QueryParam.unparseSingle([])).to.be('');
+            });
+
+            it('should return an empty string for undefined values', function () {
+                expect(QueryParam.unparseSingle({})).to.be('');
+                expect(QueryParam.unparseSingle({ key: 'foo' })).to.be('');
+            });
+
+            it('should encode keys when value is null and encode is true', function () {
+                expect(QueryParam.unparseSingle({ key: ' ', value: null }, true)).to.be('%20');
+                expect(QueryParam.unparseSingle({ key: 'foo', value: null }, true)).to.be('foo');
+            });
+        });
     });
 
     rawQueryStrings.forEach(function (rawQueryString) {

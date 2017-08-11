@@ -141,4 +141,21 @@ describe('Collection', function () {
             }]);
         });
     });
+
+    describe('.toJSON', function () {
+        it('should handle missing events and variables correctly', function () {
+            var collection = new Collection(),
+                json = collection.toJSON();
+
+            expect(json.event).to.eql([]);
+            expect(json.variable).to.eql([]);
+
+            delete collection.variables;
+            delete collection.events;
+
+            json = collection.toJSON();
+            expect(json).to.have.property('event', undefined);
+            expect(json).to.have.property('variable', undefined);
+        });
+    });
 });

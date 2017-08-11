@@ -1,8 +1,9 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    PropertyList = require('../../lib/index.js').PropertyList,
-    Url = require('../../lib/index.js').Url,
-    Request = require('../../lib/index.js').Request;
+    sdk = require('../../lib/index.js'),
+    PropertyList = sdk.PropertyList,
+    Url = sdk.Url,
+    Request = sdk.Request;
 
 /* global describe, it */
 describe('Request', function () {
@@ -15,6 +16,34 @@ describe('Request', function () {
 
         it('initializes successfully', function () {
             expect(request).to.be.ok();
+        });
+
+        it('should handle arbitrary options correctly', function () {
+            var req = new Request({
+                url: {
+                    raw: 'https://postman-echo.com/:path',
+                    protocol: 'https',
+                    host: ['postman-echo', 'com'],
+                    path: [':path'],
+                    variable: [
+                        {
+                            key: 'path',
+                            value: 'get'
+                        }
+                    ]
+                },
+                proxy: {},
+                certificate: {}
+            });
+
+            expect(req.method).to.be('GET');
+            expect(sdk.ProxyConfig.isProxyConfig(req.proxy)).to.be(true);
+            expect(sdk.Certificate.isCertificate(req.certificate)).to.be(true);
+
+            req.update({ method: { name: 'GET' } });
+
+            expect(req.method).to.eql({ name: 'GET' });
+            expect(req.toJSON()).to.have.keys(['certificate', 'proxy', 'url']);
         });
 
         describe('has property', function () {
@@ -274,6 +303,62 @@ describe('Request', function () {
                 // Ideally, only one param should be left, so this runs only once.
                 expect(param.key).to.eql(secondParam.key);
                 expect(param.value).to.eql(secondParam.value);
+            });
+        });
+    });
+
+    describe('.removeHeader', function () {
+        it('should bail out for invalid parameters', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader({});
+            expect(request.headers.reference).to.eql({
+                foo: {
+                    key: 'foo',
+                    value: 'bar'
+                }
+            });
+        });
+    });
+
+    describe('.forEachHeader', function () {
+        it('should traverse the set of headers correctly', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                result = [];
+
+            request.forEachHeader(function (header) {
+                result.push(header.key);
+            });
+            expect(result).to.eql(['foo']);
+        });
+    });
+
+    describe('.authorize', function () {
+        it('should correctly authorize the current request context', function () {
+            var newReq,
+                request = new Request({
+                    auth: {
+                        type: 'basic',
+                        basic: {
+                            username: 'foo',
+                            password: 'bar'
+                        }
+                    }
+                });
+
+            newReq = request.authorize();
+            expect(newReq.headers.reference).to.eql({
+                authorization: {
+                    key: 'Authorization',
+                    value: 'Basic Zm9vOmJhcg==',
+                    system: true
+                }
             });
         });
     });
