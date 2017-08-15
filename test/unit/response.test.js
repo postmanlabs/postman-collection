@@ -23,11 +23,12 @@ describe('Response', function () {
 
         it('should handle the absence of Buffer gracefully', function () {
             var response,
-                originalBuffer = Buffer;
+                originalBuffer = Buffer,
+                stream = new Buffer('random').toJSON();
 
             delete global.Buffer;
             expect(function () {
-                response = new Response({ stream: originalBuffer('random').toJSON() });
+                response = new Response({ stream: stream });
             }).to.not.throwError();
 
             expect(response).to.be.ok();
