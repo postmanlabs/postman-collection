@@ -511,7 +511,7 @@ describe('PropertyList', function () {
                 this.disabled = options.disabled;
             };
 
-            FakeType._postman_sanitize = false;
+            FakeType._postman_sanitizeKeys = false;
             FakeType._postman_propertyIndexKey = 'keyAttr';
             FakeType._postman_propertyIndexCaseInsensitive = true;
             FakeType._postman_propertyAllowsMultipleValues = false;
