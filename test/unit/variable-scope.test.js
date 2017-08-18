@@ -17,6 +17,7 @@ describe('VariableScope', function () {
         expect(scope.id).be.ok();
 
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(VariableList.isVariableList(scope.values)).be.ok();
         expect(scope.values.__parent).be(scope);
     });
@@ -33,6 +34,7 @@ describe('VariableScope', function () {
         expect(scope).have.property('id');
         expect(scope.id).be.ok();
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).be(2);
 
         // check whether the
@@ -60,6 +62,7 @@ describe('VariableScope', function () {
         expect(scope).have.property('id');
         expect(scope.id).be('test-scope-id');
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).be(2);
 
         expect(scope.values.idx(0) instanceof Variable).be.ok();
@@ -84,6 +87,7 @@ describe('VariableScope', function () {
         expect(scope.name).be('my-environment');
 
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(VariableList.isVariableList(scope.values)).be.ok();
         expect(scope.values.count()).be(0);
     });
@@ -467,7 +471,7 @@ describe('VariableScope', function () {
             var scope = new VariableScope(layerOne);
             scope.addLayer([]);
 
-            expect(scope._layers).to.be.empty(1);
+            expect(scope).to.not.have.property('_layers');
         });
     });
 
@@ -504,13 +508,12 @@ describe('VariableScope', function () {
             var scope = new VariableScope({}, [layerOne, layerTwo]),
                 scopeOne = new VariableScope({}, undefined);
 
-
             expect(scope._layers.length).to.be(2);
             scope._layers.forEach(function (list) {
                 expect(VariableList.isVariableList(list)).to.be(true);
             });
 
-            expect(scopeOne._layers.length).to.be(0);
+            expect(scopeOne).to.not.have.property('_layers');
         });
 
         it('the additional variable list is cast to an array if it is not already', function () {
