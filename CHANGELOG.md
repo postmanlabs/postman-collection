@@ -1,5 +1,11 @@
 # Postman Collection SDK Changelog
 
+#### v2.1.1 (August 18, 2017)
+* :tada: Added an option to sanitize Property keys in `PropertList~toObject` #430
+* :bug: Fixed a bug that caused incorrect AWS Auth signatures #438
+* :racehorse: Initialized `VariableScope~_layers` only on demand, and not by default #437
+* Updated dependencies, added edge case unit tests.
+
 #### v2.1.0 (July 18, 2017)
 * Updated `ProxyConfig#getProxyURL` to always return proxy URL with HTTP protocol #417
 * Prevented `_details` from showing up in `Response#toJSON` results #411
