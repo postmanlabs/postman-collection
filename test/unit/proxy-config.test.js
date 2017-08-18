@@ -118,6 +118,24 @@ describe('Proxy Config', function () {
             expect(p1.getProtocols()).to.be.eql(newProtocolsAfterUpdate);
             expect(p1.match.pattern).to.be.eql('http+https://google.com/*');
         });
+
+        it('should ignore falsy protocols while updating', function () {
+            var pc = new ProxyConfig({ host: 'proxy.com' });
+
+            pc.updateProtocols(['http']);
+            expect(pc.match.pattern).to.be('http://*/*');
+
+            pc.updateProtocols();
+            expect(pc.match.pattern).to.be('http://*/*');
+        });
+
+        it('should ignore falsy host-path combinations whilst updating', function () {
+            var pc = new ProxyConfig({ host: 'proxy.com', tunnel: true });
+
+            pc.match.pattern = 'http://';
+            pc.updateProtocols(['https']);
+            expect(pc.match.pattern).to.be('http://');
+        });
     });
 
     describe('test', function () {

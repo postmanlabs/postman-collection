@@ -198,6 +198,38 @@ describe('Item', function () {
         });
     });
 
+    describe('.getEvents', function () {
+        var item = new sdk.Item({
+            name: '200 ok',
+            request: 'http://echo.getpostman.com/status/200',
+            event: [{
+                listen: 'prerequest',
+                script: 'my-global-script-1'
+            }, {
+                listen: 'test',
+                script: {
+                    type: 'text/javascript',
+                    exec: 'console.log(\'hello\');'
+                }
+            }]
+        });
+
+        it('should return all events if no name/falsy name is provided', function () {
+            var events = item.getEvents();
+
+            expect(events).to.have.length(2);
+            expect(events[0]).to.have.property('listen', 'prerequest');
+            expect(events[1]).to.have.property('listen', 'test');
+        });
+
+        it('should filter down to the provided name', function () {
+            var events = item.getEvents('test');
+
+            expect(events).to.have.length(1);
+            expect(events[0]).to.have.property('listen', 'test');
+        });
+    });
+
     describe('isItem', function () {
         var rawItem = fixtures.collectionV2.item[0];
 

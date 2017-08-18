@@ -79,6 +79,86 @@ describe('RequestBody', function () {
         });
     });
 
+    describe('.update', function () {
+        it('should use the raw request body by if an invalid mode is specified', function () {
+            var reqData = new RequestBody({
+                mode: 'random',
+                raw: 'This is supposed to be a raw body. Do not cook it.'
+            });
+            expect(reqData).to.be.ok();
+            expect(reqData).to.have.property('mode', 'raw');
+            expect(reqData).to.have.property('raw', 'This is supposed to be a raw body. Do not cook it.');
+        });
+
+        it('should support stringified urlencoded bodies', function () {
+            var reqData = new RequestBody({
+                mode: 'urlencoded',
+                urlencoded: 'alpha=foo&beta=bar'
+            });
+
+            expect(reqData.urlencoded.reference).to.eql({
+                alpha: {
+                    key: 'alpha',
+                    value: 'foo'
+                },
+                beta: {
+                    key: 'beta',
+                    value: 'bar'
+                }
+            });
+        });
+
+        it('should handle missing formdata bodies correctly', function () {
+            var reqData = new RequestBody({ mode: 'formdata' });
+
+            expect(reqData.formdata.reference).to.be.empty();
+        });
+    });
+
+    describe('.toString', function () {
+        it('should return an empty string for formdata or files', function () {
+            var rBody = new RequestBody({ mode: 'formdata' });
+            expect(rBody.toString()).to.be('');
+
+            rBody.update({ mode: 'file' });
+            expect(rBody.toString()).to.be('');
+        });
+
+        it('should correctly stringify urlencoded bodies', function () {
+            var rBody = new RequestBody({
+                mode: 'urlencoded',
+                urlencoded: [{ key: 'foo', value: 'bar' }]
+            });
+
+            expect(rBody.toString()).to.be('foo=bar');
+        });
+
+        it('should handle malformed urlencoded request bodies gracefully', function () {
+            var rBody = new RequestBody({ mode: 'urlencoded' });
+
+            rBody.urlencoded = ['a', 'b']; // This ensures that there is an inbuilt fallback to .unparse
+            expect(rBody.toString()).to.be('a,b');
+
+            rBody.urlencoded = Object.create(null); // This ensures that there is an inbuilt fallback to .unparse
+            expect(rBody.toString()).to.be('');
+        });
+
+        it('should handle raw bodies correctly', function () {
+            var rBody = new RequestBody({ mode: 'raw', raw: 'Arbitrary raw request body' });
+
+            expect(rBody.toString()).to.be('Arbitrary raw request body');
+            rBody.update({ mode: 'raw' }); // clear the request body
+            expect(rBody.toString()).to.be('');
+        });
+
+        it('should return an empty string for arbitrary request body modes', function () {
+            var rBody = new RequestBody();
+
+            rBody.mode = 'random';
+            expect(rBody.toString()).to.be('');
+        });
+    });
+
     describe('sanity', function () {
         it('should be parsed properly', function () {
             var reqData = new RequestBody(rawRequestBody);

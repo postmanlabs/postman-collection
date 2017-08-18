@@ -68,4 +68,61 @@ describe('EventList', function () {
             }]);
         });
     });
+
+    describe('.listeners', function () {
+        var el = new EventList({}, [{
+            listen: 'test',
+            id: 'my-test-script-1',
+            script: { exec: 'console.log("hello");' }
+        }, {
+            listen: 'prerequest',
+            id: 'my-prerequest-script-1',
+            script: { exec: 'console.log("hello again");' }
+        }]);
+
+        it('should correctly filter down to the specified type of event listener', function () {
+            var listeners = el.listeners('test');
+
+            expect(listeners).to.have.length(1);
+            expect(listeners[0]).to.have.property('listen', 'test');
+            expect(listeners[0]).to.have.property('id', 'my-test-script-1');
+            expect(listeners[0]).to.have.property('script');
+        });
+
+        it('should return an empty set for an invalid/missing filter', function () {
+            expect(el.listeners()).to.have.length(0);
+            expect(el.listeners('random')).to.have.length(0);
+        });
+    });
+
+    describe('.listenersOwn', function () {
+        var el = new EventList({}, [{
+            listen: 'test',
+            id: 'my-test-script-1',
+            script: {
+                type: 'text/javascript',
+                exec: 'console.log("hello");'
+            }
+        }, {
+            listen: 'prerequest',
+            id: 'my-prerequest-script-1',
+            script: {
+                type: 'text/javascript',
+                exec: 'console.log("hello again");'
+            }
+        }]);
+
+        it('should correctly filter down to the specified type of event listener', function () {
+            var listeners = el.listenersOwn('test');
+            expect(listeners).to.have.length(1);
+            expect(listeners[0]).to.have.property('listen', 'test');
+            expect(listeners[0]).to.have.property('id', 'my-test-script-1');
+            expect(listeners[0]).to.have.property('script');
+        });
+
+        it('should return an empty set for an invalid/missing filter', function () {
+            expect(el.listenersOwn()).to.have.length(0);
+            expect(el.listenersOwn('random')).to.have.length(0);
+        });
+    });
 });

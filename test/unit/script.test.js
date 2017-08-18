@@ -1,11 +1,31 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    Script = require('../../lib/index.js').Script;
+    sdk = require('../../lib/index.js'),
+    Url = sdk.Url,
+    Script = sdk.Script;
 
 /* global describe, it */
 describe('Script', function () {
     var rawScript = fixtures.collectionV2.event[1].script,
         script = new Script(rawScript);
+
+    describe('constructor', function () {
+        it('should handle the src property correctly', function () {
+            var script = new Script({
+                src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'
+            });
+
+            expect(script).to.not.have.property('exec');
+            expect(Url.isUrl(script.src)).to.be(true);
+        });
+
+        it('should default to undefined for script code if neither an array of strings or a string is provided',
+            function () {
+                var script = new Script({ exec: 123 });
+
+                expect(script).to.have.property('exec', undefined);
+            });
+    });
 
     describe('sanity', function () {
         var rawScript = fixtures.collectionV2.event[1].script,
