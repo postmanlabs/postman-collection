@@ -1,5 +1,7 @@
 var expect = require('expect.js'),
-    Property = require('../../lib/index.js').Property;
+    sdk = require('../../lib/index.js'),
+    VariableList = sdk.VariableList,
+    Property = sdk.Property;
 
 /* global describe, it */
 describe('Property', function () {
@@ -14,6 +16,51 @@ describe('Property', function () {
             expect(prop.description).to.be.ok();
             expect(prop.description.toString()).to.be('Hello Postman');
             expect(prop.description.type).to.be('text/plain');
+        });
+    });
+
+    describe('.describe', function () {
+        it('should use an existing Description instance when available', function () {
+            var property = new Property({ description: 'Sample description' });
+
+            property.describe('New description');
+            expect(property.description).to.eql({ content: 'New description', type: 'text/plain' });
+        });
+    });
+
+    describe('.toObjectResolved', function () {
+        it('should throw an error for invalid arguments', function () {
+            var property = new Property();
+
+            expect(property.toObjectResolved.bind(property)).to.throwError();
+        });
+
+        it('should resolve properties correctly', function () {
+            var property = new Property(),
+                parent = new Property();
+
+            parent.variables = new VariableList();
+            property.variables = new VariableList({}, [{ key: 'alpha', value: 'foo' }, { key: 'beta', value: 'bar' }]);
+
+            property.setParent(parent);
+            expect(property.toObjectResolved()).to.eql({
+                variable: [
+                    { type: 'any', value: 'foo', key: 'alpha' },
+                    { type: 'any', value: 'bar', key: 'beta' }
+                ]
+            });
+        });
+    });
+
+    describe('.replaceSubstitutions', function () {
+        it('should bail out if a non-string argument is passed', function () {
+            expect(Property.replaceSubstitutions(['random'])).to.eql(['random']);
+        });
+    });
+
+    describe('.replaceSubstitutionsIn', function () {
+        it('should bail out if a non-object argument is passed', function () {
+            expect(Property.replaceSubstitutionsIn('random')).to.be('random');
         });
     });
 

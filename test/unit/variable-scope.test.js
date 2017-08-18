@@ -17,6 +17,7 @@ describe('VariableScope', function () {
         expect(scope.id).be.ok();
 
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(VariableList.isVariableList(scope.values)).be.ok();
         expect(scope.values.__parent).be(scope);
     });
@@ -33,6 +34,7 @@ describe('VariableScope', function () {
         expect(scope).have.property('id');
         expect(scope.id).be.ok();
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).be(2);
 
         // check whether the
@@ -60,6 +62,7 @@ describe('VariableScope', function () {
         expect(scope).have.property('id');
         expect(scope.id).be('test-scope-id');
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).be(2);
 
         expect(scope.values.idx(0) instanceof Variable).be.ok();
@@ -84,6 +87,7 @@ describe('VariableScope', function () {
         expect(scope.name).be('my-environment');
 
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(VariableList.isVariableList(scope.values)).be.ok();
         expect(scope.values.count()).be(0);
     });
@@ -285,6 +289,22 @@ describe('VariableScope', function () {
             it('must return undefined for ', function () {
                 expect(scope.get('random')).to.be(undefined);
             });
+
+            describe('multi layer search', function () {
+                var newScope = new VariableScope();
+
+                newScope.addLayer(new VariableList({}, [
+                    { key: 'alpha', value: 'foo' }
+                ]));
+
+                it('should work correctly', function () {
+                    expect(newScope.get('alpha')).to.be('foo');
+                });
+
+                it('should bail out if no matches are found', function () {
+                    expect(newScope.get('random')).to.be(undefined);
+                });
+            });
         });
 
         describe('set', function () {
@@ -446,6 +466,13 @@ describe('VariableScope', function () {
             expect(scope._layers.length).to.be(1);
             expect(VariableList.isVariableList(scope._layers[0])).to.be.ok();
         });
+
+        it('should bail out for a non VariableList argument', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer([]);
+
+            expect(scope).to.not.have.property('_layers');
+        });
     });
 
     describe('multiple level variable resolution', function () {
@@ -481,13 +508,12 @@ describe('VariableScope', function () {
             var scope = new VariableScope({}, [layerOne, layerTwo]),
                 scopeOne = new VariableScope({}, undefined);
 
-
             expect(scope._layers.length).to.be(2);
             scope._layers.forEach(function (list) {
                 expect(VariableList.isVariableList(list)).to.be(true);
             });
 
-            expect(scopeOne._layers.length).to.be(0);
+            expect(scopeOne).to.not.have.property('_layers');
         });
 
         it('the additional variable list is cast to an array if it is not already', function () {
@@ -537,7 +563,19 @@ describe('VariableScope', function () {
                 }]),
                 scope = new VariableScope({}, list);
 
-            expect(scope.toJSON()._layers).to.be(undefined);
+            expect(scope.toJSON()).to.not.have.property('_layers');
+        });
+
+        it('should handle malformed VariableScope instances correctly', function () {
+            var scope = new VariableScope([
+                { key: 'alpha', value: 'foo' }
+            ]);
+
+            delete scope._layers;
+            scope.values = scope.value;
+            delete scope.value;
+
+            expect(scope.toJSON()).to.be.ok();
         });
     });
 
@@ -621,6 +659,18 @@ describe('VariableScope', function () {
                 'key2': 'val2',
                 'key3': 'val3'
             });
+        });
+    });
+
+    describe('has', function () {
+        var scope = new VariableScope([
+            { key: 'alpha', value: 'foo' },
+            { key: 'beta', value: 'bar' }
+        ]);
+
+        it('should correctly determine if the current scope contains a provided identifier', function () {
+            expect(scope.has('alpha')).to.be(true);
+            expect(scope.has('random')).to.be(false);
         });
     });
 });

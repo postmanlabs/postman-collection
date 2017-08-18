@@ -57,4 +57,33 @@ describe('Description', function () {
             expect(Description.isDescription()).to.be(false);
         });
     });
+
+    describe('.toString', function () {
+        it('should correctly handle markdown', function () {
+            var description = new Description({
+                content: '# Description',
+                type: 'text/markdown'
+            });
+
+            expect(description.toString()).to.be('Description\n');
+        });
+
+        it('should correctly handle HTML', function () {
+            var description = new Description({
+                content: '<h1>Description</h1><form><input /></form>',
+                type: 'text/html'
+            });
+
+            expect(description.toString()).to.be('<h1>Description</h1>');
+        });
+
+        it('should escape HTML for arbitrary formats', function () {
+            var description = new Description({
+                content: '<%= template %>',
+                type: 'text/random'
+            });
+
+            expect(description.toString()).to.be('&lt;%= template %&gt;');
+        });
+    });
 });

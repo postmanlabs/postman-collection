@@ -21,6 +21,34 @@ describe('Response', function () {
             expect(response).to.be.ok();
         });
 
+        it('should handle the absence of Buffer gracefully', function () {
+            var response,
+                originalBuffer = Buffer,
+                stream = new Buffer('random').toJSON();
+
+            delete global.Buffer;
+            expect(function () {
+                response = new Response({ stream: stream });
+            }).to.not.throwError();
+
+            expect(response).to.be.ok();
+            global.Buffer = originalBuffer;
+        });
+
+        it('should handle non atomic bodies correctly', function () {
+            var response = new Response({ body: { foo: 'bar' } });
+
+            expect(response.body).to.eql({ foo: 'bar' });
+        });
+
+        it('should provide the response reason for malformed responses as well', function () {
+            var response = new Response({ code: 200 });
+
+            delete response.status;
+
+            expect(response.reason()).to.be('OK');
+        });
+
         describe('has property', function () {
             it('code', function () {
                 expect(response).to.have.property('code', rawResponse.code);
@@ -113,6 +141,158 @@ describe('Response', function () {
 
             // Skip cookie tests, because cookies are tested independently.
             expect(jsonified).to.have.property('cookie');
+        });
+    });
+
+    describe('.encoding', function () {
+        it('should work correctly, even for blank responses', function () {
+            var response = new Response();
+
+            expect(response.encoding()).to.eql({
+                format: undefined,
+                source: undefined
+            });
+        });
+
+        it('should respect the content-encoding value', function () {
+            var response = new Response({
+                header: [
+                    {
+                        key: 'Content-Encoding',
+                        value: 'arbitrary value'
+                    }
+                ]
+            });
+
+            expect(response.encoding()).to.eql({
+                format: 'arbitrary value',
+                source: 'header'
+            });
+        });
+
+        it('should fallback to the response body if no content-encoding value is available', function () {
+            var response = new Response({
+                body: new Buffer([31, 139, 8]) // the specifics matter here
+            });
+
+            expect(response.encoding()).to.eql({
+                format: 'gzip',
+                source: 'body'
+            });
+        });
+
+        it('should handle malformed bodies gracefully', function () {
+            var response = new Response({ body: 'random' });
+
+            expect(response.encoding()).to.eql({
+                format: undefined,
+                source: undefined
+            });
+        });
+    });
+
+    describe('.mime', function () {
+        it('should correctly handle the absence of content-type', function () {
+            var response = new Response({
+                header: [
+                    {
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }
+                ]
+            });
+
+            expect(response.mime()).to.eql({
+                type: 'text',
+                format: 'json',
+                name: 'response',
+                ext: 'json',
+                charset: 'utf8',
+                _originalContentType: 'application/json',
+                _sanitisedContentType: 'application/json',
+                _accuratelyDetected: true,
+                filename: 'response.json',
+                source: 'header',
+                detected: null
+            });
+        });
+
+        (typeof window === 'undefined' ? it : it.skip)('should correctly detect the mime type from the stream',
+            function () {
+                var response = new Response({
+                    body: fs.readFileSync('test/fixtures/icon.png')
+                });
+
+                expect(response.mime()).to.eql({
+                    type: 'image',
+                    format: 'image',
+                    name: 'response',
+                    ext: 'png',
+                    charset: 'utf8',
+                    _originalContentType: 'image/png',
+                    _sanitisedContentType: 'image/png',
+                    _accuratelyDetected: true,
+                    filename: 'response.png',
+                    source: 'body',
+                    detected: {
+                        type: 'image',
+                        format: 'image',
+                        name: 'response',
+                        ext: 'png',
+                        charset: 'utf8',
+                        _originalContentType: 'image/png',
+                        _sanitisedContentType: 'image/png',
+                        _accuratelyDetected: true,
+                        filename: 'response.png'
+                    }
+                });
+            });
+
+        it('should handle content-type overrides correctly', function () {
+            var response = new Response({ body: 'random' });
+
+            expect(response.mime('text/html')).to.eql({
+                type: 'text',
+                format: 'html',
+                name: 'response',
+                ext: 'html',
+                charset: 'utf8',
+                _originalContentType: 'text/html',
+                _sanitisedContentType: 'text/html',
+                _accuratelyDetected: true,
+                filename: 'response.html',
+                source: 'forced',
+                detected: null
+            });
+        });
+    });
+
+    describe('.size', function () {
+        it('should handle blank responses correctly', function () {
+            var response = new Response();
+            expect(response.size()).to.eql({
+                body: 0, header: 30, total: 30
+            });
+        });
+    });
+
+    describe('.dataURI', function () {
+        it('should work correctly for blank responses', function () {
+            var response = new Response();
+
+            expect(response.dataURI()).to.be('data:text/plain;base64, ');
+        });
+
+        it('should handle response streams correctly', function () {
+            var response = new Response({ stream: new Buffer('random') });
+
+            expect(response.dataURI()).to.be('data:text/plain;base64, cmFuZG9t');
+        });
+
+        it('should handle regular bodies correctly', function () {
+            var response = new Response({ body: 'random' });
+
+            expect(response.dataURI()).to.be('data:text/plain;base64, cmFuZG9t');
         });
     });
 
@@ -605,6 +785,29 @@ describe('Response', function () {
                     validateResponse(response);
                     done();
                 });
+            });
+        });
+    });
+
+    describe('static methods', function () {
+        describe('.mimeInfo', function () {
+            it('should handle incoming Header instances correctly', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'random' }),
+                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=response' }))).to.eql({
+                    type: 'unknown',
+                    format: 'raw',
+                    name: 'response',
+                    ext: '',
+                    charset: 'utf8',
+                    _originalContentType: 'random',
+                    _sanitisedContentType: 'random',
+                    _accuratelyDetected: false,
+                    filename: 'response'
+                });
+            });
+
+            it('should bail out for non string content-type specifications', function () {
+                expect(Response.mimeInfo(1)).to.be(undefined);
             });
         });
     });

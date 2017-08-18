@@ -171,6 +171,30 @@ module.exports = {
                 }]
             }
         },
+        oauth2: {
+            auth: {
+                type: 'oauth2',
+                oauth2: {
+                    addTokenTo: 'RKCGzna7bv9YD57c',
+                    callBackUrl: 'D+EdQ-gs$-%@2Nu7',
+                    authUrl: '',
+                    accessTokenUrl: '',
+                    clientId: 'HMAC-SHA1',
+                    clientSecret: '1453890475',
+                    scope: 'yly1UR',
+                    requestAccessTokenLocally: '1.0'
+                }
+            },
+            url: 'https://postman-echo.com/oauth2?hi=hello&yo=true',
+            method: 'POST',
+            data: {
+                mode: 'urlencoded',
+                content: [{
+                    key: 'haha',
+                    value: 'somevalue'
+                }]
+            }
+        },
         awsv4: {
             auth: {
                 type: 'awsv4',
