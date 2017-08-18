@@ -147,6 +147,56 @@ describe('ItemGroup', function () {
         });
     });
 
+    describe('.forEachItem', function () {
+        it('should correctly iterate over a nested list of items and item groups', function () {
+            var result = [],
+                itemGroup = new ItemGroup({
+                    id: 'F0',
+                    name: 'F0-name',
+                    item: [{
+                        id: 'R1',
+                        name: 'R1-name',
+                        request: 'postman-echo.com'
+                    }, {
+                        id: 'F2',
+                        name: 'F2-name',
+                        item: [{
+                            id: 'R2',
+                            name: 'R2-name',
+                            request: 'postman-echo.com'
+                        }, {
+                            id: 'R3',
+                            name: 'R3-name',
+                            request: 'postman-echo.com'
+                        }, {
+                            id: 'F3',
+                            name: 'F3-name',
+                            item: [{
+                                id: 'R4',
+                                name: 'R4-name',
+                                request: 'postman-echo.com'
+                            }, {
+                                id: 'F4',
+                                name: 'F4-name',
+                                item: []
+                            }]
+                        }]
+                    }, {
+                        id: 'R5',
+                        name: 'R5-name',
+                        request: 'postman-echo.com'
+                    }, {
+                        id: 'F5',
+                        name: 'F5-name',
+                        item: []
+                    }]
+                });
+
+            itemGroup.forEachItem(function (item) { result.push(item.name); });
+            expect(result).to.eql(['R1-name', 'R2-name', 'R3-name', 'R4-name', 'R5-name']);
+        });
+    });
+
     describe('.oneDeep()', function () {
         var itemGroupData = {
                 id: 'F0',
@@ -313,6 +363,10 @@ describe('ItemGroup', function () {
             i = itemGroup.oneDeep('non-existent');
 
             expect(i).to.be(undefined);
+        });
+
+        it('should return `undefined` if the specified id is not a string', function () {
+            expect(itemGroup.oneDeep(1)).to.be(undefined);
         });
     });
 

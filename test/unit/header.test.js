@@ -74,6 +74,13 @@ describe('Header', function () {
     });
 
     describe('unparse', function () {
+        it('should unparse headers to a blank string for invalid inputs', function () {
+            expect(Header.unparse('')).to.be('');
+            expect(Header.unparse({ key: 'foo', value: 'bar' })).to.be('');
+
+            expect(Header.unparseSingle('')).to.be('');
+        });
+
         it('should unparse headers to a string', function () {
             var raw = 'name1: value1\r\nname2: value2',
                 list = new PropertyList(Header, {}, raw);

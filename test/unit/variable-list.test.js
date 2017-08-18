@@ -228,4 +228,43 @@ describe('VariableList', function () {
             expect(VariableList.isVariableList()).to.be(false);
         });
     });
+
+    describe('.syncFromObject', function () {
+        it('should bail out if no source object has been provided', function () {
+            var list = new VariableList(null, [
+                { key: 'foo', value: 'bar' }
+            ]);
+
+            expect(list.syncFromObject()).to.be(undefined);
+            expect(list.reference).to.eql({
+                foo: {
+                    key: 'foo',
+                    value: 'bar',
+                    type: 'any'
+                }
+            });
+        });
+    });
+
+    describe('.syncToObject', function () {
+        it('should use a default blank target object if the provided target is not an object', function () {
+            var list = new VariableList(null, [
+                { key: 'foo', value: 'bar' }
+            ]);
+
+            expect(list.syncToObject()).to.eql({
+                foo: 'bar'
+            });
+        });
+    });
+
+    describe('.replace', function () {
+        it('should correctly replace variable tokens in the provided string', function () {
+            var list = new VariableList(null, [
+                { key: 'foo', value: 'bar' }
+            ]);
+
+            expect(list.replace('{{foo}}')).to.be('bar');
+        });
+    });
 });

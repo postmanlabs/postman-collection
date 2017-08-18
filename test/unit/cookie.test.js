@@ -12,6 +12,27 @@ describe('Cookie', function () {
             expect(cookie).to.be.ok();
         });
 
+        it('should work correctly with a raw cookie string as well', function () {
+            var strCookie = new Cookie('foo=bar;');
+
+            expect(strCookie.name).to.be('foo');
+            expect(strCookie.value).to.be('bar');
+        });
+
+        it('should work correctly with specific options and value defaults', function () {
+            var expires = 'Sat, 02 May 2020 23:38:25 GMT',
+                strCookie = new Cookie({
+                    name: 'foo',
+                    expires: expires, // just a test, these options won't usually appear together
+                    maxAge: 1234
+                });
+
+            expect(strCookie.name).to.be('foo');
+            expect(strCookie.value).to.be(undefined);
+            expect(strCookie.expires).to.be.ok();
+            expect(strCookie.maxAge).to.be(1234);
+        });
+
         describe('has property', function () {
             it('domain', function () {
                 expect(cookie).to.have.property('domain', rawCookie.domain);
@@ -121,6 +142,29 @@ describe('Cookie', function () {
 
         it('should return false when called without arguments', function () {
             expect(Cookie.isCookie()).to.be(false);
+        });
+    });
+
+    describe('.parse', function () {
+        it('should bail out for non string input', function () {
+            expect(Cookie.parse(['random'])).to.eql(['random']);
+        });
+
+        it('should correctly handle valid input', function () {
+            expect(Cookie.parse('foo=bar;domain=postman-echo.com')).to.eql({
+                domain: 'postman-echo.com',
+                key: 'foo',
+                value: 'bar'
+            });
+        });
+    });
+
+    describe('.splitParam', function () {
+        it('should correctly split string cookie values into their components', function () {
+            expect(Cookie.splitParam('foo="bar"')).to.eql({
+                key: 'foo',
+                value: 'bar'
+            });
         });
     });
 
