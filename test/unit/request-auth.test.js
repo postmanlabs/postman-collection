@@ -1,8 +1,10 @@
 var _ = require('lodash'),
     expect = require('expect.js'),
+    aws4 = require('aws4'),
 
     Request = require('../../').Request,
     RequestAuth = require('../../').RequestAuth,
+    Url = require('../../').Url,
     rawRequests = require('../fixtures/index').authRequests;
 
 /* global describe, it */
@@ -69,13 +71,32 @@ describe('RequestAuth', function () {
         // querystring.unescape is not available in browserify's querystring module, so this goes to hell
         // TODO: fix this
         (typeof window === 'undefined' ? it : it.skip)('Required headers must be added', function () {
-            var request = new Request(rawRequests.awsv4),
+            var awsv4Data = rawRequests.awsv4,
+                auth = awsv4Data.auth.awsv4,
+                request = new Request(awsv4Data),
                 authorizedReq = request.auth.awsv4.authorize(request),
-                headers = authorizedReq.getHeaders({ ignoreCase: true });
+                parsedUrl = new Url(awsv4Data.url),
+                headers = authorizedReq.getHeaders({ ignoreCase: true }),
+                expectedSignedReq = aws4.sign({
+                    headers: {
+                        'X-Amz-Date': headers['x-amz-date'],
+                        'content-type': 'application/json'
+                    },
+                    host: parsedUrl.getRemote(),
+                    path: parsedUrl.getPathWithQuery(),
+                    service: auth.serviceName,
+                    region: auth.region,
+                    method: awsv4Data.method,
+                    body: undefined
+                }, {
+                    accessKeyId: auth.accessKey,
+                    secretAccessKey: auth.secretKey,
+                    sessionToken: auth.sessionToken
+                });
 
             // Ensure that the required headers have been added.
             // todo stricter tests?
-            expect(headers).to.have.property('authorization');
+            expect(headers).to.have.property('authorization', expectedSignedReq.headers.Authorization);
             expect(headers).to.have.property('content-type', request.getHeaders({ ignoreCase: true })['content-type']);
             expect(headers).to.have.property('x-amz-date');
             expect(headers).to.have.property('x-amz-security-token');
