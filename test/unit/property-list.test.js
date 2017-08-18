@@ -745,6 +745,166 @@ describe('PropertyList', function () {
             // should have removed the array of values
             expect(list.reference).to.not.have.property('key1');
         });
+
+        it('should correctly remove an element by direct reference', function () {
+            var entity = new FakeType({ keyAttr: 'key', value: 'val' }),
+                list = new PropertyList(FakeType, {}, [entity]);
+
+            list.remove(entity);
+
+            // should have removed the correct element from the reference map, and removed the array of values
+            expect(list.reference).to.not.have.property('key');
+        });
+    });
+
+    describe('.each', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should handle non-function iterators correctly', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'foo', value: 'bar' }
+            ]);
+
+            expect(pList.each.bind(pList)).withArgs({ foo: 'bar' }).to.not.throwError();
+            expect(pList.each.bind(pList)).withArgs(undefined).to.not.throwError();
+            expect(pList.each.bind(pList)).to.not.throwError();
+        });
+    });
+
+    describe('.eachParent', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should bail out if the iterator is not a function', function () {
+            var pList = new PropertyList(FakeType, {}, []);
+
+            expect(pList.eachParent.bind(pList)).withArgs('random').to.not.throwError();
+            expect(pList.eachParent.bind(pList)).withArgs(undefined).to.not.throwError();
+            expect(pList.eachParent.bind(pList)).to.not.throwError();
+        });
+
+        it('should correctly bind the context to the iterator if one is provided', function () {
+            var parent = new PropertyList(FakeType, {}, [{ key: 'level', value: 'parent' }]),
+                pList = new PropertyList(FakeType, parent, [{ key: 'level', value: 'child' }]),
+                chain = [];
+
+            pList.eachParent(function (parent) {
+                parent.members && chain.push(parent.members[0][this.attr]);
+            }, {
+                attr: 'value'
+            });
+
+            expect(chain).to.eql(['parent']);
+        });
+
+        it('should use the default context of the caller instance if none is provided', function () {
+            var parent = new PropertyList(FakeType, {}, [{ key: 'level', value: 'parent' }]),
+                pList = new PropertyList(FakeType, parent, [{ key: 'level', value: 'child' }]),
+                chain = [];
+
+            pList.eachParent(function (parent) {
+                expect(this.toJSON()).to.eql([{ key: 'level', value: 'child' }]);
+                parent.members && chain.push(parent.members[0].value);
+            });
+
+            expect(chain).to.eql(['parent']);
+        });
+    });
+
+    describe('.filter', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should correctly bind the iterator to the provided context', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'foo', value: 'bar' },
+                { key: 'alpha', value: 'bar' },
+                { key: 'gamma', value: 'baz' }
+            ]);
+
+            expect(pList.filter(function (property) {
+                return property.value === this.value;
+            }, { value: 'bar' })).to.eql([
+                { key: 'foo', value: 'bar' },
+                { key: 'alpha', value: 'bar' }
+            ]);
+        });
+    });
+
+    describe('.find', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should correctly bind the iterator to the provided context', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'foo', value: 'bar' },
+                { key: 'alpha', value: 'bar' },
+                { key: 'gamma', value: 'baz' }
+            ]);
+
+            expect(pList.find(function (property) {
+                return property.key === this.key;
+            }, { key: 'alpha' })).to.eql(
+                { key: 'alpha', value: 'bar' }
+            );
+        });
+    });
+
+    describe('.insert', function () {
+        it('should bail out for non-object arguments', function () {
+            var pList = new PropertyList();
+
+            pList.insert();
+            expect(pList.members).to.eql([]);
+        });
+    });
+
+    describe('.add', function () {
+        it('should bail out for null, undefined, or NaN input', function () {
+            var pList = new PropertyList();
+
+            pList.add(null);
+            expect(pList.members).to.be.empty();
+
+            pList.add(undefined);
+            expect(pList.members).to.be.empty();
+
+            pList.add(NaN);
+            expect(pList.members).to.be.empty();
+        });
+    });
+
+    describe('.toJSON', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            _.has(options, 'value') && (this.value = options.value);
+            _.has(options, 'values') && (this.values = options.values);
+        };
+
+        it('should handle various kinds of values correctly', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'alpha', value: undefined },
+                { key: 'beta', value: {} },
+                { key: 'gamma', value: { val: 'random', toJSON: function () { return this.val; } } },
+                { key: 'delta', values: new PropertyList(FakeType, {}, []) }
+            ]);
+
+            expect(pList.toJSON()).to.eql([
+                { key: 'alpha' },
+                { key: 'beta', value: {} },
+                { key: 'gamma', value: 'random' },
+                { key: 'delta', value: [] }
+            ]);
+        });
     });
 
     describe('.has()', function () {
