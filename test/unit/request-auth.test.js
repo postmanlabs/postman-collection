@@ -376,10 +376,10 @@ describe('RequestAuth', function () {
         });
     });
 
-    describe('awsv4', function () {
-        // querystring.unescape is not available in browserify's querystring module, so this goes to hell
-        // TODO: fix this
-        (typeof window === 'undefined' ? it : it.skip)('Required headers must be added', function () {
+    // querystring.unescape is not available in browserify's querystring module, so this goes to hell
+    // TODO: fix this
+    (typeof window === 'undefined' ? describe : describe.skip)('awsv4', function () {
+        it('should add the required headers', function () {
             var awsv4Data = rawRequests.awsv4,
                 auth = awsv4Data.auth.awsv4,
                 request = new Request(rawRequests.awsv4),
