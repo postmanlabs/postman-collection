@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### v2.1.2 (August 21, 2017)
+* Renamed the property `_postman_requiresId` to `_postman_propertyRequiresId` in order to be standard compliant #441
+
 #### v2.1.1 (August 18, 2017)
 * :tada: Added an option to sanitize Property keys in `PropertList~toObject` #430
 * :bug: Fixed a bug that caused incorrect AWS Auth signatures #438
