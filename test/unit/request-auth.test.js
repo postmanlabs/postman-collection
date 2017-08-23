@@ -438,7 +438,7 @@ describe('RequestAuth', function () {
                 },
                 certificate: undefined,
                 proxy: undefined,
-                body: { },
+                body: { mode: 'raw', raw: { foo: 'bar' } },
                 url: 'https://the2yl2ege.execute-api.eu-west-1.amazonaws.com/{{stagename}}/item',
                 method: 'POST',
                 description: {
