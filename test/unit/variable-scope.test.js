@@ -17,6 +17,7 @@ describe('VariableScope', function () {
         expect(scope.id).be.ok();
 
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(VariableList.isVariableList(scope.values)).be.ok();
         expect(scope.values.__parent).be(scope);
     });
@@ -33,6 +34,7 @@ describe('VariableScope', function () {
         expect(scope).have.property('id');
         expect(scope.id).be.ok();
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).be(2);
 
         // check whether the
@@ -60,6 +62,7 @@ describe('VariableScope', function () {
         expect(scope).have.property('id');
         expect(scope.id).be('test-scope-id');
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).be(2);
 
         expect(scope.values.idx(0) instanceof Variable).be.ok();
@@ -84,6 +87,7 @@ describe('VariableScope', function () {
         expect(scope.name).be('my-environment');
 
         expect(scope).have.property('values');
+        expect(scope).to.not.have.property('_layers');
         expect(VariableList.isVariableList(scope.values)).be.ok();
         expect(scope.values.count()).be(0);
     });
@@ -285,6 +289,22 @@ describe('VariableScope', function () {
             it('must return undefined for ', function () {
                 expect(scope.get('random')).to.be(undefined);
             });
+
+            describe('multi layer search', function () {
+                var newScope = new VariableScope();
+
+                newScope.addLayer(new VariableList({}, [
+                    { key: 'alpha', value: 'foo' }
+                ]));
+
+                it('should work correctly', function () {
+                    expect(newScope.get('alpha')).to.be('foo');
+                });
+
+                it('should bail out if no matches are found', function () {
+                    expect(newScope.get('random')).to.be(undefined);
+                });
+            });
         });
 
         describe('set', function () {
@@ -420,6 +440,237 @@ describe('VariableScope', function () {
                 var2: 2,
                 var3: true
             });
+        });
+    });
+
+    describe('.addLayer()', function () {
+        var layerOne = new VariableList({}, [{
+                key: 'var-1-layerOne',
+                value: 'var-1-layerOne-value'
+            }, {
+                key: 'var-2-layerOne',
+                value: 'var-2-layerOne-value'
+            }]),
+            layerTwo = new VariableList({}, [{
+                key: 'var-1-layerTwo',
+                value: 'var-1-layerTwo-value'
+            }, {
+                key: 'var-2-layerTwo',
+                value: 'var-2-layerTwo-value'
+            }]);
+
+        it('adds a variable list to the current instance', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+
+            expect(scope._layers.length).to.be(1);
+            expect(VariableList.isVariableList(scope._layers[0])).to.be.ok();
+        });
+
+        it('should bail out for a non VariableList argument', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer([]);
+
+            expect(scope).to.not.have.property('_layers');
+        });
+    });
+
+    describe('multiple level variable resolution', function () {
+        var layerOne = new VariableList({}, [{
+                key: 'var-1-layerOne',
+                value: 'var-1-layerOne-value'
+            }, {
+                key: 'var-2-layerOne',
+                value: 'var-2-layerOne-value'
+            }]),
+            layerTwo = new VariableList({}, [{
+                key: 'var-1-layerTwo',
+                value: 'var-1-layerTwo-value'
+            }, {
+                key: 'var-2-layerTwo',
+                value: 'var-2-layerTwo-value'
+            }, {
+                key: 'var-3',
+                value: 'var-3-layerTwo-value'
+            }]),
+            layerThree = new VariableList({}, [{
+                key: 'var-1-layer',
+                value: 'var-1-layerThree-value'
+            }, {
+                key: 'var-2-layer',
+                value: 'var-2-layerThree-value'
+            }, {
+                key: 'var-3',
+                value: 'var-3-layerThree-value'
+            }]);
+
+        it('ensures an array of variable list instances is provided via the constructor', function () {
+            var scope = new VariableScope({}, [layerOne, layerTwo]),
+                scopeOne = new VariableScope({}, undefined);
+
+            expect(scope._layers.length).to.be(2);
+            scope._layers.forEach(function (list) {
+                expect(VariableList.isVariableList(list)).to.be(true);
+            });
+
+            expect(scopeOne).to.not.have.property('_layers');
+        });
+
+        it('the additional variable list is cast to an array if it is not already', function () {
+            var scope = new VariableScope({}, layerOne);
+
+            expect(scope._layers.length).to.be(1);
+        });
+
+        it('requires instance(s) of VariableList for increasing search area', function () {
+            var scope = new VariableScope({}, [{
+                key: 'key-1',
+                value: 'value-1'
+            }]);
+
+            expect(scope._layers.length).to.be(0);
+        });
+
+        it('retrieves the value from the current scope', function () {
+            var scope = new VariableScope(layerOne);
+            expect(scope.get('var-1-layerOne')).to.be('var-1-layerOne-value');
+        });
+
+        it('retrieves the value of a variable from parent scopes', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+
+            expect(scope.get('var-1-layerTwo')).to.be('var-1-layerTwo-value');
+        });
+
+        it('retrieves the first occurence of a value should duplicates exist', function () {
+            var scope = new VariableScope(layerOne);
+            scope.addLayer(layerTwo);
+            scope.addLayer(layerThree);
+
+            expect(scope.get('var-3')).to.be('var-3-layerTwo-value');
+        });
+    });
+
+    describe('.toJSON()', function () {
+        it('does not expose the concept of layers', function () {
+            var list = new VariableList({}, [{
+                    key: 'var-1-layerOne',
+                    value: 'var-1-layerOne-value'
+                }, {
+                    key: 'var-2-layerOne',
+                    value: 'var-2-layerOne-value'
+                }]),
+                scope = new VariableScope({}, list);
+
+            expect(scope.toJSON()).to.not.have.property('_layers');
+        });
+
+        it('should handle malformed VariableScope instances correctly', function () {
+            var scope = new VariableScope([
+                { key: 'alpha', value: 'foo' }
+            ]);
+
+            delete scope._layers;
+            scope.values = scope.value;
+            delete scope.value;
+
+            expect(scope.toJSON()).to.be.ok();
+        });
+    });
+
+    describe('.toObject()', function () {
+        var keyVals = [{
+            key: 'key1',
+            value: 'val1'
+        }, {
+            key: 'key2',
+            value: 'val2'
+        }, {
+            key: 'key3',
+            value: 'val3'
+        }];
+
+        it('should return a pojo', function () {
+            var scope = new VariableScope(keyVals);
+
+            expect(scope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2',
+                'key3': 'val3'
+            });
+        });
+
+        it('uses the last found key-val pair should a duplicate key exists', function () {
+            var scope = new VariableScope(keyVals.concat({
+                key: 'key3',
+                value: 'duplicate-val3'
+            }));
+
+            expect(scope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2',
+                'key3': 'duplicate-val3'
+            });
+        });
+
+        it('should return a pojo from all layers of scope', function () {
+            var globalScope = new VariableList(null, keyVals[0]),
+                envScope = new VariableList(null, keyVals[1]),
+                localScope = new VariableScope([keyVals[2]], [envScope, globalScope]);
+
+            expect(localScope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2',
+                'key3': 'val3'
+            });
+        });
+
+        it('returns only local scope values if layers are not provided', function () {
+            var localValues = [{
+                    key: 'key1',
+                    value: 'val1'
+                }, {
+                    key: 'key2',
+                    value: 'val2'
+                }],
+                scope = new VariableScope(localValues);
+
+            expect(scope.toObject()).to.eql({
+                'key1': 'val1',
+                'key2': 'val2'
+            });
+        });
+
+        it('gives local scope highest order of precedence when resolving layers', function () {
+            var localValues = [{
+                    key: 'key3',
+                    value: 'val3'
+                }, {
+                    key: 'key1',
+                    value: 'duplicated_key'
+                }],
+                globalScope = new VariableList(null, keyVals[0]),
+                envScope = new VariableList(null, keyVals[1]),
+                localScope = new VariableScope(localValues, [envScope, globalScope]);
+
+            expect(localScope.toObject()).to.eql({
+                'key1': 'duplicated_key',
+                'key2': 'val2',
+                'key3': 'val3'
+            });
+        });
+    });
+
+    describe('has', function () {
+        var scope = new VariableScope([
+            { key: 'alpha', value: 'foo' },
+            { key: 'beta', value: 'bar' }
+        ]);
+
+        it('should correctly determine if the current scope contains a provided identifier', function () {
+            expect(scope.has('alpha')).to.be(true);
+            expect(scope.has('random')).to.be(false);
         });
     });
 });

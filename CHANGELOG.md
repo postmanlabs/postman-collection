@@ -1,5 +1,125 @@
 # Postman Collection SDK Changelog
 
+#### v2.1.2 (August 21, 2017)
+* Renamed the property `_postman_requiresId` to `_postman_propertyRequiresId` in order to be standard compliant #441
+
+#### v2.1.1 (August 18, 2017)
+* :tada: Added an option to sanitize Property keys in `PropertList~toObject` #430
+* :bug: Fixed a bug that caused incorrect AWS Auth signatures #438
+* :racehorse: Initialized `VariableScope~_layers` only on demand, and not by default #437
+* Updated dependencies, added edge case unit tests.
+
+#### v2.1.0 (July 18, 2017)
+* Updated `ProxyConfig#getProxyURL` to always return proxy URL with HTTP protocol #417
+* Prevented `_details` from showing up in `Response#toJSON` results #411
+* The `Script` constructor now accepts script arrays and strings as well #404
+* `VariableScope#toObject` now returns data across multiple layers as well #384
+
+#### v2.0.2 (July 5, 2017)
+* :bug: Fixed typo in the `ALLOWED_PROTOCOLS` variable #403
+
+#### v2.0.1 (July 3, 2017)
+* Updated `ProxyConfig` to match all protocols, hosts and paths by default. #402
+
+#### v2.0.0 (July 3, 2017)
+* **Breaking Change:**  Updated the `ProxyConfig` & `UrlMatchPattern` to support multiple protocols.
+* `ProxyConfig` and `ProxyConfigList` now accept the `host` and `port` keys instead of `server`. The `match` property also takes in multiple protocols:
+```js
+// v1.2.9
+var proxyConfig = new ProxyConfig({
+    match: 'http://*/foo',
+    server: 'https://proxy.com:8080', // This has been split into host and port in v2.0.0
+    tunnel: true
+});
+var proxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'http://*/foo',
+        server: 'https://proxy.com:8080', // This has been split into host and port in v2.0.0
+        tunnel: true
+    }
+]);
+
+// v2.0.0
+var proxyConfig = new ProxyConfig({
+    match: 'http+ftp://*/foo', // match now supports multiple plus(`+`) separated protocols
+    host: 'proxy.com', // In v1.2.9, `host` and `port` were combined into `server`
+    port: 8080,
+    tunnel: true
+});
+
+var ProxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'http+ftp://*/foo', // `match` now supports multiple plus(`+`) separated protocols
+        host: 'proxy.com', // In v1.2.9, `host` and `port` were combined into `server`
+        port: 8080,
+        tunnel: true
+    }
+]);
+```
+* `UrlMatchPattern` now returns an array of protocol strings:
+```js
+// v1.2.9
+var matchPattern = new UrlMatchPattern('http://*/*').createMatchPattern();
+matchPattern.protocol // 'http'
+
+// v2.0.0
+var matchPattern = new UrlMatchPattern('http://*/*').createMatchPattern();
+matchPattern.protocols // ['http'] (The singular protocol key has been replaced with the plural protocols in v2.0.0)
+
+var anotherMatchPattern = new UrlMatchPattern('http+https+ftp+file://').createMatchPattern();
+anotherMatchPatter.protocols // ['http', 'https', 'ftp', 'file']
+```
+* `ProxyConfig#server` has been removed in favour of the new host format:
+```js
+// v1.2.9
+var proxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'https://*/*',
+        host: 'proxy.com'
+    }
+]);
+proxyConfigList.resolve('https://www.google.com').server.getHost(); // `proxy.com`
+
+// v2.0.0
+var proxyConfigList = new ProxyConfigList({}, [
+    {
+        match: 'https://*/*',
+        host: 'proxy.com'
+    }
+]);
+proxyConfigList.resolve('https://www.google.com').host // `proxy.com`
+```
+
+#### v1.2.9 (June 27, 2017)
+* Added support to allow duplicate indexed items to be exported as array via `PropertyList.prototype.toObject`
+* Added a helper, `ItemGroup.oneDeep()` to recursively look for an `Item` in an `ItemGroup`
+* Fixed a bug which caused `PropertyList.remove()` to remove uncalled for elements from internal reference
+
+#### v1.2.8 (May 31, 2017)
+* Fixed a bug where converting `QueryParam` and `FormParam` lists to objects was not working
+
+#### v1.2.7 (May 30, 2017)
+* Fixed path variable data representations to work correctly with `id` as well as `key`.
+
+#### 1.2.6 (May 29, 2017)
+* Enhanced `Url.toString()` to handle non-string path variable values
+* Enhanced `PropertyList.has()` to also check for values (optionally)
+* Added a data structure for NTLM authentication mechanism
+
+#### 1.2.5 (May 11, 2017)
+* Added support for multi-layered variable resolution
+* Added convenience method, `VariableScope.toObject()`
+* `VariableScope.variables()` is now deprecated in favor of above
+
+#### 1.2.4 (May 09, 2017)
+* Fixed a bug in the response size computation which was caused due to reliance on a hidden property
+
+#### 1.2.3 (May 08, 2017)
+* `Header` now inherits from `Property` instead of `PropertyBase`.
+* Authorization helper fixes.
+* Descriptions have been shifted to `Property` from `PropertyBase`.
+* Header size is sent is zero if no headers are present.
+
 #### 1.2.2 (April 26, 2017)
 * Updated signing logic to support inherited auth parameters
 * Added a new helper function, `setParent` to `PropertyBase`
@@ -9,7 +129,7 @@
 * Added a new property, `CookieList`
 * Fixed a bug in the `RequestAuth` implementation which caused authorization step to be skipped
 
-#### 1.2.0 (April 24, 2017) 
+#### 1.2.0 (April 24, 2017)
 * Added support for variable types via VariableScope `.set` function
 * Added `VariableScope~variables` to access all variables as a plain object
 * Ensure that `Xyz.isXyz()` functions always return a boolean

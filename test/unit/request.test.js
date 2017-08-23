@@ -1,13 +1,125 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    PropertyList = require('../../lib/index.js').PropertyList,
-    Url = require('../../lib/index.js').Url,
-    Request = require('../../lib/index.js').Request;
+    sdk = require('../../lib/index.js'),
+    PropertyList = sdk.PropertyList,
+    Url = sdk.Url,
+    Request = sdk.Request;
 
 /* global describe, it */
 describe('Request', function () {
     var rawRequest = fixtures.collectionV2.item[1].request,
         request = new Request(rawRequest);
+
+    describe('sanity', function () {
+        var rawRequest = fixtures.collectionV2.item[1],
+            request = new Request(rawRequest.request);
+
+        it('initializes successfully', function () {
+            expect(request).to.be.ok();
+        });
+
+        it('should handle arbitrary options correctly', function () {
+            var req = new Request({
+                url: {
+                    raw: 'https://postman-echo.com/:path',
+                    protocol: 'https',
+                    host: ['postman-echo', 'com'],
+                    path: [':path'],
+                    variable: [
+                        {
+                            key: 'path',
+                            value: 'get'
+                        }
+                    ]
+                },
+                proxy: {},
+                certificate: {}
+            });
+
+            expect(req.method).to.be('GET');
+            expect(sdk.ProxyConfig.isProxyConfig(req.proxy)).to.be(true);
+            expect(sdk.Certificate.isCertificate(req.certificate)).to.be(true);
+
+            req.update({ method: { name: 'GET' } });
+
+            expect(req.method).to.eql({ name: 'GET' });
+            expect(req.toJSON()).to.have.keys(['certificate', 'proxy', 'url']);
+        });
+
+        describe('has property', function () {
+            it('headers', function () {
+                expect(request).to.have.property('headers');
+                expect(request.headers.all()).to.be.an('array');
+                expect(request.headers.all()).to.not.be.empty();
+            });
+
+            it('body', function () {
+                expect(request).to.have.property('body');
+            });
+
+            it('method', function () {
+                expect(request).to.have.property('method');
+                expect(request.method).to.be.a('string');
+            });
+
+            describe('url', function () {
+                it('an object', function () {
+                    expect(request).to.have.property('url');
+                    expect(request.url).to.be.an('object');
+                    expect(request.url).to.not.be.empty();
+                });
+
+                describe('has property', function () {
+                    describe('auth', function () {
+                        it('is undefined', function () {
+                            expect(request.url).to.have.property('auth');
+                            expect(request.url.auth).to.be(undefined);
+                        });
+                    });
+
+                    it('protocol', function () {
+                        expect(request.url).to.have.property('protocol', 'http');
+                    });
+
+                    it('port', function () {
+                        expect(request.url).to.have.property('port', undefined);
+                    });
+
+                    it('path', function () {
+                        expect(request.url).to.have.property('path');
+                        expect(request.url.path).to.be.an('array');
+                        expect(request.url.path).to.not.be.empty();
+                    });
+
+                    it('hash', function () {
+                        expect(request.url).to.have.property('hash', undefined);
+                    });
+
+                    it('host', function () {
+                        expect(request.url).to.have.property('host');
+                        expect(request.url.host).to.be.an('array');
+                        expect(request.url.host).to.not.be.empty();
+                    });
+
+                    it('query', function () {
+                        expect(request.url).to.have.property('query');
+                    });
+                });
+            });
+        });
+
+        describe('has function', function () {
+            it('getHeaders', function () {
+                expect(request.getHeaders).to.be.ok();
+                expect(request.getHeaders).to.be.a('function');
+            });
+
+            it('forEachHeader', function () {
+                expect(request.forEachHeader).to.be.ok();
+                expect(request.forEachHeader).to.be.a('function');
+            });
+        });
+    });
 
     describe('isRequest', function () {
         it('must distinguish between requests and other objects', function () {
@@ -191,6 +303,62 @@ describe('Request', function () {
                 // Ideally, only one param should be left, so this runs only once.
                 expect(param.key).to.eql(secondParam.key);
                 expect(param.value).to.eql(secondParam.value);
+            });
+        });
+    });
+
+    describe('.removeHeader', function () {
+        it('should bail out for invalid parameters', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader({});
+            expect(request.headers.reference).to.eql({
+                foo: {
+                    key: 'foo',
+                    value: 'bar'
+                }
+            });
+        });
+    });
+
+    describe('.forEachHeader', function () {
+        it('should traverse the set of headers correctly', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                result = [];
+
+            request.forEachHeader(function (header) {
+                result.push(header.key);
+            });
+            expect(result).to.eql(['foo']);
+        });
+    });
+
+    describe('.authorize', function () {
+        it('should correctly authorize the current request context', function () {
+            var newReq,
+                request = new Request({
+                    auth: {
+                        type: 'basic',
+                        basic: {
+                            username: 'foo',
+                            password: 'bar'
+                        }
+                    }
+                });
+
+            newReq = request.authorize();
+            expect(newReq.headers.reference).to.eql({
+                authorization: {
+                    key: 'Authorization',
+                    value: 'Basic Zm9vOmJhcg==',
+                    system: true
+                }
             });
         });
     });

@@ -1,4 +1,5 @@
-var expect = require('expect.js'),
+var _ = require('lodash'),
+    expect = require('expect.js'),
     PropertyList = require('../../lib/index.js').PropertyList,
     Item = require('../../lib/index.js').Item,
 
@@ -446,7 +447,7 @@ describe('PropertyList', function () {
                 ]);
             });
 
-            it('.one() should always the last item inserted, even if multiple are present', function () {
+            it('.one() should always return the last item inserted, even if multiple are present', function () {
                 expect(list.one('key1')).to.eql({ keyAttr: 'key1', value: 'val2' });
             });
 
@@ -465,7 +466,7 @@ describe('PropertyList', function () {
         });
     });
 
-    describe('isPropertyList', function () {
+    describe('.isPropertyList()', function () {
         var list,
             rawList = [{
                 keyAttr: 'key1',
@@ -500,19 +501,28 @@ describe('PropertyList', function () {
         });
     });
 
-    describe('toObject', function () {
-        var FakeType = function (options) {
-            this.keyAttr = options.keyAttr;
-            this.value = options.value;
-            this.disabled = options.disabled;
-        };
+    describe('.toObject()', function () {
+        var FakeType;
 
-        FakeType._postman_propertyIndexKey = 'keyAttr';
-        FakeType._postman_propertyIndexCaseInsensitive = true;
-        FakeType._postman_propertyAllowsMultipleValues = true;
-        FakeType.prototype.valueOf = function () {
-            return this.value;
-        };
+        beforeEach(function () {
+            FakeType = function (options) {
+                this.keyAttr = options.keyAttr;
+                this.value = options.value;
+                this.disabled = options.disabled;
+            };
+
+            FakeType._postman_sanitizeKeys = false;
+            FakeType._postman_propertyIndexKey = 'keyAttr';
+            FakeType._postman_propertyIndexCaseInsensitive = true;
+            FakeType._postman_propertyAllowsMultipleValues = false;
+            FakeType.prototype.valueOf = function () {
+                return this.value;
+            };
+        });
+
+        afterEach(function () {
+            FakeType = null;
+        });
 
         it('should return a pojo', function () {
             var list = new PropertyList(FakeType, {}, [{
@@ -570,9 +580,53 @@ describe('PropertyList', function () {
                 key3: 'val3'
             });
         });
+
+        it('should return multiple values as array', function () {
+            FakeType._postman_propertyAllowsMultipleValues = true;
+
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.toObject()).to.eql({
+                key1: ['val1', 'val2'],
+                key2: 'val3'
+            });
+        });
+
+        it('should respect the in-built sanitize property', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: '',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }]);
+
+            expect(list.toObject()).to.eql({ '': 'val1', key1: 'val2' });
+        });
+
+        it('should correctly handle the keys with the sanitize option', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: '',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }]);
+
+            expect(list.toObject(false, false, false, true)).to.eql({ key1: 'val2' });
+        });
     });
 
-    describe('.get', function () {
+    describe('.get()', function () {
         var FakeType = function (options) {
             this.keyAttr = options.keyAttr;
             this.value = options.value;
@@ -599,6 +653,400 @@ describe('PropertyList', function () {
             }]);
 
             expect(list.get('key1')).to.eql('val2');
+        });
+    });
+
+    describe('.remove()', function () {
+        var FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            _.has(options, 'disabled') && (this.disabled = options.disabled);
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = true;
+        FakeType._postman_propertyAllowsMultipleValues = true;
+        FakeType.prototype.valueOf = function () {
+            return this.value;
+        };
+
+        it('should remove an element from the property list members array', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            list.remove(function (fake) {
+                return fake.keyAttr === 'key1' && fake.value === 'val2';
+            });
+
+            // should have removed exactly the one element from the members array
+            expect(list.toJSON()).to.eql([
+                { keyAttr: 'key1', value: 'val1' },
+                { keyAttr: 'key2', value: 'val3' }
+            ]);
+        });
+
+
+        it('should remove an element from the property list reference map', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            // Ensure that the reference array contains an array of values for `key1`
+            expect(list.reference.key1).to.be.an(Array);
+            expect(list.reference.key1).to.have.length(2);
+
+            list.remove(function (fake) {
+                return fake.keyAttr === 'key1' && fake.value === 'val2';
+            });
+
+            // should have removed the correct element from the reference map, and removed the array of values
+            expect(list.reference.key1).to.not.be.an(Array);
+            expect(list.reference.key1).to.eql({
+                keyAttr: 'key1',
+                value: 'val1'
+            });
+        });
+
+        it('should remove an element from the property list reference map and remove associated array', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            // Ensure that the reference array contains an array of values for `key1`
+            expect(list.reference.key1).to.be.an(Array);
+            expect(list.reference.key1).to.have.length(2);
+
+            list.remove(function (fake) {
+                return fake.keyAttr === 'key1';
+            });
+
+            // should have removed the array of values
+            expect(list.reference).to.not.have.property('key1');
+        });
+
+        it('should correctly remove an element by direct reference', function () {
+            var entity = new FakeType({ keyAttr: 'key', value: 'val' }),
+                list = new PropertyList(FakeType, {}, [entity]);
+
+            list.remove(entity);
+
+            // should have removed the correct element from the reference map, and removed the array of values
+            expect(list.reference).to.not.have.property('key');
+        });
+    });
+
+    describe('.each', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should handle non-function iterators correctly', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'foo', value: 'bar' }
+            ]);
+
+            expect(pList.each.bind(pList)).withArgs({ foo: 'bar' }).to.not.throwError();
+            expect(pList.each.bind(pList)).withArgs(undefined).to.not.throwError();
+            expect(pList.each.bind(pList)).to.not.throwError();
+        });
+    });
+
+    describe('.eachParent', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should bail out if the iterator is not a function', function () {
+            var pList = new PropertyList(FakeType, {}, []);
+
+            expect(pList.eachParent.bind(pList)).withArgs('random').to.not.throwError();
+            expect(pList.eachParent.bind(pList)).withArgs(undefined).to.not.throwError();
+            expect(pList.eachParent.bind(pList)).to.not.throwError();
+        });
+
+        it('should correctly bind the context to the iterator if one is provided', function () {
+            var parent = new PropertyList(FakeType, {}, [{ key: 'level', value: 'parent' }]),
+                pList = new PropertyList(FakeType, parent, [{ key: 'level', value: 'child' }]),
+                chain = [];
+
+            pList.eachParent(function (parent) {
+                parent.members && chain.push(parent.members[0][this.attr]);
+            }, {
+                attr: 'value'
+            });
+
+            expect(chain).to.eql(['parent']);
+        });
+
+        it('should use the default context of the caller instance if none is provided', function () {
+            var parent = new PropertyList(FakeType, {}, [{ key: 'level', value: 'parent' }]),
+                pList = new PropertyList(FakeType, parent, [{ key: 'level', value: 'child' }]),
+                chain = [];
+
+            pList.eachParent(function (parent) {
+                expect(this.toJSON()).to.eql([{ key: 'level', value: 'child' }]);
+                parent.members && chain.push(parent.members[0].value);
+            });
+
+            expect(chain).to.eql(['parent']);
+        });
+    });
+
+    describe('.filter', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should correctly bind the iterator to the provided context', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'foo', value: 'bar' },
+                { key: 'alpha', value: 'bar' },
+                { key: 'gamma', value: 'baz' }
+            ]);
+
+            expect(pList.filter(function (property) {
+                return property.value === this.value;
+            }, { value: 'bar' })).to.eql([
+                { key: 'foo', value: 'bar' },
+                { key: 'alpha', value: 'bar' }
+            ]);
+        });
+    });
+
+    describe('.find', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+
+        it('should correctly bind the iterator to the provided context', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'foo', value: 'bar' },
+                { key: 'alpha', value: 'bar' },
+                { key: 'gamma', value: 'baz' }
+            ]);
+
+            expect(pList.find(function (property) {
+                return property.key === this.key;
+            }, { key: 'alpha' })).to.eql(
+                { key: 'alpha', value: 'bar' }
+            );
+        });
+    });
+
+    describe('.insert', function () {
+        it('should bail out for non-object arguments', function () {
+            var pList = new PropertyList();
+
+            pList.insert();
+            expect(pList.members).to.eql([]);
+        });
+    });
+
+    describe('.add', function () {
+        it('should bail out for null, undefined, or NaN input', function () {
+            var pList = new PropertyList();
+
+            pList.add(null);
+            expect(pList.members).to.be.empty();
+
+            pList.add(undefined);
+            expect(pList.members).to.be.empty();
+
+            pList.add(NaN);
+            expect(pList.members).to.be.empty();
+        });
+    });
+
+    describe('.toJSON', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            _.has(options, 'value') && (this.value = options.value);
+            _.has(options, 'values') && (this.values = options.values);
+        };
+
+        it('should handle various kinds of values correctly', function () {
+            var pList = new PropertyList(FakeType, {}, [
+                { key: 'alpha', value: undefined },
+                { key: 'beta', value: {} },
+                { key: 'gamma', value: { val: 'random', toJSON: function () { return this.val; } } },
+                { key: 'delta', values: new PropertyList(FakeType, {}, []) }
+            ]);
+
+            expect(pList.toJSON()).to.eql([
+                { key: 'alpha' },
+                { key: 'beta', value: {} },
+                { key: 'gamma', value: 'random' },
+                { key: 'delta', value: [] }
+            ]);
+        });
+    });
+
+    describe('.has()', function () {
+        var FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            this.disabled = options.disabled;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = true;
+        FakeType._postman_propertyAllowsMultipleValues = true;
+        FakeType.prototype.valueOf = function () {
+            return this.value;
+        };
+
+        it('should check if given key exists in the property list', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key1')).to.eql(true);
+        });
+
+        it('should return a falsey value if the key does not exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('something')).to.eql(false);
+        });
+
+        it('should handle if a key has multiple values', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key1')).to.eql(true);
+        });
+
+        it('should handle if a particular value is provided for lookup', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key1',
+                value: 'val3'
+            }, {
+                keyAttr: 'key2',
+                value: 'val4'
+            }]);
+
+            expect(list.has('key1', 'val1')).to.eql(true);
+            expect(list.has('key1', 'val2')).to.eql(true);
+            expect(list.has('key1', 'val3')).to.eql(true);
+        });
+
+        it('should return false if a particular value is provided for lookup but does not exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key1',
+                value: 'val3'
+            }, {
+                keyAttr: 'key2',
+                value: 'val4'
+            }]);
+
+            expect(list.has('key1', 'val4')).to.eql(false);
+        });
+
+        it('should return false if the key-value pair does not exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key4', 'val3')).to.eql(false);
+        });
+
+        it('should return true if the item is provided', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has(list.members[0])).to.eql(true);
+        });
+
+        it('should return true if key and value exist, but no duplicate values exist', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val2'
+            }, {
+                keyAttr: 'key3',
+                value: 'val3'
+            }]);
+
+            expect(list.has('key1', 'val1')).to.eql(true);
         });
     });
 });

@@ -9,7 +9,7 @@ require('shelljs/global');
 var colors = require('colors/safe'),
     path = require('path'),
 
-    KARMA_CONFIG_PATH = path.join(__dirname, '..', 'karma.conf');
+    KARMA_CONFIG_PATH = path.join(__dirname, '..', 'test', 'karma.conf');
 
 module.exports = function (exit) {
     console.log(colors.yellow.bold('Running unit tests within browser...'));

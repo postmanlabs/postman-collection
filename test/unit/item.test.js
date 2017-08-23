@@ -1,11 +1,82 @@
 var expect = require('expect.js'),
     fixtures = require('../fixtures'),
-    sdk = require('../../lib/index.js');
+    sdk = require('../../lib/index.js'),
+
+    Request = require('../../lib/index.js').Request,
+    Item = require('../../lib/index.js').Item;
 
 /* global describe, it */
 describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
         item = new sdk.Item(rawItem);
+
+    describe('sanity', function () {
+        describe('request', function () {
+            var rawItem = fixtures.collectionV2.item[0],
+                item = new Item(rawItem);
+
+            it('initializes successfully', function () {
+                expect(item).to.be.ok();
+            });
+
+            describe('has property', function () {
+                it('description', function () {
+                    expect(item).to.have.property('description');
+                    expect(item.description).to.be.an('object');
+                });
+
+                it('events', function () {
+                    expect(item).to.have.property('events');
+                    expect(item.events.all()).to.be.an('array');
+                    expect(item.events.all()).to.not.be.empty();
+                });
+
+                it('id', function () {
+                    expect(item).to.have.property('id', rawItem.id);
+                });
+
+                it('name', function () {
+                    expect(item).to.have.property('name', rawItem.name);
+                });
+
+                it('request', function () {
+                    expect(item).to.have.property('request');
+                    expect(item.request).to.be.an('object');
+                    expect(item.request).to.not.be.empty();
+                });
+
+                it('responses', function () {
+                    expect(item).to.have.property('responses');
+                    expect(item.responses.all()).to.be.an('array');
+                    expect(item.responses.all()).to.not.be.empty();
+                });
+            });
+        });
+
+        describe('folder', function () {
+            var rawItem = fixtures.collectionV2.item[2],
+                item = new Item(rawItem);
+
+            it('initializes successfully', function () {
+                expect(item).to.be.ok();
+            });
+
+            describe('has property', function () {
+                it('id', function () {
+                    expect(item).to.have.property('id', rawItem.id);
+                });
+
+                it('name', function () {
+                    expect(item).to.have.property('name', rawItem.name);
+                });
+
+                it('request', function () {
+                    expect(item).to.have.property('request');
+                    expect(item.request).to.be.a(Request);
+                });
+            });
+        });
+    });
 
     describe('json representation', function () {
         it('must match what the item was initialized with', function () {
@@ -124,6 +195,38 @@ describe('Item', function () {
             var auth = item.getAuth();
 
             expect(auth).to.be(undefined);
+        });
+    });
+
+    describe('.getEvents', function () {
+        var item = new sdk.Item({
+            name: '200 ok',
+            request: 'http://echo.getpostman.com/status/200',
+            event: [{
+                listen: 'prerequest',
+                script: 'my-global-script-1'
+            }, {
+                listen: 'test',
+                script: {
+                    type: 'text/javascript',
+                    exec: 'console.log(\'hello\');'
+                }
+            }]
+        });
+
+        it('should return all events if no name/falsy name is provided', function () {
+            var events = item.getEvents();
+
+            expect(events).to.have.length(2);
+            expect(events[0]).to.have.property('listen', 'prerequest');
+            expect(events[1]).to.have.property('listen', 'test');
+        });
+
+        it('should filter down to the provided name', function () {
+            var events = item.getEvents('test');
+
+            expect(events).to.have.length(1);
+            expect(events[0]).to.have.property('listen', 'test');
         });
     });
 

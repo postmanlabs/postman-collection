@@ -1,9 +1,32 @@
 var expect = require('expect.js'),
+    fixtures = require('../fixtures'),
     Header = require('../../lib/index.js').Header,
     PropertyList = require('../../lib/index.js').PropertyList;
 
 /* global describe, it */
 describe('Header', function () {
+    describe('sanity', function () {
+        var rawHeaders = fixtures.collectionV2.item[0].response[0].header,
+            headers = (new PropertyList(Header, undefined, rawHeaders)).all();
+
+        it('initialize successfully', function () {
+            expect(headers).to.be.ok();
+            expect(headers).to.be.an('array');
+        });
+
+        describe('each contain property', function () {
+            var header = headers[0];
+
+            it('key', function () {
+                expect(header).to.have.property('key', 'Content-Type');
+            });
+
+            it('value', function () {
+                expect(header).to.have.property('value', 'application/json');
+            });
+        });
+    });
+
     it('must have a .create to create new instamce', function () {
         expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date')).to.eql({
             key: 'Date',
@@ -51,6 +74,13 @@ describe('Header', function () {
     });
 
     describe('unparse', function () {
+        it('should unparse headers to a blank string for invalid inputs', function () {
+            expect(Header.unparse('')).to.be('');
+            expect(Header.unparse({ key: 'foo', value: 'bar' })).to.be('');
+
+            expect(Header.unparseSingle('')).to.be('');
+        });
+
         it('should unparse headers to a string', function () {
             var raw = 'name1: value1\r\nname2: value2',
                 list = new PropertyList(Header, {}, raw);
@@ -162,6 +192,7 @@ describe('Header', function () {
     });
 
     describe('isHeader', function () {
+        // eslint-disable-next-line max-len
         var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="\n';
 
         it('should return true for a Header instance', function () {

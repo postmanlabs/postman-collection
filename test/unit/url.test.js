@@ -7,6 +7,56 @@ var expect = require('expect.js'),
 
 /* global describe, it */
 describe('Url', function () {
+    describe('sanity', function () {
+        var rawUrl = 'https://user:pass@postman-echo.com/get?a=1&b=2#heading',
+            url = new Url(rawUrl);
+
+        it('parsed successfully', function () {
+            expect(url).to.be.ok();
+            expect(url).to.be.an('object');
+        });
+
+        describe('has property', function () {
+            it('auth', function () {
+                expect(url).to.have.property('auth');
+                expect(url.auth).to.be.an('object');
+                expect(url.auth).to.have.property('user', 'user');
+                expect(url.auth).to.have.property('password', 'pass');
+            });
+
+            it('hash', function () {
+                expect(url).to.have.property('hash', 'heading');
+            });
+
+            it('host', function () {
+                expect(url).to.have.property('host');
+                expect(url.host).be.an('array');
+            });
+
+            it('path', function () {
+                expect(url).to.have.property('path');
+                expect(url.path).to.be.an('array');
+            });
+
+            it('port', function () {
+                expect(url).to.have.property('port', undefined);
+            });
+
+            it('protocol', function () {
+                expect(url).to.have.property('protocol', 'https');
+            });
+
+            it('query', function () {
+                expect(url).to.have.property('query');
+                expect(url.query).to.be.an('object');
+            });
+
+            it('update', function () {
+                expect(url.update).to.be.ok();
+                expect(url.update).to.be.a('function');
+            });
+        });
+    });
 
     describe('Constructor', function () {
         it('should be able to construct a URL from empty string', function () {
@@ -345,6 +395,13 @@ describe('Url', function () {
                 url = new Url(urlstring);
             expect(url.toString()).to.eql(urlstring);
         });
+
+        it('must handle falsy input correctly', function () {
+            expect(new Url().toString()).to.be('');
+            expect(new Url('').toString()).to.be('');
+            expect(new Url(null).toString()).to.be('');
+            expect(new Url(undefined).toString()).to.be('');
+        });
     });
 
     describe('OAuth1 Base Url', function () {
@@ -391,6 +448,65 @@ describe('Url', function () {
             var rawUrl = rawUrls[10],
                 url = new Url(rawUrl);
             expect(url.getPath()).to.eql('/get');
+        });
+
+        it('should ignore non string valued path variables correctly', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta/:gamma/:delta/:epsilon/:phi',
+                variable: [
+                    { id: 'alpha', value: 'get' },
+                    { id: 'beta', value: null },
+                    { id: 'gamma', value: NaN },
+                    { id: 'gamma', value: undefined },
+                    { id: 'epsilon', value: [] },
+                    { id: 'phi', value: {} }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
+        });
+
+        it('should work correctly without the id field as well', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta/:gamma/:delta/:epsilon/:phi',
+                variable: [
+                    { key: 'alpha', value: 'get' },
+                    { key: 'beta', value: null },
+                    { key: 'gamma', value: NaN },
+                    { key: 'gamma', value: undefined },
+                    { key: 'epsilon', value: [] },
+                    { key: 'phi', value: {} }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
+        });
+
+        it('should not resolve path variables when unresolved is set to false', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta/:gamma/:delta/:epsilon/:phi',
+                variable: [
+                    { key: 'alpha', value: '1' },
+                    { key: 'beta', value: '2' },
+                    { key: 'gamma', value: '3' },
+                    { key: 'gamma', value: '4' },
+                    { key: 'epsilon', value: '5' },
+                    { key: 'phi', value: '6' }
+                ]
+            });
+
+            expect(url.getPath({
+                unresolved: true
+            })).to.eql('/:alpha/:beta/:gamma/:delta/:epsilon/:phi');
         });
     });
 
@@ -523,6 +639,71 @@ describe('Url', function () {
                 var url = { _postman_propertyName: 'Url' };
                 expect(Url.isUrl(url)).to.eql(false);
             });
+        });
+    });
+
+    describe('.getHost', function () {
+        it('should handle string based hosts correctly', function () {
+            var url = new Url('postman-echo.com');
+
+            expect(url.getHost()).to.be('postman-echo.com');
+
+            url.host = url.host.join('.'); // hijack the host form to ensure sanity in the next assertion
+            expect(url.getHost()).to.be('postman-echo.com');
+        });
+    });
+
+    describe('.getOAuth1BaseUrl', function () {
+        it('should use the default protocol of http', function () {
+            var url = new Url('https://postman-echo.com/auth/oauth1');
+
+            delete url.protocol;
+            expect(url.getOAuth1BaseUrl()).to.be('http://postman-echo.com/auth/oauth1');
+        });
+
+        it('should use the the port if one is provided', function () {
+            var url = new Url('https://postman-echo.com:8443/auth/oauth1');
+
+            expect(url.getOAuth1BaseUrl()).to.be('https://postman-echo.com:8443/auth/oauth1');
+        });
+
+        it('should not append superfluous protocol separators', function () {
+            var url = new Url('https://postman-echo.com/auth/oauth1');
+
+            url.protocol = 'https://';
+            expect(url.getOAuth1BaseUrl()).to.be('https://postman-echo.com/auth/oauth1');
+        });
+    });
+
+    describe('Query parameters', function () {
+        it('should correctly add a string of query params to an existing Url instance', function () {
+            var url = new Url();
+            url.addQueryParams('alpha=foo&beta=bar');
+
+            expect(url.toJSON().query).to.eql([
+                { key: 'alpha', value: 'foo' },
+                { key: 'beta', value: 'bar' }
+            ]);
+        });
+
+        it('should correctly remove a list of query params from an existing Url instance', function () {
+            var url = new Url('https://postman-echo.com/get?alpha=foo&beta=bar&gamma=baz');
+
+            url.removeQueryParams([{ key: 'alpha' }, { key: 'gamma' }]);
+            expect(url.toJSON().query).to.eql([
+                { key: 'beta', value: 'bar' }
+            ]);
+        });
+
+        it('should return an empty string if there are no query parameters', function () {
+            var url = new Url('https://postman-echo.com/getbaz');
+
+            expect(url.getQueryString()).to.be('');
+        });
+
+        it('must be able to convert query params to object', function () {
+            var url = new Url('http://127.0.0.1/hello/world/?query=param&query2=param2#test-api');
+            expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
         });
     });
 });

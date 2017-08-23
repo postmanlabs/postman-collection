@@ -171,6 +171,30 @@ module.exports = {
                 }]
             }
         },
+        oauth2: {
+            auth: {
+                type: 'oauth2',
+                oauth2: {
+                    addTokenTo: 'RKCGzna7bv9YD57c',
+                    callBackUrl: 'D+EdQ-gs$-%@2Nu7',
+                    authUrl: '',
+                    accessTokenUrl: '',
+                    clientId: 'HMAC-SHA1',
+                    clientSecret: '1453890475',
+                    scope: 'yly1UR',
+                    requestAccessTokenLocally: '1.0'
+                }
+            },
+            url: 'https://postman-echo.com/oauth2?hi=hello&yo=true',
+            method: 'POST',
+            data: {
+                mode: 'urlencoded',
+                content: [{
+                    key: 'haha',
+                    value: 'somevalue'
+                }]
+            }
+        },
         awsv4: {
             auth: {
                 type: 'awsv4',
@@ -227,6 +251,7 @@ module.exports = {
             header: [
                 {
                     key: 'Authorization',
+                    // eslint-disable-next-line max-len
                     value: 'Hawk id="dh37fgj492je", ts="1448888081", nonce="HoH6Ay", ext="skjdfklsjhdflkjhsdf", mac="moWleO5f/8QbvIiy7oo2zj1bmezhrYwrCkz4BsXg0M4="',
                     description: ''
                 }
@@ -238,29 +263,6 @@ module.exports = {
             description: ''
         }
     },
-    samplePropertyList: [
-        {
-            keyAttr: 'heyo',
-            value: 'what'
-        },
-        {
-            keyAttr: 'somethingidk',
-            value: 'oops'
-        }
-    ],
-    environments: [
-        {
-            somevar: 'asdasd',
-            root: 'one'
-        },
-        {
-            somevar: '2nd layer override',
-            hi: 'hello'
-        },
-        {
-            somevar: '3rd layer override'
-        }
-    ],
     rawCookie: 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH',
     requestData: {
         mode: 'formdata',
@@ -285,11 +287,13 @@ module.exports = {
     responseData1: {
         code: 200,
         body: '{"status":200}',
+        // eslint-disable-next-line max-len
         header: 'HTTP/1.1 200 OK\r\nServer: nginx/1.8.1\r\nDate: Sun, 24 Jul 2016 23:16:35 GMT\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 14\r\nConnection: keep-alive\r\nAccess-Control-Allow-Origin: \r\nAccess-Control-Allow-Credentials: \r\nAccess-Control-Allow-Methods: \r\nAccess-Control-Allow-Headers: \r\nAccess-Control-Expose-Headers: \r\nETag: W/"e-+3Pmmp/QERKiJq3DueGVYg"\r\nVary: Accept-Encoding\r\nset-cookie: sails.sid=s%3A5KvXh2N_L9GM7L-ZMtv7TCNbiVmNbH2_.aL8xAy5OL9F9vXEhJEIj5%2Br0bdcrpUPGUX4mB7gZ67o; Path=/; HttpOnly\r\n\r\n'
     },
     responseData2: {
         code: 200,
         body: '{"status":200}',
+        // eslint-disable-next-line max-len
         header: 'HTTP/1.1 200 OK\nServer: nginx/1.8.1\nDate: Sun, 24 Jul 2016 23:16:35 GMT\nContent-Type: application/json; charset=utf-8\nContent-Length: 14\nConnection: keep-alive\nAccess-Control-Allow-Origin: \nAccess-Control-Allow-Credentials: \nAccess-Control-Allow-Methods: \nAccess-Control-Allow-Headers: \nAccess-Control-Expose-Headers: \nETag: W/"e-+3Pmmp/QERKiJq3DueGVYg"\nVary: Accept-Encoding\nset-cookie: sails.sid=s%3A5KvXh2N_L9GM7L-ZMtv7TCNbiVmNbH2_.aL8xAy5OL9F9vXEhJEIj5%2Br0bdcrpUPGUX4mB7gZ67o; Path=/; HttpOnly'
     }
 };

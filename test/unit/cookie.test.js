@@ -4,6 +4,84 @@ var expect = require('expect.js'),
 
 /* global describe, it */
 describe('Cookie', function () {
+    describe('sanity', function () {
+        var rawCookie = fixtures.collectionV2.item[0].response[0].cookie[0],
+            cookie = new Cookie(rawCookie);
+
+        it('initializes successfully', function () {
+            expect(cookie).to.be.ok();
+        });
+
+        it('should work correctly with a raw cookie string as well', function () {
+            var strCookie = new Cookie('foo=bar;');
+
+            expect(strCookie.name).to.be('foo');
+            expect(strCookie.value).to.be('bar');
+        });
+
+        it('should work correctly with specific options and value defaults', function () {
+            var expires = 'Sat, 02 May 2020 23:38:25 GMT',
+                strCookie = new Cookie({
+                    name: 'foo',
+                    expires: expires, // just a test, these options won't usually appear together
+                    maxAge: 1234
+                });
+
+            expect(strCookie.name).to.be('foo');
+            expect(strCookie.value).to.be(undefined);
+            expect(strCookie.expires).to.be.ok();
+            expect(strCookie.maxAge).to.be(1234);
+        });
+
+        describe('has property', function () {
+            it('domain', function () {
+                expect(cookie).to.have.property('domain', rawCookie.domain);
+            });
+
+            it('expires', function () {
+                expect(cookie).to.have.property('expires', rawCookie.expires);
+            });
+
+            it('hostOnly', function () {
+                expect(cookie).to.have.property('hostOnly', rawCookie.hostOnly);
+            });
+
+            it('httpOnly', function () {
+                expect(cookie).to.have.property('httpOnly', rawCookie.httpOnly);
+            });
+
+            it.skip('maxAge', function () { // @todo: possibly delete test. seems like based on old expectations
+                expect(cookie).to.have.property('maxAge', undefined);
+            });
+
+            it('path', function () {
+                expect(cookie).to.have.property('path', rawCookie.path);
+            });
+
+            it('secure', function () {
+                expect(cookie).to.have.property('secure', rawCookie.secure);
+            });
+
+            it('session', function () {
+                expect(cookie).to.have.property('session', rawCookie.session);
+            });
+
+            it('value', function () {
+                expect(cookie).to.have.property('value', rawCookie.value);
+            });
+
+            it('_', function () {
+                expect(cookie).to.have.property('_');
+                expect(cookie._).to.have.property('postman_storeId', rawCookie._postman_storeId);
+            });
+
+            it('update', function () {
+                expect(cookie.update).to.be.ok();
+                expect(cookie.update).to.be.an('function');
+            });
+        });
+    });
+
     describe('json representation', function () {
         it('must match what it was initialized with', function () {
             var rawCookie = fixtures.collectionV2.item[0].response[0].cookie[0],
@@ -64,6 +142,29 @@ describe('Cookie', function () {
 
         it('should return false when called without arguments', function () {
             expect(Cookie.isCookie()).to.be(false);
+        });
+    });
+
+    describe('.parse', function () {
+        it('should bail out for non string input', function () {
+            expect(Cookie.parse(['random'])).to.eql(['random']);
+        });
+
+        it('should correctly handle valid input', function () {
+            expect(Cookie.parse('foo=bar;domain=postman-echo.com')).to.eql({
+                domain: 'postman-echo.com',
+                key: 'foo',
+                value: 'bar'
+            });
+        });
+    });
+
+    describe('.splitParam', function () {
+        it('should correctly split string cookie values into their components', function () {
+            expect(Cookie.splitParam('foo="bar"')).to.eql({
+                key: 'foo',
+                value: 'bar'
+            });
         });
     });
 

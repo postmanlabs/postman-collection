@@ -2,7 +2,7 @@
 // Generated on Mon Nov 09 2015 18:53:12 GMT+0530 (IST)
 
 module.exports = function (config) {
-    config.set({
+    var configuration = {
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
@@ -13,8 +13,8 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'index.js',
-            'test/**/*.js'
+            '../index.js',
+            '../test/unit/**/*.js'
         ],
 
         // list of files to exclude
@@ -25,8 +25,8 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'index.js': ['browserify'], // Mention path as per your test js folder
-            'test/**/*.js': ['browserify'] // Mention path as per your library js folder
+            '../index.js': ['browserify'], // Mention path as per your test js folder
+            '../test/unit/**/*.js': ['browserify'] // Mention path as per your library js folder
         },
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -40,7 +40,7 @@ module.exports = function (config) {
         colors: true,
 
         // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        // one of: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_WARN,
 
         // enable / disable watching file and executing tests whenever any file changes
@@ -73,5 +73,17 @@ module.exports = function (config) {
                 timeout: 10000 // 10 seconds
             }
         }
-    });
+    };
+
+    if (process.env.TRAVIS) { // eslint-disable-line no-process-env
+        configuration.customLaunchers = {
+            chromeTravis: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        };
+        configuration.browsers = ['chromeTravis'];
+    }
+
+    config.set(configuration);
 };
