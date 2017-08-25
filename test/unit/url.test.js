@@ -528,8 +528,30 @@ describe('Url', function () {
         });
     });
 
+    describe('toString', function () {
+        it('should return empty string when url is empty', function () {
+            var url = new Url();
+
+            expect(url.toString()).to.eql('');
+        });
+    });
+
+    describe('getHost', function () {
+        it('should return empty string when url is empty', function () {
+            var url = new Url();
+
+            expect(url.getHost()).to.eql('');
+        });
+    });
+
     describe('getRemote', function () {
         describe('default', function () {
+            it('should return empty string when url is empty', function () {
+                var url = new Url();
+
+                expect(url.getRemote()).to.eql('');
+            });
+
             it('should get the correct remote when port is specified', function () {
                 var rawUrl = 'https://postman-echo.com:8999/get?w=x%y',
                     url = new Url(rawUrl);
