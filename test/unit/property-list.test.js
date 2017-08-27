@@ -883,6 +883,65 @@ describe('PropertyList', function () {
         });
     });
 
+    describe('upsert method', function () {
+        var FakeType = function (opts) {
+            _.assign(this, opts);
+        };
+        FakeType._postman_propertyIndexKey = 'key';
+        FakeType.prototype.update = function (opts) {
+            _.assign(this, opts);
+        };
+
+        it('should be able to add a key that is not existing', function () {
+            var list = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            // just verifying
+            expect(list.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            list.upsert({
+                key: 'key2',
+                val: 'value2'
+            });
+
+            expect(list.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
+            }, {
+                key: 'key2',
+                val: 'value2'
+            }]);
+        });
+
+        it('should be able to update a key that is existing', function () {
+            var list = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }, {
+                key: 'key2',
+                val: 'value2'
+            }]);
+
+            list.upsert({
+                key: 'key1',
+                val: 'value1-updated'
+            });
+
+            expect(list.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1-updated'
+            }, {
+                key: 'key2',
+                val: 'value2'
+            }]);
+        });
+    });
+
     describe('.toJSON', function () {
         var FakeType = function (options) {
             this.key = options.key;
