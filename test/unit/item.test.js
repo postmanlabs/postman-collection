@@ -145,7 +145,13 @@ describe('Item', function () {
                     auth: { type: 'basic', basic: { username: 'a', password: 'b' } }
                 }
             });
-            folderWithAuth = new sdk.ItemGroup({ name: 'folder2', auth: { type: 'hawk', hawk: {} } });
+            folderWithAuth = new sdk.ItemGroup({
+                name: 'folder2',
+                auth: {
+                    type: 'hawk',
+                    hawk: { user: 'nobody' }
+                }
+            });
         });
 
         afterEach(function () {
@@ -162,7 +168,9 @@ describe('Item', function () {
 
             var auth = item.getAuth();
 
-            expect(auth.constructor.name).to.eql('HawkAuth');
+            expect(auth).to.eql({
+                user: 'nobody'
+            });
         });
 
         it('should lookup auth method from collection, if absent in folder and item', function () {
@@ -173,7 +181,6 @@ describe('Item', function () {
 
             expect(auth.username).to.eql('c');
             expect(auth.password).to.eql('d');
-            expect(auth.constructor.name).to.eql('BasicAuth');
         });
 
 
@@ -185,7 +192,6 @@ describe('Item', function () {
 
             expect(auth.username).to.eql('a');
             expect(auth.password).to.eql('b');
-            expect(auth.constructor.name).to.eql('BasicAuth');
         });
 
         it('should return undefined if no auth is present', function () {

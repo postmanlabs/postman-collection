@@ -352,30 +352,6 @@ describe('Request', function () {
         });
     });
 
-    describe('.authorize', function () {
-        it('should correctly authorize the current request context', function () {
-            var newReq,
-                request = new Request({
-                    auth: {
-                        type: 'basic',
-                        basic: {
-                            username: 'foo',
-                            password: 'bar'
-                        }
-                    }
-                });
-
-            newReq = request.authorize();
-            expect(newReq.headers.reference).to.eql({
-                authorization: {
-                    key: 'Authorization',
-                    value: 'Basic Zm9vOmJhcg==',
-                    system: true
-                }
-            });
-        });
-    });
-
     describe('empty requests', function () {
 
         it('should have a url', function () {
