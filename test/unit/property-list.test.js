@@ -942,6 +942,79 @@ describe('PropertyList', function () {
         });
     });
 
+    describe('assimilate method', function () {
+        var FakeType = function (opts) {
+            _.assign(this, opts);
+        };
+        FakeType._postman_propertyIndexKey = 'key';
+        FakeType.prototype.update = function (opts) {
+            _.assign(this, opts);
+        };
+
+        it('should be able to add items from another list', function () {
+            var list1 = new PropertyList(FakeType, null, [{
+                    key: 'key1',
+                    val: 'value1'
+                }]),
+                list2 = new PropertyList(FakeType, null, [{
+                    key: 'key2',
+                    val: 'value2'
+                }]);
+
+            list1.assimilate(list2);
+
+            expect(list1.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
+            }, {
+                key: 'key2',
+                val: 'value2'
+            }]);
+        });
+
+        it('should be able to update existing keys while assimilating from another list', function () {
+            var list1 = new PropertyList(FakeType, null, [{
+                    key: 'key1',
+                    val: 'value1'
+                }, {
+                    key: 'key2',
+                    val: 'value2-old'
+                }]),
+                list2 = new PropertyList(FakeType, null, [{
+                    key: 'key2',
+                    val: 'value2'
+                }]);
+
+            list1.assimilate(list2);
+
+            expect(list1.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
+            }, {
+                key: 'key2',
+                val: 'value2'
+            }]);
+        });
+
+        it('should be able to add items from another list and prune extra items', function () {
+            var list1 = new PropertyList(FakeType, null, [{
+                    key: 'key1',
+                    val: 'value1'
+                }]),
+                list2 = new PropertyList(FakeType, null, [{
+                    key: 'key2',
+                    val: 'value2'
+                }]);
+
+            list1.assimilate(list2, true);
+
+            expect(list1.toJSON()).to.eql([{
+                key: 'key2',
+                val: 'value2'
+            }]);
+        });
+    });
+
     describe('.toJSON', function () {
         var FakeType = function (options) {
             this.key = options.key;
