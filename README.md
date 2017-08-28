@@ -46,3 +46,18 @@ console.log(myCollection.toJSON());
 After loading the collection from file, one can do a lot more using the functions that are available in the SDK. To know
 more about these functions, head over to
 [Collection SDK Docs](http://www.postmanlabs.com/postman-collection).
+
+## Postman Collection Schema
+
+The collection schema outlines the JSON definition of data structure accepted by the constructor of each properties of
+this SDK. In other words, this SDK provides JavaScript level object manipulation for the JSON structure defined by
+Postman Collection Format in [http://schema.getpostman.com/](http://schema.getpostman.com/).
+
+| Schema Version | Compatible SDK Versions |
+|----------------|-------------------------|
+| 1.0            | none                    |
+| 2.0            | <3.0                    |
+| 2.1            | >= 3.0                  |
+
+Conceptually, a JSON input to the constructor of an SDK property should provide similar output when that property
+instance's `.toJSON()` is called.
