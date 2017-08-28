@@ -46,6 +46,19 @@ describe('Request', function () {
             expect(req.toJSON()).to.have.keys(['certificate', 'proxy', 'url']);
         });
 
+        it('should handle falsy request methods correctly', function () {
+            var req = new Request({
+                method: null,
+                url: 'https://postman-echo.com/:path'
+            });
+
+            expect(req.method).to.be('GET');
+        });
+
+        it('should handle falsy request options correctly', function () {
+            expect(new Request()).to.have.property('method', 'GET');
+        });
+
         describe('has property', function () {
             it('headers', function () {
                 expect(request).to.have.property('headers');

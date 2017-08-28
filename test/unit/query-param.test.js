@@ -180,6 +180,94 @@ describe('QueryParam', function () {
         });
     });
 
+    describe('disabled-enabled states', function () {
+        // key is what the string representation should be, value is the parsed representation.
+        var testCases = [
+            {
+                ignore: {
+                    true: 'a=b&e=f',
+                    false: 'a=b&c=d&e=f'
+                },
+                list: [
+                    { key: 'a', value: 'b' },
+                    { key: 'c', value: 'd', disabled: true },
+                    { key: 'e', value: 'f', disabled: 1 } // this is done to test the explicit true check
+                ]
+            },
+            {
+                ignore: {
+                    true: 'c=d&e=f',
+                    false: 'a=b&c=d&e=f'
+                },
+                list: [
+                    { key: 'a', value: 'b', disabled: true },
+                    { key: 'c', value: 'd', disabled: 1 },
+                    { key: 'e', value: 'f' }
+                ]
+            },
+            {
+                ignore: {
+                    true: 'a=b&d=e&e=f',
+                    false: 'a=b&c=d&d=e&e=f'
+                },
+                list: [
+                    { key: 'a', value: 'b' },
+                    { key: 'c', value: 'd', disabled: true },
+                    { key: 'd', value: 'e', disabled: 1 },
+                    { key: 'e', value: 'f' }
+                ]
+            },
+            {
+                ignore: {
+                    true: 'c=d&g=h',
+                    false: 'a=b&c=d&e=f&g=h'
+                },
+                list: [
+                    { key: 'a', value: 'b', disabled: true },
+                    { key: 'c', value: 'd' },
+                    { key: 'e', value: 'f', disabled: true },
+                    { key: 'g', value: 'h', disabled: 1 }
+                ]
+            },
+            {
+                ignore: {
+                    true: 'u=v&a=b',
+                    false: 'u=v&w=x&y=z&a=b'
+                },
+                list: [
+                    { key: 'u', value: 'v' },
+                    { key: 'w', value: 'x', disabled: true },
+                    { key: 'y', value: 'z', disabled: true },
+                    { key: 'a', value: 'b', disabled: 1 }
+                ]
+            },
+            {
+                ignore: {
+                    true: 'g=h',
+                    false: 'a=b&c=d&e=f&g=h'
+                },
+                list: [
+                    { key: 'a', value: 'b', disabled: true },
+                    { key: 'c', value: 'd', disabled: true },
+                    { key: 'e', value: 'f', disabled: true },
+                    { key: 'g', value: 'h', disabled: 1 }
+                ]
+            }
+        ];
+
+        _.forEach(testCases, function (fixture) {
+            it(`should handle ${fixture.ignore.true || 'empty string'}, ignoreDisabled: true`, function () {
+                expect(QueryParam.unparse(fixture.list, {
+                    ignoreDisabled: true
+                })).to.eql(fixture.ignore.true);
+            });
+
+            it(`should handle ${fixture.ignore.false || 'empty string'}, ignoreDisabled: false`, function () {
+                expect(QueryParam.unparse(fixture.list)).to.eql(fixture.ignore.false);
+            });
+        });
+    });
+
     describe('encoding', function () {
         it('a=b{{c}}', function () {
             var parsed = [
