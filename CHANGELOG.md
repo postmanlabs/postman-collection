@@ -1,5 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### v2.1.3 (August 28, 2017)
+* :bug: Added an option to ignore disabled parameters in `QueryParam.unparse` #429
+* :bug: Ensured that all `_.get` calls use valid and sane fallback values. #444
+* :bug: Ensured that empty hosts don't cause an exception in `Url~getHost`. #443
+
 #### v2.1.2 (August 21, 2017)
 * Renamed the property `_postman_requiresId` to `_postman_propertyRequiresId` in order to be standard compliant #441
 
