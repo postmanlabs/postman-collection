@@ -166,10 +166,15 @@ describe('Item', function () {
             folderWithAuth.items.add(item);
             collection.items.add(folderWithAuth);
 
-            var auth = item.getAuth();
+            var auth = item.getAuth().toJSON();
 
             expect(auth).to.eql({
-                user: 'nobody'
+                type: 'hawk',
+                hawk: [{
+                    key: 'user',
+                    type: 'any',
+                    value: 'nobody'
+                }]
             });
         });
 
@@ -177,10 +182,17 @@ describe('Item', function () {
             folder.items.add(item);
             collectionWithAuth.items.add(folder);
 
-            var auth = item.getAuth();
+            var auth = item.getAuth().toJSON();
 
-            expect(auth.username).to.eql('c');
-            expect(auth.password).to.eql('d');
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
         });
 
 
@@ -188,10 +200,17 @@ describe('Item', function () {
             folder.items.add(itemWithAuth);
             collectionWithAuth.items.add(folder);
 
-            var auth = itemWithAuth.getAuth();
+            var auth = itemWithAuth.getAuth().toJSON();
 
-            expect(auth.username).to.eql('a');
-            expect(auth.password).to.eql('b');
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'a'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'b'
+            }]);
         });
 
         it('should return undefined if no auth is present', function () {
