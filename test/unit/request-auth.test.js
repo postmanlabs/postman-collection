@@ -73,4 +73,45 @@ describe('RequestAuth', function () {
             username: 'u', password: 'p'
         });
     });
+
+    it('should be able to clear an auth that is currently selected', function () {
+        var auth = new RequestAuth({
+            noauth: {
+                foo: 'bar'
+            },
+            basic: {
+                username: 'u', password: 'p'
+            },
+            type: 'noauth'
+        });
+
+        expect(auth.current()).to.eql({
+            foo: 'bar'
+        });
+
+        auth.clear('noauth');
+
+        expect(auth.current()).to.eql({});
+    });
+
+    it('should be able to clear an auth that is defined but not selected', function () {
+        var auth = new RequestAuth({
+            noauth: {
+                foo: 'bar'
+            },
+            basic: {
+                username: 'u', password: 'p'
+            },
+            type: 'noauth'
+        });
+
+        expect(auth.basic.toObject()).to.eql({
+            username: 'u',
+            password: 'p'
+        });
+
+        auth.clear('basic');
+
+        expect(auth).to.not.have.property('basic');
+    });
 });
