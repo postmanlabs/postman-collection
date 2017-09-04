@@ -352,6 +352,32 @@ describe('Request', function () {
         });
     });
 
+    describe('.authoriseUsing', function () {
+        it('should be able to set an authentication property using a specific type', function () {
+            var request = new Request();
+
+            request.authorizeUsing('noauth', {
+                foo: 'bar'
+            });
+
+            request.authorizeUsing('basic', {
+                username: 'foo',
+                password: 'bar'
+            });
+
+            expect(request.auth.toJSON()).to.eql({
+                type: 'basic',
+                noauth: [
+                    { type: 'any', value: 'bar', key: 'foo' }
+                ],
+                basic: [
+                    { type: 'any', value: 'foo', key: 'username' },
+                    { type: 'any', value: 'bar', key: 'password' }
+                ]
+            });
+        });
+    });
+
     describe('empty requests', function () {
 
         it('should have a url', function () {

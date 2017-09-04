@@ -255,6 +255,32 @@ describe('Item', function () {
         });
     });
 
+    describe('.authoriseRequestUsing', function () {
+        it('should be able to set an authentication property using a specific type', function () {
+            var item = new Item();
+
+            item.authorizeRequestUsing('noauth', {
+                foo: 'bar'
+            });
+
+            item.authorizeRequestUsing('basic', {
+                username: 'foo',
+                password: 'bar'
+            });
+
+            expect(item.request.auth.toJSON()).to.eql({
+                type: 'basic',
+                noauth: [
+                    { type: 'any', value: 'bar', key: 'foo' }
+                ],
+                basic: [
+                    { type: 'any', value: 'foo', key: 'username' },
+                    { type: 'any', value: 'bar', key: 'password' }
+                ]
+            });
+        });
+    });
+
     describe('isItem', function () {
         var rawItem = fixtures.collectionV2.item[0];
 
