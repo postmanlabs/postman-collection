@@ -40,7 +40,6 @@
     "marked": "0.3.6",
     "mime-format": "2.0.0",
     "mime-types": "2.1.17",
-    "node-oauth1": "1.2.1",
     "sanitize-html": "1.14.1",
     "semver": "5.4.1",
     "uuid": "3.1.0",
