@@ -8,16 +8,19 @@ describe('Variable', function () {
 
         expect(v.value).to.be(undefined);
         expect(v.type).to.be('any');
+        expect(v.system).to.be(undefined);
     });
 
     it('should prepopulate value and type when passed to the constructor', function () {
         var v = new Variable({
             value: 'Picard',
-            type: 'string'
+            type: 'string',
+            system: true
         });
 
         expect(v.value).to.be('Picard');
         expect(v.type).to.be('string');
+        expect(v.system).to.be(true);
     });
 
     it('should typecast value during construction when type is provided', function () {
