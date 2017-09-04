@@ -8,19 +8,43 @@ describe('Variable', function () {
 
         expect(v.value).to.be(undefined);
         expect(v.type).to.be('any');
+    });
+
+    it('should initialize variable with correct system value', function () {
+        var v = new Variable();
         expect(v.system).to.be(undefined);
+
+        v = new Variable({
+            system: true
+        });
+        expect(v.system).to.be(true);
+
+        v = new Variable({
+            system: false
+        });
+        expect(v.system).to.be(false);
+    });
+
+    it('should update the sytem property of a variable', function () {
+        var v = new Variable();
+        v.update({ system: true });
+        expect(v.system).to.be(true);
+
+        v = new Variable({
+            system: true
+        });
+        v.update({ system: false });
+        expect(v.system).to.be(false);
     });
 
     it('should prepopulate value and type when passed to the constructor', function () {
         var v = new Variable({
             value: 'Picard',
-            type: 'string',
-            system: true
+            type: 'string'
         });
 
         expect(v.value).to.be('Picard');
         expect(v.type).to.be('string');
-        expect(v.system).to.be(true);
     });
 
     it('should typecast value during construction when type is provided', function () {
