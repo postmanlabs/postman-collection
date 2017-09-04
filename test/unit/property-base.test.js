@@ -175,4 +175,35 @@ describe('PropertyBase', function () {
             expect(base.__parent).to.eql(newParent);
         });
     });
+
+    describe('.parent()', function () {
+        it('should return grandparent by default', function () {
+            var base = new sdk.PropertyBase();
+
+            base.__parent = {
+                p: true
+            };
+
+            base.__parent.__parent = {
+                g: true
+            };
+
+            expect(base.parent()).to.eql({
+                g: true
+            });
+
+        });
+
+        it('should return parent if grandparent is missing', function () {
+            var base = new sdk.PropertyBase();
+
+            base.__parent = {
+                p: true
+            };
+            expect(base.parent()).to.eql({
+                p: true
+            });
+
+        });
+    });
 });

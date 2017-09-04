@@ -114,4 +114,14 @@ describe('RequestAuth', function () {
 
         expect(auth).to.not.have.property('basic');
     });
+
+    it('should be able to set parent', function () {
+        var auth = new RequestAuth(null, {
+            fakeParent: true
+        });
+
+        expect(auth.parent()).to.eql({
+            fakeParent: true
+        });
+    });
 });
