@@ -56,6 +56,38 @@ describe('Url', function () {
                 expect(url.update).to.be.a('function');
             });
         });
+
+        describe('hosts in query params', function () {
+            it('should accept hosts as query param values in URL strings sans protocol', function () {
+                var url = new Url('google.com?param=https://fb.com');
+                expect(url.toJSON()).to.eql({
+                    host: ['google', 'com'],
+                    query: [{ key: 'param', value: 'https://fb.com' }],
+                    variable: []
+                });
+            });
+
+            it('should accept hosts as query param values in URL strings with a protocol', function () {
+                var url = new Url('http://google.com?param=https://fb.com');
+                expect(url.toJSON()).to.eql({
+                    protocol: 'http',
+                    host: ['google', 'com'],
+                    query: [{ key: 'param', value: 'https://fb.com' }],
+                    variable: []
+                });
+            });
+
+            it('should accept email addresses as query param values in URL strings', function () {
+                var url = new Url('localhost:80/api/validate-email?user_email=fred@gmail.com');
+                expect(url.toJSON()).to.eql({
+                    host: ['localhost'],
+                    path: ['api', 'validate-email'],
+                    port: 80,
+                    query: [{ key: 'user_email', value: 'fred@gmail.com' }],
+                    variable: []
+                });
+            });
+        });
     });
 
     describe('Constructor', function () {
