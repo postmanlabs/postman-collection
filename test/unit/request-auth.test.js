@@ -426,7 +426,7 @@ describe('RequestAuth', function () {
             expect(headers).to.have.property('authorization');
             expect(headers).to.have.property('content-type', request.getHeaders({ ignoreCase: true })['content-type']);
             expect(headers).to.have.property('x-amz-date');
-            expect(_.omit(authorizedReq.toJSON(), ['header', 'auth.awsv4.time'])).to.eql({
+            expect(_.omit(authorizedReq.toJSON(), ['header', 'auth.awsv4.time', 'body'])).to.eql({
                 auth: {
                     type: 'awsv4',
                     awsv4: {
@@ -438,7 +438,6 @@ describe('RequestAuth', function () {
                 },
                 certificate: undefined,
                 proxy: undefined,
-                body: { mode: 'raw', raw: { foo: 'bar' } },
                 url: 'https://the2yl2ege.execute-api.eu-west-1.amazonaws.com/{{stagename}}/item',
                 method: 'POST',
                 description: {
