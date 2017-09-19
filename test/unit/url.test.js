@@ -434,6 +434,18 @@ describe('Url', function () {
             expect(new Url(null).toString()).to.be('');
             expect(new Url(undefined).toString()).to.be('');
         });
+
+        it('must not include disabled query params in the unparsed result', function () {
+            var url = new Url({
+                host: 'postman-echo.com',
+                query: [
+                    { key: 'foo', value: 'bar' },
+                    { key: 'alpha', value: 'beta', disabled: true }
+                ]
+            });
+
+            expect(url.toString()).to.be('postman-echo.com?foo=bar');
+        });
     });
 
     describe('OAuth1 Base Url', function () {
