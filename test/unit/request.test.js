@@ -352,26 +352,28 @@ describe('Request', function () {
         });
     });
 
-    describe('.authorize', function () {
-        it('should correctly authorize the current request context', function () {
-            var newReq,
-                request = new Request({
-                    auth: {
-                        type: 'basic',
-                        basic: {
-                            username: 'foo',
-                            password: 'bar'
-                        }
-                    }
-                });
+    describe('.authoriseUsing', function () {
+        it('should be able to set an authentication property using a specific type', function () {
+            var request = new Request();
 
-            newReq = request.authorize();
-            expect(newReq.headers.reference).to.eql({
-                authorization: {
-                    key: 'Authorization',
-                    value: 'Basic Zm9vOmJhcg==',
-                    system: true
-                }
+            request.authorizeUsing('noauth', {
+                foo: 'bar'
+            });
+
+            request.authorizeUsing('basic', {
+                username: 'foo',
+                password: 'bar'
+            });
+
+            expect(request.auth.toJSON()).to.eql({
+                type: 'basic',
+                noauth: [
+                    { type: 'any', value: 'bar', key: 'foo' }
+                ],
+                basic: [
+                    { type: 'any', value: 'foo', key: 'username' },
+                    { type: 'any', value: 'bar', key: 'password' }
+                ]
             });
         });
     });

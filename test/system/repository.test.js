@@ -82,11 +82,6 @@ describe('repository', function () {
                 expect(json.dependencies).to.be.a('object');
             });
 
-            // Hawk library v3.1.2+ uses ES6 and is not compatible with the browser.
-            it('hawk version', function () {
-                expect(json.dependencies.hawk).to.be('3.1.3');
-            });
-
             it('must point to specific package version; (*, ^, ~) not expected', function () {
                 _.forEach(json.dependencies, function (dep) {
                     expect(/^\d/.test(dep)).be.ok();
