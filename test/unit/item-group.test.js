@@ -370,6 +370,32 @@ describe('ItemGroup', function () {
         });
     });
 
+    describe('.authoriseRequestsUsing', function () {
+        it('should be able to set an authentication property using a specific type', function () {
+            var group = new ItemGroup();
+
+            group.authorizeRequestsUsing('noauth', {
+                foo: 'bar'
+            });
+
+            group.authorizeRequestsUsing('basic', {
+                username: 'foo',
+                password: 'bar'
+            });
+
+            expect(group.auth.toJSON()).to.eql({
+                type: 'basic',
+                noauth: [
+                    { type: 'any', value: 'bar', key: 'foo' }
+                ],
+                basic: [
+                    { type: 'any', value: 'foo', key: 'username' },
+                    { type: 'any', value: 'bar', key: 'password' }
+                ]
+            });
+        });
+    });
+
     describe('isItemGroup', function () {
         it('should return true for a ItemGroup instance', function () {
             expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be(true);

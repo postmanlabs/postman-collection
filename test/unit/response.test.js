@@ -462,13 +462,7 @@ describe('Response', function () {
                 code: 200,
                 originalRequest: {
                     url: 'https://postman-echo.com/get',
-                    method: 'GET',
-                    header: undefined,
-                    body: undefined,
-                    auth: undefined,
-                    proxy: undefined,
-                    certificate: undefined,
-                    description: undefined
+                    method: 'GET'
                 },
                 header: [],
                 body: '{"foo":"bar"}',

@@ -27,11 +27,18 @@ module.exports = function (exit) {
     console.log('\nRunning system tests using mocha and nsp...'.yellow.bold);
 
     async.series([
+        // ensure all dependencies are okay
+        function (next) {
+            console.log('checking package dependencies...\n'.yellow);
+
+            exec('dependency-check ./package.json --extra --no-dev --missing', next);
+        },
+
         // run test specs using mocha
         function (next) {
             var mocha = new Mocha();
 
-            console.log(SPEC_SOURCE_DIR);
+            console.log('running system specs using mocha...\n'.yellow);
             fs.readdir(SPEC_SOURCE_DIR, function (err, files) {
                 if (err) { return next(err); }
 

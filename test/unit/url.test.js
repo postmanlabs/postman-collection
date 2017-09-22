@@ -56,6 +56,38 @@ describe('Url', function () {
                 expect(url.update).to.be.a('function');
             });
         });
+
+        describe('hosts in query params', function () {
+            it('should accept hosts as query param values in URL strings sans protocol', function () {
+                var url = new Url('google.com?param=https://fb.com');
+                expect(url.toJSON()).to.eql({
+                    host: ['google', 'com'],
+                    query: [{ key: 'param', value: 'https://fb.com' }],
+                    variable: []
+                });
+            });
+
+            it('should accept hosts as query param values in URL strings with a protocol', function () {
+                var url = new Url('http://google.com?param=https://fb.com');
+                expect(url.toJSON()).to.eql({
+                    protocol: 'http',
+                    host: ['google', 'com'],
+                    query: [{ key: 'param', value: 'https://fb.com' }],
+                    variable: []
+                });
+            });
+
+            it('should accept email addresses as query param values in URL strings', function () {
+                var url = new Url('localhost:80/api/validate-email?user_email=fred@gmail.com');
+                expect(url.toJSON()).to.eql({
+                    host: ['localhost'],
+                    path: ['api', 'validate-email'],
+                    port: 80,
+                    query: [{ key: 'user_email', value: 'fred@gmail.com' }],
+                    variable: []
+                });
+            });
+        });
     });
 
     describe('Constructor', function () {
@@ -402,6 +434,18 @@ describe('Url', function () {
             expect(new Url(null).toString()).to.be('');
             expect(new Url(undefined).toString()).to.be('');
         });
+
+        it('must not include disabled query params in the unparsed result', function () {
+            var url = new Url({
+                host: 'postman-echo.com',
+                query: [
+                    { key: 'foo', value: 'bar' },
+                    { key: 'alpha', value: 'beta', disabled: true }
+                ]
+            });
+
+            expect(url.toString()).to.be('postman-echo.com?foo=bar');
+        });
     });
 
     describe('OAuth1 Base Url', function () {
@@ -528,8 +572,30 @@ describe('Url', function () {
         });
     });
 
+    describe('toString', function () {
+        it('should return empty string when url is empty', function () {
+            var url = new Url();
+
+            expect(url.toString()).to.eql('');
+        });
+    });
+
+    describe('getHost', function () {
+        it('should return empty string when url is empty', function () {
+            var url = new Url();
+
+            expect(url.getHost()).to.eql('');
+        });
+    });
+
     describe('getRemote', function () {
         describe('default', function () {
+            it('should return empty string when url is empty', function () {
+                var url = new Url();
+
+                expect(url.getRemote()).to.eql('');
+            });
+
             it('should get the correct remote when port is specified', function () {
                 var rawUrl = 'https://postman-echo.com:8999/get?w=x%y',
                     url = new Url(rawUrl);
