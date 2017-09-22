@@ -756,6 +756,7 @@ describe('Url', function () {
             // as per NSP guidelines, anything that blocks the event loop for a second or more is a potential DOS threat
             this.timeout(1e3);
 
+            // The raw URLs are being constructed here to avoid messing up the timing sequence for the tests below
             var q = '?',
                 at = '@',
                 eq = '=',
@@ -765,14 +766,23 @@ describe('Url', function () {
                 sep = ':',
                 fk = 5e3,
                 slash = '/', // not to be confused with the Guns and Roses guitarist
-                protoSep = sep + slash.repeat(2);
-
-            it('should be thwarted for a long URL', function () {
+                protoSep = sep + slash.repeat(2),
                 // ~76 million characters
-                var longUrl = 'h'.repeat(fk) + protoSep + 'u'.repeat(fk) + sep + 'p'.repeat(fk) + at +
+                longUrl = 'h'.repeat(fk) + protoSep + 'u'.repeat(fk) + sep + 'p'.repeat(fk) + at +
                     ('d'.repeat(fk) + dot).repeat(100) + 'com' + sep + 1e100 + (slash + 'x'.repeat(fk)).repeat(fk) +
                     q + ('k'.repeat(fk) + eq + 'v'.repeat(fk) + amp).repeat(fk) + hash + 'r'.repeat(fk),
-                    url = new Url(longUrl),
+                longProto = 'h'.repeat(1e7) + protoSep + 'postman-echo.com',
+                longAuth = 'https://' + 'u'.repeat(1e7) + sep + 'p'.repeat(1e7) + '@postman-echo.com',
+                // ~50 billion characters
+                longPath = 'https://postman-echo.com' + (slash + 'x'.repeat(fk)).repeat(1e4),
+                longHash = 'https://postman-echo.com#' + 'h'.repeat(1e8),
+                // ~0.5 million characters
+                longHost = ('a'.repeat(fk) + dot).repeat(100) + 'com',
+                // 50 million characters
+                longQuery = 'postman-echo.com?' + ('k'.repeat(fk) + eq + 'v'.repeat(fk) + amp).repeat(fk);
+
+            it('should be thwarted for a long URL', function () {
+                var url = new Url(longUrl),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
@@ -787,8 +797,7 @@ describe('Url', function () {
             });
 
             it('should be thwarted for a long protocol', function () {
-                var longProto = 'h'.repeat(1e7) + protoSep + 'postman-echo.com',
-                    url = new Url(longProto),
+                var url = new Url(longProto),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
@@ -798,8 +807,7 @@ describe('Url', function () {
             });
 
             it('should be thwarted for a long auth', function () {
-                var longAuth = 'https://' + 'u'.repeat(1e7) + sep + 'p'.repeat(1e7) + '@postman-echo.com',
-                    url = new Url(longAuth),
+                var url = new Url(longAuth),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
@@ -810,9 +818,7 @@ describe('Url', function () {
             });
 
             it('should be thwarted for a long path', function () {
-                // ~50 billion characters
-                var longPath = 'https://postman-echo.com' + (slash + 'x'.repeat(fk)).repeat(1e4),
-                    url = new Url(longPath),
+                var url = new Url(longPath),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
@@ -822,8 +828,7 @@ describe('Url', function () {
             });
 
             it('should be thwarted for a long hash', function () {
-                var longHash = 'https://postman-echo.com#' + 'h'.repeat(1e8),
-                    url = new Url(longHash),
+                var url = new Url(longHash),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
@@ -833,9 +838,7 @@ describe('Url', function () {
             });
 
             it('should be thwarted for a long host', function () {
-                // ~0.5 million characters
-                var longHost = ('a'.repeat(fk) + dot).repeat(100) + 'com',
-                    url = new Url(longHost),
+                var url = new Url(longHost),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
@@ -844,9 +847,7 @@ describe('Url', function () {
             });
 
             it('should be thwarted for a long query', function () {
-                // 50 million characters
-                var longQuery = 'postman-echo.com?' + ('k'.repeat(fk) + eq + 'v'.repeat(fk) + amp).repeat(fk),
-                    url = new Url(longQuery),
+                var url = new Url(longQuery),
                     json = url.toJSON();
 
                 expect(url).to.be.ok();
