@@ -139,7 +139,7 @@ describe('UrlMatchPattern', function () {
 
         describe('security', function () {
             describe('ReDoS', function () {
-                this.timeout(1e3);
+                this.timeout(1500);
 
                 var specials = ['.', '+', '^', '$', '{', '}', '(', ')', '|', '[', ']', '\\'];
 

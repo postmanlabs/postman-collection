@@ -754,7 +754,7 @@ describe('Url', function () {
     describe('Security', function () {
         describe('ReDOS', function () {
             // as per NSP guidelines, anything that blocks the event loop for a second or more is a potential DOS threat
-            this.timeout(1e3);
+            this.timeout(1500);
 
             // The raw URLs are being constructed here to avoid messing up the timing sequence for the tests below
             var q = '?',
