@@ -1,4 +1,4 @@
 {
-  "exceptions": [],
+  "exceptions": ["https://nodesecurity.io/advisories/531"],
   "exclusions": ["marked"]
 }
