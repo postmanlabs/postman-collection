@@ -18,7 +18,7 @@ describe('nsprc', function () {
     });
 
     it('must not have any exclusion', function () {
-        expect(nsprc.exceptions).to.eql([]);
+        expect(nsprc.exceptions).to.eql(['https://nodesecurity.io/advisories/531']);
     });
 
     it('must exclude only a known set of packages', function () {
