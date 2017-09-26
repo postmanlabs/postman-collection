@@ -136,6 +136,21 @@ describe('UrlMatchPattern', function () {
                 convertedPattern = new UrlMatchPattern().globPatternToRegexp(pattern);
             expect(convertedPattern).to.eql(/^.*foo$/);
         });
+
+        describe('security', function () {
+            describe('ReDoS', function () {
+                this.timeout(1500);
+
+                var specials = ['.', '+', '^', '$', '{', '}', '(', ')', '|', '[', ']', '\\'];
+
+                it('should be thwarted for long patterns', function () {
+                    var pattern = specials.join('a'.repeat(3e6)),
+                        convertedPattern = new UrlMatchPattern().globPatternToRegexp(pattern);
+
+                    expect(convertedPattern.toString()).to.have.length(33000028);
+                });
+            });
+        });
     });
 
     describe('createMatchPattern', function () {
