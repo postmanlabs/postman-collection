@@ -145,7 +145,13 @@ describe('Item', function () {
                     auth: { type: 'basic', basic: { username: 'a', password: 'b' } }
                 }
             });
-            folderWithAuth = new sdk.ItemGroup({ name: 'folder2', auth: { type: 'hawk', hawk: {} } });
+            folderWithAuth = new sdk.ItemGroup({
+                name: 'folder2',
+                auth: {
+                    type: 'hawk',
+                    hawk: { user: 'nobody' }
+                }
+            });
         });
 
         afterEach(function () {
@@ -160,20 +166,33 @@ describe('Item', function () {
             folderWithAuth.items.add(item);
             collection.items.add(folderWithAuth);
 
-            var auth = item.getAuth();
+            var auth = item.getAuth().toJSON();
 
-            expect(auth.constructor.name).to.eql('HawkAuth');
+            expect(auth).to.eql({
+                type: 'hawk',
+                hawk: [{
+                    key: 'user',
+                    type: 'any',
+                    value: 'nobody'
+                }]
+            });
         });
 
         it('should lookup auth method from collection, if absent in folder and item', function () {
             folder.items.add(item);
             collectionWithAuth.items.add(folder);
 
-            var auth = item.getAuth();
+            var auth = item.getAuth().toJSON();
 
-            expect(auth.username).to.eql('c');
-            expect(auth.password).to.eql('d');
-            expect(auth.constructor.name).to.eql('BasicAuth');
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
         });
 
 
@@ -181,11 +200,17 @@ describe('Item', function () {
             folder.items.add(itemWithAuth);
             collectionWithAuth.items.add(folder);
 
-            var auth = itemWithAuth.getAuth();
+            var auth = itemWithAuth.getAuth().toJSON();
 
-            expect(auth.username).to.eql('a');
-            expect(auth.password).to.eql('b');
-            expect(auth.constructor.name).to.eql('BasicAuth');
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'a'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'b'
+            }]);
         });
 
         it('should return undefined if no auth is present', function () {
@@ -227,6 +252,32 @@ describe('Item', function () {
 
             expect(events).to.have.length(1);
             expect(events[0]).to.have.property('listen', 'test');
+        });
+    });
+
+    describe('.authoriseRequestUsing', function () {
+        it('should be able to set an authentication property using a specific type', function () {
+            var item = new Item();
+
+            item.authorizeRequestUsing('noauth', {
+                foo: 'bar'
+            });
+
+            item.authorizeRequestUsing('basic', {
+                username: 'foo',
+                password: 'bar'
+            });
+
+            expect(item.request.auth.toJSON()).to.eql({
+                type: 'basic',
+                noauth: [
+                    { type: 'any', value: 'bar', key: 'foo' }
+                ],
+                basic: [
+                    { type: 'any', value: 'foo', key: 'username' },
+                    { type: 'any', value: 'bar', key: 'password' }
+                ]
+            });
         });
     });
 

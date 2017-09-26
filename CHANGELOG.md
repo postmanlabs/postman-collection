@@ -1,5 +1,16 @@
 # Postman Collection SDK Changelog
 
+#### v3.0.0 (September 26, 2017)
+* :arrow_up: Updated to using collection format schema v2.1 (auth structure change)
+* Modified functioning of `Item#getAuth` to return `RequestAuth` directly
+* :tada: Added sugar to RequestAuth to handle any auth type (refer docs)
+* :fire: Removed any auth type specific code from SDK. All individual authentication related code is now moved to `postman-runtime`
+* :tada: Added ability to deal with `PropertyList~upsert` operations
+* :fire: Removed `.sign()` from Request Auth
+* Made `Request.toJSON` use `PropertyBase` toJSON
+* :tada: Updated `.toObjectResolved` to accept reference tree for resolution of variables
+* :tada: Updated variable substitution function to now look up the parent tree to find variable replacement
+
 #### v2.1.3 (August 28, 2017)
 * :bug: Added an option to ignore disabled parameters in `QueryParam.unparse` #429
 * :bug: Ensured that all `_.get` calls use valid and sane fallback values. #444

@@ -56,6 +56,38 @@ describe('Url', function () {
                 expect(url.update).to.be.a('function');
             });
         });
+
+        describe('hosts in query params', function () {
+            it('should accept hosts as query param values in URL strings sans protocol', function () {
+                var url = new Url('google.com?param=https://fb.com');
+                expect(url.toJSON()).to.eql({
+                    host: ['google', 'com'],
+                    query: [{ key: 'param', value: 'https://fb.com' }],
+                    variable: []
+                });
+            });
+
+            it('should accept hosts as query param values in URL strings with a protocol', function () {
+                var url = new Url('http://google.com?param=https://fb.com');
+                expect(url.toJSON()).to.eql({
+                    protocol: 'http',
+                    host: ['google', 'com'],
+                    query: [{ key: 'param', value: 'https://fb.com' }],
+                    variable: []
+                });
+            });
+
+            it('should accept email addresses as query param values in URL strings', function () {
+                var url = new Url('localhost:80/api/validate-email?user_email=fred@gmail.com');
+                expect(url.toJSON()).to.eql({
+                    host: ['localhost'],
+                    path: ['api', 'validate-email'],
+                    port: 80,
+                    query: [{ key: 'user_email', value: 'fred@gmail.com' }],
+                    variable: []
+                });
+            });
+        });
     });
 
     describe('Constructor', function () {
@@ -402,6 +434,18 @@ describe('Url', function () {
             expect(new Url(null).toString()).to.be('');
             expect(new Url(undefined).toString()).to.be('');
         });
+
+        it('must not include disabled query params in the unparsed result', function () {
+            var url = new Url({
+                host: 'postman-echo.com',
+                query: [
+                    { key: 'foo', value: 'bar' },
+                    { key: 'alpha', value: 'beta', disabled: true }
+                ]
+            });
+
+            expect(url.toString()).to.be('postman-echo.com?foo=bar');
+        });
     });
 
     describe('OAuth1 Base Url', function () {
@@ -704,6 +748,113 @@ describe('Url', function () {
         it('must be able to convert query params to object', function () {
             var url = new Url('http://127.0.0.1/hello/world/?query=param&query2=param2#test-api');
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
+        });
+    });
+
+    describe('Security', function () {
+        describe('ReDOS', function () {
+            // as per NSP guidelines, anything that blocks the event loop for a second or more is a potential DOS threat
+            this.timeout(2000);
+
+            // The raw URLs are being constructed here to avoid messing up the timing sequence for the tests below
+            var q = '?',
+                at = '@',
+                eq = '=',
+                amp = '&',
+                dot = '.',
+                hash = '#',
+                sep = ':',
+                fk = 5e3,
+                slash = '/', // not to be confused with the Guns and Roses guitarist
+                protoSep = sep + slash.repeat(2),
+                // ~76 million characters
+                longUrl = 'h'.repeat(fk) + protoSep + 'u'.repeat(fk) + sep + 'p'.repeat(fk) + at +
+                    ('d'.repeat(fk) + dot).repeat(100) + 'com' + sep + 1e100 + (slash + 'x'.repeat(fk)).repeat(fk) +
+                    q + ('k'.repeat(fk) + eq + 'v'.repeat(fk) + amp).repeat(fk) + hash + 'r'.repeat(fk),
+                longProto = 'h'.repeat(1e7) + protoSep + 'postman-echo.com',
+                longAuth = 'https://' + 'u'.repeat(1e7) + sep + 'p'.repeat(1e7) + '@postman-echo.com',
+                // ~50 billion characters
+                longPath = 'https://postman-echo.com' + (slash + 'x'.repeat(fk)).repeat(1e4),
+                longHash = 'https://postman-echo.com#' + 'h'.repeat(1e8),
+                // ~0.5 million characters
+                longHost = ('a'.repeat(fk) + dot).repeat(100) + 'com',
+                // 50 million characters
+                longQuery = 'postman-echo.com?' + ('k'.repeat(fk) + eq + 'v'.repeat(fk) + amp).repeat(fk);
+
+            it('should be thwarted for a long URL', function () {
+                var url = new Url(longUrl),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json.auth.user).to.have.length(fk);
+                expect(json.auth.password).to.have.length(fk);
+                expect(json.protocol).to.have.length(fk);
+                expect(json.port).to.be(1e100.toString());
+                expect(json.path).to.have.length(fk);
+                expect(json.hash).to.have.length(fk);
+                expect(json.host).to.have.length(101);
+                expect(json.query).to.have.length(fk + 1);
+            });
+
+            it('should be thwarted for a long protocol', function () {
+                var url = new Url(longProto),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json.protocol).to.have.length(1e7);
+                expect(json).to.not.have.keys(['auth', 'port', 'path', 'hash', 'query']);
+                expect(json.host).to.eql(['postman-echo', 'com']);
+            });
+
+            it('should be thwarted for a long auth', function () {
+                var url = new Url(longAuth),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json).to.not.have.keys(['port', 'path', 'hash', 'query']);
+                expect(json.auth.user).to.have.length(1e7);
+                expect(json.auth.password).to.have.length(1e7);
+                expect(json.host).to.eql(['postman-echo', 'com']);
+            });
+
+            it('should be thwarted for a long path', function () {
+                var url = new Url(longPath),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json).to.not.have.keys(['port', 'auth', 'hash', 'query']);
+                expect(json.host).to.eql(['postman-echo', 'com']);
+                expect(json.path).to.have.length(1e4);
+            });
+
+            it('should be thwarted for a long hash', function () {
+                var url = new Url(longHash),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json).to.not.have.keys(['port', 'auth', 'query', 'path']);
+                expect(json.host).to.eql(['postman-echo', 'com']);
+                expect(json.hash).to.have.length(1e8);
+            });
+
+            it('should be thwarted for a long host', function () {
+                var url = new Url(longHost),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json).to.not.have.keys(['port', 'auth', 'query', 'path', 'hash', 'protocol']);
+                expect(json.host).to.have.length(101);
+            });
+
+            it('should be thwarted for a long query', function () {
+                var url = new Url(longQuery),
+                    json = url.toJSON();
+
+                expect(url).to.be.ok();
+                expect(json).to.not.have.keys(['port', 'auth', 'query', 'path', 'hash', 'protocol']);
+                expect(json.host).to.eql(['postman-echo', 'com']);
+                expect(json.query).to.have.length(fk + 1);
+            });
         });
     });
 });
