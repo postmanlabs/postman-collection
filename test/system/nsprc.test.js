@@ -3,7 +3,8 @@
  */
 
 var expect = require('expect.js'),
-    fs = require('fs');
+    fs = require('fs'),
+    _ = require('lodash');
 
 /* global describe, it, before */
 describe('nsprc', function () {
@@ -21,7 +22,14 @@ describe('nsprc', function () {
         expect(nsprc.exceptions).to.eql([]);
     });
 
-    it('must exclude only a known set of packages', function () {
-        expect(nsprc.exclusions).to.eql(['marked']);
+    it('must exclude only a known set of packages (prevent erroneous exclusions)', function () {
+        expect(nsprc.exclusions).to.eql({
+            marked: '0.3.6'
+        });
+    });
+
+    it('dependency version in package.json should match .nsprc (time to remove exclusion?)', function () {
+        var pkg = _.pick(require('../../package').dependencies, _.keys(nsprc.exclusions));
+        expect(pkg).to.eql(nsprc.exclusions);
     });
 });
