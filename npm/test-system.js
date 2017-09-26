@@ -70,7 +70,7 @@ module.exports = function (exit) {
                 offline: false,
                 package: {
                     name: pkg.name,
-                    dependencies: _.omit(pkg.dependencies, nsprc.exclusions || [])
+                    dependencies: _.omit(pkg.dependencies, _.keys(nsprc.exclusions))
                 }
             }, function (err, result) {
                 // if processing nsp had an error, simply print that and exit
