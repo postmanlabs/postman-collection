@@ -380,6 +380,59 @@ describe('Url', function () {
             expect(subject.host).to.eql(['{{ip.network_identifier}}', '{{ip.subnet}}', '1']);
             expect(subject.port).to.be(undefined);
         });
+
+        it('must parse url with file protocol', function () {
+            var subject = Url.parse('file://hostname/path/to/file.txt');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['hostname']);
+            expect(subject.path).to.eql(['path', 'to', 'file.txt']);
+            expect(subject.port).to.be(undefined);
+        });
+
+        it('must parse url with file protocol and file name without extension', function () {
+            var subject = Url.parse('file://hostname/path/to/file');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['hostname']);
+            expect(subject.path).to.eql(['path', 'to', 'file']);
+            expect(subject.port).to.be(undefined);
+        });
+
+        it('must parse url with file protocol and relative path to files', function () {
+            var subject = Url.parse('file://../path/to/file');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['']);
+            expect(subject.path).to.eql(['path', 'to', 'file']);
+            expect(subject.port).to.be(undefined);
+        });
+
+        it('must parse url with file protocol and with leading / in path', function () {
+            var subject = Url.parse('file:///etc/hosts');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(undefined);
+            expect(subject.path).to.eql(['etc', 'hosts']);
+            expect(subject.port).to.be(undefined);
+        });
+
+        it('must parse url with file protocol and with leading / in path and relative path', function () {
+            var subject = Url.parse('file:///../etc/hosts');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(undefined);
+            expect(subject.path).to.eql(['..', 'etc', 'hosts']);
+            expect(subject.port).to.be(undefined);
+        });
+        it('must parse url with file protocol and with multiple leading / in path and relative path', function () {
+            var subject = Url.parse('file:////../etc/hosts');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(undefined);
+            expect(subject.path).to.eql(['', '..', 'etc', 'hosts']);
+            expect(subject.port).to.be(undefined);
+        });
     });
 
     describe('unparsing', function () {
