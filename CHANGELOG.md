@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### v3.0.1 (October 12, 2017)
+* :arrow_up: Updated dependencies
+* :bug: Corrected file URL handling #479
+
 #### v3.0.0 (September 26, 2017)
 * :arrow_up: Updated to using collection format schema v2.1 (auth structure change)
 * Modified functioning of `Item#getAuth` to return `RequestAuth` directly
