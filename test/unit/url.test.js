@@ -434,6 +434,24 @@ describe('Url', function () {
             expect(subject.path).to.eql(['', '..', 'etc', 'hosts']);
             expect(subject.port).to.be(undefined);
         });
+
+        it('must pars url with file:/ as protocol and absolute path', function () {
+            var subject = Url.parse('file:/foo.com/hosts');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['foo', 'com']);
+            expect(subject.path).to.eql(['hosts']);
+            expect(subject.port).to.be(undefined);
+        });
+
+        it('must pars url with file:/ as protocol and relative path', function () {
+            var subject = Url.parse('file:/../etc/hosts');
+            expect(subject.protocol).to.be('file');
+            expect(subject.auth).to.be(undefined);
+            expect(subject.host).to.eql(['']);
+            expect(subject.path).to.eql(['etc', 'hosts']);
+            expect(subject.port).to.be(undefined);
+        });
     });
 
     describe('unparsing', function () {
