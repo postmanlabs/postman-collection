@@ -70,59 +70,198 @@ describe('EventList', function () {
     });
 
     describe('.listeners', function () {
-        var el = new EventList({}, [{
-            listen: 'test',
-            id: 'my-test-script-1',
-            script: { exec: 'console.log("hello");' }
-        }, {
-            listen: 'prerequest',
-            id: 'my-prerequest-script-1',
-            script: { exec: 'console.log("hello again");' }
-        }]);
+        var parent,
+            item;
 
-        it('should correctly filter down to the specified type of event listener', function () {
-            var listeners = el.listeners('test');
+        describe('with no parent', function () {
+            before(function () {
+                item = {};
 
-            expect(listeners).to.have.length(1);
-            expect(listeners[0]).to.have.property('listen', 'test');
-            expect(listeners[0]).to.have.property('id', 'my-test-script-1');
-            expect(listeners[0]).to.have.property('script');
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+            });
+
+            it('should correctly filter down to the specified type of event listener', function () {
+                var listeners = item.events.listeners('test');
+
+                expect(listeners).to.have.length(1);
+                expect(listeners[0]).to.have.property('listen', 'test');
+                expect(listeners[0]).to.have.property('id', 'my-test-script-1');
+                expect(listeners[0]).to.have.property('script');
+            });
+
+            it('should return an empty set for an invalid/missing filter', function () {
+                expect(item.events.listeners()).to.have.length(0);
+                expect(item.events.listeners('random')).to.have.length(0);
+            });
         });
 
-        it('should return an empty set for an invalid/missing filter', function () {
-            expect(el.listeners()).to.have.length(0);
-            expect(el.listeners('random')).to.have.length(0);
+        describe('without events on parent', function () {
+            before(function () {
+                parent = {};
+                item = {};
+
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+
+                item.__parent = parent;
+            });
+
+            it('should correctly filter down to the specified type of event listener', function () {
+                var listeners = item.events.listeners('test');
+
+                expect(listeners).to.have.length(1);
+
+                expect(listeners[0]).to.have.property('listen', 'test');
+                expect(listeners[0]).to.have.property('id', 'my-test-script-1');
+                expect(listeners[0]).to.have.property('script');
+            });
+        });
+
+        describe('with events on parent', function () {
+            before(function () {
+                parent = {};
+                item = {};
+
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+
+                parent.events = new EventList(parent, [{
+                    listen: 'test',
+                    id: 'my-parent-level-test-script',
+                    script: { exec: 'console.log("hello from up here")' }
+                }]);
+
+                item.__parent = parent;
+            });
+
+            it('should include events on parent chain', function () {
+                var testListeners = item.events.listeners('test'),
+                    prScriptListeners = item.events.listeners('prerequest');
+
+                expect(testListeners).to.have.length(2);
+
+                // order is important
+                expect(testListeners[0]).to.have.property('listen', 'test');
+                expect(testListeners[0]).to.have.property('id', 'my-parent-level-test-script');
+                expect(testListeners[0]).to.have.property('script');
+
+                expect(testListeners[1]).to.have.property('listen', 'test');
+                expect(testListeners[1]).to.have.property('id', 'my-test-script-1');
+                expect(testListeners[1]).to.have.property('script');
+
+
+                expect(prScriptListeners).to.have.length(1);
+                expect(prScriptListeners[0]).to.have.property('listen', 'prerequest');
+                expect(prScriptListeners[0]).to.have.property('id', 'my-prerequest-script-1');
+                expect(prScriptListeners[0]).to.have.property('script');
+
+                // .listeners should not mutate original event list
+                expect(item.events.count()).to.be(2);
+                expect(item.__parent.events.count()).to.be(1);
+            });
         });
     });
 
     describe('.listenersOwn', function () {
-        var el = new EventList({}, [{
-            listen: 'test',
-            id: 'my-test-script-1',
-            script: {
-                type: 'text/javascript',
-                exec: 'console.log("hello");'
-            }
-        }, {
-            listen: 'prerequest',
-            id: 'my-prerequest-script-1',
-            script: {
-                type: 'text/javascript',
-                exec: 'console.log("hello again");'
-            }
-        }]);
+        var parent,
+            item;
 
-        it('should correctly filter down to the specified type of event listener', function () {
-            var listeners = el.listenersOwn('test');
-            expect(listeners).to.have.length(1);
-            expect(listeners[0]).to.have.property('listen', 'test');
-            expect(listeners[0]).to.have.property('id', 'my-test-script-1');
-            expect(listeners[0]).to.have.property('script');
+        describe('with no parent', function () {
+            before(function () {
+                item = {};
+
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+            });
+
+            it('should correctly filter down to the specified type of event listener on the list', function () {
+                var testListeners = item.events.listenersOwn('test'),
+                    prScriptListeners = item.events.listenersOwn('prerequest');
+
+                expect(testListeners).to.have.length(1);
+                expect(testListeners[0]).to.have.property('listen', 'test');
+                expect(testListeners[0]).to.have.property('id', 'my-test-script-1');
+                expect(testListeners[0]).to.have.property('script');
+
+                expect(prScriptListeners).to.have.length(1);
+                expect(prScriptListeners[0]).to.have.property('listen', 'prerequest');
+                expect(prScriptListeners[0]).to.have.property('id', 'my-prerequest-script-1');
+                expect(prScriptListeners[0]).to.have.property('script');
+            });
+
+            it('should return an empty set for an invalid/missing filter', function () {
+                expect(item.events.listenersOwn()).to.have.length(0);
+                expect(item.events.listenersOwn('random')).to.have.length(0);
+            });
         });
 
-        it('should return an empty set for an invalid/missing filter', function () {
-            expect(el.listenersOwn()).to.have.length(0);
-            expect(el.listenersOwn('random')).to.have.length(0);
+        describe('with events on parent', function () {
+            before(function () {
+                parent = {};
+                item = {};
+
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+
+                parent.events = new EventList(parent, [{
+                    listen: 'test',
+                    id: 'my-parent-level-test-script',
+                    script: { exec: 'console.log("hello from up here")' }
+                }]);
+
+                item.__parent = parent;
+            });
+
+            it('should not include events on parent', function () {
+                var testListeners = item.events.listenersOwn('test'),
+                    prScriptListeners = item.events.listenersOwn('prerequest');
+
+                expect(testListeners).to.have.length(1);
+                expect(testListeners[0]).to.have.property('listen', 'test');
+                expect(testListeners[0]).to.have.property('id', 'my-test-script-1');
+                expect(testListeners[0]).to.have.property('script');
+
+                expect(prScriptListeners).to.have.length(1);
+                expect(prScriptListeners[0]).to.have.property('listen', 'prerequest');
+                expect(prScriptListeners[0]).to.have.property('id', 'my-prerequest-script-1');
+                expect(prScriptListeners[0]).to.have.property('script');
+            });
         });
     });
 });
