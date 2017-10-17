@@ -162,18 +162,24 @@ describe('EventList', function () {
 
                 expect(testListeners).to.have.length(2);
 
+                // order is important
                 expect(testListeners[0]).to.have.property('listen', 'test');
-                expect(testListeners[0]).to.have.property('id', 'my-test-script-1');
+                expect(testListeners[0]).to.have.property('id', 'my-parent-level-test-script');
                 expect(testListeners[0]).to.have.property('script');
 
                 expect(testListeners[1]).to.have.property('listen', 'test');
-                expect(testListeners[1]).to.have.property('id', 'my-parent-level-test-script');
+                expect(testListeners[1]).to.have.property('id', 'my-test-script-1');
                 expect(testListeners[1]).to.have.property('script');
+
 
                 expect(prScriptListeners).to.have.length(1);
                 expect(prScriptListeners[0]).to.have.property('listen', 'prerequest');
                 expect(prScriptListeners[0]).to.have.property('id', 'my-prerequest-script-1');
                 expect(prScriptListeners[0]).to.have.property('script');
+
+                // .listeners should not mutate original event list
+                expect(item.events.count()).to.be(2);
+                expect(item.__parent.events.count()).to.be(1);
             });
         });
     });
