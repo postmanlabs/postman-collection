@@ -23,9 +23,7 @@ describe('nsprc', function () {
     });
 
     it('must exclude only a known set of packages (prevent erroneous exclusions)', function () {
-        expect(nsprc.exclusions).to.eql({
-            marked: '0.3.6'
-        });
+        expect(nsprc.exclusions).to.be.empty();
     });
 
     it('dependency version in package.json should match .nsprc (time to remove exclusion?)', function () {
