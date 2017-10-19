@@ -7,12 +7,6 @@ var expect = require('expect.js'),
         return new UrlMatchPattern(matchPatternString);
     },
 
-    nodeVersion = process.env.TRAVIS_NODE_VERSION, // eslint-disable-line no-process-env
-    runningOnTravis = process.env.TRAVIS, // eslint-disable-line no-process-env
-
-    // to skip particular tests when running on travis with node version 4.x
-    travisNodeV4Skip = (runningOnTravis && nodeVersion === '4') ? describe.skip : describe,
-
     // Run tests for Url matching on test method of a given target
     // Reason for doing this here is, so the same tests can be run on
     // UrlMatchPattern and UrlMatchPatternList
@@ -143,7 +137,7 @@ describe('UrlMatchPattern', function () {
             expect(convertedPattern).to.eql(/^.*foo$/);
         });
 
-        travisNodeV4Skip('security', function () {
+        describe('security', function () {
             describe('ReDoS', function () {
                 this.timeout(1500);
 
