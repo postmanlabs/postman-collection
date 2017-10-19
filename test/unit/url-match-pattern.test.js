@@ -11,7 +11,7 @@ var expect = require('expect.js'),
     runningOnTravis = process.env.TRAVIS, // eslint-disable-line no-process-env
 
     // to skip particular tests when running on travis with node version 4.x
-    travisNodeV4Skip = (runningOnTravis && nodeVersion.match(/^v4./)) ? describe.skip : describe,
+    travisNodeV4Skip = (runningOnTravis && nodeVersion === '4') ? describe.skip : describe,
 
     // Run tests for Url matching on test method of a given target
     // Reason for doing this here is, so the same tests can be run on
