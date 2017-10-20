@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "async": "2.5.0",
-    "browserify": "14.2.0",
+    "browserify": "14.5.0",
     "btoa": "1.1.2",
     "colors": "1.1.2",
     "dependency-check": "2.9.1",
