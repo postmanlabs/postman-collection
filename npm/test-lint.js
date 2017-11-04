@@ -6,9 +6,9 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 require('shelljs/global');
-require('colors');
 
-var async = require('async'),
+var chalk = require('chalk'),
+    async = require('async'),
     LINT_SOURCE_DIRS = [
         './test/**/*.js',
         './index.js',
@@ -20,7 +20,7 @@ module.exports = function (exit) {
     var ESLintCLIEngine = require('eslint').CLIEngine;
 
     // banner line
-    console.log('\nLinting files using eslint...'.yellow.bold);
+    console.log(chalk.yellow.bold('\nLinting files using eslint...'));
 
     async.waterfall([
         // execute the CLI engine
@@ -34,7 +34,7 @@ module.exports = function (exit) {
             // log the result to CLI
             console.log(ESLintCLIEngine.getFormatter()(report.results));
             // log the success of the parser if it has no errors
-            (errorReport && !errorReport.length) && console.log('eslint ok!'.green);
+            (errorReport && !errorReport.length) && console.log(chalk.green('eslint ok!'));
             // ensure that the exit code is non zero in case there was an error
             next(Number(errorReport && errorReport.length) || 0);
         }

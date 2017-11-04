@@ -11,11 +11,12 @@ environment:
   matrix:
     - nodejs_version: "4"
     - nodejs_version: "6"
+    - nodejs_version: "8"
 
 # scripts that run after cloning repository
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm cache clean
+  - npm cache clean --force
   - appveyor-retry npm install
 
 build: off # Disable MSBuilds, not related to the regular build process

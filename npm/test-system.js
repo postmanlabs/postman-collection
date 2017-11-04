@@ -2,9 +2,9 @@
 /* eslint-env node, es6 */
 
 require('shelljs/global');
-require('colors');
 
-var async = require('async'),
+var chalk = require('chalk'),
+    async = require('async'),
     _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
@@ -24,12 +24,12 @@ var async = require('async'),
 
 module.exports = function (exit) {
     // banner line
-    console.log('\nRunning system tests using mocha and nsp...'.yellow.bold);
+    console.log(chalk.yellow.bold('\nRunning system tests using mocha and nsp...'));
 
     async.series([
         // ensure all dependencies are okay
         function (next) {
-            console.log('checking package dependencies...\n'.yellow);
+            console.log(chalk.yellow('checking package dependencies...\n'));
 
             exec('dependency-check ./package.json --extra --no-dev --missing', next);
         },
@@ -38,7 +38,7 @@ module.exports = function (exit) {
         function (next) {
             var mocha = new Mocha();
 
-            console.log('running system specs using mocha...\n'.yellow);
+            console.log(chalk.yellow('running system specs using mocha...\n'));
             fs.readdir(SPEC_SOURCE_DIR, function (err, files) {
                 if (err) { return next(err); }
 
@@ -62,7 +62,7 @@ module.exports = function (exit) {
                 pkg = loadJSON('../package.json'),
                 nsprc = loadJSON('../.nsprc');
 
-            console.log('processing nsp for security vulnerabilities...\n'.yellow);
+            console.log(chalk.yellow('processing nsp for security vulnerabilities...\n'));
 
             // we do not pass full package for privacy concerns and also to add the ability to ignore exclude packages,
             // hence we customise the package before we send it
@@ -75,8 +75,8 @@ module.exports = function (exit) {
             }, function (err, result) {
                 // if processing nsp had an error, simply print that and exit
                 if (err) {
-                    console.error('There was an error processing NSP!\n'.red + (err.message || err).gray + '\n\n' +
-                        'Since NSP server failure is not a blocker for tests, tests are not marked as failure!');
+                    console.error(chalk.red('There was an error processing NSP!\n') + chalk.gray(err.message || err) +
+                        '\n\nSince NSP server failure is not a blocker for tests, tests are not marked as failure!');
                     return next();
                 }
 
@@ -86,7 +86,7 @@ module.exports = function (exit) {
                     return next(1);
                 }
 
-                console.log('nsp ok!\n'.green);
+                console.log(chalk.green('nsp ok!\n'));
                 return next();
             });
         }

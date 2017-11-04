@@ -4,7 +4,7 @@ require('shelljs/global');
 
 var path = require('path'),
     fs = require('fs'),
-    colors = require('colors'),
+    chalk = require('chalk'),
     async = require('async'),
 
     WIKI_URL = 'https://github.com/postmanlabs/postman-collection.wiki.git',
@@ -19,7 +19,7 @@ module.exports = function (exit) {
 
         // prepare a separate wiki output folder
         function (next) {
-            console.log('Publishing wiki...'.yellow.bold);
+            console.log(chalk.yellow.bold('Publishing wiki...'));
 
             // create a location to clone repository
             // @todo - maybe do this outside in an os-level temp folder to avoid recursive .git
@@ -73,8 +73,8 @@ module.exports = function (exit) {
         }
     ], function (code) {
         console.log(code ?
-            colors.red.bold('\nwiki publish failed.') :
-            colors.green(`\nwiki published successfully for ${WIKI_VERSION}`));
+            chalk.red.bold('\nwiki publish failed.') :
+            chalk.green(`\nwiki published successfully for ${WIKI_VERSION}`));
         exit(code);
     });
 };
