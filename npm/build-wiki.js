@@ -3,17 +3,17 @@
 require('shelljs/global');
 
 var fs = require('fs'),
-    colors = require('colors/safe'),
+    chalk = require('chalk'),
     path = require('path'),
     jsdoc2md = require('jsdoc-to-markdown'),
 
     OUT_DIR = path.join('out', 'wiki'),
     INP_DIR = path.join('lib', '**', '*.js'),
     OUT_PATH = path.join(OUT_DIR, 'REFERENCE.md'),
-    SUCCESS_MESSAGE = colors.green.bold(`- wiki generated at "${OUT_PATH}"`);
+    SUCCESS_MESSAGE = chalk.green.bold(`- wiki generated at "${OUT_PATH}"`);
 
 module.exports = function (exit) {
-    console.log(colors.yellow.bold('Generating wiki using jsdoc2md...'));
+    console.log(chalk.yellow.bold('Generating wiki using jsdoc2md...'));
 
     // clean directory
     test('-d', OUT_DIR) && rm('-rf', OUT_DIR);

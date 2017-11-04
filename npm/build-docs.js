@@ -7,14 +7,15 @@
 require('shelljs/global');
 
 var path = require('path'),
-    colors = require('colors/safe'),
+
+    chalk = require('chalk'),
     pkg = require('../package.json'),
 
     IS_WINDOWS = (/^win/).test(process.platform),
     TARGET_DIR = path.join('out', 'docs');
 
 module.exports = function (exit) {
-    console.log(colors.yellow.bold('Generating documentation...'));
+    console.log(chalk.yellow.bold('Generating documentation...'));
 
     try {
         // clean directory
@@ -29,7 +30,7 @@ module.exports = function (exit) {
         ` -c .jsdoc-config.json -u docs lib --query 'pkgVersion=${pkg.version}'`, function (code) {
         // output status
         console.log(code ?
-            colors.red.bold('unable to genereate documentation') :
+            chalk.red.bold('unable to genereate documentation') :
             ` - documentation created at "${TARGET_DIR}"`);
         exit(code);
     });

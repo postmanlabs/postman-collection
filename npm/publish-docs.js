@@ -3,7 +3,7 @@
 require('shelljs/global');
 
 var async = require('async'),
-    colors = require('colors/safe');
+    chalk = require('chalk');
 
 module.exports = function (exit) {
     async.series([
@@ -12,7 +12,7 @@ module.exports = function (exit) {
 
         // now that documentation is build, we publish the same
         function (next) {
-            console.log(colors.yellow.bold('Generating and publishing documentation for postman-collection'));
+            console.log(chalk.yellow.bold('Generating and publishing documentation for postman-collection'));
 
             try {
                 // go to the out directory and create a *new* Git repo
@@ -44,8 +44,8 @@ module.exports = function (exit) {
         }
     ], function (code) {
         console.log(code ?
-            colors.red.bold('\ndocumentation publish failed.') :
-            colors.green('\ndocumentation published successfully.'));
+            chalk.red.bold('\ndocumentation publish failed.') :
+            chalk.green('\ndocumentation published successfully.'));
         exit(code);
     });
 };
