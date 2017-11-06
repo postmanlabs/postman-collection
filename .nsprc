@@ -1,6 +1,4 @@
 {
   "exceptions": [],
-  "exclusions": {
-    "marked": "0.3.6"
-  }
+  "exclusions": {}
 }

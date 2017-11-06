@@ -169,6 +169,47 @@ describe('Property', function () {
                 testProp2: 'substituted-parent-value-2'
             });
         });
+
+        it('should ignore own variables when `ignoreOwnVariables` is set', function () {
+            var property = new Property(),
+                variables = new VariableList({}, [{
+                    key: 'var1',
+                    value: 'value-1'
+                }]);
+
+            property.variables = new VariableList({}, [{
+                key: 'var1',
+                value: 'ignore_me_please'
+            }]);
+
+            property.testProp1 = 'prop-{{var1}}';
+
+            expect(property.toObjectResolved(null, [variables], { ignoreOwnVariables: true })).to.eql({
+                testProp1: 'prop-value-1'
+            });
+        });
+
+        it('should ignore scope variables when `ignoreOwnVariables` is set', function () {
+            var property = new Property(),
+                scope = new Property(),
+                variables = new VariableList({}, [{
+                    key: 'var1',
+                    value: 'value-1'
+                }]);
+
+            scope.variables = new VariableList({}, [{
+                key: 'var1',
+                value: 'ignore_me_please'
+            }]);
+
+            property.testProp1 = 'prop-{{var1}}';
+
+            // why on earth would anyone want to pass a scope and not use the scope,
+            // but you know we have tests to make sure even if someone did
+            expect(property.toObjectResolved(scope, [variables], { ignoreOwnVariables: true })).to.eql({
+                testProp1: 'prop-value-1'
+            });
+        });
     });
 
     describe('.replaceSubstitutions', function () {

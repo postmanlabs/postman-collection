@@ -642,22 +642,71 @@ describe('VariableScope', function () {
             });
         });
 
-        it('gives local scope highest order of precedence when resolving layers', function () {
-            var localValues = [{
-                    key: 'key3',
-                    value: 'val3'
+        it('gives correct order of precedence for "overrides" when resolving layers', function () {
+            var globalValues = [{
+                    key: 'foo',
+                    value: '1'
                 }, {
-                    key: 'key1',
-                    value: 'duplicated_key'
+                    key: 'bar',
+                    value: '1'
+                }, {
+                    key: 'baz',
+                    value: '1'
                 }],
-                globalScope = new VariableList(null, keyVals[0]),
-                envScope = new VariableList(null, keyVals[1]),
-                localScope = new VariableScope(localValues, [envScope, globalScope]);
+                localValues = [{
+                    key: 'bar',
+                    value: '2'
+                }, {
+                    key: 'baz',
+                    value: '2'
+                }],
+                envValues = [{
+                    key: 'baz',
+                    value: '3'
+                }],
+                globalScope = new VariableList(null, globalValues),
+                envScope = new VariableList(null, envValues),
+                localScope = new VariableList(null, localValues),
+                variableScope = new VariableScope(null, [envScope, localScope, globalScope]);
 
-            expect(localScope.toObject()).to.eql({
-                'key1': 'duplicated_key',
-                'key2': 'val2',
-                'key3': 'val3'
+            expect(variableScope.toObject()).to.eql({
+                'foo': '1',
+                'bar': '2',
+                'baz': '3'
+            });
+        });
+
+        it('"definition" should take the highest precedence when resolving layers', function () {
+            var globalValues = [{
+                    key: 'foo',
+                    value: '1'
+                }, {
+                    key: 'bar',
+                    value: '1'
+                }, {
+                    key: 'baz',
+                    value: '1'
+                }],
+                localValues = [{
+                    key: 'bar',
+                    value: '2'
+                }, {
+                    key: 'baz',
+                    value: '2'
+                }],
+                envValues = [{
+                    key: 'baz',
+                    value: '3'
+                }],
+                globalScope = new VariableList(null, globalValues),
+                envScope = new VariableList(null, envValues),
+                localScope = new VariableList(null, localValues),
+                variableScope = new VariableScope(envScope, [localScope, globalScope]);
+
+            expect(variableScope.toObject()).to.eql({
+                'foo': '1',
+                'bar': '2',
+                'baz': '3'
             });
         });
     });

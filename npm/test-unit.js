@@ -5,10 +5,11 @@
 /* eslint-env node, es6 */
 
 require('shelljs/global');
-require('colors');
 
 // set directories and files for test and coverage report
 var path = require('path'),
+
+    chalk = require('chalk'),
 
     IS_WINDOWS = (/^win/).test(process.platform),
     COV_REPORT_PATH = '.coverage',
@@ -27,7 +28,7 @@ module.exports = function (exit) {
     // }
 
     // banner line
-    console.log('Running unit tests using mocha on node...'.yellow.bold);
+    console.log(chalk.yellow.bold('Running unit tests using mocha on node...'));
 
     mkdir('-p', '.tmp');
     test('-d', COV_REPORT_PATH) && rm('-rf', COV_REPORT_PATH) && mkdir('-p', COV_REPORT_PATH);

@@ -3,12 +3,12 @@
 require('shelljs/global');
 
 var async = require('async'),
-    colors = require('colors/safe');
+    chalk = require('chalk');
 
-console.log(colors.yellow.bold('  ___     _ _        _   _           ') + colors.green.bold(' ___ ___  _  __ '));
-console.log(colors.yellow.bold(' / __|___| | |___ __| |_(_)___ _ _   ') + colors.green.bold('/ __|   \\| |/ / '));
-console.log(colors.yellow.bold('| (__/ _ \\ | / -_) _|  _| / _ \\ \' \\  ') + colors.green.bold('\\__ \\ |) | \' < '));
-console.log(colors.yellow.bold(' \\___\\___/_|_\\___\\__|\\__|_\\___/_||_| ') + colors.green.bold('|___/___/|_|\\_\\'));
+console.log(chalk.yellow.bold('  ___     _ _        _   _           ') + chalk.green.bold(' ___ ___  _  __ '));
+console.log(chalk.yellow.bold(' / __|___| | |___ __| |_(_)___ _ _   ') + chalk.green.bold('/ __|   \\| |/ / '));
+console.log(chalk.yellow.bold('| (__/ _ \\ | / -_) _|  _| / _ \\ \' \\  ') + chalk.green.bold('\\__ \\ |) | \' < '));
+console.log(chalk.yellow.bold(' \\___\\___/_|_\\___\\__|\\__|_\\___/_||_| ') + chalk.green.bold('|___/___/|_|\\_\\'));
 
 async.series([
     require('./test-lint'),
@@ -16,6 +16,6 @@ async.series([
     require('./test-unit'),
     require('./test-browser')
 ], function (code) {
-    !code && console.log(colors.green('\npostman-collection tests: all ok!'));
+    !code && console.log(chalk.green('\npostman-collection tests: all ok!'));
     exit(code);
 });

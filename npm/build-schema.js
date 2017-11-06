@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /* eslint-env node, es6 */
 require('shelljs/global');
-require('colors');
 
 var fs = require('fs'),
     path = require('path'),
+
+    chalk = require('chalk'),
 
     IN_FOLDER = path.join('lib', 'schema'),
     IN_FOLDER_ROOT = path.join(IN_FOLDER, 'collection.json'),
@@ -14,7 +15,7 @@ var fs = require('fs'),
 module.exports = function (exit) {
     var compiler = require('schema-compiler');
 
-    console.log('Generating schema...'.yellow.bold);
+    console.log(chalk.yellow.bold('Generating schema...'));
 
     // clean directory
     try {
