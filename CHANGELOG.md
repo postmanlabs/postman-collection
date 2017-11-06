@@ -1,5 +1,12 @@
 # Postman Collection SDK Changelog
 
+#### v3.0.2 (November 6, 2017)
+* Updated dependencies. :arrow_up:
+* #495 Added Node v8 to the CI.
+* #494 Allowed `VariableScope~toObjectResolved` to be called with parent overrides. :tada:
+* #484 Switched to [8fold-marked](https://www.npmjs.com/package/8fold-marked) from [marked](https://www.npmjs.com/package/marked) :closed_lock_with_key:
+* #485 Fixed `VariableScope~toObject` to respect layers :bug:
+
 #### v3.0.1 (October 12, 2017)
 * :arrow_up: Updated dependencies
 * :bug: Corrected file URL handling #479
