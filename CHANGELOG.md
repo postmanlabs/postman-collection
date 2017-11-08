@@ -1,5 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### v3.0.3 (November 8, 2017)
+* :arrow_up: Updated dependencies.
+* #501 Fixed `Description~toString()` behaviour for falsy description contents. :bug:
+* #499 Updated `.npmignore`
+
 #### v3.0.2 (November 6, 2017)
 * Updated dependencies. :arrow_up:
 * #495 Added Node v8 to the CI.
