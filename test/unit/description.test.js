@@ -85,5 +85,9 @@ describe('Description', function () {
 
             expect(description.toString()).to.be('&lt;%= template %&gt;');
         });
+
+        it('should return an empty string for falsy input', function () {
+            expect(new Description().toString()).to.be('');
+        });
     });
 });
