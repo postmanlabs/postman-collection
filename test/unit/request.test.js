@@ -150,7 +150,13 @@ describe('Request', function () {
             var jsonified = request.toJSON();
 
             expect(jsonified.method).to.eql(rawRequest.method);
-            expect(jsonified.url).to.eql(rawRequest.url);
+            expect(jsonified.url).to.eql({
+                protocol: 'http',
+                path: ['post'],
+                host: ['echo', 'getpostman', 'com'],
+                query: [],
+                variable: []
+            });
             expect(jsonified.header).to.eql(rawRequest.header);
             expect(jsonified.body).to.eql(rawRequest.body);
             expect(jsonified.description).to.eql(rawRequest.description);
