@@ -461,7 +461,13 @@ describe('Response', function () {
                 status: 'OK',
                 code: 200,
                 originalRequest: {
-                    url: 'https://postman-echo.com/get',
+                    url: {
+                        host: ['postman-echo', 'com'],
+                        path: ['get'],
+                        protocol: 'https',
+                        query: [],
+                        variable: []
+                    },
                     method: 'GET'
                 },
                 header: [],
