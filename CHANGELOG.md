@@ -2,6 +2,7 @@
 
 #### Unreleased
 * #502 Added support for system property in query parameters
+* #503 `request~toJSON` no longer converts `url` to string
 
 #### v3.0.3 (November 8, 2017)
 * :arrow_up: Updated dependencies.
