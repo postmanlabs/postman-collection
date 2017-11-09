@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### Unreleased
+* #502 Added support for system property in query parameters
+
 #### v3.0.3 (November 8, 2017)
 * :arrow_up: Updated dependencies.
 * #501 Fixed `Description~toString()` behaviour for falsy description contents. :bug:
