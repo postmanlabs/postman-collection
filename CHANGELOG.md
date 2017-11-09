@@ -1,6 +1,6 @@
 # Postman Collection SDK Changelog
 
-#### Unreleased
+####  v3.0.4-beta,1 (November 9, 2017)
 * #502 Added support for system property in query parameters
 * #503 `request~toJSON` no longer converts `url` to string
 
