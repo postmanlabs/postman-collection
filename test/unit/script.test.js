@@ -25,6 +25,14 @@ describe('Script', function () {
 
                 expect(script).to.have.property('exec', undefined);
             });
+
+        it('should handle ids', function () {
+            var script1 = new Script(),
+                script2 = new Script({ id: 'ID1' });
+
+            expect(script1).to.have.property('id');
+            expect(script2).to.have.property('id', 'ID1');
+        });
     });
 
     describe('sanity', function () {
