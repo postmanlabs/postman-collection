@@ -27,6 +27,27 @@ describe('QueryParam', function () {
             expect(qp).to.have.property('key', 'foo');
             expect(qp).to.have.property('value', 'bar');
         });
+
+        it('should handle system property correctly', function () {
+            var qp1 = new QueryParam({
+                    key: 'foo1',
+                    value: 'bar1',
+                    system: true
+                }),
+                qp2 = new QueryParam({
+                    key: 'foo2',
+                    value: 'bar2',
+                    system: false
+                }),
+                qp3 = new QueryParam({
+                    key: 'foo3',
+                    value: 'bar3'
+                });
+
+            expect(qp1).to.have.property('system', true);
+            expect(qp2).to.have.property('system', false);
+            expect(qp3).not.to.have.property('system');
+        });
     });
 
     describe('static helpers', function () {
