@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+### Unreleased
+* Made sure all Script instances have an id
+
 #### v3.0.2 (November 6, 2017)
 * Updated dependencies. :arrow_up:
 * #495 Added Node v8 to the CI.
