@@ -10,6 +10,47 @@ describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
         item = new sdk.Item(rawItem);
 
+    describe('constructor', function () {
+        it('should handle all properties', function () {
+            var itemDefinition = {
+                    id: 'peter-pan',
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-script-1',
+                            type: 'text/javascript',
+                            exec: ['console.log("This doesn\'t matter");']
+                        }
+                    }],
+                    request: {
+                        method: 'GET',
+                        url: {
+                            host: ['postman-echo', 'com'],
+                            'protocol': 'http',
+                            'query': [],
+                            'variable': []
+                        },
+                        auth: {
+                            type: 'basic',
+                            basic: [{
+                                key: 'username',
+                                type: 'string',
+                                value: 'postman'
+                            }, {
+                                key: 'password',
+                                type: 'string',
+                                value: 'password'
+                            }]
+                        }
+                    },
+                    response: []
+                },
+                item = new Item(itemDefinition);
+
+            expect(item.toJSON()).to.eql(itemDefinition);
+        });
+    });
+
     describe('sanity', function () {
         describe('request', function () {
             var rawItem = fixtures.collectionV2.item[0],
