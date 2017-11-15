@@ -35,7 +35,10 @@ describe('Request', function () {
                 },
                 request = new Request(requestDefinition);
 
-            expect(request.toJSON()).to.eql(requestDefinition);
+            expect(request).to.have.property('url');
+            expect(request.url).to.eql(new sdk.Url(requestDefinition.url));
+            expect(request).to.have.property('auth');
+            expect(request.auth).to.eql(new sdk.RequestAuth(requestDefinition.auth));
         });
 
         it('should not create auth if auth is falsy', function () {
