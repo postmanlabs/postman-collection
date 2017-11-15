@@ -84,21 +84,21 @@ describe('Script', function () {
 
     describe('Variadic formats', function () {
         it('should support non-wrapped strings', function () {
-            var script = new Script('console.log("This is a line of test script code");');
+            var script = new Script('console.log("This is a line of test script code");'),
+                scriptJSON = script.toJSON();
 
-            expect(script.toJSON()).to.eql({
-                type: 'text/javascript',
-                exec: ['console.log("This is a line of test script code");']
-            });
+            expect(scriptJSON).to.have.property('id');
+            expect(scriptJSON).to.have.property('type', 'text/javascript');
+            expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
         });
 
         it('should support non-wrapped arrays', function () {
-            var script = new Script(['console.log("This is a line of test script code");']);
+            var script = new Script(['console.log("This is a line of test script code");']),
+                scriptJSON = script.toJSON();
 
-            expect(script.toJSON()).to.eql({
-                type: 'text/javascript',
-                exec: ['console.log("This is a line of test script code");']
-            });
+            expect(scriptJSON).to.have.property('id');
+            expect(scriptJSON).to.have.property('type', 'text/javascript');
+            expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
         });
     });
 
