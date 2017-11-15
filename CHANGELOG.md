@@ -3,6 +3,7 @@
 #### Unreleased
 * #502 Added support for system property in query parameters
 * #503 `request~toJSON` no longer converts `url` to string
+* :bug: Fixed a bug where empty `auth` was created for `new {Request,ItemGroup,Collection}({auth: null})`. This affected the auth lookup in parents.
 
 #### v3.0.3 (November 8, 2017)
 * :arrow_up: Updated dependencies.
