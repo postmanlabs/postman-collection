@@ -10,6 +10,52 @@ describe('Request', function () {
     var rawRequest = fixtures.collectionV2.item[1].request,
         request = new Request(rawRequest);
 
+    describe('constructor', function () {
+        it('should handle all properties', function () {
+            var requestDefinition = {
+                    method: 'GET',
+                    url: {
+                        host: ['postman-echo', 'com'],
+                        'protocol': 'http',
+                        'query': [],
+                        'variable': []
+                    },
+                    auth: {
+                        type: 'basic',
+                        basic: [{
+                            key: 'username',
+                            type: 'string',
+                            value: 'postman'
+                        }, {
+                            key: 'password',
+                            type: 'string',
+                            value: 'password'
+                        }]
+                    }
+                },
+                request = new Request(requestDefinition);
+
+            expect(request.toJSON()).to.eql(requestDefinition);
+        });
+
+        it('should not create auth if auth is falsy', function () {
+            var requestDefinition = {
+                    method: 'GET',
+                    url: {
+                        host: ['postman-echo', 'com'],
+                        'protocol': 'http',
+                        'query': [],
+                        'variable': []
+                    },
+                    auth: null
+                },
+                request = new Request(requestDefinition);
+
+            expect(request).to.not.have.property('auth');
+            expect(request.toJSON()).to.not.have.property('auth');
+        });
+    });
+
     describe('sanity', function () {
         var rawRequest = fixtures.collectionV2.item[1],
             request = new Request(rawRequest.request);
