@@ -143,21 +143,6 @@ describe('Collection', function () {
     });
 
     describe('.toJSON', function () {
-        it('should handle missing events and variables correctly', function () {
-            var collection = new Collection(),
-                json = collection.toJSON();
-
-            expect(json.event).to.eql([]);
-            expect(json.variable).to.eql([]);
-
-            delete collection.variables;
-            delete collection.events;
-
-            json = collection.toJSON();
-            expect(json).to.have.property('event', undefined);
-            expect(json).to.have.property('variable', undefined);
-        });
-
         it('should handle all required properties', function () {
             var collectionDefinition = {
                     info: {
@@ -221,9 +206,9 @@ describe('Collection', function () {
             expect(collectionJSON).to.eql(collectionDefinition);
 
             // check for root level properties moved to info
-            expect(collectionJSON).to.not.have('id');
-            expect(collectionJSON).to.not.have('version');
-            expect(collectionJSON).to.not.have('name');
+            expect(collectionJSON).to.not.have.property('id');
+            expect(collectionJSON).to.not.have.property('version');
+            expect(collectionJSON).to.not.have.property('name');
         });
     });
 });
