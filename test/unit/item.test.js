@@ -129,7 +129,8 @@ describe('Item', function () {
             itemWithAuth,
             folderWithAuth,
             collectionWithAuth,
-            itemWithEmptyAuth;
+            itemWithEmptyAuth,
+            folderWithEmptyAuth;
 
         // Create building blocks which we can use in different combinations for the tests.
         beforeEach(function () {
@@ -152,6 +153,10 @@ describe('Item', function () {
                     type: 'hawk',
                     hawk: { user: 'nobody' }
                 }
+            });
+            folderWithEmptyAuth = new sdk.ItemGroup({
+                name: 'folder3',
+                auth: { type: null }
             });
             itemWithEmptyAuth = new sdk.Item({
                 name: 'item2',
@@ -233,6 +238,23 @@ describe('Item', function () {
         it('should handle parent lookup for empty but defined auth in item', function () {
             folder.items.add(itemWithEmptyAuth);
             collectionWithAuth.items.add(folder);
+
+            var auth = itemWithEmptyAuth.getAuth().toJSON();
+
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
+        });
+
+        it('should handle parent lookup for empty but defined auth in folder', function () {
+            folderWithEmptyAuth.items.add(itemWithEmptyAuth);
+            collectionWithAuth.items.add(folderWithEmptyAuth);
 
             var auth = itemWithEmptyAuth.getAuth().toJSON();
 
