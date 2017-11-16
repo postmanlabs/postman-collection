@@ -128,7 +128,9 @@ describe('Item', function () {
             collection,
             itemWithAuth,
             folderWithAuth,
-            collectionWithAuth;
+            collectionWithAuth,
+            itemWithEmptyAuth,
+            folderWithEmptyAuth;
 
         // Create building blocks which we can use in different combinations for the tests.
         beforeEach(function () {
@@ -150,6 +152,17 @@ describe('Item', function () {
                 auth: {
                     type: 'hawk',
                     hawk: { user: 'nobody' }
+                }
+            });
+            folderWithEmptyAuth = new sdk.ItemGroup({
+                name: 'folder3',
+                auth: { type: null }
+            });
+            itemWithEmptyAuth = new sdk.Item({
+                name: 'item2',
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    auth: { type: null }
                 }
             });
         });
@@ -220,6 +233,40 @@ describe('Item', function () {
             var auth = item.getAuth();
 
             expect(auth).to.be(undefined);
+        });
+
+        it('should handle parent lookup for empty but defined auth in item', function () {
+            folder.items.add(itemWithEmptyAuth);
+            collectionWithAuth.items.add(folder);
+
+            var auth = itemWithEmptyAuth.getAuth().toJSON();
+
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
+        });
+
+        it('should handle parent lookup for empty but defined auth in folder', function () {
+            folderWithEmptyAuth.items.add(itemWithEmptyAuth);
+            collectionWithAuth.items.add(folderWithEmptyAuth);
+
+            var auth = itemWithEmptyAuth.getAuth().toJSON();
+
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
         });
     });
 

@@ -127,6 +127,28 @@ describe('PropertyBase', function () {
             it('should return undefined if a random property is provided for lookup', function () {
                 expect(c.findInParents('some-randome-stuff')).to.be(undefined);
             });
+
+            describe('with customizer', function () {
+                it('should be able to lookup with a customizer', function () {
+                    var customizer = function (parent) { return parent.value === 'yo1'; };
+
+                    expect(c.findInParents('value', customizer)).to.be('yo1');
+                });
+
+                it('should prioritize customizer over existance', function () {
+                    var i = 0,
+                        // find parent 4 levels up
+                        customizer = function () { return ++i >= 4; };
+
+                    expect(c.findInParents('value', customizer)).to.be('yo1');
+                });
+
+                it('should return undefined if a random property is provided for lookup', function () {
+                    var customizer = function () { return false; };
+
+                    expect(c.findInParents('some-randome-stuff', customizer)).to.be(undefined);
+                });
+            });
         });
 
         describe('.findParentContaining()', function () {
@@ -144,6 +166,28 @@ describe('PropertyBase', function () {
 
             it('should return undefined if a random property is provided for lookup', function () {
                 expect(c.findParentContaining('some-randome-stuff')).to.be(undefined);
+            });
+
+            describe('with customizer', function () {
+                it('should be able to lookup with a customizer', function () {
+                    var customizer = function (parent) { return parent.value === 'yo1'; };
+
+                    expect(c.findParentContaining('value', customizer)).to.be(ggp);
+                });
+
+                it('should prioritize customizer over existance', function () {
+                    var i = 0,
+                        // find parent 4 levels up
+                        customizer = function () { return ++i >= 4; };
+
+                    expect(c.findParentContaining('value', customizer)).to.be(ggp);
+                });
+
+                it('should return undefined if a random property is provided for lookup', function () {
+                    var customizer = function () { return false; };
+
+                    expect(c.findParentContaining('some-randome-stuff', customizer)).to.be(undefined);
+                });
             });
         });
     });
