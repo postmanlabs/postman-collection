@@ -1,10 +1,55 @@
 var expect = require('expect.js'),
-    Collection = require('../../lib/index.js').Collection,
+    sdk = require('../../lib/index.js'),
+    Collection = sdk.Collection,
 
     fixtures = require('../fixtures');
 
 /* global describe, it */
 describe('Collection', function () {
+    describe('constructor', function () {
+        it('should handle all properties', function () {
+            var collectionDefinition = {
+                    auth: {
+                        type: 'basic',
+                        basic: [{
+                            key: 'username',
+                            type: 'string',
+                            value: 'postman'
+                        }, {
+                            key: 'password',
+                            type: 'string',
+                            value: 'password'
+                        }]
+                    },
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-script-1',
+                            type: 'text/javascript',
+                            exec: ['console.log("This doesn\'t matter");']
+                        }
+                    }]
+                },
+                collection = new Collection(collectionDefinition);
+
+            expect(collection).to.have.property('events');
+            expect(collection.events).to.eql(new sdk.EventList({}, collectionDefinition.event));
+            expect(collection).to.have.property('auth');
+            expect(collection.auth).to.eql(new sdk.RequestAuth(collectionDefinition.auth));
+            expect(collection).to.have.property('items');
+        });
+
+        it('should not create auth if auth is falsy', function () {
+            var collectionDefinition = {
+                    auth: null
+                },
+                collection = new Collection(collectionDefinition);
+
+            expect(collection).to.not.have.property('auth');
+            expect(collection.toJSON()).to.not.have.property('auth');
+        });
+    });
+
     describe('sanity', function () {
         var rawCollection = fixtures.collectionV2,
             collection = new Collection(rawCollection);
