@@ -3,6 +3,9 @@
 #### Unreleased
 * #502 Added support for system property in query parameters
 * #503 `request~toJSON` no longer converts `url` to string
+* Made sure all Script instances have an id
+* :bug: `auth` is now included in `collection.toJSON`
+* :bug: Fixed a bug where `item.getAuth` would return an empty `RequestAuth`, instead of looking up in the parent
 * :bug: Fixed a bug where empty `auth` was created for `new {Request,ItemGroup,Collection}({auth: null})`. This affected the auth lookup in parents.
 
 #### v3.0.3 (November 8, 2017)

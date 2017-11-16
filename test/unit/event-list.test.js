@@ -30,18 +30,21 @@ describe('EventList', function () {
     describe('#add', function () {
         it('should correctly handle variadic script formats', function () {
             var eventList = new EventList({}, [{
-                listen: 'test',
-                id: 'my-test-script-1',
-                script: {
-                    type: 'text/javascript',
-                    exec: 'console.log("hello");'
-                }
-            }]);
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    script: {
+                        id: 'test-script-1',
+                        type: 'text/javascript',
+                        exec: 'console.log("hello");'
+                    }
+                }]),
+                eventListJSON;
 
             expect(eventList.toJSON()).to.eql([{
                 listen: 'test',
                 id: 'my-test-script-1',
                 script: {
+                    id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("hello");']
                 }
@@ -52,20 +55,23 @@ describe('EventList', function () {
                 script: 'console.log("Nothing to see here, move along...");'
             });
 
-            expect(eventList.toJSON()).to.eql([{
+            eventListJSON = eventList.toJSON();
+
+            expect(eventListJSON[0]).to.eql({
                 listen: 'test',
                 id: 'my-test-script-1',
                 script: {
+                    id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("hello");']
                 }
-            }, {
-                listen: 'prerequest',
-                script: {
-                    type: 'text/javascript',
-                    exec: ['console.log("Nothing to see here, move along...");']
-                }
-            }]);
+            });
+
+            expect(eventListJSON[1]).to.have.property('listen', 'prerequest');
+            expect(eventListJSON[1]).to.have.property('script');
+            expect(eventListJSON[1].script).to.have.property('type', 'text/javascript');
+            expect(eventListJSON[1].script.exec)
+                .to.eql(['console.log("Nothing to see here, move along...");']);
         });
     });
 
