@@ -112,11 +112,13 @@ describe('Collection', function () {
 
     describe('events', function () {
         it('should allow adding events with a multitude of script definition format', function () {
-            var collection = new Collection();
+            var collection = new Collection(),
+                collectionJSON;
 
             collection.events.add({
                 listen: 'test',
                 script: {
+                    id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("Random");']
                 }
@@ -126,19 +128,21 @@ describe('Collection', function () {
                 script: ['console.log("A little less random");']
             });
 
-            expect(collection.events.toJSON()).to.eql([{
+            collectionJSON = collection.toJSON();
+
+            expect(collectionJSON.event[0]).to.eql({
                 listen: 'test',
                 script: {
+                    id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("Random");']
                 }
-            }, {
-                listen: 'prerequest',
-                script: {
-                    type: 'text/javascript',
-                    exec: ['console.log("A little less random");']
-                }
-            }]);
+            });
+            expect(collectionJSON.event[1]).to.have.property('listen', 'prerequest');
+            expect(collectionJSON.event[1]).to.have.property('script');
+            expect(collectionJSON.event[1].script).to.have.property('id');
+            expect(collectionJSON.event[1].script).to.have.property('type', 'text/javascript');
+            expect(collectionJSON.event[1].script.exec).to.eql(['console.log("A little less random");']);
         });
     });
 
