@@ -1,7 +1,14 @@
 # Postman Collection SDK Changelog
 
-### Unreleased
+#### Unreleased
+* #502 Added support for system property in query parameters
+* #503 `request~toJSON` no longer converts `url` to string
 * Made sure all Script instances have an id
+
+#### v3.0.3 (November 8, 2017)
+* :arrow_up: Updated dependencies.
+* #501 Fixed `Description~toString()` behaviour for falsy description contents. :bug:
+* #499 Updated `.npmignore`
 
 #### v3.0.2 (November 6, 2017)
 * Updated dependencies. :arrow_up:

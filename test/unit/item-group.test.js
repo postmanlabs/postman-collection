@@ -19,19 +19,6 @@ describe('ItemGroup', function () {
         expect(groups.length).to.be(4);
     });
 
-    it('should not cast incoming items/item groups', function () {
-        var collection = new Collection(),
-            url = 'https://www.random.org:443/integers/?num=1&min=0&max=255&col=16&base=10&format=plain&rnd=new';
-
-        collection.items.add(new Item({
-            request: {
-                method: 'GET',
-                url: url
-            }
-        }));
-        expect(collection.toJSON().item[0].request.url).to.be(url);
-    });
-
     it('should correctly handle incoming items/item groups and/or plain objects', function () {
         var plain = ItemGroup._createNewGroupOrItem({
                 request: {
