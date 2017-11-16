@@ -396,4 +396,39 @@ describe('ItemGroup', function () {
             expect(sdk.ItemGroup.isItemGroup()).to.be(false);
         });
     });
+
+    describe('.toJSON', function () {
+        it('should handle all properties', function () {
+            var itemGroupDefinition = {
+                    id: 'my-folder',
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-test-script',
+                            type: 'text/javascript',
+                            exec: ['console.log("hello there!");']
+                        }
+                    }],
+                    item: [{
+                        event: [],
+                        id: 'my-item',
+                        request: {
+                            method: 'GET',
+                            url: {
+                                host: ['postmanecho', 'com'],
+                                path: ['get'],
+                                protocol: 'https',
+                                query: [],
+                                variable: []
+                            }
+                        },
+                        response: []
+                    }]
+                },
+                itemGroup = new ItemGroup(itemGroupDefinition),
+                itemGroupJSON = itemGroup.toJSON();
+
+            expect(itemGroupJSON).to.eql(itemGroupDefinition);
+        });
+    });
 });

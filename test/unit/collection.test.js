@@ -112,11 +112,13 @@ describe('Collection', function () {
 
     describe('events', function () {
         it('should allow adding events with a multitude of script definition format', function () {
-            var collection = new Collection();
+            var collection = new Collection(),
+                collectionJSON;
 
             collection.events.add({
                 listen: 'test',
                 script: {
+                    id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("Random");']
                 }
@@ -126,36 +128,91 @@ describe('Collection', function () {
                 script: ['console.log("A little less random");']
             });
 
-            expect(collection.events.toJSON()).to.eql([{
+            collectionJSON = collection.toJSON();
+
+            expect(collectionJSON.event[0]).to.eql({
                 listen: 'test',
                 script: {
+                    id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("Random");']
                 }
-            }, {
-                listen: 'prerequest',
-                script: {
-                    type: 'text/javascript',
-                    exec: ['console.log("A little less random");']
-                }
-            }]);
+            });
+            expect(collectionJSON.event[1]).to.have.property('listen', 'prerequest');
+            expect(collectionJSON.event[1]).to.have.property('script');
+            expect(collectionJSON.event[1].script).to.have.property('id');
+            expect(collectionJSON.event[1].script).to.have.property('type', 'text/javascript');
+            expect(collectionJSON.event[1].script.exec).to.eql(['console.log("A little less random");']);
         });
     });
 
     describe('.toJSON', function () {
-        it('should handle missing events and variables correctly', function () {
-            var collection = new Collection(),
-                json = collection.toJSON();
+        it('should handle all required properties', function () {
+            var collectionDefinition = {
+                    info: {
+                        id: 'my-collection',
+                        name: 'Yay Collection!',
+                        schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+                        version: '2.1.0'
+                    },
+                    auth: {
+                        type: 'basic',
+                        basic: [{
+                            key: 'username',
+                            type: 'string',
+                            value: 'postman'
+                        }, {
+                            key: 'password',
+                            type: 'string',
+                            value: 'password'
+                        }]
+                    },
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-script-1',
+                            type: 'text/javascript',
+                            exec: [
+                                'console.log("bcoz I am batman!");'
+                            ]
+                        }
+                    }],
+                    item: [{
+                        event: [],
+                        id: 'my-item-1',
+                        request: {
+                            method: 'GET',
+                            url: {
+                                host: ['postman-echo', 'com'],
+                                path: ['get'],
+                                protocol: 'https',
+                                query: [],
+                                variable: []
+                            }
+                        },
+                        response: []
+                    }],
+                    variable: [{
+                        key: 'foo',
+                        value: 'bar',
+                        type: 'string'
+                    }]
+                },
+                collection = new Collection(collectionDefinition),
+                collectionJSON = collection.toJSON();
 
-            expect(json.event).to.eql([]);
-            expect(json.variable).to.eql([]);
+            // version info does not exactly have a one to one mapping
+            // with the definition and toJSON, hence the hack
+            expect(collectionJSON.info.version).to.have.property('string', '2.1.0');
+            delete collectionJSON.info.version;
+            delete collectionDefinition.info.version;
 
-            delete collection.variables;
-            delete collection.events;
+            expect(collectionJSON).to.eql(collectionDefinition);
 
-            json = collection.toJSON();
-            expect(json).to.have.property('event', undefined);
-            expect(json).to.have.property('variable', undefined);
+            // check for root level properties moved to info
+            expect(collectionJSON).to.not.have.property('id');
+            expect(collectionJSON).to.not.have.property('version');
+            expect(collectionJSON).to.not.have.property('name');
         });
     });
 });
