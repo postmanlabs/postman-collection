@@ -2,7 +2,7 @@ var expect = require('expect.js'),
     Variable = require('../../lib/index.js').Variable;
 
 /* global describe, it */
-describe('Variable', function () {
+describe.only('Variable', function () {
     it('should initialise variable of type `any` and value `undefined`', function () {
         var v = new Variable();
 
@@ -78,24 +78,45 @@ describe('Variable', function () {
         expect(v.type).to.be('json');
     });
 
-    it('should prepopulate value and type when passed to the constructor (json as string)', function () {
-        var vValue = JSON.stringify({ foo: 'bar' }),
-            v = new Variable({
-                value: vValue,
-                type: 'json'
-            });
-
-        expect(v.value).to.be(JSON.stringify(vValue));
-        expect(v.type).to.be('json');
-    });
-
-    it('should typecast value during construction when type is provided', function () {
+    it('should typecast value during construction when type is provided (number)', function () {
         var v = new Variable({
             value: '108',
             type: 'number'
         });
 
         expect(v.value).to.be(108);
+    });
+
+    it('should typecast value during construction when type is provided (string)', function () {
+        var v = new Variable({
+            value: true,
+            type: 'string'
+        });
+
+        expect(v.value).to.be('true');
+    });
+
+    it('should typecast value during construction when type is provided (boolean)', function () {
+        var v = new Variable({
+            value: 'foo',
+            type: 'boolean'
+        });
+
+        expect(v.value).to.be(true);
+    });
+
+    it('should typecast value during construction when type is provided (json)', function () {
+        var v = new Variable({
+                value: null,
+                type: 'json'
+            }),
+            v1 = new Variable({
+                value: '{"foo":"bar"}',
+                type: 'json'
+            });
+
+        expect(v.value).to.be('null');
+        expect(v1.value).to.be('{"foo":"bar"}');
     });
 
     it('should support any data type if type is set to `any`', function () {
