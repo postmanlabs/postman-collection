@@ -105,17 +105,19 @@ describe('Event', function () {
         });
 
         it('must correctly handle non-compliant script input', function () {
-            var event = new Event(rawEvent);
+            var event = new Event(rawEvent),
+                eventJSON;
 
             event.update({});
-            expect(event.toJSON()).to.eql({
-                id: 'my-global-script-1',
-                listen: 'test',
-                script: {
-                    type: 'text/javascript',
-                    exec: ['console.log("hello");']
-                }
-            });
+
+            eventJSON = event.toJSON();
+
+            expect(eventJSON).to.have.property('id', 'my-global-script-1');
+            expect(eventJSON).to.have.property('listen', 'test');
+            expect(eventJSON).to.have.property('script');
+            expect(eventJSON.script).to.have.property('id');
+            expect(eventJSON.script).to.have.property('type', 'text/javascript');
+            expect(eventJSON.script.exec).to.eql(['console.log("hello");']);
         });
     });
 });
