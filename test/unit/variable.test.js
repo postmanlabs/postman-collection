@@ -2,7 +2,7 @@ var expect = require('expect.js'),
     Variable = require('../../lib/index.js').Variable;
 
 /* global describe, it */
-describe.only('Variable', function () {
+describe('Variable', function () {
     it('should initialise variable of type `any` and value `undefined`', function () {
         var v = new Variable();
 
@@ -120,13 +120,17 @@ describe.only('Variable', function () {
     });
 
     it('should support any data type if type is set to `any`', function () {
-        var v = new Variable();
+        var v = new Variable(),
+            jsonValue = { iam: 'json' };
 
         v.set('Picard');
         expect(v.get()).to.be('Picard');
 
         v.set(3.142);
         expect(v.get()).to.be(3.142);
+
+        v.set(jsonValue);
+        expect(v.get()).to.be(jsonValue);
     });
 
     it('should type cast values to the specific type set', function () {
@@ -139,6 +143,9 @@ describe.only('Variable', function () {
 
         v.set(3.142);
         expect(v.get()).to.be('3.142');
+
+        v.set({ foo: 'bar' });
+        expect(v.get()).to.be('[object Object]');
     });
 
     it('should recast values when type is changed', function () {
@@ -153,10 +160,44 @@ describe.only('Variable', function () {
         expect(v.get()).to.be(3.142);
     });
 
+    it('should recast values when type is changed (json)', function () {
+        var v = new Variable({
+            type: 'string'
+        });
+
+        v.set({ foo: 'bar' });
+        expect(v.get()).to.be('[object Object]');
+
+        v.valueType('json');
+        expect(v.get()).to.be(null);
+    });
+
     it('should handle functions correctly', function () {
         var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'bar'; } });
 
         expect(v.get()).to.be('bar');
+    });
+
+    it('should not touch value functions when type is changed', function () {
+        var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'foo'; } });
+
+        expect(v.get()).to.be('foo');
+
+        v.valueType('boolean');
+
+        expect(v.value).to.be.a('function');
+        expect(v.get()).to.be(true);
+    });
+
+    it('should typecast returns of values as functions correctly', function () {
+        var v = new Variable({ type: 'number', key: 'foo', value: function () { return '3.14'; } }),
+            v2 = new Variable({ type: 'boolean', key: 'foo', value: function () { return 'bar'; } });
+
+        // number
+        expect(v.get()).to.be(3.14);
+
+        // boolean
+        expect(v2.get()).to.be(true);
     });
 
     describe('.set', function () {
