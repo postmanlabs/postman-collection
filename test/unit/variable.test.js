@@ -37,7 +37,7 @@ describe('Variable', function () {
         expect(v.system).to.be(false);
     });
 
-    it('should prepopulate value and type when passed to the constructor', function () {
+    it('should prepopulate value and type when passed to the constructor (string)', function () {
         var v = new Variable({
             value: 'Picard',
             type: 'string'
@@ -45,6 +45,48 @@ describe('Variable', function () {
 
         expect(v.value).to.be('Picard');
         expect(v.type).to.be('string');
+    });
+
+    it('should prepopulate value and type when passed to the constructor (number)', function () {
+        var v = new Variable({
+            value: 42,
+            type: 'number'
+        });
+
+        expect(v.value).to.be(42);
+        expect(v.type).to.be('number');
+    });
+
+    it('should prepopulate value and type when passed to the constructor (boolean)', function () {
+        var v = new Variable({
+            value: true,
+            type: 'boolean'
+        });
+
+        expect(v.value).to.be(true);
+        expect(v.type).to.be('boolean');
+    });
+
+    it('should prepopulate value and type when passed to the constructor (json)', function () {
+        var vValue = { foo: 'bar' },
+            v = new Variable({
+                value: vValue,
+                type: 'json'
+            });
+
+        expect(v.value).to.be(JSON.stringify(vValue));
+        expect(v.type).to.be('json');
+    });
+
+    it('should prepopulate value and type when passed to the constructor (json as string)', function () {
+        var vValue = JSON.stringify({ foo: 'bar' }),
+            v = new Variable({
+                value: vValue,
+                type: 'json'
+            });
+
+        expect(v.value).to.be(JSON.stringify(vValue));
+        expect(v.type).to.be('json');
     });
 
     it('should typecast value during construction when type is provided', function () {
