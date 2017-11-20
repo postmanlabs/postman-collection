@@ -1,6 +1,8 @@
 # Postman Collection SDK Changelog
 
 #### Unreleased
+
+#### 3.0.4
 * :tada: Get and set objects in variables with `json` variable type
 ```js
 var variable = new Variable({ type: 'json' });
