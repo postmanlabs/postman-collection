@@ -1,9 +1,21 @@
 # Postman Collection SDK Changelog
 
 #### Unreleased
+* :tada: Get and set objects in variables with `json` variable type
+```js
+var variable = new Variable({ type: 'json' });
+
+// set objects as values for `json types`
+variable.set({ version: 'v1' });
+
+// get object values
+console.log(variable.get()); // { version: 'v1' }
+console.log(typeof variable.get()); // object
+```
 * #502 Added support for system property in query parameters
 * #503 `request~toJSON` no longer converts `url` to string
 * Made sure all Script instances have an id
+* :bug: Fixed a bug where updating types in a variable removed value functions
 * :bug: `auth` is now included in `collection.toJSON`
 * :bug: Fixed a bug where `item.getAuth` would return an empty `RequestAuth`, instead of looking up in the parent
 * :bug: Fixed a bug where empty `auth` was created for `new {Request,ItemGroup,Collection}({auth: null})`. This affected the auth lookup in parents.

@@ -37,7 +37,7 @@ describe('Variable', function () {
         expect(v.system).to.be(false);
     });
 
-    it('should prepopulate value and type when passed to the constructor', function () {
+    it('should prepopulate value and type when passed to the constructor (string)', function () {
         var v = new Variable({
             value: 'Picard',
             type: 'string'
@@ -47,7 +47,38 @@ describe('Variable', function () {
         expect(v.type).to.be('string');
     });
 
-    it('should typecast value during construction when type is provided', function () {
+    it('should prepopulate value and type when passed to the constructor (number)', function () {
+        var v = new Variable({
+            value: 42,
+            type: 'number'
+        });
+
+        expect(v.value).to.be(42);
+        expect(v.type).to.be('number');
+    });
+
+    it('should prepopulate value and type when passed to the constructor (boolean)', function () {
+        var v = new Variable({
+            value: true,
+            type: 'boolean'
+        });
+
+        expect(v.value).to.be(true);
+        expect(v.type).to.be('boolean');
+    });
+
+    it('should prepopulate value and type when passed to the constructor (json)', function () {
+        var vValue = { foo: 'bar' },
+            v = new Variable({
+                value: vValue,
+                type: 'json'
+            });
+
+        expect(v.value).to.be(JSON.stringify(vValue));
+        expect(v.type).to.be('json');
+    });
+
+    it('should typecast value during construction when type is provided (number)', function () {
         var v = new Variable({
             value: '108',
             type: 'number'
@@ -56,14 +87,50 @@ describe('Variable', function () {
         expect(v.value).to.be(108);
     });
 
+    it('should typecast value during construction when type is provided (string)', function () {
+        var v = new Variable({
+            value: true,
+            type: 'string'
+        });
+
+        expect(v.value).to.be('true');
+    });
+
+    it('should typecast value during construction when type is provided (boolean)', function () {
+        var v = new Variable({
+            value: 'foo',
+            type: 'boolean'
+        });
+
+        expect(v.value).to.be(true);
+    });
+
+    it('should typecast value during construction when type is provided (json)', function () {
+        var v = new Variable({
+                value: null,
+                type: 'json'
+            }),
+            v1 = new Variable({
+                value: '{"foo":"bar"}',
+                type: 'json'
+            });
+
+        expect(v.value).to.be('null');
+        expect(v1.value).to.be('{"foo":"bar"}');
+    });
+
     it('should support any data type if type is set to `any`', function () {
-        var v = new Variable();
+        var v = new Variable(),
+            jsonValue = { iam: 'json' };
 
         v.set('Picard');
         expect(v.get()).to.be('Picard');
 
         v.set(3.142);
         expect(v.get()).to.be(3.142);
+
+        v.set(jsonValue);
+        expect(v.get()).to.be(jsonValue);
     });
 
     it('should type cast values to the specific type set', function () {
@@ -76,6 +143,9 @@ describe('Variable', function () {
 
         v.set(3.142);
         expect(v.get()).to.be('3.142');
+
+        v.set({ foo: 'bar' });
+        expect(v.get()).to.be('[object Object]');
     });
 
     it('should recast values when type is changed', function () {
@@ -90,10 +160,44 @@ describe('Variable', function () {
         expect(v.get()).to.be(3.142);
     });
 
+    it('should recast values when type is changed (json)', function () {
+        var v = new Variable({
+            type: 'string'
+        });
+
+        v.set({ foo: 'bar' });
+        expect(v.get()).to.be('[object Object]');
+
+        v.valueType('json');
+        expect(v.get()).to.be(null);
+    });
+
     it('should handle functions correctly', function () {
         var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'bar'; } });
 
         expect(v.get()).to.be('bar');
+    });
+
+    it('should not touch value functions when type is changed', function () {
+        var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'foo'; } });
+
+        expect(v.get()).to.be('foo');
+
+        v.valueType('boolean');
+
+        expect(v.value).to.be.a('function');
+        expect(v.get()).to.be(true);
+    });
+
+    it('should typecast returns of values as functions correctly', function () {
+        var v = new Variable({ type: 'number', key: 'foo', value: function () { return '3.14'; } }),
+            v2 = new Variable({ type: 'boolean', key: 'foo', value: function () { return 'bar'; } });
+
+        // number
+        expect(v.get()).to.be(3.14);
+
+        // boolean
+        expect(v2.get()).to.be(true);
     });
 
     describe('.set', function () {
