@@ -10,6 +10,47 @@ describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
         item = new sdk.Item(rawItem);
 
+    describe('constructor', function () {
+        it('should handle all properties', function () {
+            var itemDefinition = {
+                    id: 'peter-pan',
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-script-1',
+                            type: 'text/javascript',
+                            exec: ['console.log("This doesn\'t matter");']
+                        }
+                    }],
+                    request: {
+                        method: 'GET',
+                        url: {
+                            host: ['postman-echo', 'com'],
+                            'protocol': 'http',
+                            'query': [],
+                            'variable': []
+                        },
+                        auth: {
+                            type: 'basic',
+                            basic: [{
+                                key: 'username',
+                                type: 'string',
+                                value: 'postman'
+                            }, {
+                                key: 'password',
+                                type: 'string',
+                                value: 'password'
+                            }]
+                        }
+                    },
+                    response: []
+                },
+                item = new Item(itemDefinition);
+
+            expect(item.toJSON()).to.eql(itemDefinition);
+        });
+    });
+
     describe('sanity', function () {
         describe('request', function () {
             var rawItem = fixtures.collectionV2.item[0],
@@ -128,7 +169,9 @@ describe('Item', function () {
             collection,
             itemWithAuth,
             folderWithAuth,
-            collectionWithAuth;
+            collectionWithAuth,
+            itemWithEmptyAuth,
+            folderWithEmptyAuth;
 
         // Create building blocks which we can use in different combinations for the tests.
         beforeEach(function () {
@@ -150,6 +193,17 @@ describe('Item', function () {
                 auth: {
                     type: 'hawk',
                     hawk: { user: 'nobody' }
+                }
+            });
+            folderWithEmptyAuth = new sdk.ItemGroup({
+                name: 'folder3',
+                auth: { type: null }
+            });
+            itemWithEmptyAuth = new sdk.Item({
+                name: 'item2',
+                request: {
+                    url: 'https://postman-echo.com/get',
+                    auth: { type: null }
                 }
             });
         });
@@ -220,6 +274,40 @@ describe('Item', function () {
             var auth = item.getAuth();
 
             expect(auth).to.be(undefined);
+        });
+
+        it('should handle parent lookup for empty but defined auth in item', function () {
+            folder.items.add(itemWithEmptyAuth);
+            collectionWithAuth.items.add(folder);
+
+            var auth = itemWithEmptyAuth.getAuth().toJSON();
+
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
+        });
+
+        it('should handle parent lookup for empty but defined auth in folder', function () {
+            folderWithEmptyAuth.items.add(itemWithEmptyAuth);
+            collectionWithAuth.items.add(folderWithEmptyAuth);
+
+            var auth = itemWithEmptyAuth.getAuth().toJSON();
+
+            expect(auth.basic).to.eql([{
+                key: 'username',
+                type: 'any',
+                value: 'c'
+            }, {
+                key: 'password',
+                type: 'any',
+                value: 'd'
+            }]);
         });
     });
 

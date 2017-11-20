@@ -8,6 +8,49 @@ var _ = require('lodash'),
 
 /* global describe, it */
 describe('ItemGroup', function () {
+    describe('constructor', function () {
+        it('should handle all properties', function () {
+            var itemGroupDefinition = {
+                    auth: {
+                        type: 'basic',
+                        basic: [{
+                            key: 'username',
+                            type: 'string',
+                            value: 'postman'
+                        }, {
+                            key: 'password',
+                            type: 'string',
+                            value: 'password'
+                        }]
+                    },
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-script-1',
+                            type: 'text/javascript',
+                            exec: ['console.log("This doesn\'t matter");']
+                        }
+                    }]
+                },
+                itemGroup = new ItemGroup(itemGroupDefinition);
+
+            expect(itemGroup).to.have.property('events');
+            expect(itemGroup.events).to.eql(new sdk.EventList({}, itemGroupDefinition.event));
+            expect(itemGroup).to.have.property('auth');
+            expect(itemGroup.auth).to.eql(new sdk.RequestAuth(itemGroupDefinition.auth));
+            expect(itemGroup).to.have.property('items');
+        });
+
+        it('should not create auth if auth is falsy', function () {
+            var itemGroupDefinition = {
+                    auth: null
+                },
+                itemGroup = new ItemGroup(itemGroupDefinition);
+
+            expect(itemGroup).to.not.have.property('auth');
+            expect(itemGroup.toJSON()).to.not.have.property('auth');
+        });
+    });
     it('must be able to iterate over all subfolders', function () {
         var rawCollection = fixtures.collectionV2,
             collection = new Collection(rawCollection),
@@ -17,19 +60,6 @@ describe('ItemGroup', function () {
             groups.push(group);
         });
         expect(groups.length).to.be(4);
-    });
-
-    it('should not cast incoming items/item groups', function () {
-        var collection = new Collection(),
-            url = 'https://www.random.org:443/integers/?num=1&min=0&max=255&col=16&base=10&format=plain&rnd=new';
-
-        collection.items.add(new Item({
-            request: {
-                method: 'GET',
-                url: url
-            }
-        }));
-        expect(collection.toJSON().item[0].request.url).to.be(url);
     });
 
     it('should correctly handle incoming items/item groups and/or plain objects', function () {
@@ -407,6 +437,41 @@ describe('ItemGroup', function () {
 
         it('should return false when called without arguments', function () {
             expect(sdk.ItemGroup.isItemGroup()).to.be(false);
+        });
+    });
+
+    describe('.toJSON', function () {
+        it('should handle all properties', function () {
+            var itemGroupDefinition = {
+                    id: 'my-folder',
+                    event: [{
+                        listen: 'test',
+                        script: {
+                            id: 'my-test-script',
+                            type: 'text/javascript',
+                            exec: ['console.log("hello there!");']
+                        }
+                    }],
+                    item: [{
+                        event: [],
+                        id: 'my-item',
+                        request: {
+                            method: 'GET',
+                            url: {
+                                host: ['postmanecho', 'com'],
+                                path: ['get'],
+                                protocol: 'https',
+                                query: [],
+                                variable: []
+                            }
+                        },
+                        response: []
+                    }]
+                },
+                itemGroup = new ItemGroup(itemGroupDefinition),
+                itemGroupJSON = itemGroup.toJSON();
+
+            expect(itemGroupJSON).to.eql(itemGroupDefinition);
         });
     });
 });
