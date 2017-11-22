@@ -102,6 +102,73 @@ describe('Script', function () {
         });
     });
 
+    describe('updates', function () {
+        it('should not create new ids', function () {
+            var script1 = new Script('old script'),
+                script2 = new Script({ id: 'ID1' }),
+                script1BeforeId = script1.id,
+                script2BeforeId = script2.id;
+
+            script1.update('new script');
+            expect(script1BeforeId).to.be(script1.id);
+            script1.update({ exec: 'new script' });
+            expect(script1BeforeId).to.be(script1.id);
+
+            script2.update('new script');
+            expect(script2BeforeId).to.be(script2.id);
+            script2.update({ exec: 'new script' });
+            expect(script2BeforeId).to.be(script2.id);
+        });
+
+        it('should handle the src property correctly', function () {
+            var script = new Script();
+
+            script.update({
+                src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'
+            });
+
+            expect(script).to.not.have.property('exec');
+            expect(Url.isUrl(script.src)).to.be(true);
+        });
+
+        it('should default to undefined for script code if neither an array of strings or a string is provided',
+            function () {
+                var script = new Script();
+
+                script.update({ exec: 123 });
+
+                expect(script).to.have.property('exec', undefined);
+            });
+
+        describe('Variadic formats', function () {
+            it('should support non-wrapped strings', function () {
+                var script = new Script(),
+                    scriptJSON;
+
+                script.update('console.log("This is a line of test script code");');
+                scriptJSON = script.toJSON();
+
+                expect(scriptJSON).to.have.property('id');
+                expect(scriptJSON).to.have.property('type', 'text/javascript');
+                expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
+            });
+
+            it('should support non-wrapped arrays', function () {
+                var script = new Script(),
+                    scriptJSON;
+
+                script.update(['console.log("This is a line of test script code");']);
+
+                scriptJSON = script.toJSON();
+
+                expect(scriptJSON).to.have.property('id');
+                expect(scriptJSON).to.have.property('type', 'text/javascript');
+                expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
+            });
+        });
+    });
+
+
     describe('.toSource', function () {
         it('should correctly unparse an array of exec strings', function () {
             var script = new Script({

@@ -119,5 +119,23 @@ describe('Event', function () {
             expect(eventJSON.script).to.have.property('type', 'text/javascript');
             expect(eventJSON.script.exec).to.eql(['console.log("hello");']);
         });
+
+        it('should update script id', function () {
+            var event = new Event(rawEvent),
+                beforeJSON = event.toJSON(),
+                afterJSON;
+
+            expect(beforeJSON).to.have.property('script');
+            expect(beforeJSON.script).to.have.property('id');
+            expect(beforeJSON.script).to.have.property('type', 'text/javascript');
+            expect(beforeJSON.script.exec).to.eql(['console.log("hello");']);
+
+            event.update({ script: { id: 'my-new-script' } });
+            afterJSON = event.toJSON();
+
+            expect(beforeJSON.script.id).to.not.be(afterJSON.script.id);
+            expect(afterJSON.script).to.have.property('id', 'my-new-script');
+            expect(afterJSON.script.exec).to.not.ok;
+        });
     });
 });
