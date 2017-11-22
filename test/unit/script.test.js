@@ -110,14 +110,14 @@ describe('Script', function () {
                 script2BeforeId = script2.id;
 
             script1.update('new script');
-            expect(script1BeforeId).to.be(script1.id);
+            expect(script1.id).to.be(script1BeforeId);
             script1.update({ exec: 'new script' });
-            expect(script1BeforeId).to.be(script1.id);
+            expect(script1.id).to.be(script1BeforeId);
 
             script2.update('new script');
-            expect(script2BeforeId).to.be(script2.id);
+            expect(script2.id).to.be(script2BeforeId);
             script2.update({ exec: 'new script' });
-            expect(script2BeforeId).to.be(script2.id);
+            expect(script2.id).to.be(script2BeforeId);
         });
 
         it('should handle the src property correctly', function () {

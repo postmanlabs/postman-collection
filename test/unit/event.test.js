@@ -135,7 +135,7 @@ describe('Event', function () {
 
             expect(beforeJSON.script.id).to.not.be(afterJSON.script.id);
             expect(afterJSON.script).to.have.property('id', 'my-new-script');
-            expect(afterJSON.script.exec).to.not.ok;
+            expect(afterJSON.script.exec).to.not.be.ok();
         });
     });
 });
