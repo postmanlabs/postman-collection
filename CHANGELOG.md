@@ -2,7 +2,11 @@
 
 #### Unreleased
 
-#### 3.0.4
+#### v3.0.5 (November 23, 2017)
+* Added `update` method to `Script`
+* :arrow_up: Updated dependencies
+
+#### v3.0.4 (November 20, 2017)
 * :tada: Get and set objects in variables with `json` variable type
 ```js
 var variable = new Variable({ type: 'json' });
