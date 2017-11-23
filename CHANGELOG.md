@@ -1,6 +1,7 @@
 # Postman Collection SDK Changelog
 
 #### Unreleased
+* Added `update` method to `Script`
 
 #### v3.0.4 (November 20, 2017)
 * :tada: Get and set objects in variables with `json` variable type
