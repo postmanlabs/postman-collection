@@ -1,6 +1,7 @@
 # Postman Collection SDK Changelog
 
 #### Unreleased
+* :tada: Allow `PropertyList.prototype.one` to select from duplicates with a `customizer`
 
 #### v3.0.5 (November 23, 2017)
 * Added `update` method to `Script`
