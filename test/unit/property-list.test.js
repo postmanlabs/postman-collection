@@ -447,12 +447,37 @@ describe('PropertyList', function () {
                 ]);
             });
 
-            it('.one() should always return the last item inserted, even if multiple are present', function () {
-                expect(list.one('key1')).to.eql({ keyAttr: 'key1', value: 'val2' });
-            });
+            describe('.one', function () {
+                it('should always return the last item inserted, even if multiple are present', function () {
+                    expect(list.one('key1')).to.eql({ keyAttr: 'key1', value: 'val2' });
+                });
 
-            it('.one() should return undefined if item is not found', function () {
-                expect(list.one('asdjhaks')).to.be(undefined);
+                it('should invoke customizer, if present, in reverse order of values', function () {
+                    var customizerInvokedWith = [];
+
+                    expect(list.one('key1', function (variable) { customizerInvokedWith.push(variable.value); }))
+                        .to.not.be.ok(); // if customizer returned falsy for all values, undefined should be returned
+
+                    expect(customizerInvokedWith).to.eql(['val2', 'val1']);
+                });
+
+                it('should stop customizer on first match', function () {
+                    var customizerInvokedWith = [];
+
+                    expect(list.one('key1', function (variable) {
+                        customizerInvokedWith.push(variable.value);
+                        return variable.value === 'val2';
+                    })).to.eql({
+                        keyAttr: 'key1',
+                        value: 'val2'
+                    });
+
+                    expect(customizerInvokedWith).to.eql(['val2']);
+                });
+
+                it('should return undefined if item is not found', function () {
+                    expect(list.one('asdjhaks')).to.be(undefined);
+                });
             });
 
             it('.remove() should remove all associated values with the key', function () {
