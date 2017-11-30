@@ -2,6 +2,10 @@
 
 #### Unreleased
 
+#### v3.0.6 (November 30, 2017)
+* :arrow_up: Updated dependencies
+* Downgraded `sanitize-html` to continue support for `postman-sandbox`
+
 #### v3.0.5 (November 23, 2017)
 * Added `update` method to `Script`
 * :arrow_up: Updated dependencies
