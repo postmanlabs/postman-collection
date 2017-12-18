@@ -50,7 +50,7 @@
     "browserify": "14.5.0",
     "btoa": "1.1.2",
     "chalk": "2.3.0",
-    "dependency-check": "2.9.1",
+    "dependency-check": "2.9.2",
     "eslint": "4.13.1",
     "eslint-plugin-jsdoc": "3.3.0",
     "eslint-plugin-lodash": "2.5.0",
