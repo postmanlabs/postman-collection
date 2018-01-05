@@ -2,10 +2,13 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "#/definitions/event",
     "title": "Event",
-    "description": "An Event",
-    // TODO: Add detailed description
+    "description": "Defines a script associated with an associated event name",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "description": "A unique identifier for the enclosing event."
+        },
         "listen": {
             "type": "string",
             "description": "Can be set to `test` or `prerequest` for test scripts or pre-request scripts respectively."
@@ -15,6 +18,7 @@
         },
         "disabled": {
             "type": "boolean",
+            "default": false,
             "description": "Indicates whether the event is disabled. If absent, the event is assumed to be enabled."
         }
     },
