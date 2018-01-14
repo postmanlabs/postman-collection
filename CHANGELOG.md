@@ -1,6 +1,8 @@
 # Postman Collection SDK Changelog
 
-#### Unreleased
+#### v3.0.7 (January 15, 2018)
+* :arrow_up: Updated dependencies
+* :bug: Improved pre-stringification variable type safety #539
 
 #### v3.0.6 (November 30, 2017)
 * :arrow_up: Updated dependencies
