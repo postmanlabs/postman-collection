@@ -220,6 +220,34 @@ describe('Variable', function () {
     });
 
     describe('.toString', function () {
+        it('should handle nil values', function () {
+            var variable;
+
+            // no value
+            variable = new Variable();
+            expect(variable.toString()).to.be('');
+
+            // value undefined
+            variable = new Variable({ key: 'foo', value: undefined });
+            expect(variable.toString()).to.be('');
+
+            // value null
+            variable = new Variable({ key: 'foo', value: null });
+            expect(variable.toString()).to.be('');
+        });
+
+        it('should handle falsey values', function () {
+            var variable;
+
+            // value undefined
+            variable = new Variable({ key: 'foo', value: '' });
+            expect(variable.toString()).to.be('');
+
+            // value null
+            variable = new Variable({ key: 'foo', value: false });
+            expect(variable.toString()).to.be('');
+        });
+
         it('should handle the absence of .valueOf correctly', function () {
             var variable = new Variable({ key: 'foo', value: Object.create(null) });
 
