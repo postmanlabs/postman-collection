@@ -60,7 +60,7 @@
     "istanbul": "0.4.5",
     "js-yaml": "3.10.0",
     "jsdoc": "3.5.5",
-    "jsdoc-to-markdown": "3.0.4",
+    "jsdoc-to-markdown": "4.0.0",
     "karma": "2.0.0",
     "karma-browserify": "5.1.3",
     "karma-chrome-launcher": "2.2.0",
