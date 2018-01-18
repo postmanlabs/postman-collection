@@ -526,7 +526,7 @@ describe('Url', function () {
             expect(jsonified.protocol).to.eql(rawUrl.protocol);
             expect(jsonified.host).to.eql(rawUrl.host.split('.'));
             expect(jsonified.port).to.eql(rawUrl.port);
-            expect(jsonified.path).to.eql(rawUrl.path.split('/'));
+            expect(jsonified.path).to.eql(rawUrl.path.split('/').slice(1));
             expect(jsonified.query).to.eql(rawUrl.query);
             expect(jsonified.hash).to.eql(rawUrl.hash);
 
@@ -565,6 +565,20 @@ describe('Url', function () {
             });
 
             expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
+        });
+
+        it('should be handled correctly for empty and non-existent values', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                path: [':alpha', 'beta', ':gamma', 'delta', ':epsilon', 'phi'],
+                variable: [
+                    { key: 'alpha', value: '' },
+                    { key: 'epsilon', value: '' }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('//beta/:gamma/delta//phi');
         });
 
         it('should work correctly without the id field as well', function () {
