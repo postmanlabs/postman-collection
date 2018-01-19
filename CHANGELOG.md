@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### Unreleased
+* :arrow_up: Updated dependencies
+* :bug: Corrected handling for empty valued path variables #558
+
 #### v3.0.7 (January 15, 2018)
 * :arrow_up: Updated dependencies
 * :bug: Improved pre-stringification variable type safety #539
