@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "async": "2.6.0",
-    "browserify": "15.2.0",
+    "browserify": "16.0.0",
     "btoa": "1.1.2",
     "chalk": "2.3.0",
     "dependency-check": "3.0.0",
