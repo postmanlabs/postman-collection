@@ -197,6 +197,7 @@ describe('Collection', function () {
                     info: {
                         id: 'my-collection',
                         name: 'Yay Collection!',
+                        description: { content: '__foo__', type: 'markdown' },
                         schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
                         version: '2.1.0'
                     },
@@ -252,7 +253,56 @@ describe('Collection', function () {
             delete collectionJSON.info.version;
             delete collectionDefinition.info.version;
 
-            expect(collectionJSON).to.eql(collectionDefinition);
+            expect(collectionJSON).to.eql({
+                info: {
+                    _postman_id: 'my-collection',
+                    name: 'Yay Collection!',
+                    description: { content: '__foo__', type: 'markdown' },
+                    schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+                },
+                auth: {
+                    type: 'basic',
+                    basic: [{
+                        key: 'username',
+                        type: 'string',
+                        value: 'postman'
+                    }, {
+                        key: 'password',
+                        type: 'string',
+                        value: 'password'
+                    }]
+                },
+                event: [{
+                    listen: 'test',
+                    script: {
+                        id: 'my-script-1',
+                        type: 'text/javascript',
+                        exec: [
+                            'console.log("bcoz I am batman!");'
+                        ]
+                    }
+                }],
+                item: [{
+                    event: [],
+                    id: 'my-item-1',
+                    request: {
+                        method: 'GET',
+                        url: {
+                            host: ['postman-echo', 'com'],
+                            path: ['get'],
+                            protocol: 'https',
+                            query: [],
+                            variable: []
+                        }
+                    },
+                    response: []
+                }],
+                variable: [{
+                    key: 'foo',
+                    value: 'bar',
+                    type: 'string'
+                }]
+            });
 
             // check for root level properties moved to info
             expect(collectionJSON).to.not.have.property('id');
