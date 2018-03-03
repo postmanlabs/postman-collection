@@ -49,7 +49,7 @@
     "async": "2.6.0",
     "browserify": "16.1.0",
     "btoa": "1.1.2",
-    "chalk": "2.3.1",
+    "chalk": "2.3.2",
     "dependency-check": "3.0.0",
     "eslint": "4.18.1",
     "eslint-plugin-jsdoc": "3.5.0",
