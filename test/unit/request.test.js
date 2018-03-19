@@ -194,6 +194,33 @@ describe('Request', function () {
                 expect(new Request({ body: Buffer.from('') })).to.not.have.property('body');
                 expect(new Request({ body: 2 })).to.not.have.property('body');
             });
+
+            it('should allow updating to a valid body', function () {
+                var req = new Request();
+
+                req.update({ body: 'foo' });
+                expect(req.body).to.have.property('mode', 'raw');
+                expect(req.body).to.have.property('raw', 'foo');
+
+                req.update({ body: { mode: 'formdata', formdata: [{ key: 'foo', value: 'bar' }] } });
+                expect(req.body).to.have.property('mode', 'formdata');
+                expect(req.body.formdata.toJSON()).to.eql([{ key: 'foo', value: 'bar' }]);
+            });
+
+            it('should prohibit updates to invalid bodies', function () {
+                var req = new Request({ body: 'foo' });
+
+                expect(req.body).to.have.property('mode', 'raw');
+                expect(req.body).to.have.property('raw', 'foo');
+
+                req.update({ body: [] });
+                expect(req.body).to.have.property('mode', 'raw');
+                expect(req.body).to.have.property('raw', 'foo');
+
+                req.update({ body: 2 });
+                expect(req.body).to.have.property('mode', 'raw');
+                expect(req.body).to.have.property('raw', 'foo');
+            });
         });
     });
 
