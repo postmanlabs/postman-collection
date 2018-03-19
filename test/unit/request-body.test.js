@@ -80,7 +80,23 @@ describe('RequestBody', function () {
     });
 
     describe('.update', function () {
-        it('should use the raw request body by if an invalid mode is specified', function () {
+        it('should handle falsy options correctly', function () {
+            var reqData = new RequestBody({
+                mode: 'random',
+                raw: 'This is supposed to be a raw body. Do not cook it.'
+            });
+
+            expect(reqData).to.be.ok();
+            expect(reqData).to.have.property('mode', 'raw');
+            expect(reqData).to.have.property('raw', 'This is supposed to be a raw body. Do not cook it.');
+
+            reqData.update();
+            expect(reqData).to.be.ok();
+            expect(reqData).to.have.property('mode', 'raw');
+            expect(reqData).to.have.property('raw', 'This is supposed to be a raw body. Do not cook it.');
+        });
+
+        it('should use the raw request body by default if an invalid mode is specified', function () {
             var reqData = new RequestBody({
                 mode: 'random',
                 raw: 'This is supposed to be a raw body. Do not cook it.'
@@ -112,6 +128,34 @@ describe('RequestBody', function () {
             var reqData = new RequestBody({ mode: 'formdata' });
 
             expect(reqData.formdata.reference).to.be.empty();
+        });
+
+        describe('polymorphic raw request bodies', function () {
+            it('should handle strings correctly', function () {
+                var reqData = new RequestBody('This is supposed to be a raw body. Do not cook it.');
+
+                expect(reqData).to.be.ok();
+                expect(reqData).to.have.property('mode', 'raw');
+                expect(reqData).to.have.property('raw', 'This is supposed to be a raw body. Do not cook it.');
+            });
+
+            it('should handle arbitrary objects correctly', function () {
+                var obj = { foo: 'bar' },
+                    reqData = new RequestBody(obj);
+
+                expect(reqData).to.be.ok();
+                expect(reqData).to.have.property('mode', 'raw');
+                expect(reqData.raw).to.eql(obj);
+            });
+
+            it('should array bodies correctly', function () {
+                var array = ['alpha'],
+                    reqData = new RequestBody(array);
+
+                expect(reqData).to.be.ok();
+                expect(reqData).to.have.property('mode', 'raw');
+                expect(reqData.raw).to.eql(array);
+            });
         });
     });
 
