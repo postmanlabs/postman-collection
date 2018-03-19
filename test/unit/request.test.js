@@ -181,6 +181,20 @@ describe('Request', function () {
                 expect(request.forEachHeader).to.be.a('function');
             });
         });
+
+        describe('body', function () {
+            it('should work with string bodies correctly', function () {
+                var body = new Request({ body: 'foo' }).body;
+                expect(body).to.have.property('mode', 'raw');
+                expect(body).to.have.property('raw', 'foo');
+            });
+
+            it('should reject invalid body types', function () {
+                expect(new Request({ body: [] })).to.not.have.property('body');
+                expect(new Request({ body: Buffer.from('') })).to.not.have.property('body');
+                expect(new Request({ body: 2 })).to.not.have.property('body');
+            });
+        });
     });
 
     describe('isRequest', function () {
