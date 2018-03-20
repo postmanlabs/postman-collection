@@ -79,6 +79,17 @@ describe('RequestBody', function () {
         });
     });
 
+    it('should work with string bodies correctly', function () {
+        var body = new RequestBody('foo');
+        expect(body).to.have.property('mode', 'raw');
+        expect(body).to.have.property('raw', 'foo');
+    });
+
+    it('should reject invalid body types', function () {
+        expect(new RequestBody([])).to.be.empty();
+        expect(new RequestBody(2)).to.be.empty();
+    });
+
     describe('.update', function () {
         it('should use the raw request body by if an invalid mode is specified', function () {
             var reqData = new RequestBody({
@@ -112,6 +123,33 @@ describe('RequestBody', function () {
             var reqData = new RequestBody({ mode: 'formdata' });
 
             expect(reqData.formdata.reference).to.be.empty();
+        });
+
+        it('should allow updating to a valid body', function () {
+            var body = new RequestBody();
+
+            body.update('foo');
+            expect(body).to.have.property('mode', 'raw');
+            expect(body).to.have.property('raw', 'foo');
+
+            body.update({ mode: 'formdata', formdata: [{ key: 'foo', value: 'bar' }] });
+            expect(body).to.have.property('mode', 'formdata');
+            expect(body.formdata.toJSON()).to.eql([{ key: 'foo', value: 'bar' }]);
+        });
+
+        it('should prohibit updates to invalid bodies', function () {
+            var body = new RequestBody('foo');
+
+            expect(body).to.have.property('mode', 'raw');
+            expect(body).to.have.property('raw', 'foo');
+
+            body.update([]);
+            expect(body).to.have.property('mode', 'raw');
+            expect(body).to.have.property('raw', 'foo');
+
+            body.update(2);
+            expect(body).to.have.property('mode', 'raw');
+            expect(body).to.have.property('raw', 'foo');
         });
     });
 
