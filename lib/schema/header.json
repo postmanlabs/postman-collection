@@ -11,6 +11,14 @@
         "value": {
             "type": "string",
             "description": "The value (or the RHS) of the Header is stored in this field."
+        },
+        "disabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "If set to true, the current header will not be sent with requests."
+        },
+        "description": {
+            "$ref": "#/definitions/description"
         }
     },
     "required": ["key", "value"]
