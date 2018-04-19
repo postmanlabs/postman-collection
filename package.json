@@ -61,7 +61,7 @@
     "js-yaml": "3.11.0",
     "jsdoc": "3.5.5",
     "jsdoc-to-markdown": "4.0.1",
-    "karma": "2.0.0",
+    "karma": "2.0.2",
     "karma-browserify": "5.2.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-mocha": "1.3.0",
