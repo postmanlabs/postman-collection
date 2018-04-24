@@ -80,6 +80,34 @@ describe('QueryParam', function () {
             it('should bail out of the provided set of params is falsy', function () {
                 expect(QueryParam.unparse()).to.be('');
             });
+
+            it('should set value as empty for null and drop undefined', function () {
+                var queryParams = [{
+                    key: 'foo',
+                    value: 'foo'
+                }, {
+                    key: 'bar',
+                    value: null
+                }, {
+                    key: 'baz',
+                    value: undefined
+                }];
+
+                // if query param value is undefined the param is not appeneded
+                // but the trailing ampersand is not removed
+                // this is the current behaviour
+                expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&');
+
+            });
+
+            it('should set value as empty for null and drop undefined when unparsing object format', function () {
+                expect(QueryParam.unparse({ foo: 'foo', bar: null, baz: undefined }))
+
+                    // if query param value is undefined the param is not appeneded
+                    // but the trailing ampersand is not removed
+                    // this is the current behaviour
+                    .to.equal('foo=foo&bar&');
+            });
         });
 
         describe('.unparseSingle', function () {
