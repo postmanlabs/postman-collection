@@ -12,7 +12,7 @@ var fs = require('fs'),
     HeaderList = require('../../lib/index.js').HeaderList;
 
 /* global describe, it */
-describe('Response', function () {
+describe.only('Response', function () {
     describe('sanity', function () {
         var rawResponse = fixtures.collectionV2.item[0].response[0],
             response = new Response(rawResponse);
@@ -804,6 +804,133 @@ describe('Response', function () {
                     _accuratelyDetected: false,
                     filename: 'response'
                 });
+            });
+
+            it('Should take file name from content disposition header with type attachment and file name', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=testResponse.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'testResponse',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'testResponse.json'
+                    });
+            });
+
+            it('Should take file name from contentDisposition header with type attachment and file name without extension', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=testResponse' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'testResponse',
+                        ext: '',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'testResponse'
+                    });
+            });
+
+            it('Should take file name from contentDisposition header with type attachment and file name with dots', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=test.Response.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'test.Response',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'test.Response.json'
+                    });
+            });
+
+            it('Should take file name from content disposition header with type attachment and file name with quotes', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=test\'Response\'.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'test\'Response\'',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'test\'Response\'.json'
+                    });
+            });
+
+            it('Should take file name from content disposition header with type inline and file name', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'inline; filename=testResponse.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'testResponse',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'testResponse.json'
+                    });
+            });
+
+            it('Should take file name from content disposition header with type form-data and file name', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'form-data; name="fieldName"; filename="testResponse.json"' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'testResponse',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'testResponse.json'
+                    });
+            });
+
+            it('Should take default file name if content disposition header is empty', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'response',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'response.json'
+                    });
+            });
+
+            it('Should take default file name if content disposition header has no file name', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'attachment; name="fieldName"; filename=""' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'response',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'response.json'
+                    });
             });
 
             it('should bail out for non string content-type specifications', function () {
