@@ -31,6 +31,7 @@
     "test-unit": "node npm/test-unit.js"
   },
   "dependencies": {
+    "content-disposition": "^0.5.2",
     "escape-html": "1.0.3",
     "file-type": "3.9.0",
     "http-reasons": "0.1.0",
@@ -40,10 +41,10 @@
     "marked": "0.3.19",
     "mime-format": "2.0.0",
     "mime-types": "2.1.18",
+    "postman-url-encoder": "1.0.1",
     "sanitize-html": "1.15.0",
     "semver": "5.5.0",
-    "uuid": "3.2.1",
-    "postman-url-encoder": "1.0.1"
+    "uuid": "3.2.1"
   },
   "devDependencies": {
     "async": "2.6.0",
