@@ -34,7 +34,7 @@
     "escape-html": "1.0.3",
     "file-type": "3.9.0",
     "http-reasons": "0.1.0",
-    "iconv-lite": "0.4.19",
+    "iconv-lite": "0.4.22",
     "liquid-json": "0.3.1",
     "lodash": "4.17.9",
     "marked": "0.3.19",
