@@ -31,7 +31,6 @@
     "test-unit": "node npm/test-unit.js"
   },
   "dependencies": {
-    "content-disposition": "^0.5.2",
     "escape-html": "1.0.3",
     "file-type": "3.9.0",
     "http-reasons": "0.1.0",
