@@ -905,6 +905,22 @@ describe('Response', function () {
                     });
             });
 
+            it('Should take file name from content disposition header with encoded type utf-8', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition', value: 'inline; filename*=utf-8\'\'%E5%93%8D%E5%BA%94.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: '响应',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: '响应.json'
+                    });
+            });
+
             it('Should take file name from content disposition header with type form-data and file name', function () {
                 expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
                     new Header({ key: 'Content-Disposition', value: 'form-data; filename="testResponse.json"' }))).to
