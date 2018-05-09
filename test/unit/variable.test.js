@@ -220,7 +220,7 @@ describe('Variable', function () {
     });
 
     describe('.toString', function () {
-        it('should handle nil values', function () {
+        it('should convert nil values to empty string', function () {
             var variable;
 
             // no value
@@ -236,16 +236,32 @@ describe('Variable', function () {
             expect(variable.toString()).to.be('');
         });
 
-        it('should handle falsey values', function () {
+        it('should preserve empty string', function () {
             var variable;
 
-            // value undefined
             variable = new Variable({ key: 'foo', value: '' });
             expect(variable.toString()).to.be('');
+        });
 
-            // value null
+        it('should stringify false as "false"', function () {
+            var variable;
+
             variable = new Variable({ key: 'foo', value: false });
-            expect(variable.toString()).to.be('');
+            expect(variable.toString()).to.be('false');
+        });
+
+        it('should stringify 0 as "0"', function () {
+            var variable;
+
+            variable = new Variable({ key: 'foo', value: 0 });
+            expect(variable.toString()).to.be('0');
+        });
+
+        it('should stringify NaN as "NaN"', function () {
+            var variable;
+
+            variable = new Variable({ key: 'foo', value: NaN });
+            expect(variable.toString()).to.be('NaN');
         });
 
         it('should handle the absence of .valueOf correctly', function () {
