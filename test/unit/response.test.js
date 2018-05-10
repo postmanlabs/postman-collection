@@ -875,17 +875,17 @@ describe('Response', function () {
             it('Should take file name from content disposition header with type attachment and file name with quotes',
                 function () {
                     expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
-                        new Header({ key: 'Content-Disposition', value: 'attachment;filename=r\'esponse\'.json' }))).to
+                        new Header({ key: 'Content-Disposition', value: 'attachment;filename="response.json"' }))).to
                         .eql({
                             type: 'text',
                             format: 'json',
-                            name: 'r\'esponse\'',
+                            name: 'response',
                             ext: 'json',
                             charset: 'utf8',
                             _originalContentType: 'application/json',
                             _sanitisedContentType: 'application/json',
                             _accuratelyDetected: true,
-                            filename: 'r\'esponse\'.json'
+                            filename: 'response.json'
                         });
                 });
 
@@ -907,7 +907,25 @@ describe('Response', function () {
 
             it('Should take file name from content disposition header with encoded type utf-8', function () {
                 expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
-                    new Header({ key: 'Content-Disposition', value: 'inline; filename*=utf-8\'\'%E5%93%8D%E5%BA%94.json' }))).to
+                    new Header({ key: 'Content-Disposition',
+                        value: 'inline; filename*=utf-8\'\'%E5%93%8D%E5%BA%94.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: '响应',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: '响应.json'
+                    });
+            });
+
+            it('filename* parameter is prefered than filename in content disposition header', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition',
+                        value: 'inline; filename*=utf-8\'\'%E5%93%8D%E5%BA%94.json; filename = response.json' }))).to
                     .eql({
                         type: 'text',
                         format: 'json',
