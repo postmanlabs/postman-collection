@@ -40,16 +40,16 @@
     "marked": "0.3.19",
     "mime-format": "2.0.0",
     "mime-types": "2.1.18",
-    "postman-url-encoder": "1.0.1",
     "sanitize-html": "1.15.0",
     "semver": "5.5.0",
-    "uuid": "3.2.1"
+    "uuid": "3.2.1",
+    "postman-url-encoder": "1.0.1"
   },
   "devDependencies": {
     "async": "2.6.0",
     "browserify": "16.2.0",
     "btoa": "1.2.1",
-    "chalk": "2.4.1",
+    "chalk": "2.4.0",
     "dependency-check": "3.1.0",
     "eslint": "4.19.1",
     "eslint-plugin-jsdoc": "3.6.3",
