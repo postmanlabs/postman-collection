@@ -922,6 +922,23 @@ describe('Response', function () {
                     });
             });
 
+            it('Should take file name from content disposition header with encoded type iso-8859-1', function () {
+                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
+                    new Header({ key: 'Content-Disposition',
+                        value: 'inline; filename*=iso-8859-1\'\'myResponse.json' }))).to
+                    .eql({
+                        type: 'text',
+                        format: 'json',
+                        name: 'myResponse',
+                        ext: 'json',
+                        charset: 'utf8',
+                        _originalContentType: 'application/json',
+                        _sanitisedContentType: 'application/json',
+                        _accuratelyDetected: true,
+                        filename: 'myResponse.json'
+                    });
+            });
+
             it('filename* parameter is prefered than filename in content disposition header', function () {
                 expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
                     new Header({ key: 'Content-Disposition',
