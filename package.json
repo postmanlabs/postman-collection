@@ -46,7 +46,7 @@
     "postman-url-encoder": "1.0.1"
   },
   "devDependencies": {
-    "async": "2.6.0",
+    "async": "2.6.1",
     "browserify": "16.2.1",
     "btoa": "1.2.1",
     "chalk": "2.4.1",
