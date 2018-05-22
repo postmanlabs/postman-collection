@@ -730,7 +730,7 @@ describe('Response', function () {
                         mime = response.mime(),
                         headers = new HeaderList(null, json.header);
 
-                    expect(mime._originalContentType).to.be('application/json');
+                    expect(mime._originalContentType).to.be('application/json; charset=utf-8');
                     expect(mime._sanitisedContentType).to.be('application/json');
 
                     expect(body.gzipped).to.be(true);
