@@ -730,7 +730,7 @@ describe('Response', function () {
                         mime = response.mime(),
                         headers = new HeaderList(null, json.header);
 
-                    expect(mime._originalContentType).to.be('application/json');
+                    expect(mime._originalContentType).to.be('application/json; charset=utf-8');
                     expect(mime._sanitisedContentType).to.be('application/json');
 
                     expect(body.gzipped).to.be(true);
@@ -804,53 +804,6 @@ describe('Response', function () {
                     _accuratelyDetected: false,
                     filename: 'response'
                 });
-            });
-
-            it('Should take file name from content disposition header with type attachment and file name', function () {
-                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
-                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=testResponse.json' }))).to
-                    .eql({
-                        type: 'text',
-                        format: 'json',
-                        name: 'testResponse',
-                        ext: 'json',
-                        charset: 'utf8',
-                        _originalContentType: 'application/json',
-                        _sanitisedContentType: 'application/json',
-                        _accuratelyDetected: true,
-                        filename: 'testResponse.json'
-                    });
-            });
-
-            it('Should take default file name if content disposition header is empty', function () {
-                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }))).to
-                    .eql({
-                        type: 'text',
-                        format: 'json',
-                        name: 'response',
-                        ext: 'json',
-                        charset: 'utf8',
-                        _originalContentType: 'application/json',
-                        _sanitisedContentType: 'application/json',
-                        _accuratelyDetected: true,
-                        filename: 'response.json'
-                    });
-            });
-
-            it('Should take default file name if content disposition header has no file name', function () {
-                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'application/json' }),
-                    new Header({ key: 'Content-Disposition', value: 'attachment; name="fieldName"; filename=""' }))).to
-                    .eql({
-                        type: 'text',
-                        format: 'json',
-                        name: 'response',
-                        ext: 'json',
-                        charset: 'utf8',
-                        _originalContentType: 'application/json',
-                        _sanitisedContentType: 'application/json',
-                        _accuratelyDetected: true,
-                        filename: 'response.json'
-                    });
             });
 
             it('should bail out for non string content-type specifications', function () {
