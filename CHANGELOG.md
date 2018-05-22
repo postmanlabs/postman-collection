@@ -1,5 +1,16 @@
 # Postman Collection SDK Changelog
 
+#### v3.0.9 (May 16, 2018)
+* Faster `QueryParam~unparse`
+* `Variable~toString` now stringifies falsy values instead of falling back to empty string
+* `Response~mimeInfo` now computes filename from `content-disposition` header
+* Updated dependencies
+
+#### v3.0.8 (March 21, 2018)
+* :arrow_up: Updated dependencies
+* :bug: Improved type checking in `RequestBody~update` #607
+* :bug: Fixed bug that caused missing descriptions in `Collection~toJSON` #589
+
 #### v3.0.7 (January 15, 2018)
 * :arrow_up: Updated dependencies
 * :bug: Improved pre-stringification variable type safety #539
