@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### v3.0.10 (May 22, 2018)
+* Revert computing filename from content-disposition header in `Response~mime`
+* Updated dependencies
+
 #### v3.0.9 (May 16, 2018)
 * Faster `QueryParam~unparse`
 * `Variable~toString` now stringifies falsy values instead of falling back to empty string
