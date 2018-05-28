@@ -1,6 +1,6 @@
 var expect = require('expect.js'),
-    contentInfo = require('../../lib/content-info/index'),
-    Response = require('../../lib/index.js').Response;
+    contentInfo = require('../../lib/content-info'),
+    Response = require('../../lib').Response;
 
 describe('contentInfo module', function () {
     it('Should take the content-type from the response stream if content-type headers is not present', function () {
