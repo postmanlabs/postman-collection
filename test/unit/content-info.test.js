@@ -20,6 +20,7 @@ describe('contentInfo module', function () {
             mimeType: 'image'
         });
     });
+
     it('Should return file name from content disposition header with type attachment and file name', function () {
         var response = new Response({ header: [
             {
@@ -42,100 +43,100 @@ describe('contentInfo module', function () {
         });
     });
 
-    it('Should return filename from contentDisposition header with type attachment and file name without ext',
-        function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'attachment; filename=testResponse'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    defaultExtension: 'json',
-                    format: 'json',
-                    mimeType: 'text',
-                    name: 'testResponse',
-                    ext: ''
-                });
+    // eslint-disable-next-line max-len
+    it('Should return filename from contentDisposition header with type attachment and file name without ext', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'attachment; filename=testResponse'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
         });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                defaultExtension: 'json',
+                format: 'json',
+                mimeType: 'text',
+                name: 'testResponse',
+                ext: ''
+            });
+    });
 
-    it('Should return file name from contentDisposition header with type attachment and file name with dots',
-        function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'attachment;filename=test.Response.json'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    defaultExtension: 'json',
-                    format: 'json',
-                    mimeType: 'text',
-                    name: 'test.Response',
-                    ext: 'json'
-                });
+    // eslint-disable-next-line max-len
+    it('Should return file name from contentDisposition header with type attachment and file name with dots', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'attachment;filename=test.Response.json'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
         });
-    it('Should return file name from contentDisposition header with type attachment and dot files',
-        function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'attachment;filename=.response'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                defaultExtension: 'json',
+                format: 'json',
+                mimeType: 'text',
+                name: 'test.Response',
+                ext: 'json'
             });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    defaultExtension: 'json',
-                    format: 'json',
-                    mimeType: 'text',
-                    name: '.response',
-                    ext: ''
-                });
-        });
+    });
 
-    it('Should return file name from content disposition header with type attachment and file name with quotes',
-        function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'attachment;filename="test Response.json"'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    defaultExtension: 'json',
-                    format: 'json',
-                    mimeType: 'text',
-                    name: 'test Response',
-                    ext: 'json'
-                });
+    it('Should return file name from contentDisposition header with type attachment and dot files', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'attachment;filename=.response'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
         });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                defaultExtension: 'json',
+                format: 'json',
+                mimeType: 'text',
+                name: '.response',
+                ext: ''
+            });
+    });
+
+    // eslint-disable-next-line max-len
+    it('Should return file name from content disposition header with type attachment and file name with quotes', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'attachment;filename="test Response.json"'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                defaultExtension: 'json',
+                format: 'json',
+                mimeType: 'text',
+                name: 'test Response',
+                ext: 'json'
+            });
+    });
 
     it('Should return file name from content disposition header with type inline and file name', function () {
         var response = new Response({ header: [
@@ -251,6 +252,7 @@ describe('contentInfo module', function () {
                 ext: 'json'
             });
     });
+
     describe('Regex DOS Security', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII char', function () {
             this.timeout(1000);
@@ -258,6 +260,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.fileNameRegex.exec(filenameHeader);
             expect(headerPart[1].toString()).to.have.length(80000000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(300);
@@ -265,6 +268,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.fileNameRegex.exec(filenameHeader);
             expect(headerPart).eql(null);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             this.timeout(300);
@@ -272,6 +276,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.fileNameRegex.exec(filenameHeader);
             expect(headerPart).eql(null);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(300);
@@ -279,6 +284,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.fileNameRegex.exec(filenameHeader);
             expect(headerPart).eql(null);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             this.timeout(300);
@@ -293,6 +299,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.encodedFileNameRegex.exec(filenameHeader);
             expect(headerPart[2].toString()).to.have.length(3000000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(300);
@@ -300,6 +307,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.encodedFileNameRegex.exec(filenameHeader);
             expect(headerPart[1]).eql('utf-8');
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             this.timeout(300);
@@ -307,6 +315,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.encodedFileNameRegex.exec(filenameHeader);
             expect(headerPart[1]).eql('utf-8');
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(300);
@@ -314,6 +323,7 @@ describe('contentInfo module', function () {
                 headerPart = contentInfo.Regex.encodedFileNameRegex.exec(filenameHeader);
             expect(headerPart[1]).eql('utf-8');
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             this.timeout(300);
@@ -329,6 +339,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.quotedPairRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(5000);
@@ -337,6 +348,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.quotedPairRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             this.timeout(3000);
@@ -345,6 +357,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.quotedPairRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(10000);
@@ -353,6 +366,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.quotedPairRegex);
             expect(headerPart).to.have.length(2400000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             this.timeout(10000);
@@ -368,6 +382,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.nonLatinCharMatchRegex);
             expect(headerPart).eql(null);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(5000);
@@ -375,6 +390,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.nonLatinCharMatchRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             this.timeout(5000);
@@ -382,6 +398,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.nonLatinCharMatchRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(1500);
@@ -389,6 +406,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.nonLatinCharMatchRegex);
             expect(headerPart).to.have.length(600000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             this.timeout(1500);
@@ -403,6 +421,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.hexCharMatchRegex);
             expect(headerPart).to.have.length(600000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(3000);
@@ -410,6 +429,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.hexCharMatchRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             this.timeout(3000);
@@ -417,6 +437,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.hexCharMatchRegex);
             expect(headerPart).to.have.length(1500000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(5000);
@@ -424,6 +445,7 @@ describe('contentInfo module', function () {
                 headerPart = filenameHeader.match(contentInfo.Regex.hexCharMatchRegex);
             expect(headerPart).to.have.length(2400000);
         });
+
         // eslint-disable-next-line max-len
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             this.timeout(5000);
