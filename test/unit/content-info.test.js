@@ -311,7 +311,7 @@ describe('contentInfo module', function () {
         // eslint-disable-next-line max-len
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(1000);
-            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello你好你好你'.repeat(1.5e7),
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello你好你好你'.repeat(1e7),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
             expect(headerPart[1]).eql('utf-8');
         });
@@ -327,7 +327,7 @@ describe('contentInfo module', function () {
         // eslint-disable-next-line max-len
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(1000);
-            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'helloooo你好'.repeat(1.5e7),
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'helloooo你好'.repeat(1e7),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
             expect(headerPart[1]).eql('utf-8');
         });
