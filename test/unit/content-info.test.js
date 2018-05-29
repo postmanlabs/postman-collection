@@ -352,9 +352,9 @@ describe('contentInfo module', function () {
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(1000);
             // eslint-disable-next-line
-            var filenameHeader = "\\h\\e\\l\\l\\o\\你\\好\\你\\好\\你".repeat(4e5),
+            var filenameHeader = "\\h\\e\\l\\l\\o\\你\\好\\你\\好\\你".repeat(2e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
-            expect(headerPart).to.have.length(2e6);
+            expect(headerPart).to.have.length(1e6);
         });
 
         // eslint-disable-next-line max-len
