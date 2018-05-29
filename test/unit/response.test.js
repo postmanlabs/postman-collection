@@ -283,12 +283,10 @@ describe('Response', function () {
 
             expect(response.contentInfo()).to.eql({
                 charset: 'utf8',
-                defaultExtension: 'json',
-                filename: 'testResponse.json',
-                format: 'json',
+                extension: 'json',
+                mimeFormat: 'json',
                 mimeType: 'text',
-                name: 'testResponse',
-                ext: 'json'
+                fileName: 'testResponse.json'
             });
         });
 
@@ -304,11 +302,9 @@ describe('Response', function () {
 
             expect(response.contentInfo(response)).to.eql({
                 charset: 'utf8',
-                defaultExtension: 'png',
-                filename: 'response.png',
-                format: 'image',
-                name: 'response',
-                ext: 'png',
+                extension: 'png',
+                fileName: 'response.png',
+                mimeFormat: 'image',
                 mimeType: 'image'
             });
         });
