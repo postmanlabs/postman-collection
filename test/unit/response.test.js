@@ -266,6 +266,53 @@ describe('Response', function () {
             });
         });
     });
+    describe('.contentInfo', function () {
+        it('should get content info from the response object with content type and disposition headers', function () {
+            var response = new Response({
+                header: [
+                    {
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    },
+                    {
+                        key: 'content-disposition',
+                        value: 'attachment; filename=testResponse.json'
+                    }
+                ], stream: Buffer.from('random').toJSON()
+            });
+
+            expect(response.contentInfo()).to.eql({
+                charset: 'utf8',
+                defaultExtension: 'json',
+                filename: 'testResponse.json',
+                format: 'json',
+                mimeType: 'text',
+                name: 'testResponse',
+                ext: 'json'
+            });
+        });
+
+        it('Should take the content-type from the response stream if content-type headers is not present', function () {
+            // data url of png image
+            var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
+                'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +
+                '3gAAAABJRU5ErkJggg==',
+                // replacing the mime type and encoded format
+                data = img.replace(/^data:image\/\w+;base64,/, ''),
+                // creating the buffer of the image file
+                response = new Response({ stream: Buffer.from(data, 'base64') });
+
+            expect(response.contentInfo(response)).to.eql({
+                charset: 'utf8',
+                defaultExtension: 'png',
+                filename: 'response.png',
+                format: 'image',
+                name: 'response',
+                ext: 'png',
+                mimeType: 'image'
+            });
+        });
+    });
 
     describe('.size', function () {
         it('should handle blank responses correctly', function () {
