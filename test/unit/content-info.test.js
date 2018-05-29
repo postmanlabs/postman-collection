@@ -264,9 +264,9 @@ describe('contentInfo module', function () {
     describe('regexes DOS Security', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII char', function () {
             this.timeout(1000);
-            var filenameHeader = 'attachment;filename=' + 'hello.txt.'.repeat(8e6),
+            var filenameHeader = 'attachment;filename=' + 'hello.txt.'.repeat(5e6),
                 headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
-            expect(headerPart[1].toString()).to.have.length(8e7);
+            expect(headerPart[1].toString()).to.have.length(5e7);
         });
 
         // eslint-disable-next-line max-len
