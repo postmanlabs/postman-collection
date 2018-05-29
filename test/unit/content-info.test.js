@@ -449,17 +449,17 @@ describe('contentInfo module', function () {
         // eslint-disable-next-line max-len
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             this.timeout(1000);
-            var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5你好'.repeat(3e5),
+            var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5你好'.repeat(2e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
-            expect(headerPart).to.have.length(2.4e6);
+            expect(headerPart).to.have.length(1.6e6);
         });
 
         // eslint-disable-next-line max-len
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             this.timeout(1000);
-            var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5'.repeat(3e5) + '你你'.repeat(3e5),
+            var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5'.repeat(2e5) + '你你'.repeat(2e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
-            expect(headerPart).to.have.length(2.4e6);
+            expect(headerPart).to.have.length(1.6e6);
         });
     });
 });
