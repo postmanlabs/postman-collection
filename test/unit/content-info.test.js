@@ -343,18 +343,18 @@ describe('contentInfo module', function () {
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII char', function () {
             this.timeout(1000);
             // eslint-disable-next-line
-            var filenameHeader = "\\h\\e\\l\\l\\o".repeat(5e5),
+            var filenameHeader = "\\h\\e\\l\\l\\o".repeat(4e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
-            expect(headerPart).to.have.length(2.5e6);
+            expect(headerPart).to.have.length(2e6);
         });
 
         // eslint-disable-next-line max-len
         it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(1000);
             // eslint-disable-next-line
-            var filenameHeader = "\\h\\e\\l\\l\\o\\你\\好\\你\\好\\你".repeat(5e5),
+            var filenameHeader = "\\h\\e\\l\\l\\o\\你\\好\\你\\好\\你".repeat(4e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
-            expect(headerPart).to.have.length(2.5e6);
+            expect(headerPart).to.have.length(2e6);
         });
 
         // eslint-disable-next-line max-len
@@ -394,17 +394,17 @@ describe('contentInfo module', function () {
         // eslint-disable-next-line max-len
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             this.timeout(1000);
-            var filenameHeader = 'hello你好你好你'.repeat(5e5),
+            var filenameHeader = 'hello你好你好你'.repeat(4e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
-            expect(headerPart).to.have.length(2.5e6);
+            expect(headerPart).to.have.length(2e6);
         });
 
         // eslint-disable-next-line max-len
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             this.timeout(1000);
-            var filenameHeader = 'hello'.repeat(4e5) + '你好你好你'.repeat(4e5),
+            var filenameHeader = 'hello'.repeat(3e5) + '你好你好你'.repeat(3e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
-            expect(headerPart).to.have.length(2e6);
+            expect(headerPart).to.have.length(1.5e6);
         });
 
         // eslint-disable-next-line max-len
@@ -425,9 +425,9 @@ describe('contentInfo module', function () {
 
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII char', function () {
             this.timeout(1000);
-            var filenameHeader = '%E4%BD%A0%E5%A5%BD%0A%0A%0A%0A'.repeat(3e5),
+            var filenameHeader = '%E4%BD%A0%E5%A5%BD%0A%0A%0A%0A'.repeat(2e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
-            expect(headerPart).to.have.length(3e6);
+            expect(headerPart).to.have.length(2e6);
         });
 
         // eslint-disable-next-line max-len
