@@ -15,13 +15,16 @@
             "title": "ResponseTime",
             "oneOf": [
                 {
+                    "type": "null"
+                },
+                {
                     "type": "string"
                 },
                 {
                     "type": "number"
                 }
             ],
-            "description": "The time taken by the request to complete. If a number, the unit is milliseconds."
+            "description": "The time taken by the request to complete. If a number, the unit is milliseconds. If the response is manually created, this can be set to `null`."
         },
         "header": {
             "title": "Headers",
