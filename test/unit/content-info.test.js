@@ -261,4 +261,183 @@ describe('contentInfo module', function () {
                 fileName: 'testResponse.json'
             });
     });
+
+    describe('regexes DOS Security', function () {
+        this.timeout(1000);
+
+        it('should not get ReDos by fileNameRegex for long patterns of ASCII char', function () {
+            var filenameHeader = 'attachment;filename=' + 'hello.txt.'.repeat(1e5),
+                headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+            expect(headerPart[1].toString()).to.have.length(1e6);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
+            var filenameHeader = 'attachment;filename="' + 'hello你好你好你'.repeat(1e5) + '"',
+                headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+            expect(headerPart).eql(null);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
+            var filenameHeader = 'attachment;filename="' + 'hello'.repeat(1e5) + '你好你好你'.repeat(1e5) + '"',
+                headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+            expect(headerPart).eql(null);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
+            var filenameHeader = 'attachment;filename="' + 'helloooo你好'.repeat(1e5) + '"',
+                headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+            expect(headerPart).eql(null);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
+            var filenameHeader = 'attachment;filename="' + 'helloooo'.repeat(1e5) + '你你'.repeat(1e5) + '"',
+                headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+            expect(headerPart).eql(null);
+        });
+
+        it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII char', function () {
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello.txt.'.repeat(1e5),
+                headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+            expect(headerPart[2].toString()).to.have.length(1e6);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello你好你好你'.repeat(1e5),
+                headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+            expect(headerPart[1]).eql('utf-8');
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello'.repeat(1e5) + '你好你好你'.repeat(1e5),
+                headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+            expect(headerPart[1]).eql('utf-8');
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'helloooo你好'.repeat(1e5),
+                headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+            expect(headerPart[1]).eql('utf-8');
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
+            var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'helloooo'.repeat(1e5) + '你你'.repeat(1e5),
+                headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+            expect(headerPart[1]).eql('utf-8');
+        });
+
+        it('should not get ReDos by quotedPairRegex for long patterns of ASCII char', function () {
+            // eslint-disable-next-line
+            var filenameHeader = "\\h\\e\\l\\l\\o".repeat(2e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+            expect(headerPart).to.have.length(1e6);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
+            // eslint-disable-next-line
+            var filenameHeader = "\\h\\e\\l\\l\\o\\你\\好\\你\\好\\你".repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+            expect(headerPart).to.have.length(5e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
+            // eslint-disable-next-line
+            var filenameHeader = "\\h\\e\\l\\l\\o".repeat(1e5) + "\\你\\好\\你\\好\\你".repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+            expect(headerPart).to.have.length(5e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
+            // eslint-disable-next-line
+            var filenameHeader = "\\h\\e\\l\\l\\o\\o\\o\\o\\你\\好".repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+            expect(headerPart).to.have.length(8e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by quotedPairRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
+            // eslint-disable-next-line
+            var filenameHeader = "\\h\\e\\l\\l\\o\\o\\o\\o".repeat(1e5) + "\\你\\你".repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+            expect(headerPart).to.have.length(8e5);
+        });
+
+        it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII char', function () {
+            var filenameHeader = 'hellohello'.repeat(1e6),
+                headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+            expect(headerPart).eql(null);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
+            var filenameHeader = 'hello你好你好你'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+            expect(headerPart).to.have.length(5e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
+            var filenameHeader = 'hello'.repeat(1e5) + '你好你好你'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+            expect(headerPart).to.have.length(5e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
+            var filenameHeader = 'helloooo你好'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+            expect(headerPart).to.have.length(2e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
+            var filenameHeader = 'helloooo'.repeat(1e5) + '你你'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+            expect(headerPart).to.have.length(2e5);
+        });
+
+        it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII char', function () {
+            var filenameHeader = '%E4%BD%A0%E5%A5%BD%0A%0A%0A%0A'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+            expect(headerPart).to.have.length(1e6);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
+            var filenameHeader = '%E4%BD%A0%E5%A5你好你好你'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+            expect(headerPart).to.have.length(5e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
+            var filenameHeader = '%E4%BD%A0%E5%A5'.repeat(1e5) + '你好你好你'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+            expect(headerPart).to.have.length(5e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
+            var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5你好'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+            expect(headerPart).to.have.length(8e5);
+        });
+
+        // eslint-disable-next-line max-len
+        it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
+            var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5'.repeat(1e5) + '你你'.repeat(1e5),
+                headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+            expect(headerPart).to.have.length(8e5);
+        });
+    });
 });
