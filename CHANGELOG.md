@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+### unreleased
+* Added `Response~contentInfo` to extract mime info and filename from response.
+* Deprecated `Response~mime` and `Response~mimeInfo`
+
 #### v3.0.10 (May 22, 2018)
 * Revert computing filename from content-disposition header in `Response~mime`
 * Updated dependencies
