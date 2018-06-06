@@ -3,7 +3,7 @@ var expect = require('expect.js'),
     VariableScope = require('../../').VariableScope;
 
 /* global describe, it */
-describe.only('VariableScopeDiff', function () {
+describe('VariableScopeDiff', function () {
     describe('constructor', function () {
         it('should initialize with raw mode by default', function () {
             var diff = new VariableScopeDiff();
