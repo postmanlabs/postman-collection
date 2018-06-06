@@ -4,7 +4,7 @@ var expect = require('expect.js'),
 
 describe('contentInfo module', function () {
     // eslint-disable-next-line max-len
-    it('Should take the sniffed content-type from the response stream if content-type headers is not present', function () {
+    it('Should take the sniffed content-type from the response stream if content-type and content-disposition headers is not present', function () {
         // data url of png image
         var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
         'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +
@@ -262,189 +262,218 @@ describe('contentInfo module', function () {
             });
     });
 
-    describe('edge cases', function () {
-        it('Should take default filename if content-disposition header value is empty', function () {
-            var response = new Response({ header: [
+    it('Should take default filename if content-disposition header value is empty', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: ''
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'response.json'
+            });
+    });
+
+    // eslint-disable-next-line max-len
+    it('Should take default filename and sniffed content type, if content-disposition and content-type header value are empty', function () {
+        // data url of png image
+        var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
+                'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +
+                '3gAAAABJRU5ErkJggg==',
+            // replacing the mime type and encoded format
+            data = img.replace(/^data:image\/\w+;base64,/, ''),
+            // creating the buffer of the image file
+            response = new Response({ header: [
                 {
                     key: 'Content-Disposition',
                     value: ''
                 },
                 {
                     key: 'Content-Type',
-                    value: 'application/json'
+                    value: ''
                 }
-            ], stream: Buffer.from('a test json').toJSON()
+            ], stream: Buffer.from(data, 'base64')
             });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'response.json'
-                });
-        });
 
-        it('Should take default filename if there is no separator in content-disposition header value', function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'form-data filename="testResponse.json"'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'response.json'
-                });
-        });
-
-        it('Should take default filename if separator placed wrongly in content-disposition header value', function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'form-data; filename;="testResponse.json"'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'response.json'
-                });
-        });
-        // eslint-disable-next-line max-len
-        it('If spaces present in the filename without quotes, text from and beyond space should be ignored', function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'form-data; filename = test  Response.json'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'test'
-                });
-        });
-
-        it('Should take default filename if order of the content-disposition header value is wrong', function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'filename = test  Response.json; form-data'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'response.json'
-                });
-        });
-
-        // eslint-disable-next-line max-len
-        it('Should take default filename if unsupported characters are present in content-disposition header', function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: '你你你你你你 = test  Response.json; form-data'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'response.json'
-                });
-        });
-
-        // eslint-disable-next-line max-len
-        it('Should take first token value if multiple filename tokens are present in the content-disposition header value', function () {
-            var response = new Response({ header: [
-                {
-                    key: 'Content-Disposition',
-                    value: 'attachment; filename = testResponse.json; filename = test.json'
-                },
-                {
-                    key: 'Content-Type',
-                    value: 'application/json'
-                }
-            ], stream: Buffer.from('a test json').toJSON()
-            });
-            expect(contentInfo.contentInfo(response)).to
-                .eql({
-                    charset: 'utf8',
-                    fileExtension: 'json',
-                    mimeFormat: 'json',
-                    mimeType: 'text',
-                    fileName: 'testResponse.json'
-                });
-        });
-
-        it('Should take sniffed mime-type if content-type header value is empty', function () {
-            // data url of png image
-            var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
-                      'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +
-                      '3gAAAABJRU5ErkJggg==',
-                // replacing the mime type and encoded format
-                data = img.replace(/^data:image\/\w+;base64,/, ''),
-                // creating the buffer of the image file
-                response = new Response({
-                    header: [{
-                        key: 'Content-Disposition',
-                        value: 'form-data; filename=testResponse.xml'
-                    },
-                    {
-                        key: 'Content-Type',
-                        value: ''
-                    }],
-                    stream: Buffer.from(data, 'base64') });
-
-            expect(contentInfo.contentInfo(response)).to.eql({
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
                 charset: 'utf8',
                 fileExtension: 'png',
-                fileName: 'testResponse.xml',
                 mimeFormat: 'image',
-                mimeType: 'image'
+                mimeType: 'image',
+                fileName: 'response.png'
             });
+    });
+
+    it('Should take default filename if there is no separator in content-disposition header value', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'form-data filename="testResponse.json"'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'response.json'
+            });
+    });
+
+    it('Should take default filename if separator placed wrongly in content-disposition header value', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'form-data; filename;="testResponse.json"'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'response.json'
+            });
+    });
+    // eslint-disable-next-line max-len
+    it('If spaces present in the filename without quotes, text from and beyond space should be ignored', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'form-data; filename = test  Response.json'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'test'
+            });
+    });
+
+    it('Should take default filename if order of the content-disposition header value is wrong', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'filename = test  Response.json; form-data'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'response.json'
+            });
+    });
+
+    // eslint-disable-next-line max-len
+    it('Should take default filename if unsupported characters are present in content-disposition header', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: '你你你你你你 = test  Response.json; form-data'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'response.json'
+            });
+    });
+
+    // eslint-disable-next-line max-len
+    it('Should take first token value if multiple filename tokens are present in the content-disposition header value', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'attachment; filename = testResponse.json; filename = test.json'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'testResponse.json'
+            });
+    });
+
+    it('Should take sniffed mime-type if content-type header value is empty', function () {
+        // data url of png image
+        var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
+                  'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +
+                  '3gAAAABJRU5ErkJggg==',
+            // replacing the mime type and encoded format
+            data = img.replace(/^data:image\/\w+;base64,/, ''),
+            // creating the buffer of the image file
+            response = new Response({
+                header: [{
+                    key: 'Content-Disposition',
+                    value: 'form-data; filename=testResponse.xml'
+                },
+                {
+                    key: 'Content-Type',
+                    value: ''
+                }],
+                stream: Buffer.from(data, 'base64') });
+
+        expect(contentInfo.contentInfo(response)).to.eql({
+            charset: 'utf8',
+            fileExtension: 'png',
+            fileName: 'testResponse.xml',
+            mimeFormat: 'image',
+            mimeType: 'image'
         });
     });
 
