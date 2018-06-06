@@ -1,5 +1,49 @@
 # Postman Collection SDK Changelog
 
+#### v3.1.0-beta.1 (June 6, 2018)
+* Added support for tracking changes on a `VariableScope`. To use this you can enable tracking on variable scopes at the time of construction like
+
+```js
+var variableScope = new VariableScope(definition, layers, { enableTracking: true });
+```
+
+or at any point later using
+
+```js
+variableScope.enableTracking();
+```
+
+* If you are only interested in the last change for any key, you can use the `compressed` mode. This is available when you enable compression during construction as well as later.
+
+```js
+var variableScope = new VariableScope(definition, layers, {
+        enableTracking: true,
+        changeTracker: { compressed: true }
+    });
+
+// which would be the same as 
+variableScope.enableTracking({ compressed: true });
+
+```
+* This makes sure that you are only provided with the most minimal set of changes. Use this when you are conscious about memory usage and performance while applying the changes back.
+
+* The diff object allows you to then apply the same changes on a different `VariableScope`.
+
+```js
+var scope1 = new VariableScope(definition, layers, { enableTracking: true }),
+    scope2 = new VariableScope();
+
+// this change is captured in scope1.changes
+scope1.set('foo', 'bar');
+
+// this applies the captured changes on scope2
+scope2.patch(scope1.changes);
+
+// which is the same as
+scope1.changes.apply(scope2);
+```
+* **Warning:** These public API are still being worked upon. Expect some breaking changes before the final stable release.
+
 #### v3.0.10 (May 22, 2018)
 * Revert computing filename from content-disposition header in `Response~mime`
 * Updated dependencies
