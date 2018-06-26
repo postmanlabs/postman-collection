@@ -552,6 +552,123 @@ describe('VariableScope', function () {
         });
     });
 
+    describe('change tracking', function () {
+        it('should be disabled by default', function () {
+            var scope = new VariableScope();
+
+            expect(scope).to.not.have.property('changes');
+        });
+
+        it('should be enabled if initialized with changes', function () {
+            var changes = {
+                    mode: 'raw',
+                    raw: [['1', ['foo'], 'fooValue']]
+                },
+                scope = new VariableScope({ changes: changes });
+
+            expect(scope).to.have.property('changes');
+            expect(scope.changes.all()).to.have.length(1);
+
+            scope.set('foo', 'bar');
+            expect(scope.changes.all()).to.have.length(2);
+        });
+
+        it('should be enabled if configured through option', function () {
+            var scope = new VariableScope({}, null, { enableTracking: true });
+
+            scope.set('foo', 'bar');
+
+            expect(scope).to.have.property('changes');
+            expect(scope.changes.all()).to.have.length(1);
+        });
+
+        it('should allow compressed changes', function () {
+            var scope = new VariableScope({}, null, { enableTracking: true, trackingOptions: { compress: true } });
+
+            expect(scope.changes.isCompressed()).to.equal(true);
+        });
+
+        it('should allow enabling on demand', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+            scope.set('foo', 'fooValue');
+
+            expect(scope.changes.all()).to.have.length(1);
+        });
+
+        it('should allow enabling on demand, with tracking options', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking({ compress: true });
+            scope.set('foo', 'fooValue');
+
+            expect(scope.changes.all()).to.have.length(1);
+            expect(scope.changes.isCompressed()).to.equal(true);
+        });
+
+        it('should allow disabling on demand', function () {
+            var scope = new VariableScope({}, {}, { enableTracking: true });
+
+            scope.set('foo', 'fooValue');
+
+            expect(scope.changes.all()).to.have.length(1);
+
+            scope.disableTracking();
+
+            expect(scope.changes).to.not.be.ok;
+        });
+
+        it('should restore the configuration over serialization', function () {
+            var scope1 = new VariableScope({}, {}, { enableTracking: true, trackingOptions: { compress: true } }),
+                scope2;
+
+            scope1.set('foo', 'fooValue');
+
+            scope2 = new VariableScope(scope1.toJSON());
+
+            // restores changes
+            expect(scope2.changes.all()).to.have.length(1);
+
+            // restores configuration, tracking is enabled
+            scope2.set('foo2', 'fooValue');
+            expect(scope2.changes.all()).to.have.length(2);
+            expect(scope2.changes.isCompressed()).to.equal(true);
+        });
+    });
+
+    describe('patch', function () {
+        it('should allow patching with scope diff instance', function () {
+            var scope1 = new VariableScope(),
+                scope2 = new VariableScope();
+
+
+            // generate a set of diffs
+            scope1.enableTracking();
+            scope1.set('foo', 'fooValue');
+
+            // apply the diff on a scope
+            scope2.patch(scope1.changes);
+
+            expect(scope1.variables()).to.eql(scope2.variables());
+        });
+
+        it('should allow patching with scope diff definition', function () {
+            var scope1 = new VariableScope(),
+                scope2 = new VariableScope();
+
+
+            // generate a set of diffs
+            scope1.enableTracking();
+            scope1.set('foo', 'fooValue');
+
+            // apply the diff on a scope
+            scope2.patch(scope1.changes.toJSON());
+
+            expect(scope1.variables()).to.eql(scope2.variables());
+        });
+    });
+
     describe('.toJSON()', function () {
         it('does not expose the concept of layers', function () {
             var list = new VariableList({}, [{
@@ -576,6 +693,14 @@ describe('VariableScope', function () {
             delete scope.value;
 
             expect(scope.toJSON()).to.be.ok();
+        });
+
+        it('must not expose internal change tracking flag', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+
+            expect(scope.toJSON()).to.not.have.property('_postman_enableTracking');
         });
     });
 
