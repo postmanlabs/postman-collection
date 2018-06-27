@@ -722,4 +722,223 @@ describe('VariableScope', function () {
             expect(scope.has('random')).to.be(false);
         });
     });
+
+    describe('mutation tracking', function () {
+        it('should not be initialized by default', function () {
+            var scope = new VariableScope();
+
+            expect(scope).to.not.have.property('mutations');
+            expect(scope._postman_enableTracking).to.not.be.ok();
+        });
+
+        it('should be restored from definition during construction, but not enabled further on', function () {
+            var scopeDefinition = {
+                    values: [{ key: 'foo', value: 'foo' }],
+                    mutations: {
+                        stream: [['foo', 'foo']]
+                    }
+                },
+                scope = new VariableScope(scopeDefinition);
+
+            expect(scope).to.have.property('mutations');
+            expect(scope._postman_enableTracking).to.not.be.ok();
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should not track until explicitly enabled', function () {
+            var scopeDefinition = {
+                    values: [{ key: 'foo', value: 'foo' }],
+                    mutations: {
+                        stream: [['foo', 'foo']]
+                    }
+                },
+                scope = new VariableScope(scopeDefinition);
+
+            scope.set('bar', 'bar');
+            scope.set('foo', 'foo updated');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope._postman_enableTracking).to.not.be.ok();
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should track set operations', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+
+            scope.set('foo', 'foo');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should track unset operations', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'foo',
+                    value: 'foo'
+                }]
+            });
+
+            scope.enableTracking();
+
+            scope.unset('foo');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should track clear operations', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'foo',
+                    value: 'foo'
+                }, {
+                    key: 'bar',
+                    value: 'bar'
+                }]
+            });
+
+            scope.enableTracking();
+            scope.clear();
+
+            expect(scope).to.have.property('mutations');
+
+            // one unset for each key
+            expect(scope.mutations.count()).to.equal(2);
+        });
+
+        it('should be capable of being replayed', function () {
+            var initialState = {
+                    values: [{
+                        key: 'foo',
+                        value: 'foo'
+                    }, {
+                        key: 'bar',
+                        value: 'bar'
+                    }]
+                },
+                scope1 = new VariableScope(initialState),
+                scope2 = new VariableScope(initialState);
+
+            scope1.enableTracking();
+
+            // add a new key
+            scope1.set('baz', 'baz');
+            // update a key
+            scope1.set('foo', 'foo updated');
+            // remove a key
+            scope1.unset('bar');
+
+            // replay mutations on a different object
+            scope1.mutations.applyOn(scope2);
+
+            expect(scope1.values).to.eql(scope2.values);
+        });
+
+        it('should be serialized', function () {
+            var scope = new VariableScope(),
+                serialized,
+                scope2;
+
+            scope.enableTracking();
+
+            scope.set('foo', 'foo');
+
+            serialized = scope.toJSON();
+
+            expect(serialized).to.have.property('mutations');
+            expect(serialized).to.not.have.property('_postman_enableTracking');
+            expect(serialized).to.have.property('mutations');
+
+            scope2 = new VariableScope(serialized);
+
+            expect(scope2.toJSON().mutations).to.eql(serialized.mutations);
+        });
+
+        it('should be enabled at any time', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+
+            scope.set('foo', 'foo');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should be enabled at any time, with options', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking({ autoCompact: true });
+
+            scope.set('foo', 'foo');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
+            expect(scope.mutations.count()).to.equal(1);
+            expect(scope.mutations.autoCompact).to.equal(true);
+        });
+
+        it('should do nothing if enabled when already enabled', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+            scope.set('foo', 'foo');
+
+            scope.enableTracking();
+
+            expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should reset mutations when enabled', function () {
+            var scope = new VariableScope({
+                mutations: {
+                    stream: [['foo', 'foo']]
+                }
+            });
+
+            scope.enableTracking();
+
+            expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
+            expect(scope.mutations.count()).to.equal(0);
+        });
+
+        it('should be disabled when desired', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+            scope.set('foo', 'foo');
+
+            scope.disableTracking();
+
+            // disable further mutations
+            expect(scope._postman_enableTracking).to.not.be.ok();
+
+            // but keep the existing mutations
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should stay disabled when disabling multiple times', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+            scope.set('foo', 'foo');
+
+            scope.disableTracking();
+            scope.disableTracking();
+
+
+            // disable further mutations
+            expect(scope._postman_enableTracking).to.not.be.ok();
+
+            // but keep the existing mutations
+            expect(scope.mutations.count()).to.equal(1);
+        });
+    });
 });
