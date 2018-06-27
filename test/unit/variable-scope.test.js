@@ -728,6 +728,7 @@ describe('VariableScope', function () {
             var scope = new VariableScope();
 
             expect(scope).to.not.have.property('mutations');
+            expect(scope._postman_enableTracking).to.not.be.ok();
         });
 
         it('should be restored from definition during construction, but not enabled further on', function () {
@@ -738,6 +739,23 @@ describe('VariableScope', function () {
                     }
                 },
                 scope = new VariableScope(scopeDefinition);
+
+            expect(scope).to.have.property('mutations');
+            expect(scope._postman_enableTracking).to.not.be.ok();
+            expect(scope.mutations.count()).to.equal(1);
+        });
+
+        it('should not track until explicitly enabled', function () {
+            var scopeDefinition = {
+                    values: [{ key: 'foo', value: 'foo' }],
+                    mutations: {
+                        stream: [['foo', 'foo']]
+                    }
+                },
+                scope = new VariableScope(scopeDefinition);
+
+            scope.set('bar', 'bar');
+            scope.set('foo', 'foo updated');
 
             expect(scope).to.have.property('mutations');
             expect(scope._postman_enableTracking).to.not.be.ok();
