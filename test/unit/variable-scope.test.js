@@ -730,7 +730,7 @@ describe('VariableScope', function () {
             expect(scope).to.not.have.property('mutations');
         });
 
-        it('should be restored from definition during construction', function () {
+        it('should be restored from definition during construction, but not enabled further on', function () {
             var scopeDefinition = {
                     values: [{ key: 'foo', value: 'foo' }],
                     mutations: {
@@ -740,30 +740,14 @@ describe('VariableScope', function () {
                 scope = new VariableScope(scopeDefinition);
 
             expect(scope).to.have.property('mutations');
+            expect(scope._postman_enableTracking).to.not.be.ok();
             expect(scope.mutations.count()).to.equal(1);
-        });
-
-        it('should be enabled through options during construction', function () {
-            var scope = new VariableScope(null, null, { mutations: true });
-
-            scope.set('foo', 'foo');
-
-            expect(scope).to.have.property('mutations');
-            expect(scope.mutations.count()).to.equal(1);
-        });
-
-        it('should be customizable through options during construction', function () {
-            var scope = new VariableScope(null, null, { mutations: { autoCompact: true } });
-
-            scope.set('foo', 'foo');
-
-            expect(scope).to.have.property('mutations');
-            expect(scope.mutations.count()).to.equal(1);
-            expect(scope.mutations.autoCompact).to.equal(true);
         });
 
         it('should track set operations', function () {
-            var scope = new VariableScope(null, null, { mutations: true });
+            var scope = new VariableScope();
+
+            scope.enableTracking();
 
             scope.set('foo', 'foo');
 
@@ -777,7 +761,9 @@ describe('VariableScope', function () {
                     key: 'foo',
                     value: 'foo'
                 }]
-            }, null, { mutations: true });
+            });
+
+            scope.enableTracking();
 
             scope.unset('foo');
 
@@ -794,8 +780,9 @@ describe('VariableScope', function () {
                     key: 'bar',
                     value: 'bar'
                 }]
-            }, null, { mutations: true });
+            });
 
+            scope.enableTracking();
             scope.clear();
 
             expect(scope).to.have.property('mutations');
@@ -814,8 +801,10 @@ describe('VariableScope', function () {
                         value: 'bar'
                     }]
                 },
-                scope1 = new VariableScope(initialState, null, { mutations: true }),
+                scope1 = new VariableScope(initialState),
                 scope2 = new VariableScope(initialState);
+
+            scope1.enableTracking();
 
             // add a new key
             scope1.set('baz', 'baz');
@@ -842,6 +831,8 @@ describe('VariableScope', function () {
             serialized = scope.toJSON();
 
             expect(serialized).to.have.property('mutations');
+            expect(serialized).to.not.have.property('_postman_enableTracking');
+            expect(serialized).to.have.property('mutations');
 
             scope2 = new VariableScope(serialized);
 
@@ -856,6 +847,7 @@ describe('VariableScope', function () {
             scope.set('foo', 'foo');
 
             expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
             expect(scope.mutations.count()).to.equal(1);
         });
 
@@ -867,39 +859,68 @@ describe('VariableScope', function () {
             scope.set('foo', 'foo');
 
             expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
             expect(scope.mutations.count()).to.equal(1);
             expect(scope.mutations.autoCompact).to.equal(true);
         });
 
         it('should do nothing if enabled when already enabled', function () {
-            var scope = new VariableScope(null, null, { mutations: true });
+            var scope = new VariableScope();
 
+            scope.enableTracking();
             scope.set('foo', 'foo');
 
             scope.enableTracking();
 
             expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
             expect(scope.mutations.count()).to.equal(1);
         });
 
-        it('should be disabled when desired', function () {
-            var scope = new VariableScope(null, null, { mutations: true });
+        it('should reset mutations when enabled', function () {
+            var scope = new VariableScope({
+                mutations: {
+                    stream: [['foo', 'foo']]
+                }
+            });
 
+            scope.enableTracking();
+
+            expect(scope).to.have.property('mutations');
+            expect(scope).to.have.property('_postman_enableTracking', true);
+            expect(scope.mutations.count()).to.equal(0);
+        });
+
+        it('should be disabled when desired', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
             scope.set('foo', 'foo');
 
             scope.disableTracking();
 
-            expect(scope.mutations).to.not.ok();
+            // disable further mutations
+            expect(scope._postman_enableTracking).to.not.be.ok();
+
+            // but keep the existing mutations
+            expect(scope.mutations.count()).to.equal(1);
         });
 
         it('should stay disabled when disabling multiple times', function () {
             var scope = new VariableScope();
 
+            scope.enableTracking();
             scope.set('foo', 'foo');
 
             scope.disableTracking();
+            scope.disableTracking();
 
-            expect(scope.mutations).to.not.ok();
+
+            // disable further mutations
+            expect(scope._postman_enableTracking).to.not.be.ok();
+
+            // but keep the existing mutations
+            expect(scope.mutations.count()).to.equal(1);
         });
     });
 });
