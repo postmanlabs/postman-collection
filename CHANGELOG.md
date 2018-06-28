@@ -1,5 +1,45 @@
 # Postman Collection SDK Changelog
 
+### v3.1.0 (June 28, 2018)
+* Added support for tracking changes on a `VariableScope`. To use this enable tracking on your variable scope
+
+```js
+var variableScope = new VariableScope();
+
+variableScope.enableTracking();
+```
+
+* If you are only interested in the last change for any key, you can use the `autoCompact` option.
+
+```js
+var variableScope = new VariableScope();
+
+variableScope.enableTracking({ autoCompact: true });
+```
+
+* This makes sure that you are only provided with the most minimal set of changes. Use this when you want to optimize memory usage or improve performance when applying the changes back.
+
+* The `mutations` object allows you to then apply the same changes on a different `VariableScope`.
+
+```js
+var scope1 = new VariableScope(),
+   scope2 = new VariableScope();
+
+// enable tracking
+scope1.enableTracking();
+
+// this change is captured in scope1.changes
+scope1.set('foo', 'bar');
+
+// this applies the captured changes on scope2
+scope1.mutations.applyOn(scope2);
+```
+* Added `MutationTracker` for tracking mutations.
+* Fixed documentation for `Description~definition`
+* Added `Response~contentInfo` to extract mime info and filename from response.
+* Deprecated `Response~mime` and `Response~mimeInfo`
+* Updated dependencies
+
 #### v3.0.10 (May 22, 2018)
 * Revert computing filename from content-disposition header in `Response~mime`
 * Updated dependencies
