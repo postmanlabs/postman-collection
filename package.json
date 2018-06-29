@@ -42,7 +42,7 @@
     "mime-types": "2.1.18",
     "sanitize-html": "1.18.2",
     "semver": "5.5.0",
-    "uuid": "3.3.0",
+    "uuid": "3.3.2",
     "postman-url-encoder": "1.0.1"
   },
   "devDependencies": {
