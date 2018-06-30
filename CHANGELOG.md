@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+### Unreleased
+* Added support for `Response.prototype.jsonp()` to easily extract jsonp inside sandbox
+
 ### v3.1.0 (June 28, 2018)
 * Added support for tracking changes on a `VariableScope`. To use this enable tracking on your variable scope
 

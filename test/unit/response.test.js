@@ -444,6 +444,38 @@ describe('Response', function () {
                 '           ^'
             );
         });
+
+        it('should parse response as JSONP', function () {
+            expect((new Response({
+                body: 'adsgfd({"hello":"world"})'
+            })).jsonp()).to.eql({
+                hello: 'world'
+            });
+        });
+
+        it('should parse response as JSONP even when sent as JSON', function () {
+            expect((new Response({
+                body: '{"hello":"world"}'
+            })).jsonp()).to.eql({
+                hello: 'world'
+            });
+        });
+
+        it('should parse response as JSONP with comment prefix', function () {
+            expect((new Response({
+                body: '/**/adsgfd({"hello":"world"})'
+            })).jsonp()).to.eql({
+                hello: 'world'
+            });
+        });
+
+        it('should parse response as JSONP with array content', function () {
+            expect((new Response({
+                body: '/**/adsgfd([{"hello":"world"}])'
+            })).jsonp()).to.eql([{
+                hello: 'world'
+            }]);
+        });
     });
 
     describe('size', function () {
