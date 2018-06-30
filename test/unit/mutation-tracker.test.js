@@ -45,6 +45,18 @@ describe('MutationTracker', function () {
 
             expect(tracker.count()).to.equal(2);
         });
+
+        it('should drop invalid properties in definition', function () {
+            var tracker = new MutationTracker({
+                autoCompact: 'yay',
+                stream: {},
+                compacted: []
+            });
+
+            expect(tracker.autoCompact).to.equal(true);
+            expect(tracker.stream).to.eql([]);
+            expect(tracker.compacted).to.eql({});
+        });
     });
 
     describe('count', function () {
@@ -131,6 +143,23 @@ describe('MutationTracker', function () {
 
             expect(tracker.stream).to.eql([['foo']]);
         });
+
+        it('should not track anything other than set and unset', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track('someFancyMutation', 'foo');
+
+            expect(tracker.count()).to.eql(0);
+        });
+
+        it('should not track invalid mutation format', function () {
+            var tracker = new MutationTracker();
+
+            // expected signature is two parameters
+            tracker.track('set', 'foo', 'bar', 'baz');
+
+            expect(tracker.count()).to.eql(0);
+        });
     });
 
     describe('apply', function () {
@@ -196,6 +225,23 @@ describe('MutationTracker', function () {
             tracker.track('unset', 'bar');
 
             tracker.applyOn(target);
+
+            expect(target).to.have.property('bar');
+        });
+
+        it('should do nothing when called with falsy params', function () {
+            var tracker = new MutationTracker(),
+                target = {
+                    bar: 'bar'
+                };
+
+            tracker.track('set', 'foo', 'foo');
+            tracker.track('unset', 'bar');
+
+            tracker.applyOn();
+            tracker.applyOn(null);
+            tracker.applyOn(undefined);
+            tracker.applyOn(false);
 
             expect(target).to.have.property('bar');
         });

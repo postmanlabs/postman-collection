@@ -2,7 +2,7 @@
   "name": "postman-collection",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Labs <help@getpostman.com>",
-  "version": "3.0.10",
+  "version": "3.1.0",
   "keywords": [
     "postman"
   ],
@@ -42,7 +42,7 @@
     "mime-types": "2.1.18",
     "sanitize-html": "1.18.2",
     "semver": "5.5.0",
-    "uuid": "3.3.0",
+    "uuid": "3.3.2",
     "postman-url-encoder": "1.0.1"
   },
   "devDependencies": {
