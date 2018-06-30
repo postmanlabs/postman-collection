@@ -1,5 +1,11 @@
 # Postman Collection SDK Changelog
 
+### v3.1.1 (June 30, 2018)
+* Fixed: Remove `console` statement, which may not be available in some environments
+* Fixed: Added `info` to `Property~Definition` documentation
+* Added support for `Response.prototype.jsonp()` to easily extract `jsonp` inside sandbox
+* Updated dependencies
+
 ### v3.1.0 (June 28, 2018)
 * Added support for tracking changes on a `VariableScope`. To use this enable tracking on your variable scope
 
