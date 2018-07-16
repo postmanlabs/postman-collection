@@ -522,11 +522,16 @@ describe('Url', function () {
         it('should be generated properly', function () {
             var rawUrl = rawUrls[9],
                 url = new Url(rawUrl),
-                jsonified = url.toJSON();
+                jsonified = url.toJSON(),
+
+                // remove leading slash from this test case's path property.
+                // since SDK will remove leading slash from path if passed as string.
+                rawPath = rawUrl.path[0] === '/' ? rawUrl.path.substr(1) : rawUrl.path;
+
             expect(jsonified.protocol).to.eql(rawUrl.protocol);
             expect(jsonified.host).to.eql(rawUrl.host.split('.'));
             expect(jsonified.port).to.eql(rawUrl.port);
-            expect(jsonified.path).to.eql(rawUrl.path.split('/'));
+            expect(jsonified.path).to.eql(rawPath.split('/'));
             expect(jsonified.query).to.eql(rawUrl.query);
             expect(jsonified.hash).to.eql(rawUrl.hash);
 
@@ -631,6 +636,11 @@ describe('Url', function () {
             var url = new Url();
 
             expect(url.toString()).to.eql('');
+        });
+
+        it('should handle empty path properly', function () {
+            var url = new Url('https://postman-echo.com///get');
+            expect(url.toString()).to.eql('https://postman-echo.com///get');
         });
     });
 
@@ -910,6 +920,43 @@ describe('Url', function () {
                 expect(json).to.not.have.keys(['port', 'auth', 'query', 'path', 'hash', 'protocol']);
                 expect(json.host).to.eql(['postman-echo', 'com']);
                 expect(json.query).to.have.length(fk + 1);
+            });
+        });
+    });
+
+    describe('Regression', function () {
+        describe('path', function () {
+            // Tests issue where path starting with empty segment removes first segment on `Url.getPath()`
+            // Reference: https://github.com/postmanlabs/postman-app-support/issues/4761
+
+            it('should handle empty path properly', function () {
+                var url = new Url('https://postman-echo.com////////get/');
+
+                expect(url.path).to.be.an('array');
+                expect(url.path).to.have.length(9);
+                expect(url.toString()).to.eql('https://postman-echo.com////////get/');
+            });
+
+            it('should parse string path properly for JSON representation', function () {
+                var url = new Url({
+                    protocol: 'http',
+                    host: 'postman-echo.com',
+                    path: '/get'
+                });
+
+                expect(url.path).to.be.an('array');
+                expect(url.path).to.eql(['get']);
+            });
+
+            it('should parse multiple empty path properly for JSON representation', function () {
+                var url = new Url({
+                    protocol: 'http',
+                    host: 'postman-echo.com',
+                    path: '///get'
+                });
+
+                expect(url.path).to.be.an('array');
+                expect(url.path).to.eql(['', '', 'get']);
             });
         });
     });
