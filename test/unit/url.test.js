@@ -434,6 +434,22 @@ describe('Url', function () {
             expect(subject.path).to.eql(['', '..', 'etc', 'hosts']);
             expect(subject.port).to.be(undefined);
         });
+
+        it('should parse path variables properly', function () {
+            var subject = Url.parse('http://127.0.0.1/:a/:ab.json/:a+b');
+            expect(subject).to.have.property('variable');
+            expect(subject.variable).to.have.length(3);
+            expect(subject.variable).to.eql([
+                { key: 'a' }, { key: 'ab.json' }, { key: 'a+b' }
+            ]);
+        });
+
+        it('should not parse empty path variables', function () {
+            var subject = Url.parse('http://127.0.0.1/:/:/:var');
+            expect(subject.path).to.eql([':', ':', ':var']);
+            expect(subject.variable).to.have.length(1);
+            expect(subject.variable).to.eql([{ key: 'var' }]);
+        });
     });
 
     describe('unparsing', function () {
