@@ -8,7 +8,7 @@ var expect = require('expect.js'),
 /* global describe, it */
 describe('Url', function () {
     describe('sanity', function () {
-        var rawUrl = 'https://user:pass@postman-echo.com/get?a=1&b=2#heading',
+        var rawUrl = 'https://user:pass@postman-echo.com/:path/get?a=1&b=2#heading',
             url = new Url(rawUrl);
 
         it('parsed successfully', function () {
@@ -30,12 +30,12 @@ describe('Url', function () {
 
             it('host', function () {
                 expect(url).to.have.property('host');
-                expect(url.host).be.an('array');
+                expect(url.host).to.eql(['postman-echo', 'com']);
             });
 
             it('path', function () {
                 expect(url).to.have.property('path');
-                expect(url.path).to.be.an('array');
+                expect(url.path).to.eql([':path', 'get']);
             });
 
             it('port', function () {
@@ -49,6 +49,11 @@ describe('Url', function () {
             it('query', function () {
                 expect(url).to.have.property('query');
                 expect(url.query).to.be.an('object');
+            });
+
+            it('variables', function () {
+                expect(url).to.have.property('variables');
+                expect(url.variables).to.be.an('object');
             });
 
             it('update', function () {
@@ -107,6 +112,21 @@ describe('Url', function () {
     });
 
     describe('.parse()', function () {
+        it('should parse empty string', function () {
+            var subject = Url.parse('');
+
+            // explicitly match object to track addition/deletion of properties.
+            expect(subject).to.eql({
+                raw: '',
+                protocol: undefined,
+                host: undefined,
+                path: undefined,
+                query: undefined,
+                hash: undefined,
+                variable: undefined
+            });
+        });
+
         it('must parse bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1');
             expect(subject.protocol).to.be(undefined);
