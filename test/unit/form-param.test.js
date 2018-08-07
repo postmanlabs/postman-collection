@@ -22,4 +22,27 @@ describe('FormParam', function () {
             expect(fp.toString()).to.be('foo=bar');
         });
     });
+
+    describe('contentType', function () {
+        it('should parse contentType properly', function () {
+            var fp = new FormParam({
+                key: 'fileName',
+                src: 'fileSrc',
+                contentType: 'text/csv',
+                type: 'file'
+            });
+            expect(fp.toJSON()).to.eql({
+                key: 'fileName',
+                value: '',
+                src: 'fileSrc',
+                contentType: 'text/csv',
+                type: 'file'
+            });
+        });
+
+        it('should default to undefined if contentType is not provided', function () {
+            var fp = new FormParam({ key: 'foo', value: 'bar' });
+            expect(fp.toJSON()).to.eql({ key: 'foo', value: 'bar' });
+        });
+    });
 });
