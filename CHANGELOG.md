@@ -1,5 +1,11 @@
 # Postman Collection SDK Changelog
 
+#### v3.2.0 (August 20, 2018)
+* #694 Updated dependencies :arrow_up:
+* #689 Added support for `contentType` to form data request bodies.
+* #679 Fixed URL path handling :bug:
+* #681 Fixed a bug that caused URL parsing to ignore path variables :bug:
+
 ### v3.1.1 (June 30, 2018)
 * Fixed: Remove `console` statement, which may not be available in some environments
 * Fixed: Added `info` to `Property~Definition` documentation
