@@ -8,7 +8,7 @@ var expect = require('expect.js'),
 /* global describe, it */
 describe('Url', function () {
     describe('sanity', function () {
-        var rawUrl = 'https://user:pass@postman-echo.com/get?a=1&b=2#heading',
+        var rawUrl = 'https://user:pass@postman-echo.com/:path/get?a=1&b=2#heading',
             url = new Url(rawUrl);
 
         it('parsed successfully', function () {
@@ -30,12 +30,12 @@ describe('Url', function () {
 
             it('host', function () {
                 expect(url).to.have.property('host');
-                expect(url.host).be.an('array');
+                expect(url.host).to.eql(['postman-echo', 'com']);
             });
 
             it('path', function () {
                 expect(url).to.have.property('path');
-                expect(url.path).to.be.an('array');
+                expect(url.path).to.eql([':path', 'get']);
             });
 
             it('port', function () {
@@ -49,6 +49,11 @@ describe('Url', function () {
             it('query', function () {
                 expect(url).to.have.property('query');
                 expect(url.query).to.be.an('object');
+            });
+
+            it('variables', function () {
+                expect(url).to.have.property('variables');
+                expect(url.variables).to.be.an('object');
             });
 
             it('update', function () {
@@ -107,6 +112,21 @@ describe('Url', function () {
     });
 
     describe('.parse()', function () {
+        it('should parse empty string', function () {
+            var subject = Url.parse('');
+
+            // explicitly match object to track addition/deletion of properties.
+            expect(subject).to.eql({
+                raw: '',
+                protocol: undefined,
+                host: undefined,
+                path: undefined,
+                query: undefined,
+                hash: undefined,
+                variable: undefined
+            });
+        });
+
         it('must parse bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1');
             expect(subject.protocol).to.be(undefined);
@@ -434,6 +454,22 @@ describe('Url', function () {
             expect(subject.path).to.eql(['', '..', 'etc', 'hosts']);
             expect(subject.port).to.be(undefined);
         });
+
+        it('should parse path variables properly', function () {
+            var subject = Url.parse('http://127.0.0.1/:a/:ab.json/:a+b');
+            expect(subject).to.have.property('variable');
+            expect(subject.variable).to.have.length(3);
+            expect(subject.variable).to.eql([
+                { key: 'a' }, { key: 'ab.json' }, { key: 'a+b' }
+            ]);
+        });
+
+        it('should not parse empty path variables', function () {
+            var subject = Url.parse('http://127.0.0.1/:/:/:var');
+            expect(subject.path).to.eql([':', ':', ':var']);
+            expect(subject.variable).to.have.length(1);
+            expect(subject.variable).to.eql([{ key: 'var' }]);
+        });
     });
 
     describe('unparsing', function () {
@@ -520,24 +556,78 @@ describe('Url', function () {
 
     describe('JSON representation', function () {
         it('should be generated properly', function () {
-            var rawUrl = rawUrls[9],
-                url = new Url(rawUrl),
-                jsonified = url.toJSON();
-            expect(jsonified.protocol).to.eql(rawUrl.protocol);
-            expect(jsonified.host).to.eql(rawUrl.host.split('.'));
-            expect(jsonified.port).to.eql(rawUrl.port);
-            expect(jsonified.path).to.eql(rawUrl.path.split('/'));
-            expect(jsonified.query).to.eql(rawUrl.query);
-            expect(jsonified.hash).to.eql(rawUrl.hash);
+            var parsedUrl = new Url({
+                protocol: 'http',
+                host: ['postman-echo', 'com'],
+                port: '80',
+                path: [':resource'],
+                query: [{ key: 'id', value: '123' }],
+                variable: [
+                    {
+                        'id': 'resource',
+                        'value': 'post'
+                    },
+                    {
+                        'id': 'foo',
+                        'value': 'bar'
+                    }
+                ]
+            }).toJSON();
 
-            // Can't use normal comparisons, because variables are by default assigned
-            // type = "any" and deep comparison fails because of that.
-            _.forEach(rawUrl.variable, function (variable, index) {
-                var jsonifiedVar = jsonified.variable[index];
-                _.forOwn(variable, function (value, attribute) {
-                    expect(jsonifiedVar[attribute]).to.eql(value);
-                });
-            });
+            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl.protocol).to.eql('http');
+            expect(parsedUrl.host).to.eql(['postman-echo', 'com']);
+            expect(parsedUrl.port).to.eql('80');
+            expect(parsedUrl.path).to.eql([':resource']);
+            expect(parsedUrl.query).to.eql([{
+                key: 'id',
+                value: '123'
+            }]);
+            expect(parsedUrl.hash).to.eql(undefined);
+
+            expect(parsedUrl.variable).to.be.ok();
+            expect(parsedUrl.variable.length).to.eql(2);
+
+            expect(parsedUrl.variable[0]).to.be.ok();
+            expect(parsedUrl.variable[0].id).to.eql('resource');
+            expect(parsedUrl.variable[0].value).to.eql('post');
+
+            expect(parsedUrl.variable[1]).to.be.ok();
+            expect(parsedUrl.variable[1].id).to.eql('foo');
+            expect(parsedUrl.variable[1].value).to.eql('bar');
+        });
+
+        it('should parse host even if sent as string', function () {
+            var parsedUrl = new Url({
+                protocol: 'http',
+                host: 'postman-echo.com',
+                path: ':resource'
+            }).toJSON();
+
+            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl.host).to.eql(['postman-echo', 'com']);
+        });
+
+        it('should parse path even if sent as string', function () {
+            var parsedUrl = new Url({
+                protocol: 'http',
+                host: 'postman-echo.com',
+                path: ':resource'
+            }).toJSON();
+
+            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl.path).to.eql([':resource']);
+        });
+
+        it('should drop malformed leading separator in path definition when sent as a string', function () {
+            var parsedUrl = new Url({
+                protocol: 'http',
+                host: 'postman-echo.com',
+                path: '/:resource'
+            }).toJSON();
+
+            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl.path).to.eql([':resource']);
         });
     });
 
@@ -631,6 +721,11 @@ describe('Url', function () {
             var url = new Url();
 
             expect(url.toString()).to.eql('');
+        });
+
+        it('should handle empty path properly', function () {
+            var url = new Url('https://postman-echo.com///get');
+            expect(url.toString()).to.eql('https://postman-echo.com///get');
         });
     });
 
@@ -910,6 +1005,43 @@ describe('Url', function () {
                 expect(json).to.not.have.keys(['port', 'auth', 'query', 'path', 'hash', 'protocol']);
                 expect(json.host).to.eql(['postman-echo', 'com']);
                 expect(json.query).to.have.length(fk + 1);
+            });
+        });
+    });
+
+    describe('Regression', function () {
+        describe('path', function () {
+            // Tests issue where path starting with empty segment removes first segment on `Url.getPath()`
+            // Reference: https://github.com/postmanlabs/postman-app-support/issues/4761
+
+            it('should handle empty path properly', function () {
+                var url = new Url('https://postman-echo.com////////get/');
+
+                expect(url.path).to.be.an('array');
+                expect(url.path).to.have.length(9);
+                expect(url.toString()).to.eql('https://postman-echo.com////////get/');
+            });
+
+            it('should parse string path properly for JSON representation', function () {
+                var url = new Url({
+                    protocol: 'http',
+                    host: 'postman-echo.com',
+                    path: '/get'
+                });
+
+                expect(url.path).to.be.an('array');
+                expect(url.path).to.eql(['get']);
+            });
+
+            it('should parse multiple empty path properly for JSON representation', function () {
+                var url = new Url({
+                    protocol: 'http',
+                    host: 'postman-echo.com',
+                    path: '///get'
+                });
+
+                expect(url.path).to.be.an('array');
+                expect(url.path).to.eql(['', '', 'get']);
             });
         });
     });
