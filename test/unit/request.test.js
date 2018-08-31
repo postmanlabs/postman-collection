@@ -457,4 +457,22 @@ describe('Request', function () {
             expect(r.headers.count()).to.be(0);
         });
     });
+
+    describe('custom http method', function () {
+        it('should handle custom HTTP method correctly', function () {
+            var requestDefinition = {
+                    method: 'POSTMAN',
+                    url: {
+                        host: ['postman-echo', 'com'],
+                        'protocol': 'http',
+                        'query': [],
+                        'variable': []
+                    }
+                },
+                request = new Request(requestDefinition);
+
+            expect(request.method).to.be('POSTMAN');
+            expect(request.toJSON()).to.have.property('method', 'POSTMAN');
+        });
+    });
 });
