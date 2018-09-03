@@ -460,18 +460,17 @@ describe('Request', function () {
 
     describe('custom http method', function () {
         it('should handle custom HTTP method correctly', function () {
-            var requestDefinition = {
-                    method: 'POSTMAN',
-                    url: {
-                        host: ['postman-echo', 'com'],
-                        'protocol': 'http',
-                        'query': [],
-                        'variable': []
-                    }
-                },
-                request = new Request(requestDefinition);
+            var request = new Request({
+                method: 'POSTMAN',
+                url: {
+                    host: ['postman-echo', 'com'],
+                    'protocol': 'http',
+                    'query': [],
+                    'variable': []
+                }
+            });
 
-            expect(request.method).to.be('POSTMAN');
+            expect(request).to.have.property('method', 'POSTMAN');
             expect(request.toJSON()).to.have.property('method', 'POSTMAN');
         });
     });
