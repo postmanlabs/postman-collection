@@ -85,13 +85,13 @@ describe('Request', function () {
                 certificate: {}
             });
 
-            expect(req.method).to.be('GET');
+            expect(req).to.have.property('method', 'GET');
             expect(sdk.ProxyConfig.isProxyConfig(req.proxy)).to.be(true);
             expect(sdk.Certificate.isCertificate(req.certificate)).to.be(true);
 
-            req.update({ method: { name: 'GET' } });
+            req.update({ method: 'POST' });
 
-            expect(req.method).to.eql({ name: 'GET' });
+            expect(req).to.have.property('method', 'POST');
             expect(req.toJSON()).to.have.keys(['certificate', 'proxy', 'url']);
         });
 
@@ -101,7 +101,20 @@ describe('Request', function () {
                 url: 'https://postman-echo.com/:path'
             });
 
-            expect(req.method).to.be('GET');
+            expect(req).to.have.property('method', 'GET');
+        });
+
+        it('should handle non-string request methods correctly', function () {
+            var req = new Request({
+                method: 12345,
+                url: 'https://postman-echo.com/:path'
+            });
+
+            expect(req).to.have.property('method', '12345');
+
+            req.update({ method: false });
+
+            expect(req).to.have.property('method', 'FALSE');
         });
 
         it('should handle falsy request options correctly', function () {
