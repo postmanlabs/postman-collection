@@ -96,7 +96,7 @@ describe('Request', function () {
         });
 
         describe('request method', function () {
-            it('should defaults to GET', function () {
+            it('should default to GET', function () {
                 expect(new Request()).to.have.property('method', 'GET');
             });
 
