@@ -95,30 +95,49 @@ describe('Request', function () {
             expect(req.toJSON()).to.have.keys(['certificate', 'proxy', 'url']);
         });
 
-        it('should handle falsy request methods correctly', function () {
-            var req = new Request({
-                method: null,
-                url: 'https://postman-echo.com/:path'
+        describe('request method', function () {
+            it('should defaults to GET', function () {
+                expect(new Request()).to.have.property('method', 'GET');
             });
 
-            expect(req).to.have.property('method', 'GET');
-        });
+            it('should handle null & undefined correctly', function () {
+                var req = new Request({
+                    method: null,
+                    url: 'https://postman-echo.com/:path'
+                });
 
-        it('should handle non-string request methods correctly', function () {
-            var req = new Request({
-                method: 12345,
-                url: 'https://postman-echo.com/:path'
+                expect(req).to.have.property('method', 'GET');
+
+                req.update({ method: undefined });
+                expect(req).to.have.property('method', 'GET');
             });
 
-            expect(req).to.have.property('method', '12345');
+            it('should handle non-string correctly', function () {
+                var req = new Request({
+                    method: 12345,
+                    url: 'https://postman-echo.com/:path'
+                });
 
-            req.update({ method: false });
+                expect(req).to.have.property('method', '12345');
 
-            expect(req).to.have.property('method', 'FALSE');
-        });
+                req.update({ method: false });
+                expect(req).to.have.property('method', 'FALSE');
+            });
 
-        it('should handle falsy request options correctly', function () {
-            expect(new Request()).to.have.property('method', 'GET');
+            it('should handle object & function correctly', function () {
+                var req = new Request({
+                    method: { name: 'GET' },
+                    url: 'https://postman-echo.com/:path'
+                });
+
+                expect(req).to.have.property('method', '[OBJECT OBJECT]');
+
+                req.update({ method: function () { return 0; } });
+                expect(req).to.have.property('method', 'FUNCTION () { RETURN 0; }');
+
+                req.update({ method: [1, 2, 3] });
+                expect(req).to.have.property('method', '1,2,3');
+            });
         });
 
         describe('has property', function () {
