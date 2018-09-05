@@ -1,8 +1,8 @@
 # Postman Collection SDK Changelog
 
-#### Unreleased
+#### v3.2.1 (September 6, 2018)
 * #699 Handle non-string request method correctly
-* Updated dependencies
+* Updated dependencies :arrow_up:
 
 #### v3.2.0 (August 20, 2018)
 * #694 Updated dependencies :arrow_up:
