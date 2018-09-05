@@ -41,7 +41,7 @@
     "mime-format": "2.0.0",
     "mime-types": "2.1.20",
     "postman-url-encoder": "1.0.1",
-    "sanitize-html": "1.18.4",
+    "sanitize-html": "1.18.5",
     "semver": "5.5.1",
     "uuid": "3.3.2"
   },
