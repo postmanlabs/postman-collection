@@ -85,27 +85,59 @@ describe('Request', function () {
                 certificate: {}
             });
 
-            expect(req.method).to.be('GET');
+            expect(req).to.have.property('method', 'GET');
             expect(sdk.ProxyConfig.isProxyConfig(req.proxy)).to.be(true);
             expect(sdk.Certificate.isCertificate(req.certificate)).to.be(true);
 
-            req.update({ method: { name: 'GET' } });
+            req.update({ method: 'POST' });
 
-            expect(req.method).to.eql({ name: 'GET' });
+            expect(req).to.have.property('method', 'POST');
             expect(req.toJSON()).to.have.keys(['certificate', 'proxy', 'url']);
         });
 
-        it('should handle falsy request methods correctly', function () {
-            var req = new Request({
-                method: null,
-                url: 'https://postman-echo.com/:path'
+        describe('request method', function () {
+            it('should default to GET', function () {
+                expect(new Request()).to.have.property('method', 'GET');
             });
 
-            expect(req.method).to.be('GET');
-        });
+            it('should handle null & undefined correctly', function () {
+                var req = new Request({
+                    method: null,
+                    url: 'https://postman-echo.com/:path'
+                });
 
-        it('should handle falsy request options correctly', function () {
-            expect(new Request()).to.have.property('method', 'GET');
+                expect(req).to.have.property('method', 'GET');
+
+                req.update({ method: undefined });
+                expect(req).to.have.property('method', 'GET');
+            });
+
+            it('should handle non-string correctly', function () {
+                var req = new Request({
+                    method: 12345,
+                    url: 'https://postman-echo.com/:path'
+                });
+
+                expect(req).to.have.property('method', '12345');
+
+                req.update({ method: false });
+                expect(req).to.have.property('method', 'FALSE');
+            });
+
+            it('should handle object & function correctly', function () {
+                var req = new Request({
+                    method: { name: 'GET' },
+                    url: 'https://postman-echo.com/:path'
+                });
+
+                expect(req).to.have.property('method', '[OBJECT OBJECT]');
+
+                req.update({ method: function () { return 0; } });
+                expect(req).to.have.property('method', 'FUNCTION () { RETURN 0; }');
+
+                req.update({ method: [1, 2, 3] });
+                expect(req).to.have.property('method', '1,2,3');
+            });
         });
 
         describe('has property', function () {
@@ -455,6 +487,23 @@ describe('Request', function () {
             expect(r).to.have.property('headers');
             expect(r.headers).to.be.a(PropertyList);
             expect(r.headers.count()).to.be(0);
+        });
+    });
+
+    describe('custom http method', function () {
+        it('should handle custom HTTP method correctly', function () {
+            var request = new Request({
+                method: 'POSTMAN',
+                url: {
+                    host: ['postman-echo', 'com'],
+                    'protocol': 'http',
+                    'query': [],
+                    'variable': []
+                }
+            });
+
+            expect(request).to.have.property('method', 'POSTMAN');
+            expect(request.toJSON()).to.have.property('method', 'POSTMAN');
         });
     });
 });
