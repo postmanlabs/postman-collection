@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### Unreleased
+* #699 Handle non-string request method correctly
+* Updated dependencies
+
 #### v3.2.0 (August 20, 2018)
 * #694 Updated dependencies :arrow_up:
 * #689 Added support for `contentType` to form data request bodies.
