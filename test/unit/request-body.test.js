@@ -152,6 +152,23 @@ describe('RequestBody', function () {
             expect(body).to.have.property('raw', 'foo');
         });
 
+        it('should handle forceInclude property (true -> false) correctly', function () {
+            var body = new RequestBody({ mode: 'raw', raw: 'foo', forceInclude: true });
+
+            expect(body).to.have.property('forceInclude', true);
+
+            body.update({ mode: 'raw', raw: 'foo', forceInclude: false });
+            expect(body).to.have.property('forceInclude', false);
+        });
+
+        it('should handle forceInclude property (false -> true) correctly', function () {
+            var body = new RequestBody({ mode: 'raw', raw: 'foo', forceInclude: false });
+            expect(body).to.have.property('forceInclude', false);
+
+            body.update({ mode: 'raw', raw: 'foo', forceInclude: true });
+            expect(body).to.have.property('forceInclude', true);
+        });
+
         it('should handle disabled property (true -> false) correctly', function () {
             var body = new RequestBody({ mode: 'raw', raw: 'foo', disabled: true });
 
@@ -219,6 +236,7 @@ describe('RequestBody', function () {
             var reqData = new RequestBody(rawRequestBody);
             expect(reqData).to.be.ok();
             expect(reqData).to.have.property('mode', rawRequestBody.mode);
+            expect(reqData).to.have.property('forceInclude', undefined);
             expect(reqData).to.have.property('disabled', undefined);
 
             // Raw Request body
