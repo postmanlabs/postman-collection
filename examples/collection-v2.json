@@ -102,6 +102,9 @@
             "proxy": {
                 "match": "https://*.getpostman.com/*",
                 "server": "https://proxy.com"
+            },
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
             }
         },
         {
