@@ -152,6 +152,26 @@ describe('RequestBody', function () {
             expect(body).to.have.property('raw', 'foo');
         });
 
+        it('should handle protocolProfileBehavior property correctly', function () {
+            var body = new RequestBody({
+                mode: 'raw',
+                raw: 'foo',
+                protocolProfileBehavior: 'disable-body-pruning'
+            });
+
+            expect(body).to.have.property('protocolProfileBehavior', 'disable-body-pruning');
+        });
+
+        it('should handle unknown protocolProfileBehavior values correctly', function () {
+            var body = new RequestBody({
+                mode: 'raw',
+                raw: 'foo',
+                protocolProfileBehavior: 'random'
+            });
+
+            expect(body).to.have.property('protocolProfileBehavior', undefined);
+        });
+
         it('should handle disabled property (true -> false) correctly', function () {
             var body = new RequestBody({ mode: 'raw', raw: 'foo', disabled: true });
 
@@ -219,6 +239,7 @@ describe('RequestBody', function () {
             var reqData = new RequestBody(rawRequestBody);
             expect(reqData).to.be.ok();
             expect(reqData).to.have.property('mode', rawRequestBody.mode);
+            expect(reqData).to.have.property('protocolProfileBehavior', undefined);
             expect(reqData).to.have.property('disabled', undefined);
 
             // Raw Request body
