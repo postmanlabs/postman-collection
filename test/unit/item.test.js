@@ -126,6 +126,36 @@ describe('Item', function () {
                 });
             });
         });
+
+        describe('protocolProfileBehavior', function () {
+            it('should not filter unknown protocol profile behaviors', function () {
+                var item = new Item({
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true,
+                        random: true
+                    }
+                });
+                expect(item).to.have.property('protocolProfileBehavior');
+                expect(item.protocolProfileBehavior).to.eql({
+                    disableBodyPruning: true,
+                    random: true
+                });
+            });
+
+            it('should not be included if its not an object', function () {
+                expect(new Item({
+                    protocolProfileBehavior: true
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new Item({
+                    protocolProfileBehavior: 'foo'
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new Item({
+                    protocolProfileBehavior: 123
+                })).to.not.have.property('protocolProfileBehavior');
+            });
+        });
     });
 
     describe('json representation', function () {
