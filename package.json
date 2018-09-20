@@ -2,7 +2,7 @@
   "name": "postman-collection",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Labs <help@getpostman.com>",
-  "version": "3.3.0-beta.1",
+  "version": "3.3.0",
   "keywords": [
     "postman"
   ],

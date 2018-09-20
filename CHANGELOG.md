@@ -1,5 +1,10 @@
 # Postman Collection SDK Changelog
 
+#### v3.3.0 (September 21, 2018)
+* #709 Added support for `protocolProfileBehaviour` overrides
+* #701 Added support for disabled request bodies
+* Updated dependencies
+
 #### v3.2.1 (September 6, 2018)
 * #699 Handle non-string request method correctly
 * Updated dependencies :arrow_up:
