@@ -151,6 +151,23 @@ describe('RequestBody', function () {
             expect(body).to.have.property('mode', 'raw');
             expect(body).to.have.property('raw', 'foo');
         });
+
+        it('should handle disabled property (true -> false) correctly', function () {
+            var body = new RequestBody({ mode: 'raw', raw: 'foo', disabled: true });
+
+            expect(body).to.have.property('disabled', true);
+
+            body.update({ mode: 'raw', raw: 'foo', disabled: false });
+            expect(body).to.have.property('disabled', false);
+        });
+
+        it('should handle disabled property (false -> true) correctly', function () {
+            var body = new RequestBody({ mode: 'raw', raw: 'foo', disabled: false });
+            expect(body).to.have.property('disabled', false);
+
+            body.update({ mode: 'raw', raw: 'foo', disabled: true });
+            expect(body).to.have.property('disabled', true);
+        });
     });
 
     describe('.toString', function () {
@@ -202,6 +219,7 @@ describe('RequestBody', function () {
             var reqData = new RequestBody(rawRequestBody);
             expect(reqData).to.be.ok();
             expect(reqData).to.have.property('mode', rawRequestBody.mode);
+            expect(reqData).to.have.property('disabled', undefined);
 
             // Raw Request body
             expect(reqData).to.have.property('raw', rawRequestBody.raw);

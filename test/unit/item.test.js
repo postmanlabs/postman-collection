@@ -43,7 +43,10 @@ describe('Item', function () {
                             }]
                         }
                     },
-                    response: []
+                    response: [],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 item = new Item(itemDefinition);
 
@@ -91,6 +94,12 @@ describe('Item', function () {
                     expect(item.responses.all()).to.be.an('array');
                     expect(item.responses.all()).to.not.be.empty();
                 });
+
+                it('protocolProfileBehavior', function () {
+                    expect(item).to.have.property('protocolProfileBehavior');
+                    expect(item.protocolProfileBehavior).to.be.an('object');
+                    expect(item.protocolProfileBehavior).to.not.be.empty();
+                });
             });
         });
 
@@ -117,6 +126,36 @@ describe('Item', function () {
                 });
             });
         });
+
+        describe('protocolProfileBehavior', function () {
+            it('should not filter unknown protocol profile behaviors', function () {
+                var item = new Item({
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true,
+                        random: true
+                    }
+                });
+                expect(item).to.have.property('protocolProfileBehavior');
+                expect(item.protocolProfileBehavior).to.eql({
+                    disableBodyPruning: true,
+                    random: true
+                });
+            });
+
+            it('should not be included if its not an object', function () {
+                expect(new Item({
+                    protocolProfileBehavior: true
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new Item({
+                    protocolProfileBehavior: 'foo'
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new Item({
+                    protocolProfileBehavior: 123
+                })).to.not.have.property('protocolProfileBehavior');
+            });
+        });
     });
 
     describe('json representation', function () {
@@ -130,6 +169,7 @@ describe('Item', function () {
             expect(jsonified).to.have.property('request');
             expect(jsonified).to.have.property('response');
             expect(jsonified).to.have.property('event');
+            expect(jsonified).to.have.property('protocolProfileBehavior');
         });
     });
 
