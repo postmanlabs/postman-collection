@@ -1,10 +1,6 @@
-/* global describe, it */
 var fs = require('fs'),
     path = require('path'),
-
     _ = require('lodash'),
-    expect = require('expect.js'),
-
     sdk = require('../../lib'),
 
     BASELESS_MODULES = ['Description'],
@@ -42,19 +38,19 @@ describe('collection module', function () {
             var meta = modules[file],
                 Module = meta.property;
 
-            it('must be exported in the SDK', function () {
-                expect(sdk[meta.name]).to.be.ok();
+            it('should be exported in the SDK', function () {
+                expect(sdk[meta.name]).to.be.ok;
             });
 
-            it('must have its name defined in the constructor', function () {
-                expect(Module._postman_propertyName).to.be(meta.name);
+            it('should have its name defined in the constructor', function () {
+                expect(Module._postman_propertyName).to.equal(meta.name);
             });
 
-            !_.includes(SCHEMALESS_MODULES, meta.name) && it('must have an associated schema file', function () {
-                expect(_.includes(schemas, meta.file)).to.be.ok();
+            !_.includes(SCHEMALESS_MODULES, meta.name) && it('should have an associated schema file', function () {
+                expect(schemas).to.include(meta.file);
             });
 
-            it('must be constructed with no parameter', function () {
+            it('should be constructed with no parameter', function () {
                 var err;
 
                 try {
@@ -65,15 +61,15 @@ describe('collection module', function () {
                     err = e;
                 }
 
-                expect(err).to.not.be.ok();
+                expect(err).to.be.undefined;
             });
 
-            !_.includes(BASELESS_MODULES, meta.name) && it('must inherit from PropertyBase', function () {
-                expect((new Module()) instanceof modules['property-base'].property).to.be.ok();
+            !_.includes(BASELESS_MODULES, meta.name) && it('should inherit from PropertyBase', function () {
+                expect((new Module()) instanceof modules['property-base'].property).to.be.ok;
             });
 
-            _.includes(BASELESS_MODULES, meta.name) && it('must not inherit from PropertyBase', function () {
-                expect((new Module()) instanceof modules['property-base'].property).to.not.be.ok();
+            _.includes(BASELESS_MODULES, meta.name) && it('should not inherit from PropertyBase', function () {
+                expect((new Module()) instanceof modules['property-base'].property).to.be.false;
             });
         });
     });
