@@ -1,4 +1,9 @@
-{
+{ 
+  "globals": {
+    "describe": true,
+    "it": true,
+    "expect": true
+  },
   "plugins": [
     "mocha"
   ],
@@ -8,7 +13,6 @@
     "es6": true
   },
   "rules": {
-    // Mocha
     "mocha/handle-done-callback": "error",
     "mocha/max-top-level-suites": "error",
     "mocha/no-exclusive-tests": "error",

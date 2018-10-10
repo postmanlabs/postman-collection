@@ -3,94 +3,95 @@
  * content of the file as well. Any change to package.json must be accompanied by valid test case in this spec-sheet.
  */
 var _ = require('lodash'),
-    expect = require('expect.js'),
     parseIgnore = require('parse-gitignore');
 
-/* global describe, it */
-describe('repository', function () {
+describe('project repository', function () {
     var fs = require('fs');
 
     describe('package.json', function () {
         var content,
             json;
 
-        it('must exist', function (done) {
+        it('should exist', function (done) {
             fs.stat('./package.json', done);
         });
 
-        it('must have readable content', function () {
-            expect(content = fs.readFileSync('./package.json').toString()).to.be.ok();
+        it('should have readable JSON content', function () {
+            expect(content = fs.readFileSync('./package.json').toString(), 'Should have readable content').to.be.ok;
         });
 
-        it('content must be valid JSON', function () {
-            expect(json = JSON.parse(content)).to.be.ok();
+        it('should have valid JSON content', function () {
+            expect(json = JSON.parse(content), 'Should have valid JSON content').to.be.ok;
         });
 
         describe('package.json JSON data', function () {
-            it('must have valid name, description and author', function () {
-                expect(json.name).to.be.a('string');
-                expect(json.description).to.be.a('string');
-                expect(json.author).to.equal('Postman Labs <help@getpostman.com>');
-                expect(json.license).to.be.a('string');
+            it('should have valid name, description, author and license', function () {
+                expect(json).to.include.keys({
+                    name: 'postman-collection',
+                    description: 'Enables developers to use a unified Postman Collection format Object across projects',
+                    author: 'Postman Labs <help@getpostman.com>',
+                    license: 'Apache-2.0'
+                });
             });
 
-            it('must have a valid version string in form of <major>.<minor>.<revision>', function () {
-                // eslint-disable-next-line max-len
-                expect(json.version).to.match(/^((\d+)\.(\d+)\.(\d+))(?:-([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?(?:\+([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?$/);
+            it('should have a valid version string in form of <major>.<minor>.<revision>', function () {
+                expect(json.version)
+                    // eslint-disable-next-line max-len
+                    .to.match(/^((\d+)\.(\d+)\.(\d+))(?:-([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?(?:\+([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?$/);
             });
         });
 
         describe('script definitions', function () {
-            it('files must exist', function () {
-                var scriptRegex = /^node\snpm\/.*\.js/;
+            it('should have valid, existing files', function () {
+                var scriptRegex = /^node\snpm\/.+\.js$/;
 
-                expect(json.scripts).to.be.ok();
+                expect(json.scripts).to.be.ok;
                 json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
-                    expect(scriptRegex.test(json.scripts[scriptName])).to.be(true);
-                    expect(fs.statSync('npm/' + scriptName + '.js')).to.be.ok();
+                    expect(json.scripts[scriptName]).to.match(scriptRegex);
+                    expect(fs.statSync('npm/' + scriptName + '.js')).to.be.ok;
                 });
             });
 
-            it('must have the hashbang defined', function () {
+            it('should have the hashbang defined', function () {
                 json.scripts && Object.keys(json.scripts).forEach(function (scriptName) {
                     var fileContent = fs.readFileSync('npm/' + scriptName + '.js').toString();
-                    expect(/^#!\/(bin\/bash|usr\/bin\/env\snode)[\r\n][\W\w]*$/g.test(fileContent)).to.be.ok();
+                    expect(fileContent).to.match(/^#!\/(bin\/bash|usr\/bin\/env\snode)[\r\n][\W\w]*$/g);
                 });
             });
         });
 
         describe('devDependencies', function () {
-            it('must exist', function () {
-                expect(json.devDependencies).to.be.a('object');
+            it('should exist', function () {
+                expect(json.devDependencies).to.be.an('object');
             });
 
-            it('must have specified version for dependencies ', function () {
+            it('should have specified version for dependencies ', function () {
                 _.forEach(json.devDependencies, function (dep) {
-                    expect(dep).be.ok();
+                    expect(dep).to.be.ok;
                 });
             });
 
-            it('must point to specific package version; (*, ^, ~) not expected', function () {
+            it('should point to specific package version; (*, ^, ~) not expected', function () {
                 _.forEach(json.devDependencies, function (dep) {
-                    expect(/^\d/.test(dep)).be.ok();
+                    expect(/^\d/.test(dep)).to.be.ok;
                 });
             });
         });
 
         describe('dependencies', function () {
-            it('must exist', function () {
-                expect(json.dependencies).to.be.a('object');
+            it('should exist', function () {
+                expect(json.dependencies).to.be.an('object');
             });
 
-            it('must point to specific package version; (*, ^, ~) not expected', function () {
+            it('should point to specific package version; (*, ^, ~) not expected', function () {
                 _.forEach(json.dependencies, function (dep) {
-                    expect(/^\d/.test(dep)).be.ok();
+                    expect(/^\d/.test(dep)).to.be.ok;
                 });
             });
         });
 
         describe('main entry script', function () {
-            it('must point to a valid file', function (done) {
+            it('should point to a valid file', function (done) {
                 expect(json.main).to.equal('index.js');
                 fs.stat(json.main, done);
             });
@@ -98,22 +99,22 @@ describe('repository', function () {
     });
 
     describe('README.md', function () {
-        it('must exist', function (done) {
+        it('should exist', function (done) {
             fs.stat('./README.md', done);
         });
 
-        it('must have readable content', function () {
-            expect(fs.readFileSync('./README.md').toString()).to.be.ok();
+        it('should have readable content', function () {
+            expect(fs.readFileSync('./README.md').toString()).to.be.ok;
         });
     });
 
     describe('LICENSE.md', function () {
-        it('must exist', function (done) {
+        it('should exist', function (done) {
             fs.stat('./LICENSE.md', done);
         });
 
-        it('must have readable content', function () {
-            expect(fs.readFileSync('./LICENSE.md').toString()).to.be.ok();
+        it('should have readable content', function () {
+            expect(fs.readFileSync('./LICENSE.md').toString()).to.be.ok;
         });
     });
 
@@ -124,26 +125,26 @@ describe('repository', function () {
             gitignore = parseIgnore(gitignorePath);
 
         describe(gitignorePath, function () {
-            it('must exist', function (done) {
+            it('should exist', function (done) {
                 fs.stat(gitignorePath, done);
             });
 
-            it('must have valid content', function () {
-                expect(_.isEmpty(gitignore)).to.not.be.ok();
+            it('should have valid content', function () {
+                expect(gitignore).to.be.an('array');
             });
         });
 
         describe(npmignorePath, function () {
-            it('must exist', function (done) {
+            it('should exist', function (done) {
                 fs.stat(npmignorePath, done);
             });
 
-            it('must have valid content', function () {
-                expect(_.isEmpty(npmignore)).to.not.be.ok();
+            it('should have valid content', function () {
+                expect(npmignore).to.be.an('array');
             });
         });
 
-        it('.gitignore coverage must be a subset of .npmignore coverage', function () {
+        it('should have .gitignore coverage to be a subset of .npmignore coverage', function () {
             expect(_.intersection(gitignore, npmignore)).to.eql(gitignore);
         });
     });
@@ -154,25 +155,25 @@ describe('repository', function () {
             content,
             json;
 
-        it('must exist', function (done) {
+        it('should exist', function (done) {
             fs.stat('./.eslintrc', done);
         });
 
-        it('must have readable content', function () {
-            expect(content = fs.readFileSync('./.eslintrc').toString()).to.be.ok();
+        it('should have readable content', function () {
+            expect(content = fs.readFileSync('./.eslintrc').toString()).to.be.ok;
         });
 
-        it('must be valid JSON content', function () {
-            expect(json = JSON.parse(stripJSON(content))).to.be.ok();
+        it('should be valid JSON content', function () {
+            expect(json = JSON.parse(stripJSON(content))).to.be.ok;
         });
 
-        it('must have appropriate plugins specified', function () {
+        it('should have appropriate plugins specified', function () {
             expect(json.plugins).to.eql(['jsdoc', 'security', 'lodash']);
         });
 
-        it('must have appropriate environments specified', function () {
-            expect(json.env.browser).to.be(true);
-            expect(json.env.node).to.be(true);
+        it('should have appropriate environments specified', function () {
+            expect(json.env.browser).to.be.true;
+            expect(json.env.node).to.be.true;
         });
     });
 });

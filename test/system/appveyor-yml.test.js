@@ -1,11 +1,8 @@
-/* global describe, it */
-var expect = require('expect.js');
+var fs = require('fs'),
+    yaml = require('js-yaml');
 
 describe('.appveyor.yml', function () {
-    var fs = require('fs'),
-        yaml = require('js-yaml'),
-
-        appveyorYAML,
+    var appveyorYAML,
         appveyorYAMLError;
 
     try {
@@ -15,20 +12,20 @@ describe('.appveyor.yml', function () {
         appveyorYAMLError = e;
     }
 
-    it('must exist', function (done) {
+    it('should exist', function (done) {
         fs.stat('.appveyor.yml', done);
     });
 
-    it('must be a valid yml', function () {
-        expect(appveyorYAMLError && appveyorYAMLError.message || appveyorYAMLError).to.not.be.ok();
+    it('should be a valid yml', function () {
+        expect(appveyorYAMLError && appveyorYAMLError.message || appveyorYAMLError).to.be.undefined;
     });
 
     describe('structure', function () {
-        it('init script must exist', function () {
-            expect(appveyorYAML.init[0]).to.be('git config --global core.autocrlf input');
+        it('should have an init script', function () {
+            expect(appveyorYAML).to.have.property('init').that.eql(['git config --global core.autocrlf input']);
         });
 
-        it('environment matrix must match that of Travis', function () {
+        it('should match the Travis environment matrix', function () {
             var travisYAML,
                 travisYAMLError,
                 appveyorNodeVersions = appveyorYAML.environment.matrix.map(function (member) {
@@ -45,21 +42,31 @@ describe('.appveyor.yml', function () {
             !travisYAMLError && expect(travisYAML.node_js).to.eql(appveyorNodeVersions);
         });
 
-        it('install sequence must be correct', function () {
-            expect(appveyorYAML.install[0].ps).to.be('Install-Product node $env:nodejs_version');
-            expect(appveyorYAML.install[1]).to.be('npm cache clean --force');
-            expect(appveyorYAML.install[2]).to.be('appveyor-retry npm install');
+        it('should have correct install scripts', function () {
+            expect(appveyorYAML).to.have.property('install').that.eql([
+                {
+                    ps: 'Install-Product node $env:nodejs_version'
+                },
+                'npm cache clean --force',
+                'appveyor-retry npm install'
+            ]);
         });
 
-        it('MS build script and deploy must be turned off', function () {
-            expect(appveyorYAML.build).to.be('off');
-            expect(appveyorYAML.deploy).to.be('off');
+        it('should have the MS build script and deploy to be turned off', function () {
+            expect(appveyorYAML).to.include.keys({
+                build: 'off',
+                deploy: 'off'
+            });
         });
 
-        it('notifications must be configured correctly', function () {
-            expect(appveyorYAML.notifications).to.be.an(Array);
-            expect(appveyorYAML.notifications[0].provider).to.be('Slack');
-            expect(appveyorYAML.notifications[0].incoming_webhook.secure).to.be.ok();
+        it('should have notifications configured correctly', function () {
+            expect(appveyorYAML).to.have.property('notifications').that.eql([{
+                incoming_webhook: {
+                    // eslint-disable-next-line max-len
+                    secure: 'PRDZ1nhG/cQrwMgCLXsWvTDJtYxv78GJrSlVYpMzpUploVWDzBlpMqmFr9WxZQkY/lxsqCSpGX4zgTYzlte1WMWnghqTIFE8u7svlXHa/tk='
+                },
+                provider: 'Slack'
+            }]);
         });
     });
 });
