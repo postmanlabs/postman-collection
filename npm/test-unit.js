@@ -1,55 +1,66 @@
 #!/usr/bin/env node
+/* eslint-env node, es6 */
 // ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to execute all unit tests.
 // ---------------------------------------------------------------------------------------------------------------------
-/* eslint-env node, es6 */
 
 require('shelljs/global');
+require('colors');
 
 // set directories and files for test and coverage report
 var path = require('path'),
+    expect = require('chai').expect,
 
-    chalk = require('chalk'),
+    NYC = require('nyc'),
+    recursive = require('recursive-readdir'),
 
-    IS_WINDOWS = (/^win/).test(process.platform),
     COV_REPORT_PATH = '.coverage',
-    REPORT_PATH = path.join('.tmp', 'report.xml'),
-    SPEC_SOURCES = path.join('test', 'unit');
+    SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'unit');
 
 module.exports = function (exit) {
-    var specPattern = (process.argv[2] || '.*'),
-        mochaReporter = 'spec',
-        istanbulReport = '';
-
-    // for CI, we use simple xunit reporter (not on Travis since it does not parse results)
-    // if (process.env.CI) {
-    //     mochaReporter = 'xunit';
-    //     istanbulReport = '--report cobertura';
-    // }
-
     // banner line
-    console.log(chalk.yellow.bold('Running unit tests using mocha on node...'));
+    console.info('Running unit tests using mocha...'.yellow.bold);
 
-    mkdir('-p', '.tmp');
-    test('-d', COV_REPORT_PATH) && rm('-rf', COV_REPORT_PATH) && mkdir('-p', COV_REPORT_PATH);
+    test('-d', COV_REPORT_PATH) && rm('-rf', COV_REPORT_PATH);
+    mkdir('-p', COV_REPORT_PATH);
 
-    // windows istanbul and mocha commands need some special attention.
-    if (IS_WINDOWS) {
-        // sample command in case you're confused
-        // node_modules\.bin\istanbul.cmd cover  --dir .coverage --color --print both
-        //      node_modules\mocha\bin\_mocha -- --reporter spec --reporter-options output=
-        //      .tmp\report.xml test\unit --recursive --prof --colors --grep=.*
-        exec(`node_modules\\.bin\\istanbul.cmd cover ${istanbulReport} --dir ${COV_REPORT_PATH} --colors ` +
-            // eslint-disable-next-line max-len
-            `--print both node_modules\\mocha\\bin\\_mocha -- ${SPEC_SOURCES} --reporter ${mochaReporter} --timeout 10000 ` +
-            `--reporter-options output=${REPORT_PATH} --recursive --prof --colors --grep=${specPattern}`, exit);
-    }
-    else {
-        exec(`./node_modules/.bin/istanbul cover ${istanbulReport} --dir ${COV_REPORT_PATH} --colors ` +
-            // eslint-disable-next-line max-len
-            `--print both node_modules/mocha/bin/_mocha -- ${SPEC_SOURCES} --reporter ${mochaReporter} --timeout 10000 ` +
-            `--reporter-options output=${REPORT_PATH} --recursive --prof --colors --grep=${specPattern}`, exit);
-    }
+    var Mocha = require('mocha'),
+        nyc = new NYC({
+            reporter: ['text', 'lcov'],
+            reportDir: COV_REPORT_PATH,
+            tempDirectory: COV_REPORT_PATH
+        });
+
+    nyc.wrap();
+    // add all spec files to mocha
+    recursive(SPEC_SOURCE_DIR, function (err, files) {
+        if (err) {
+            console.error(err);
+
+            return exit(1);
+        }
+
+        var mocha = new Mocha({ timeout: 1000 * 60 });
+
+        files.filter(function (file) { // extract all test files
+            return (file.substr(-8) === '.test.js');
+        }).forEach(mocha.addFile.bind(mocha));
+
+        // start the mocha run
+        global.expect = expect; // for easy reference
+
+        mocha.run(function (runError) {
+            // clear references and overrides
+            delete global.expect;
+
+            runError && console.error(runError.stack || runError);
+
+            nyc.reset();
+            nyc.writeCoverageFile();
+            nyc.report();
+            exit(runError ? 1 : 0);
+        });
+    });
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
