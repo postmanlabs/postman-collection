@@ -1,6 +1,6 @@
 var fs = require('fs'),
     _ = require('lodash'),
-    expect = require('expect.js'),
+    expect = require('chai').expect,
     reason = require('http-reasons'),
     util = require('../../lib/util'),
     request = require('postman-request'),
@@ -11,14 +11,13 @@ var fs = require('fs'),
     Header = require('../../lib/index.js').Header,
     HeaderList = require('../../lib/index.js').HeaderList;
 
-/* global describe, it */
 describe('Response', function () {
     describe('sanity', function () {
         var rawResponse = fixtures.collectionV2.item[0].response[0],
             response = new Response(rawResponse);
 
         it('initializes successfully', function () {
-            expect(response).to.be.ok();
+            expect(response).to.be.ok;
         });
 
         it('should handle the absence of Buffer gracefully', function () {
@@ -29,9 +28,9 @@ describe('Response', function () {
             delete global.Buffer;
             expect(function () {
                 response = new Response({ stream: stream });
-            }).to.not.throwError();
+            }).to.not.throw();
 
-            expect(response).to.be.ok();
+            expect(response).to.be.ok;
             global.Buffer = originalBuffer;
         });
 
@@ -46,7 +45,7 @@ describe('Response', function () {
 
             delete response.status;
 
-            expect(response.reason()).to.be('OK');
+            expect(response.reason()).to.equal('OK');
         });
 
         describe('has property', function () {
@@ -84,7 +83,7 @@ describe('Response', function () {
 
         describe('has function', function () {
             it('update', function () {
-                expect(response.update).to.be.ok();
+                expect(response.update).to.be.ok;
                 expect(response.update).to.be.a('function');
             });
         });
@@ -95,9 +94,9 @@ describe('Response', function () {
             var response = new Response(),
                 nonResponse = {};
 
-            expect(Response.isResponse(response)).to.be(true);
-            expect(Response.isResponse({})).to.be(false);
-            expect(Response.isResponse(nonResponse)).to.be(false);
+            expect(Response.isResponse(response)).to.be.true;
+            expect(Response.isResponse({})).to.be.false;
+            expect(Response.isResponse(nonResponse)).to.be.false;
         });
     });
 
@@ -106,9 +105,11 @@ describe('Response', function () {
             var rawResponse = fixtures.collectionV2.item[0].response[0],
                 response = new Response(rawResponse),
                 jsonified = response.toJSON();
-            expect(jsonified.status).to.eql(rawResponse.status);
-            expect(jsonified.code).to.eql(rawResponse.code);
-            expect(jsonified.body).to.eql(rawResponse.body);
+            expect(jsonified).to.deep.include({
+                status: rawResponse.status,
+                code: rawResponse.code,
+                body: rawResponse.body
+            });
             expect(Header.unparse(jsonified.header).trim()).to.eql(rawResponse.header.trim());
             // Skip cookie tests, because cookies are tested independently.
             expect(jsonified).to.have.property('cookie');
@@ -136,8 +137,10 @@ describe('Response', function () {
                 response = new Response(rawResponse),
                 jsonified = response.toJSON();
             expect(jsonified.status.toLowerCase()).to.eql('gone');
-            expect(jsonified.code).to.eql(rawResponse.code);
-            expect(jsonified.body).to.eql(rawResponse.body);
+            expect(jsonified).to.deep.include({
+                code: rawResponse.code,
+                body: rawResponse.body
+            });
 
             // Skip cookie tests, because cookies are tested independently.
             expect(jsonified).to.have.property('cookie');
@@ -324,19 +327,19 @@ describe('Response', function () {
         it('should work correctly for blank responses', function () {
             var response = new Response();
 
-            expect(response.dataURI()).to.be('data:text/plain;base64, ');
+            expect(response.dataURI()).to.equal('data:text/plain;base64, ');
         });
 
         it('should handle response streams correctly', function () {
             var response = new Response({ stream: new Buffer('random') });
 
-            expect(response.dataURI()).to.be('data:text/plain;base64, cmFuZG9t');
+            expect(response.dataURI()).to.equal('data:text/plain;base64, cmFuZG9t');
         });
 
         it('should handle regular bodies correctly', function () {
             var response = new Response({ body: 'random' });
 
-            expect(response.dataURI()).to.be('data:text/plain;base64, cmFuZG9t');
+            expect(response.dataURI()).to.equal('data:text/plain;base64, cmFuZG9t');
         });
     });
 
@@ -397,7 +400,7 @@ describe('Response', function () {
         it('should parse response stream as text', function () {
             expect((new Response({
                 stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
-            })).text()).to.be('buffer');
+            })).text()).to.equal('buffer');
         });
 
         it('should parse response as JSON', function () {
@@ -436,9 +439,9 @@ describe('Response', function () {
                 error = e;
             }
 
-            expect(json).not.be.ok();
-            expect(error).be.ok();
-            expect(error.toString()).be(
+            expect(json).to.be.undefined;
+            expect(error).to.be.an('error');
+            expect(error.toString()).to.equal(
                 'JSONError: Unexpected token \'w\' at 1:12\n' +
                 '{ "hello: "world" }\n' +
                 '           ^'
@@ -497,7 +500,7 @@ describe('Response', function () {
                     header: 'Content-Encoding: gzip\nContent-Length: 10'
                 },
                 response = new Response(rawResponse);
-            expect(response.size().body).to.eql(10);
+            expect(response.size().body).to.equal(10);
         });
 
         it('must match the content-length of the response if deflate encoded', function () {
@@ -507,7 +510,7 @@ describe('Response', function () {
                     header: 'Content-Encoding: deflate\nContent-Length: 20'
                 },
                 response = new Response(rawResponse);
-            expect(response.size().body).to.eql(20);
+            expect(response.size().body).to.equal(20);
         });
 
         it('must use byteLength from buffer if provided', function () {
@@ -517,7 +520,7 @@ describe('Response', function () {
                     stream: new Buffer('something nice')
                 },
                 response = new Response(rawResponse);
-            expect(response.size().body).to.eql(14);
+            expect(response.size().body).to.equal(14);
         });
     });
 
@@ -568,20 +571,21 @@ describe('Response', function () {
                 var json = response.toJSON(),
                     buffer = getBuffer(json.stream.data);
 
+                
                 expect(json.code).to.be.a('number');
                 expect(json.status).to.be.a('string');
                 expect(json.responseSize).to.be.a('number');
 
                 expect(json.stream).to.be.an('object');
-                expect(json.stream.type).to.be('Buffer');
+                expect(json.stream.type).to.equal('Buffer');
                 expect(json.stream.data).to.be.an('array');
-                expect(buffer.toString()).to.be(response.body);
+                expect(buffer.toString()).to.equal(response.body);
 
                 expect(json.header).to.be.an('array');
                 expect(json.cookie).to.be.an('array');
 
-                expect(_.every(response.headers.members, isHeader)).to.be(true);
-                expect(_.every(response.cookies.members, isCookie)).to.be(true);
+                expect(_.every(response.headers.members, isHeader)).to.be.true;
+                expect(_.every(response.cookies.members, isCookie)).to.be.true;
             };
 
         it('should correctly return a GET response', function (done) {
@@ -607,7 +611,7 @@ describe('Response', function () {
                         value: 'text/html; charset=Shift_JIS'
                     }],
                     stream: fs.readFileSync('test/fixtures/japaneseCharacters.txt')
-                })).text()).to.be('ハローポストマン\n'); // Harōposutoman
+                })).text()).to.equal('ハローポストマン\n'); // Harōposutoman
             });
 
             it('charset(windows-1251)- Cyrillic', function () {
@@ -617,7 +621,7 @@ describe('Response', function () {
                         value: 'text/html; charset=windows-1251'
                     }],
                     stream: fs.readFileSync('test/fixtures/russianCharacters.txt')
-                })).text()).to.be('Привет почтальон\n'); // Privet pochtal'on
+                })).text()).to.equal('Привет почтальон\n'); // Privet pochtal'on
             });
 
             it('Fallback to utf8, if it is not supported by iconvlite, say (ISO-8859-1)', function () {
@@ -627,7 +631,7 @@ describe('Response', function () {
                         value: 'text/html; charset=ISO-8859-1'
                     }],
                     stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
-                })).text()).to.be('buffer');
+                })).text()).to.equal('buffer');
             });
         });
 
@@ -651,9 +655,11 @@ describe('Response', function () {
                     var response = Response.createFromNode(res),
                         body = JSON.parse(response.toJSON().body);
 
-                    expect(body.form.alpha).to.be('foo');
-                    expect(body.form.beta).to.be('bar');
-                    expect(body.form.buffer).to.be('\u0001\u0002\u0003');
+                    expect(body.form).to.deep.include({
+                        alpha: 'foo',
+                        beta: 'bar',
+                        buffer: '\u0001\u0002\u0003'
+                    });
 
                     validateResponse(response);
                     done();
@@ -697,8 +703,8 @@ describe('Response', function () {
                     body = response.toJSON(),
                     headers = new HeaderList(null, body.header);
 
-                expect(headers.get('bar')).to.be('foo');
-                expect(headers.get('foo')).to.be('bar, bar2');
+                expect(headers.get('bar')).to.equal('foo');
+                expect(headers.get('foo')).to.equal('bar, bar2');
 
                 validateResponse(response);
                 done();
@@ -782,12 +788,14 @@ describe('Response', function () {
 
         describe('miscellaneous requests', function () {
             var checkMime = function (mime) {
-                expect(mime.type).to.be('text');
-                expect(mime.name).to.be('response');
-                expect(mime.filename).to.be('response.' + mime.format);
-                expect(mime._accuratelyDetected).to.be(true);
-                expect(mime.source).to.be('header');
-                expect(mime.detected).to.be(null);
+                expect(mime).to.deep.include({
+                    type: 'text',
+                    name: 'response',
+                    _accuratelyDetected: true,
+                    source: 'header',
+                    detected: null,
+                    filename: 'response.' + mime.format
+                });
             };
 
             it('should return a valid gzipped response', function (done) {
@@ -806,11 +814,13 @@ describe('Response', function () {
                         mime = response.mime(),
                         headers = new HeaderList(null, json.header);
 
-                    expect(mime._originalContentType).to.be('application/json; charset=utf-8');
-                    expect(mime._sanitisedContentType).to.be('application/json');
+                    expect(mime).to.deep.include({
+                        _originalContentType: 'application/json; charset=utf-8',
+                        _sanitisedContentType: 'application/json',
+                    });
 
-                    expect(body.gzipped).to.be(true);
-                    expect(headers.get('content-encoding')).to.be('gzip');
+                    expect(body.gzipped).to.be.true;
+                    expect(headers.get('content-encoding')).to.equal('gzip');
 
                     checkMime(mime);
                     validateResponse(response);
@@ -831,7 +841,7 @@ describe('Response', function () {
                     var response = Response.createFromNode(res),
                         body = JSON.parse(response.toJSON().body);
 
-                    expect(body.deflated).to.be(true);
+                    expect(body.deflated).to.be.true;
 
                     validateResponse(response);
                     done();
@@ -851,8 +861,10 @@ describe('Response', function () {
                         json = response.toJSON(),
                         mime = response.mime();
 
-                    expect(mime._originalContentType).to.be('text/html; charset=utf-8');
-                    expect(mime._sanitisedContentType).to.be('text/html');
+                    expect(mime).to.deep.include({
+                        _originalContentType: 'text/html; charset=utf-8',
+                        _sanitisedContentType: 'text/html',
+                    });
 
                     expect((new HeaderList(null, json.header)).get('content-type')).to.match(/^text\/html/);
                     expect(json.body).to.match(/<html>.*/);
@@ -883,7 +895,7 @@ describe('Response', function () {
             });
 
             it('should bail out for non string content-type specifications', function () {
-                expect(Response.mimeInfo(1)).to.be(undefined);
+                expect(Response.mimeInfo(1)).to.be.undefined;
             });
         });
     });
