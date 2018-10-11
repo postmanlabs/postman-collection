@@ -571,7 +571,6 @@ describe('Response', function () {
                 var json = response.toJSON(),
                     buffer = getBuffer(json.stream.data);
 
-                
                 expect(json.code).to.be.a('number');
                 expect(json.status).to.be.a('string');
                 expect(json.responseSize).to.be.a('number');
@@ -816,7 +815,7 @@ describe('Response', function () {
 
                     expect(mime).to.deep.include({
                         _originalContentType: 'application/json; charset=utf-8',
-                        _sanitisedContentType: 'application/json',
+                        _sanitisedContentType: 'application/json'
                     });
 
                     expect(body.gzipped).to.be.true;
@@ -863,7 +862,7 @@ describe('Response', function () {
 
                     expect(mime).to.deep.include({
                         _originalContentType: 'text/html; charset=utf-8',
-                        _sanitisedContentType: 'text/html',
+                        _sanitisedContentType: 'text/html'
                     });
 
                     expect((new HeaderList(null, json.header)).get('content-type')).to.match(/^text\/html/);
