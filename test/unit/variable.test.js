@@ -126,7 +126,6 @@ describe('Variable', function () {
 
         expect(v.value).to.equal('null');
         expect(v1.value).to.equal('{"foo":"bar"}');
-        
     });
 
     it('should support any data type if type is set to `any`', function () {
