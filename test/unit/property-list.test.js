@@ -736,7 +736,7 @@ describe('PropertyList', function () {
             }]);
 
             // Ensure that the reference array contains an array of values for `key1`
-            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(2)
+            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(2);
 
             list.remove(function (fake) {
                 return fake.keyAttr === 'key1';
