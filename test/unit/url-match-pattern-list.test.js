@@ -1,4 +1,4 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     UrlMatchPatternList = require('../../lib/url-pattern/url-match-pattern-list').UrlMatchPatternList,
 
     // return a target to run specs on
@@ -17,35 +17,39 @@ describe('UrlMatchPatternList', function () {
     describe('test', function () {
         specForTestMethodOnTarget(getTargetForSpec);
 
-        it('should match for any', function () {
+        it('should match for any', function (done) {
             var matchPatternList = new UrlMatchPatternList({}, ['https://example.com/*']);
-            expect(matchPatternList.test('https://example.com')).to.eql(true);
-            expect(matchPatternList.test('https://example.com/')).to.eql(true);
-            expect(matchPatternList.test('https://www.example.com/')).to.eql(false);
-            expect(matchPatternList.test('https://example.com/hello')).to.eql(true);
-            expect(matchPatternList.test('https://example.com/foo/bar')).to.eql(true);
-            expect(matchPatternList.test('https://foo.example.com')).to.eql(false);
-            expect(matchPatternList.test('https://foo.com')).to.eql(false);
+            expect(matchPatternList.test('https://example.com')).to.be.true;
+            expect(matchPatternList.test('https://example.com/')).to.be.true;
+            expect(matchPatternList.test('https://www.example.com/')).to.be.false;
+            expect(matchPatternList.test('https://example.com/hello')).to.be.true;
+            expect(matchPatternList.test('https://example.com/foo/bar')).to.be.true;
+            expect(matchPatternList.test('https://foo.example.com')).to.be.false;
+            expect(matchPatternList.test('https://foo.com')).to.be.false;
+            done();
         });
-        it('should match any url for <all_urls>', function () {
+        it('should match any url for <all_urls>', function (done) {
             var matchPatternList = new UrlMatchPatternList({}, ['<all_urls>']);
-            expect(matchPatternList.test('https://google.com')).to.eql(true);
-            expect(matchPatternList.test('https://www.google.com')).to.eql(true);
-            expect(matchPatternList.test('https://example.com')).to.eql(true);
-            expect(matchPatternList.test('https://foo.com')).to.eql(true);
+            expect(matchPatternList.test('https://google.com')).to.be.true;
+            expect(matchPatternList.test('https://www.google.com')).to.be.true;
+            expect(matchPatternList.test('https://example.com')).to.be.true;
+            expect(matchPatternList.test('https://foo.com')).to.be.true;
+            done();
         });
-        it('should match url is pattern list', function () {
+        it('should match url is pattern list', function (done) {
             var matchPatternList = new UrlMatchPatternList({}, ['https://google.com/*', 'https://example.com/*']);
-            expect(matchPatternList.test('https://google.com')).to.eql(true);
-            expect(matchPatternList.test('https://example.com')).to.eql(true);
-            expect(matchPatternList.test('https://foo.com')).to.eql(false);
+            expect(matchPatternList.test('https://google.com')).to.be.true;
+            expect(matchPatternList.test('https://example.com')).to.be.true;
+            expect(matchPatternList.test('https://foo.com')).to.be.false;
+            done();
         });
     });
 
     describe('toJSON', function () {
-        it('should return [] when called on an empty UrlMatchPatternList', function () {
+        it('should return [] when called on an empty UrlMatchPatternList', function (done) {
             var patternList = new UrlMatchPatternList();
             expect(patternList.toJSON()).to.eql([]);
+            done();
         });
     });
 });
