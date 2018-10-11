@@ -1,40 +1,41 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     Variable = require('../../lib/index.js').Variable;
 
-/* global describe, it */
 describe('Variable', function () {
     it('should initialise variable of type `any` and value `undefined`', function () {
         var v = new Variable();
 
-        expect(v.value).to.be(undefined);
-        expect(v.type).to.be('any');
+        expect(v).to.deep.include({
+            value: undefined,
+            type: 'any'
+        });
     });
 
     it('should initialize variable with correct system value', function () {
         var v = new Variable();
-        expect(v.system).to.be(undefined);
+        expect(v.system).to.be.undefined;
 
         v = new Variable({
             system: true
         });
-        expect(v.system).to.be(true);
+        expect(v.system).to.be.true;
 
         v = new Variable({
             system: false
         });
-        expect(v.system).to.be(false);
+        expect(v.system).to.be.false;
     });
 
     it('should update the sytem property of a variable', function () {
         var v = new Variable();
         v.update({ system: true });
-        expect(v.system).to.be(true);
+        expect(v.system).to.be.true;
 
         v = new Variable({
             system: true
         });
         v.update({ system: false });
-        expect(v.system).to.be(false);
+        expect(v.system).to.be.false;
     });
 
     it('should prepopulate value and type when passed to the constructor (string)', function () {
@@ -43,8 +44,10 @@ describe('Variable', function () {
             type: 'string'
         });
 
-        expect(v.value).to.be('Picard');
-        expect(v.type).to.be('string');
+        expect(v).to.deep.include({
+            value: 'Picard',
+            type: 'string'
+        });
     });
 
     it('should prepopulate value and type when passed to the constructor (number)', function () {
@@ -53,8 +56,10 @@ describe('Variable', function () {
             type: 'number'
         });
 
-        expect(v.value).to.be(42);
-        expect(v.type).to.be('number');
+        expect(v).to.deep.include({
+            value: 42,
+            type: 'number'
+        });
     });
 
     it('should prepopulate value and type when passed to the constructor (boolean)', function () {
@@ -63,8 +68,10 @@ describe('Variable', function () {
             type: 'boolean'
         });
 
-        expect(v.value).to.be(true);
-        expect(v.type).to.be('boolean');
+        expect(v).to.deep.include({
+            value: true,
+            type: 'boolean'
+        });
     });
 
     it('should prepopulate value and type when passed to the constructor (json)', function () {
@@ -74,8 +81,10 @@ describe('Variable', function () {
                 type: 'json'
             });
 
-        expect(v.value).to.be(JSON.stringify(vValue));
-        expect(v.type).to.be('json');
+        expect(v).to.deep.include({
+            value: JSON.stringify(vValue),
+            type: 'json'
+        });
     });
 
     it('should typecast value during construction when type is provided (number)', function () {
@@ -84,7 +93,7 @@ describe('Variable', function () {
             type: 'number'
         });
 
-        expect(v.value).to.be(108);
+        expect(v.value).to.equal(108);
     });
 
     it('should typecast value during construction when type is provided (string)', function () {
@@ -93,7 +102,7 @@ describe('Variable', function () {
             type: 'string'
         });
 
-        expect(v.value).to.be('true');
+        expect(v.value).to.equal('true');
     });
 
     it('should typecast value during construction when type is provided (boolean)', function () {
@@ -102,7 +111,7 @@ describe('Variable', function () {
             type: 'boolean'
         });
 
-        expect(v.value).to.be(true);
+        expect(v.value).to.be.true;
     });
 
     it('should typecast value during construction when type is provided (json)', function () {
@@ -115,8 +124,9 @@ describe('Variable', function () {
                 type: 'json'
             });
 
-        expect(v.value).to.be('null');
-        expect(v1.value).to.be('{"foo":"bar"}');
+        expect(v.value).to.equal('null');
+        expect(v1.value).to.equal('{"foo":"bar"}');
+        
     });
 
     it('should support any data type if type is set to `any`', function () {
@@ -124,13 +134,13 @@ describe('Variable', function () {
             jsonValue = { iam: 'json' };
 
         v.set('Picard');
-        expect(v.get()).to.be('Picard');
+        expect(v.get()).to.equal('Picard');
 
         v.set(3.142);
-        expect(v.get()).to.be(3.142);
+        expect(v.get()).to.equal(3.142);
 
         v.set(jsonValue);
-        expect(v.get()).to.be(jsonValue);
+        expect(v.get()).to.equal(jsonValue);
     });
 
     it('should type cast values to the specific type set', function () {
@@ -139,13 +149,13 @@ describe('Variable', function () {
         });
 
         v.set('Picard');
-        expect(v.get()).to.be('Picard');
+        expect(v.get()).to.equal('Picard');
 
         v.set(3.142);
-        expect(v.get()).to.be('3.142');
+        expect(v.get()).to.equal('3.142');
 
         v.set({ foo: 'bar' });
-        expect(v.get()).to.be('[object Object]');
+        expect(v.get()).to.equal('[object Object]');
     });
 
     it('should recast values when type is changed', function () {
@@ -154,10 +164,10 @@ describe('Variable', function () {
         });
 
         v.set(3.142);
-        expect(v.get()).to.be('3.142');
+        expect(v.get()).to.equal('3.142');
 
         v.valueType('number');
-        expect(v.get()).to.be(3.142);
+        expect(v.get()).to.equal(3.142);
     });
 
     it('should recast values when type is changed (json)', function () {
@@ -166,27 +176,27 @@ describe('Variable', function () {
         });
 
         v.set({ foo: 'bar' });
-        expect(v.get()).to.be('[object Object]');
+        expect(v.get()).to.equal('[object Object]');
 
         v.valueType('json');
-        expect(v.get()).to.be(null);
+        expect(v.get()).to.be.null;
     });
 
     it('should handle functions correctly', function () {
         var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'bar'; } });
 
-        expect(v.get()).to.be('bar');
+        expect(v.get()).to.equal('bar');
     });
 
     it('should not touch value functions when type is changed', function () {
         var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'foo'; } });
 
-        expect(v.get()).to.be('foo');
+        expect(v.get()).to.equal('foo');
 
         v.valueType('boolean');
 
         expect(v.value).to.be.a('function');
-        expect(v.get()).to.be(true);
+        expect(v.get()).to.be.true;
     });
 
     it('should typecast returns of values as functions correctly', function () {
@@ -194,19 +204,21 @@ describe('Variable', function () {
             v2 = new Variable({ type: 'boolean', key: 'foo', value: function () { return 'bar'; } });
 
         // number
-        expect(v.get()).to.be(3.14);
+        expect(v.get()).to.equal(3.14);
 
         // boolean
-        expect(v2.get()).to.be(true);
+        expect(v2.get()).to.be.true;
     });
 
     describe('.set', function () {
         it('should handle functions correctly', function () {
             var variable = new Variable({ type: 'string' });
 
-            expect(variable.set.bind(variable)).withArgs(function () {
-                return 'random';
-            }).to.not.throwError();
+            expect(function () {
+                variable.set.bind(variable)(function () {
+                    return 'random';
+                });
+            }).to.not.throw();
         });
     });
 
@@ -215,7 +227,7 @@ describe('Variable', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: 'bar' });
 
             variable.valueOf('newVal');
-            expect(variable.value).to.be('newVal');
+            expect(variable.value).to.equal('newVal');
         });
     });
 
@@ -225,49 +237,49 @@ describe('Variable', function () {
 
             // no value
             variable = new Variable();
-            expect(variable.toString()).to.be('');
+            expect(variable.toString()).to.equal('');
 
             // value undefined
             variable = new Variable({ key: 'foo', value: undefined });
-            expect(variable.toString()).to.be('');
+            expect(variable.toString()).to.equal('');
 
             // value null
             variable = new Variable({ key: 'foo', value: null });
-            expect(variable.toString()).to.be('');
+            expect(variable.toString()).to.equal('');
         });
 
         it('should preserve empty string', function () {
             var variable;
 
             variable = new Variable({ key: 'foo', value: '' });
-            expect(variable.toString()).to.be('');
+            expect(variable.toString()).to.equal('');
         });
 
         it('should stringify false as "false"', function () {
             var variable;
 
             variable = new Variable({ key: 'foo', value: false });
-            expect(variable.toString()).to.be('false');
+            expect(variable.toString()).to.equal('false');
         });
 
         it('should stringify 0 as "0"', function () {
             var variable;
 
             variable = new Variable({ key: 'foo', value: 0 });
-            expect(variable.toString()).to.be('0');
+            expect(variable.toString()).to.equal('0');
         });
 
         it('should stringify NaN as "NaN"', function () {
             var variable;
 
             variable = new Variable({ key: 'foo', value: NaN });
-            expect(variable.toString()).to.be('NaN');
+            expect(variable.toString()).to.equal('NaN');
         });
 
         it('should handle the absence of .valueOf correctly', function () {
             var variable = new Variable({ key: 'foo', value: Object.create(null) });
 
-            expect(variable.toString()).to.be('');
+            expect(variable.toString()).to.equal('');
         });
     });
 
@@ -284,27 +296,27 @@ describe('Variable', function () {
         it('should use the current type if no type is provided', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: 'bar' });
 
-            expect(variable.valueType()).to.be('string');
+            expect(variable.valueType()).to.equal('string');
         });
 
         it('should use the default type if no type is provided, and no type exists', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: 'bar' });
             delete variable.type;
 
-            expect(variable.valueType()).to.be('any');
+            expect(variable.valueType()).to.equal('any');
         });
 
         it('should cast to the specified type when specified', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: '123' });
 
-            expect(variable.valueType('number')).to.be('number');
+            expect(variable.valueType('number')).to.equal('number');
         });
 
         it('should handle invalid types correctly', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: '123' });
             delete variable.type;
 
-            expect(variable.valueType('random')).to.be('any');
+            expect(variable.valueType('random')).to.equal('any');
         });
     });
 
@@ -315,29 +327,29 @@ describe('Variable', function () {
 
         it('should create a new instance', function () {
             var v = new Variable();
-            expect(v instanceof Variable).to.be.ok();
+            expect(v instanceof Variable).to.be.ok;
         });
 
         it('should not update if a non-object parameter is provided', function () {
             var v = new Variable({ key: 'foo', value: 'bar' });
 
             v.update();
-            expect(v.key).to.be('foo');
-            expect(v.value).to.be('bar');
+            expect(v.key).to.equal('foo');
+            expect(v.value).to.equal('bar');
         });
     });
 
     describe('isVariable', function () {
         it('should return true for a valid Variable instance', function () {
-            expect(Variable.isVariable(new Variable({ type: 'string', key: 'foo', value: 'bar' }))).to.be(true);
+            expect(Variable.isVariable(new Variable({ type: 'string', key: 'foo', value: 'bar' }))).to.be.true;
         });
 
         it('should return false for a raw variable object', function () {
-            expect(Variable.isVariable({ type: 'string', key: 'foo', value: 'bar' })).to.be(false);
+            expect(Variable.isVariable({ type: 'string', key: 'foo', value: 'bar' })).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(Variable.isVariable()).to.be(false);
+            expect(Variable.isVariable()).to.be.false;
         });
     });
 });
