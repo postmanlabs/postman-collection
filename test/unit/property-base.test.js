@@ -1,10 +1,9 @@
 var _ = require('lodash'),
-    expect = require('expect.js'),
+    expect = require('chai').expect,
     sdk = require('../../lib/index.js'),
 
     fixtures = require('../fixtures');
 
-/* global describe, it, beforeEach */
 describe('PropertyBase', function () {
     describe('meta properties', function () {
         it('should return all the meta properties', function () {
@@ -15,9 +14,11 @@ describe('PropertyBase', function () {
                 },
                 base = new sdk.PropertyBase(definition);
 
-            expect(base.meta().postman_one).to.eql(definition._postman_one);
-            expect(base.meta()).to.have.property('postman_two', definition._postman_two);
-            expect(base.meta()).to.have.property('three', definition._three);
+            expect(base.meta()).to.deep.include({
+                postman_one: definition._postman_one,
+                postman_two: definition._postman_two,
+                three: definition._three
+            });
         });
 
         it('should pick given meta properties', function () {
@@ -42,8 +43,7 @@ describe('PropertyBase', function () {
                 base = new sdk.PropertyBase(definition);
 
             expect(base).to.have.property('_');
-            expect(base._).to.have.property('postman_one');
-            expect(base._).to.have.property('postman_two');
+            expect(base._).to.include.keys(['postman_one', 'postman_two']);
         });
     });
 
@@ -68,7 +68,9 @@ describe('PropertyBase', function () {
         });
 
         it('should not blow up for invalid arguments', function () {
-            expect(item.forEachParent.bind(item)).withArgs({ withRoot: true }, 'random').to.not.throwError();
+            expect(function () {
+                item.forEachParent.bind(item)({ withRoot: true }, 'random');
+            }).to.not.throw();
         });
     });
 
@@ -121,18 +123,18 @@ describe('PropertyBase', function () {
             });
 
             it('should return undefined if no value was found', function () {
-                expect(gggp.findInParents('value')).to.be(undefined);
+                expect(gggp.findInParents('value')).to.be.undefined;
             });
 
             it('should return undefined if a random property is provided for lookup', function () {
-                expect(c.findInParents('some-randome-stuff')).to.be(undefined);
+                expect(c.findInParents('some-randome-stuff')).to.be.undefined;
             });
 
             describe('with customizer', function () {
                 it('should be able to lookup with a customizer', function () {
                     var customizer = function (parent) { return parent.value === 'yo1'; };
 
-                    expect(c.findInParents('value', customizer)).to.be('yo1');
+                    expect(c.findInParents('value', customizer)).to.equal('yo1');
                 });
 
                 it('should prioritize customizer over existance', function () {
@@ -140,39 +142,39 @@ describe('PropertyBase', function () {
                         // find parent 4 levels up
                         customizer = function () { return ++i >= 4; };
 
-                    expect(c.findInParents('value', customizer)).to.be('yo1');
+                    expect(c.findInParents('value', customizer)).to.equal('yo1');
                 });
 
                 it('should return undefined if a random property is provided for lookup', function () {
                     var customizer = function () { return false; };
 
-                    expect(c.findInParents('some-randome-stuff', customizer)).to.be(undefined);
+                    expect(c.findInParents('some-randome-stuff', customizer)).to.be.undefined;
                 });
             });
         });
 
         describe('.findParentContaining()', function () {
             it('should be able to look up owner when it is the parent', function () {
-                expect(c.findParentContaining('value')).to.be(p);
+                expect(c.findParentContaining('value')).to.equal(p);
             });
 
             it('should be able retrieve the owner when property exists locally', function () {
-                expect(p.findParentContaining('value')).to.be(p);
+                expect(p.findParentContaining('value')).to.equal(p);
             });
 
             it('should return undefined if no value was found', function () {
-                expect(gggp.findParentContaining('value')).to.be(undefined);
+                expect(gggp.findParentContaining('value')).to.be.undefined;
             });
 
             it('should return undefined if a random property is provided for lookup', function () {
-                expect(c.findParentContaining('some-randome-stuff')).to.be(undefined);
+                expect(c.findParentContaining('some-randome-stuff')).to.be.undefined;
             });
 
             describe('with customizer', function () {
                 it('should be able to lookup with a customizer', function () {
                     var customizer = function (parent) { return parent.value === 'yo1'; };
 
-                    expect(c.findParentContaining('value', customizer)).to.be(ggp);
+                    expect(c.findParentContaining('value', customizer)).to.equal(ggp);
                 });
 
                 it('should prioritize customizer over existance', function () {
@@ -180,13 +182,13 @@ describe('PropertyBase', function () {
                         // find parent 4 levels up
                         customizer = function () { return ++i >= 4; };
 
-                    expect(c.findParentContaining('value', customizer)).to.be(ggp);
+                    expect(c.findParentContaining('value', customizer)).to.equal(ggp);
                 });
 
                 it('should return undefined if a random property is provided for lookup', function () {
                     var customizer = function () { return false; };
 
-                    expect(c.findParentContaining('some-randome-stuff', customizer)).to.be(undefined);
+                    expect(c.findParentContaining('some-randome-stuff', customizer)).to.be.undefined;
                 });
             });
         });
