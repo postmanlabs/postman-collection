@@ -1,4 +1,4 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     CertificateList = require('../../lib/index.js').CertificateList,
     Certificate = require('../../lib/index.js').Certificate;
 
@@ -16,10 +16,10 @@ describe('CertificateList', function () {
 
         it('should return a certificate instance when matched, and undefined instead', function () {
             var matchedCertificate = certificateList.resolveOne('https://www.google.com');
-            expect(matchedCertificate instanceof Certificate).to.be.ok();
+            expect(matchedCertificate instanceof Certificate).to.be.ok;
 
             matchedCertificate = certificateList.resolveOne('https://www.bla.com');
-            expect(matchedCertificate).to.eql(undefined);
+            expect(matchedCertificate).to.be.undefined;
         });
 
         it('should return the matched certificate', function () {
@@ -31,17 +31,17 @@ describe('CertificateList', function () {
         it('should return undefined when no certificate is matched', function () {
             var matchedCertificate = certificateList.resolveOne('https://www.twitter.com');
 
-            expect(matchedCertificate).to.eql(undefined);
+            expect(matchedCertificate).to.be.undefined;
         });
 
         it('should exit safely when called with url which is not a string or a Url', function () {
             var matchedCertificate = certificateList.resolveOne({});
 
-            expect(matchedCertificate).to.eql(undefined);
+            expect(matchedCertificate).to.be.undefined;
 
             matchedCertificate = certificateList.resolveOne(['bla']);
 
-            expect(matchedCertificate).to.eql(undefined);
+            expect(matchedCertificate).to.be.undefined;
         });
     });
 
@@ -49,10 +49,10 @@ describe('CertificateList', function () {
         it('should return true for CertificateList instance', function () {
             var certificateList = new CertificateList({}, [{ matches: [] }]);
 
-            expect(CertificateList.isCertificateList()).to.eql(false);
-            expect(CertificateList.isCertificateList(certificateList)).to.eql(true);
-            expect(CertificateList.isCertificateList({})).to.eql(false);
-            expect(CertificateList.isCertificateList({ _postman_propertyName: 'CertificateList' })).to.eql(false);
+            expect(CertificateList.isCertificateList()).to.be.false;
+            expect(CertificateList.isCertificateList(certificateList)).to.be.true;
+            expect(CertificateList.isCertificateList({})).to.be.false;
+            expect(CertificateList.isCertificateList({ _postman_propertyName: 'CertificateList' })).to.be.false;
         });
     });
 });
