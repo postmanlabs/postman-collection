@@ -234,7 +234,7 @@ describe('Request', function () {
                 body: rawRequest.body,
                 description: rawRequest.description
             });
-            expect(jsonified.proxy).to.eql(rawRequest.proxy)
+            expect(jsonified.proxy).to.eql(rawRequest.proxy);
         });
     });
 
