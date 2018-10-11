@@ -251,12 +251,12 @@ describe('Proxy Config', function () {
                 serialisedConfig = proxyConfig.toJSON();
 
             expect(serialisedConfig).to.deep.include({
-                match: { 
-                    pattern: rawConfig.match 
+                match: {
+                    pattern: rawConfig.match
                 },
                 tunnel: rawConfig.tunnel,
                 disabled: rawConfig.disabled
-            })
+            });
         });
     });
 
