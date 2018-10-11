@@ -1,4 +1,4 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     sdk = require('../../lib/index.js'),
     Certificate = sdk.Certificate;
 
@@ -13,45 +13,45 @@ describe('Certificate', function () {
         it('should correctly identify Certificate instances', function () {
             var certificate = new Certificate();
 
-            expect(Certificate.isCertificate(certificate)).to.be(true);
-            expect(Certificate.isCertificate({})).to.be(false);
-            expect(Certificate.isCertificate({ _postman_propertyName: 'certificate' })).to.be(false);
+            expect(Certificate.isCertificate(certificate)).to.be.true;
+            expect(Certificate.isCertificate({})).to.be.false;
+            expect(Certificate.isCertificate({ _postman_propertyName: 'certificate' })).to.be.false;
         });
     });
 
     describe('canApplyTo', function () {
         it('should return false for empty target URLs', function () {
             var certificate = new Certificate({ matches: ['https://google.com/*'] });
-            expect(certificate.canApplyTo('')).to.eql(false);
-            expect(certificate.canApplyTo(new sdk.Url())).to.eql(false);
+            expect(certificate.canApplyTo('')).to.be.false;
+            expect(certificate.canApplyTo(new sdk.Url())).to.be.false;
         });
 
         it('should return true only when tested with a match', function () {
             var certificate = new Certificate({ matches: ['https://google.com/*'] });
-            expect(certificate.canApplyTo('https://www.google.com')).to.eql(false);
-            expect(certificate.canApplyTo('https://example.com')).to.eql(false);
-            expect(certificate.canApplyTo('https://google.com')).to.eql(true);
+            expect(certificate.canApplyTo('https://www.google.com')).to.be.false;
+            expect(certificate.canApplyTo('https://example.com')).to.be.false;
+            expect(certificate.canApplyTo('https://google.com')).to.be.true;
         });
 
         it('should return true when tested with a match on any of the allowed matches', function () {
             var certificate = new Certificate({ matches: ['https://google.com/*', 'https://*.example.com/*'] });
-            expect(certificate.canApplyTo('https://twitter.com')).to.eql(false);
-            expect(certificate.canApplyTo('https://foo.example.com')).to.eql(true);
-            expect(certificate.canApplyTo('https://google.com')).to.eql(true);
+            expect(certificate.canApplyTo('https://twitter.com')).to.be.false;
+            expect(certificate.canApplyTo('https://foo.example.com')).to.be.true;
+            expect(certificate.canApplyTo('https://google.com')).to.be.true;
         });
 
         it('should disallow test string with protocol not http or https', function () {
             var certificate = new Certificate({ matches: ['http://*'], server: 'https://proxy.com/' });
-            expect(certificate.canApplyTo('foo://www.google.com')).to.eql(false);
-            expect(certificate.canApplyTo('file://www.google.com')).to.eql(false);
+            expect(certificate.canApplyTo('foo://www.google.com')).to.be.false;
+            expect(certificate.canApplyTo('file://www.google.com')).to.be.false;
         });
 
         it('should disallow any test string when match protocol is not http or https', function () {
             var certificate = new Certificate({ matches: ['ftp://*'], server: 'https://proxy.com/' });
-            expect(certificate.canApplyTo('foo://www.google.com')).to.eql(false);
-            expect(certificate.canApplyTo('file://www.google.com')).to.eql(false);
-            expect(certificate.canApplyTo('http://www.google.com')).to.eql(false);
-            expect(certificate.canApplyTo('https://www.google.com')).to.eql(false);
+            expect(certificate.canApplyTo('foo://www.google.com')).to.be.false;
+            expect(certificate.canApplyTo('file://www.google.com')).to.be.false;
+            expect(certificate.canApplyTo('http://www.google.com')).to.be.false;
+            expect(certificate.canApplyTo('https://www.google.com')).to.be.false;
         });
     });
 
@@ -65,9 +65,11 @@ describe('Certificate', function () {
                 },
                 certificate = new Certificate(rawCert),
                 serialisedCertificate = certificate.toJSON();
-            expect(serialisedCertificate.key).to.eql(rawCert.key);
-            expect(serialisedCertificate.cert).to.eql(rawCert.cert);
-            expect(serialisedCertificate.passphrase).to.eql(rawCert.passphrase);
+            expect(serialisedCertificate).to.deep.include({
+                key: rawCert.cert,
+                cert: rawCert.cert,
+                passphrase: rawCert.passphrase
+            });
         });
 
         it('should not contain key value', function () {
