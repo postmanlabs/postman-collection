@@ -118,7 +118,7 @@ describe('RequestBody', function () {
                     key: 'beta',
                     value: 'bar'
                 }]);
-            });
+        });
 
         it('should handle missing formdata bodies correctly', function () {
             var reqData = new RequestBody({ mode: 'formdata' });
