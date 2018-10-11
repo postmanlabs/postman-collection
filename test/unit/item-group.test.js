@@ -1,12 +1,11 @@
 var _ = require('lodash'),
-    expect = require('expect.js'),
+    expect = require('chai').expect,
     fixtures = require('../fixtures'),
     sdk = require('../../lib/index.js'),
     Item = sdk.Item,
     ItemGroup = sdk.ItemGroup,
     Collection = sdk.Collection;
 
-/* global describe, it */
 describe('ItemGroup', function () {
     describe('constructor', function () {
         it('should handle all properties', function () {
@@ -34,10 +33,10 @@ describe('ItemGroup', function () {
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition);
 
-            expect(itemGroup).to.have.property('events');
-            expect(itemGroup.events).to.eql(new sdk.EventList({}, itemGroupDefinition.event));
-            expect(itemGroup).to.have.property('auth');
-            expect(itemGroup.auth).to.eql(new sdk.RequestAuth(itemGroupDefinition.auth));
+            expect(itemGroup).to.deep.include({
+                events: new sdk.EventList({}, itemGroupDefinition.event),
+                auth: new sdk.RequestAuth(itemGroupDefinition.auth)
+            });
             expect(itemGroup).to.have.property('items');
         });
 
@@ -59,7 +58,7 @@ describe('ItemGroup', function () {
         collection.forEachItemGroup(function (group) {
             groups.push(group);
         });
-        expect(groups.length).to.be(4);
+        expect(groups.length).to.equal(4);
     });
 
     it('should correctly handle incoming items/item groups and/or plain objects', function () {
@@ -77,19 +76,23 @@ describe('ItemGroup', function () {
             })),
             group = ItemGroup._createNewGroupOrItem(new sdk.ItemGroup({ name: 'Blank folder' }));
 
-        expect(plain).to.be.ok();
-        expect(plain.events).to.be.ok();
-        expect(plain.responses).to.be.ok();
+        expect(plain).to.be.ok;
+        expect(plain.events).to.be.ok;
+        expect(plain.responses).to.be.ok;
         expect(plain.request).to.have.property('method', 'GET');
-        expect(plain.request.url.path).to.eql(['get']);
-        expect(plain.request.url.host).to.eql(['postman-echo', 'com']);
+        expect(plain.request.url).to.deep.include({
+            path: ['get'],
+            host: ['postman-echo', 'com']
+        });
 
-        expect(item).to.be.ok();
-        expect(item.events).to.be.ok();
-        expect(item.responses).to.be.ok();
+        expect(item).to.be.ok;
+        expect(item.events).to.be.ok;
+        expect(item.responses).to.be.ok;
         expect(item.request).to.have.property('method', 'GET');
-        expect(item.request.url.path).to.eql(['get']);
-        expect(item.request.url.host).to.eql(['postman-echo', 'com']);
+        expect(item.request.url).to.deep.include({
+            path: ['get'],
+            host: ['postman-echo', 'com']
+        });
 
         expect(_.omit(group.toJSON(), 'id')).to.eql({ name: 'Blank folder', item: [], event: [] });
     });
@@ -99,7 +102,7 @@ describe('ItemGroup', function () {
             itemGroup = new ItemGroup(rawItemGroup);
 
         it('initializes successfully', function () {
-            expect(itemGroup).to.be.ok();
+            expect(itemGroup).to.be.ok;
         });
 
         describe('has property', function () {
@@ -108,10 +111,8 @@ describe('ItemGroup', function () {
             });
 
             it('item', function () {
-                expect(itemGroup).to.have.property('items');
-                expect(itemGroup.items).to.be.an('object');
-                expect(itemGroup.items.all()).to.be.an('array');
-                expect(itemGroup.items.all()).to.not.be.empty();
+                expect(itemGroup).to.have.property('items').that.is.an('object');
+                expect(itemGroup.items.all()).to.be.an('array').that.has.lengthOf(3);
             });
 
             it('name', function () {
@@ -119,14 +120,13 @@ describe('ItemGroup', function () {
             });
             it('events', function () {
                 expect(itemGroup).to.have.property('events');
-                expect(itemGroup.events.all()).to.be.an('array');
-                expect(itemGroup.events.all()).to.not.be.empty();
+                expect(itemGroup.events.all()).to.be.an('array').that.has.lengthOf(2);
             });
         });
 
         describe('has function', function () {
             it('forEachItem', function () {
-                expect(itemGroup.forEachItem).to.be.ok();
+                expect(itemGroup.forEachItem).to.be.ok;
                 expect(itemGroup.forEachItem).to.be.a('function');
             });
         });
@@ -143,7 +143,7 @@ describe('ItemGroup', function () {
 
                 while (parent) {
                     parentIds.push(parent.id);
-                    expect(parent).to.have.keys(['description', 'id', 'name', 'items', 'events']);
+                    expect(parent).to.include.keys(['description', 'id', 'name', 'items', 'events']);
                     parent = parent.parent();
                 }
 
@@ -152,11 +152,11 @@ describe('ItemGroup', function () {
                 });
 
                 // The top most parent is always the collection, check that here
-                expect(parentIds.pop()).to.be(collection.id);
+                expect(parentIds.pop()).to.equal(collection.id);
 
                 // Check that the parents returned by .parent are in the same order as those of the itemGroup list
                 _.forEach(parentIds, function (id, index) {
-                    expect(id).to.be(groupIds[index]);
+                    expect(id).to.equal(groupIds[index]);
                 });
             });
         });
@@ -166,14 +166,14 @@ describe('ItemGroup', function () {
                 f3 = f2.items.members[0],
                 parent = f3.parent();
 
-            expect(parent.name).to.be(f2.name);
+            expect(parent.name).to.equal(f2.name);
         });
 
         it('must work correctly for a first level itemGroup', function () {
             var f1 = collection.items.members[0],
                 parent = f1.parent();
 
-            expect(parent.name).to.be(collection.name);
+            expect(parent.name).to.equal(collection.name);
         });
     });
 
@@ -283,13 +283,13 @@ describe('ItemGroup', function () {
             describe('in the root', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R1');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R1-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R1-name');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R1');
                 });
             });
@@ -297,13 +297,13 @@ describe('ItemGroup', function () {
             describe('in an immediate sub-group', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R2');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R2-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R2-name');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R2');
                 });
             });
@@ -311,13 +311,13 @@ describe('ItemGroup', function () {
             describe('in a nested subgroup', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R4');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R4-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R4-name');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R4');
                 });
             });
@@ -329,11 +329,11 @@ describe('ItemGroup', function () {
                     var f1, f2;
 
                     f1 = itemGroup.oneDeep('F2');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('name', 'F2-name');
 
                     f2 = itemGroup.oneDeep('F5');
-                    expect(ItemGroup.isItemGroup(f2)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f2)).to.be.true;
                     expect(f2).to.have.property('name', 'F5-name');
                 });
 
@@ -341,11 +341,11 @@ describe('ItemGroup', function () {
                     var f1, f2;
 
                     f1 = itemGroup.oneDeep('F2-name');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('id', 'F2');
 
                     f2 = itemGroup.oneDeep('F5-name');
-                    expect(ItemGroup.isItemGroup(f2)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f2)).to.be.true;
                     expect(f2).to.have.property('id', 'F5');
                 });
             });
@@ -355,7 +355,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F3');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('name', 'F3-name');
                 });
 
@@ -363,7 +363,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F3-name');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('id', 'F3');
                 });
             });
@@ -373,7 +373,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F4');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('name', 'F4-name');
                 });
 
@@ -381,7 +381,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F4-name');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('id', 'F4');
                 });
             });
@@ -392,11 +392,11 @@ describe('ItemGroup', function () {
 
             i = itemGroup.oneDeep('non-existent');
 
-            expect(i).to.be(undefined);
+            expect(i).to.be.undefined;
         });
 
         it('should return `undefined` if the specified id is not a string', function () {
-            expect(itemGroup.oneDeep(1)).to.be(undefined);
+            expect(itemGroup.oneDeep(1)).to.be.undefined;
         });
     });
 
@@ -428,15 +428,15 @@ describe('ItemGroup', function () {
 
     describe('isItemGroup', function () {
         it('should return true for a ItemGroup instance', function () {
-            expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be(true);
+            expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be.true;
         });
 
         it('should return false for a raw ItemGroup object', function () {
-            expect(sdk.ItemGroup.isItemGroup(fixtures.collectionV2.item)).to.be(false);
+            expect(sdk.ItemGroup.isItemGroup(fixtures.collectionV2.item)).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(sdk.ItemGroup.isItemGroup()).to.be(false);
+            expect(sdk.ItemGroup.isItemGroup()).to.be.false;
         });
     });
 
