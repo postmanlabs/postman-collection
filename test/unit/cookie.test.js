@@ -1,22 +1,23 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     fixtures = require('../fixtures'),
     Cookie = require('../../lib/index.js').Cookie;
 
-/* global describe, it */
 describe('Cookie', function () {
     describe('sanity', function () {
         var rawCookie = fixtures.collectionV2.item[0].response[0].cookie[0],
             cookie = new Cookie(rawCookie);
 
         it('initializes successfully', function () {
-            expect(cookie).to.be.ok();
+            expect(cookie).to.be.ok;
         });
 
         it('should work correctly with a raw cookie string as well', function () {
             var strCookie = new Cookie('foo=bar;');
 
-            expect(strCookie.name).to.be('foo');
-            expect(strCookie.value).to.be('bar');
+            expect(strCookie).to.deep.include({
+                name: 'foo',
+                value: 'bar',
+            });
         });
 
         it('should work correctly with specific options and value defaults', function () {
@@ -27,10 +28,12 @@ describe('Cookie', function () {
                     maxAge: 1234
                 });
 
-            expect(strCookie.name).to.be('foo');
-            expect(strCookie.value).to.be(undefined);
-            expect(strCookie.expires).to.be.ok();
-            expect(strCookie.maxAge).to.be(1234);
+            expect(strCookie.value).to.be.undefined;
+            expect(strCookie).to.deep.include({
+                name: 'foo',
+                maxAge: 1234
+            });
+            expect(strCookie.expires).to.be.ok;
         });
 
         describe('has property', function () {
@@ -76,8 +79,8 @@ describe('Cookie', function () {
             });
 
             it('update', function () {
-                expect(cookie.update).to.be.ok();
-                expect(cookie.update).to.be.an('function');
+                expect(cookie.update).to.be.ok;
+                expect(cookie.update).to.be.a('function');
             });
         });
     });
@@ -87,15 +90,17 @@ describe('Cookie', function () {
             var rawCookie = fixtures.collectionV2.item[0].response[0].cookie[0],
                 cookie = new Cookie(rawCookie),
                 jsonified = cookie.toJSON();
-            expect(jsonified.domain).to.eql(rawCookie.domain);
-            expect(jsonified.httpOnly).to.eql(rawCookie.httpOnly);
-            expect(jsonified.hostOnly).to.eql(rawCookie.hostOnly);
-            expect(jsonified.name).to.eql(rawCookie.key);
-            expect(jsonified.path).to.eql(rawCookie.path);
-            expect(jsonified.expires).to.eql(rawCookie.expires.toString());
-            expect(jsonified.secure).to.eql(rawCookie.secure);
-            expect(jsonified.session).to.eql(rawCookie.session);
-            expect(jsonified.value).to.eql(rawCookie.value);
+            expect(jsonified).to.deep.include({
+                domain: rawCookie.domain,
+                httpOnly: rawCookie.httpOnly,
+                hostOnly: rawCookie.hostOnly,
+                name: rawCookie.key,
+                path: rawCookie.path,
+                expires: rawCookie.expires,
+                secure: rawCookie.secure,
+                session: rawCookie.session,
+                value: rawCookie.value
+            });
         });
     });
 
@@ -104,17 +109,20 @@ describe('Cookie', function () {
         it('should be parsed properly', function () {
             var parsed = Cookie.parse(rawCookie),
                 ext;
-            expect(parsed).to.have.property('key', 'GAPS');
-            expect(parsed).to.have.property('value', 'lol');
-            expect(parsed).to.have.property('expires', 'Sun, 04-Feb-2018 14:18:27 GMT');
-            expect(parsed.secure).to.be(true);
-            expect(parsed.httpOnly).to.be(true);
-            expect(parsed.extensions).to.be.an(Array);
-            expect(parsed.extensions.length).to.be(1);
+            expect(parsed).to.deep.include({
+                key: 'GAPS',
+                value: 'lol',
+                expires: 'Sun, 04-Feb-2018 14:18:27 GMT',
+                secure: true,
+                httpOnly: true
+            });
+            expect(parsed.extensions).to.be.an('array').that.has.lengthOf(1);
 
             ext = parsed.extensions[0];
-            expect(ext.key).to.be('Priority');
-            expect(ext.value).to.be('HIGH');
+            expect(ext).to.deep.include({
+                key: 'Priority',
+                value: 'HIGH'
+            });
         });
     });
 
@@ -133,15 +141,15 @@ describe('Cookie', function () {
         };
 
         it('should return true for a cookie instance', function () {
-            expect(Cookie.isCookie(new Cookie(rawCookie))).to.be(true);
+            expect(Cookie.isCookie(new Cookie(rawCookie))).to.be.true;
         });
 
         it('should return false for a raw cookie object', function () {
-            expect(Cookie.isCookie(rawCookie)).to.be(false);
+            expect(Cookie.isCookie(rawCookie)).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(Cookie.isCookie()).to.be(false);
+            expect(Cookie.isCookie()).to.be.false;
         });
     });
 
