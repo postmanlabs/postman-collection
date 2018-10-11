@@ -21,7 +21,7 @@ describe('Url', function () {
                 expect(url.auth).to.deep.include({
                     user: 'user',
                     password: 'pass'
-            });
+                });
             });
 
             it('hash', function () {
@@ -101,10 +101,10 @@ describe('Url', function () {
                 path: undefined,
                 hash: undefined,
                 host: undefined
-        });
+            });
             expect(u).to.have.property('query').that.is.an.instanceOf(PropertyList);
             expect(u).to.have.property('variables').that.is.an.instanceOf(VariableList);
-    });
+        });
     });
 
     describe('.parse()', function () {
@@ -133,7 +133,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse bare ipv4 addresses with variables', function () {
@@ -146,7 +146,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse bare ipv4 addresses with protocol', function () {
@@ -159,7 +159,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse bare ipv4 addresses with non standard protocol', function () {
@@ -172,7 +172,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse bare ipv4 addresses with port', function () {
@@ -185,7 +185,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse invalid port of bare ipv4 addresses', function () {
@@ -198,7 +198,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse bare ipv4 addresses with protocol and port', function () {
@@ -211,7 +211,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
         it('must parse bare ipv4 addresses with protocol and port as variables', function () {
             var subject = Url.parse('{{my-protocol}}://127.0.0.1:{{my-port}}');
@@ -223,7 +223,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
         it('must parse variable as host with protocol and port as variables', function () {
             var subject = Url.parse('{{my-protocol}}://{{my-host}}:{{my-port}}');
@@ -235,7 +235,7 @@ describe('Url', function () {
                 path: undefined,
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse trailing path backslash in ipv4 address', function () {
@@ -248,7 +248,7 @@ describe('Url', function () {
                 path: [''],
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse trailing path backslash in ipv4 address and port', function () {
@@ -261,7 +261,7 @@ describe('Url', function () {
                 path: [''],
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse path backslash in ipv4 address and port', function () {
@@ -274,7 +274,7 @@ describe('Url', function () {
                 path: ['hello', 'world'],
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse path backslash in ipv4 address and port and retain trailing slash marker', function () {
@@ -287,7 +287,7 @@ describe('Url', function () {
                 path: ['hello', 'world', ''],
                 query: undefined,
                 hash: undefined
-        });
+            });
         });
 
         it('must parse path and query in ipv4 address and port and retain trailing slash marker', function () {
@@ -299,11 +299,11 @@ describe('Url', function () {
                 port: undefined,
                 path: ['hello', 'world', ''],
                 query: [{
-                key: 'query',
-                value: 'param'
+                    key: 'query',
+                    value: 'param'
                 }],
                 hash: undefined
-        });
+            });
         });
 
         it('must parse ip address host with query param and hash', function () {
@@ -315,8 +315,8 @@ describe('Url', function () {
                 port: undefined,
                 path: ['hello', 'world', ''],
                 query: [{
-                key: 'query',
-                value: 'param'
+                    key: 'query',
+                    value: 'param'
                 }],
                 hash: 'test-api'
             });
@@ -331,8 +331,8 @@ describe('Url', function () {
                 port: undefined,
                 path: ['hello', 'world', ''],
                 query: [{
-                key: 'query',
-                value: 'param'
+                    key: 'query',
+                    value: 'param'
                 }],
                 hash: '?test-api=true'
             });
@@ -347,11 +347,11 @@ describe('Url', function () {
                 port: undefined,
                 path: ['hello', 'world', ''],
                 query: [{
-                key: 'query',
-                value: 'param'
-            }, {
-                key: 'err?ng',
-                value: 'v_l?e@!'
+                    key: 'query',
+                    value: 'param'
+                }, {
+                    key: 'err?ng',
+                    value: 'v_l?e@!'
                 }],
                 hash: undefined
             });
@@ -362,18 +362,18 @@ describe('Url', function () {
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: {
-                user: 'username',
-                password: 'password'
+                    user: 'username',
+                    password: 'password'
                 },
                 host: ['127', '0', '0', '1'],
                 port: undefined,
                 path: ['hello', 'world', ''],
                 query: [{
-                key: 'query',
-                value: 'param'
-            }, {
-                key: 'err?ng',
-                value: 'v_l?e@!'
+                    key: 'query',
+                    value: 'param'
+                }, {
+                    key: 'err?ng',
+                    value: 'v_l?e@!'
                 }],
                 hash: undefined
             });
@@ -388,14 +388,14 @@ describe('Url', function () {
                 port: undefined,
                 path: ['hello', 'world', ''],
                 query: [{
-                key: 'query',
-                value: 'param'
-            }, {
-                key: 'valueless1',
-                value: null
-            }, {
-                key: 'valueless2',
-                value: null
+                    key: 'query',
+                    value: 'param'
+                }, {
+                    key: 'valueless1',
+                    value: null
+                }, {
+                    key: 'valueless2',
+                    value: null
                 }],
                 hash: undefined
             });
@@ -408,7 +408,7 @@ describe('Url', function () {
                 auth: undefined,
                 host: ['127', '0', '{{ip.subnet}}', '1'],
                 port: undefined,
-                path: ['get'],
+                path: ['get']
             });
         });
 
@@ -419,7 +419,7 @@ describe('Url', function () {
                 auth: undefined,
                 host: ['127', '0', '1{{ip.subnet}}2', '1'],
                 port: undefined,
-                path: ['get'],
+                path: ['get']
             });
         });
 
@@ -501,8 +501,8 @@ describe('Url', function () {
                 host: undefined,
                 path: ['', '..', 'etc', 'hosts']
             });
-            expect(subject.auth).to.be.undefined
-            expect(subject.port).to.be.undefined
+            expect(subject.auth).to.be.undefined;
+            expect(subject.port).to.be.undefined;
         });
 
         it('should parse path variables properly', function () {
@@ -640,13 +640,13 @@ describe('Url', function () {
             expect(parsedUrl.variable[0]).to.be.ok;
             expect(parsedUrl.variable[0]).to.deep.include({
                 id: 'resource',
-                value: 'post',
+                value: 'post'
             });
 
             expect(parsedUrl.variable[1]).to.be.ok;
             expect(parsedUrl.variable[1]).to.deep.include({
                 id: 'foo',
-                value: 'bar',
+                value: 'bar'
             });
         });
 
