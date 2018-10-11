@@ -102,7 +102,7 @@ describe('MutationTracker', function () {
             tracker.compact();
 
             expect(tracker.count()).to.equal(3);
-            expect(tracker.compacted).to.include.keys(['foo', 'bar', 'baz'])
+            expect(tracker.compacted).to.include.keys(['foo', 'bar', 'baz']);
         });
     });
 
