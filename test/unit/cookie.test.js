@@ -16,7 +16,7 @@ describe('Cookie', function () {
 
             expect(strCookie).to.deep.include({
                 name: 'foo',
-                value: 'bar',
+                value: 'bar'
             });
         });
 
