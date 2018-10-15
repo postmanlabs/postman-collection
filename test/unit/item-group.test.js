@@ -50,7 +50,7 @@ describe('ItemGroup', function () {
             expect(itemGroup.toJSON()).to.not.have.property('auth');
         });
     });
-    it('must be able to iterate over all subfolders', function () {
+    it('should be able to iterate over all subfolders', function () {
         var rawCollection = fixtures.collectionV2,
             collection = new Collection(rawCollection),
             groups = [];
@@ -161,7 +161,7 @@ describe('ItemGroup', function () {
             });
         });
 
-        it('must work correctly for a nested itemGroup', function () {
+        it('should work correctly for a nested itemGroup', function () {
             var f2 = collection.items.members[1],
                 f3 = f2.items.members[0],
                 parent = f3.parent();
@@ -169,7 +169,7 @@ describe('ItemGroup', function () {
             expect(parent.name).to.equal(f2.name);
         });
 
-        it('must work correctly for a first level itemGroup', function () {
+        it('should work correctly for a first level itemGroup', function () {
             var f1 = collection.items.members[0],
                 parent = f1.parent();
 
