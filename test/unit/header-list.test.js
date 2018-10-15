@@ -15,13 +15,13 @@ describe('HeaderList', function () {
 
     it('should be able to export headers to string', function () {
         var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
-        expect(hl.toString()).to.eql('Accept: *\nContent-Type: text/html');
+        expect(hl.toString()).to.equal('Accept: *\nContent-Type: text/html');
     });
 
     describe('.contentSize', function () {
         it('should be able to return header size', function () {
             var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
-            expect(hl.contentSize(200, 'OK')).to.eql(38);
+            expect(hl.contentSize(200, 'OK')).to.equal(38);
         });
 
         it('should return 0 for an empty header set', function () {
