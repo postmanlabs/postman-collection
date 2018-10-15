@@ -15,7 +15,7 @@ describe('VariableList', function () {
         expect(list.one('root').valueOf()).to.eql('one');
     });
 
-    it('must support function variables', function () {
+    it('should support function variables', function () {
         var list = new VariableList(null, [{
                 key: 'somevar',
                 value: 'asdasd'
@@ -183,7 +183,7 @@ describe('VariableList', function () {
     });
 
     describe('sanity', function () {
-        it('constructor must be exported', function () {
+        it('constructor should be exported', function () {
             expect(VariableList).to.be.a('function');
         });
 
@@ -199,7 +199,7 @@ describe('VariableList', function () {
                     key: 'third',
                     value: 'in 3rd layer'
                 }]);
-            expect(v instanceof VariableList).to.be.ok;
+            expect(v).to.be.an.instanceof(VariableList);
         });
 
         it('should store variables as an object as well', function () {
