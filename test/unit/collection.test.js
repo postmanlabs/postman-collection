@@ -65,6 +65,7 @@ describe('Collection', function () {
             it('items', function () {
                 expect(collection).to.have.property('items').that.is.an('object');
                 expect(collection.items.all()).to.be.an('array').that.has.lengthOf(3);
+                expect(collection.items.all()).to.not.be.empty;
             });
 
             it('name', function () {
@@ -74,6 +75,7 @@ describe('Collection', function () {
             it('events', function () {
                 expect(collection).to.have.property('events');
                 expect(collection.events.all()).to.be.an('array').that.has.lengthOf(2);
+                expect(collection.items.all()).to.not.be.empty;
             });
         });
 
@@ -249,6 +251,7 @@ describe('Collection', function () {
             delete collectionJSON.info.version;
             delete collectionDefinition.info.version;
 
+            // @todo: Remove below conversion to JSON after the description serialization bug has been fixed
             collectionJSON.info.description = collectionJSON.info.description.toJSON();
 
             expect(collectionJSON).to.eql({
