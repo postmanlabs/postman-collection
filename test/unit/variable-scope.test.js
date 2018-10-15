@@ -5,11 +5,11 @@ var expect = require('chai').expect,
     VariableScope = require('../../').VariableScope;
 
 describe('VariableScope', function () {
-    it('must be inherited from property and not list', function () {
-        expect(new VariableScope() instanceof Property).to.be.ok;
+    it('should be inherited from property and not list', function () {
+        expect(new VariableScope()).to.be.an.instanceof(Property);
     });
 
-    it('must have values list as a variable-list', function () {
+    it('should have values list as a variable-list', function () {
         var scope = new VariableScope();
 
         expect(scope).to.have.property('id');
@@ -21,7 +21,7 @@ describe('VariableScope', function () {
         expect(scope.values.__parent).to.equal(scope);
     });
 
-    it('must accept an array of variable objects as definition', function () {
+    it('should accept an array of variable objects as definition', function () {
         var scope = new VariableScope([{
             key: 'var-1',
             value: 'var-1-value'
@@ -36,20 +36,20 @@ describe('VariableScope', function () {
         expect(scope.values.count()).to.equal(2);
 
         // check whether the
-        expect(scope.values.idx(0) instanceof Variable).to.be.ok;
+        expect(scope.values.idx(0)).to.be.an.instanceof(Variable);
         expect(scope.values.idx(0)).to.deep.include({
             key: 'var-1',
             value: 'var-1-value'
         });
 
-        expect(scope.values.idx(1) instanceof Variable).to.be.ok;
+        expect(scope.values.idx(1)).to.be.an.instanceof(Variable);
         expect(scope.values.idx(1)).to.deep.include({
             key: 'var-2',
             value: 'var-2-value'
         });
     });
 
-    it('must accept a `values` array of variable objects as definition', function () {
+    it('should accept a `values` array of variable objects as definition', function () {
         var scope = new VariableScope({
             id: 'test-scope-id',
             values: [{
@@ -66,20 +66,20 @@ describe('VariableScope', function () {
         expect(scope).to.not.have.property('_layers');
         expect(scope.values.count()).to.equal(2);
 
-        expect(scope.values.idx(0) instanceof Variable).to.be.ok;
+        expect(scope.values.idx(0)).to.be.an.instanceof(Variable);
         expect(scope.values.idx(0)).to.deep.include({
             key: 'var-1',
             value: 'var-1-value'
         });
 
-        expect(scope.values.idx(1) instanceof Variable).to.be.ok;
+        expect(scope.values.idx(1)).to.be.an.instanceof(Variable);
         expect(scope.values.idx(1)).to.deep.include({
             key: 'var-2',
             value: 'var-2-value'
         });
     });
 
-    it('must carry the id and name from definition', function () {
+    it('should carry the id and name from definition', function () {
         var scope = new VariableScope({
             id: 'test-scope-id',
             name: 'my-environment'
@@ -97,7 +97,7 @@ describe('VariableScope', function () {
     });
 
     describe('syncing variables from source', function () {
-        it('must be able to sync values from an object (and not return crud when not specified)', function () {
+        it('should be able to sync values from an object (and not return crud when not specified)', function () {
             var scope = new VariableScope(),
                 crud;
 
@@ -111,20 +111,20 @@ describe('VariableScope', function () {
             expect(crud).to.be.undefined;
             expect(scope.values.count()).to.equal(2);
 
-            expect(scope.values.idx(0) instanceof Variable).to.be.ok;
+            expect(scope.values.idx(0)).to.be.an.instanceof(Variable);
             expect(scope.values.idx(0)).to.deep.include({
                 key: 'var1',
                 value: 'value1'
             });
 
-            expect(scope.values.idx(1) instanceof Variable).to.be.ok;
+            expect(scope.values.idx(1)).to.be.an.instanceof(Variable);
             expect(scope.values.idx(1)).to.deep.include({
                 key: 'var2',
                 value: 'value2'
             });
         });
 
-        it('must be able to sync values from an object and return crud operation details', function () {
+        it('should be able to sync values from an object and return crud operation details', function () {
             var scope = new VariableScope({
                     values: [{
                         key: 'original1',
@@ -144,13 +144,13 @@ describe('VariableScope', function () {
             }, true);
 
             expect(scope.values.count()).to.equal(2);
-            expect(scope.values.idx(0) instanceof Variable).to.be.ok;
+            expect(scope.values.idx(0)).to.be.an.instanceof(Variable);
             expect(scope.values.idx(0)).to.deep.include({
                 key: 'original1',
                 value: 'original1Updated'
             });
 
-            expect(scope.values.idx(1) instanceof Variable).to.be.ok;
+            expect(scope.values.idx(1)).to.be.an.instanceof(Variable);
             expect(scope.values.idx(1)).to.deep.include({
                 key: 'synced1',
                 value: 'syncedValue1'
@@ -163,7 +163,7 @@ describe('VariableScope', function () {
             });
         });
 
-        it('must retain original type while syncing from object', function () {
+        it('should retain original type while syncing from object', function () {
             var scope = new VariableScope({
                     values: [{
                         key: 'oneNumber',
@@ -195,7 +195,7 @@ describe('VariableScope', function () {
             expect(scope.values.one('oneNumber').type).to.eql('number'); // type is still number
         });
 
-        it('must clone the variable-list instance if passed as a list in constructor', function () {
+        it('should clone the variable-list instance if passed as a list in constructor', function () {
             var list,
                 scope;
 
@@ -217,7 +217,7 @@ describe('VariableScope', function () {
     });
 
     describe('syncing variables to target', function () {
-        it('must be able to sync to an object', function () {
+        it('should be able to sync to an object', function () {
             var scope = new VariableScope({
                     values: [{
                         key: 'var-1',
@@ -238,7 +238,7 @@ describe('VariableScope', function () {
             });
         });
 
-        it('must retain variable type while syncing to object', function () {
+        it('should retain variable type while syncing to object', function () {
             var scope = new VariableScope({
                     values: [{
                         key: 'var-1',
@@ -261,7 +261,7 @@ describe('VariableScope', function () {
             });
         });
 
-        it('must remove extra properties from target object', function () {
+        it('should remove extra properties from target object', function () {
             var scope = new VariableScope({
                     values: [{
                         key: 'var-1',
@@ -300,11 +300,11 @@ describe('VariableScope', function () {
                 }]
             });
 
-            it('must correctly return the specified value', function () {
+            it('should correctly return the specified value', function () {
                 expect(scope.get('var-1')).to.equal('var-1-value');
             });
 
-            it('must return undefined for ', function () {
+            it('should return undefined for ', function () {
                 expect(scope.get('random')).to.be.undefined;
             });
 
@@ -336,31 +336,31 @@ describe('VariableScope', function () {
                 }]
             });
 
-            it('must correctly update an existing value', function () {
+            it('should correctly update an existing value', function () {
                 scope.set('var-1', 'new-var-1-value');
                 expect(scope.get('var-1')).to.equal('new-var-1-value');
             });
 
-            it('must create a new variable if non-existent', function () {
+            it('should create a new variable if non-existent', function () {
                 scope.set('var-3', 'var-3-value');
 
                 expect(scope.values.count()).to.equal(3);
                 expect(scope.get('var-3')).to.equal('var-3-value');
             });
 
-            it('must correctly update type of existing value', function () {
+            it('should correctly update type of existing value', function () {
                 scope.set('var-1', 3.142, 'number');
                 expect(scope.get('var-1')).to.equal(3.142);
             });
 
-            it('must correctly create a new typed value', function () {
+            it('should correctly create a new typed value', function () {
                 scope.set('var-4', 3.142, 'boolean');
                 expect(scope.get('var-4')).to.be.true;
             });
         });
 
         describe('unset', function () {
-            it('must correctly remove an existing variable', function () {
+            it('should correctly remove an existing variable', function () {
                 var scope = new VariableScope({
                     values: [{
                         key: 'var-1',
@@ -377,7 +377,7 @@ describe('VariableScope', function () {
                 expect(scope.get('var-1')).to.be.undefined;
             });
 
-            it('must leave the scope untouched for an invalid key', function () {
+            it('should leave the scope untouched for an invalid key', function () {
                 var scope = new VariableScope({
                     values: [{
                         key: 'var-1',
@@ -404,7 +404,7 @@ describe('VariableScope', function () {
                 }]
             });
 
-            it('must correctly remove all variables', function () {
+            it('should correctly remove all variables', function () {
                 scope.clear();
                 expect(scope.values.count()).to.equal(0);
             });
@@ -451,7 +451,7 @@ describe('VariableScope', function () {
             }]
         });
 
-        it('must return a copy of all variables in an object form', function () {
+        it('should return a copy of all variables in an object form', function () {
             expect(scope.variables()).to.be.an('object').that.eql({
                 var1: 'one',
                 var2: 2,
