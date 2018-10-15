@@ -65,6 +65,7 @@ describe('Certificate', function () {
                 },
                 certificate = new Certificate(rawCert),
                 serialisedCertificate = certificate.toJSON();
+
             expect(serialisedCertificate).to.deep.include({
                 key: rawCert.cert,
                 cert: rawCert.cert,
