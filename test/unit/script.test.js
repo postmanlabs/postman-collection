@@ -1,10 +1,9 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     fixtures = require('../fixtures'),
     sdk = require('../../lib/index.js'),
     Url = sdk.Url,
     Script = sdk.Script;
 
-/* global describe, it */
 describe('Script', function () {
     var rawScript = fixtures.collectionV2.event[1].script,
         script = new Script(rawScript);
@@ -16,7 +15,7 @@ describe('Script', function () {
             });
 
             expect(script).to.not.have.property('exec');
-            expect(Url.isUrl(script.src)).to.be(true);
+            expect(Url.isUrl(script.src)).to.be.true;
         });
 
         it('should default to undefined for script code if neither an array of strings or a string is provided',
@@ -40,7 +39,7 @@ describe('Script', function () {
             script = new Script(rawScript);
 
         it('parsed successfully', function () {
-            expect(script).to.be.ok();
+            expect(script).to.be.ok;
             expect(script).to.be.an('object');
         });
 
@@ -57,7 +56,7 @@ describe('Script', function () {
         describe('has method', function () {
             describe('toSource', function () {
                 it('exists', function () {
-                    expect(script.toSource).to.be.ok();
+                    expect(script.toSource).to.be.ok;
                     expect(script.toSource).to.be.a('function');
                 });
 
@@ -65,7 +64,7 @@ describe('Script', function () {
                     var source = script.toSource();
 
                     expect(source).to.be.a('string');
-                    expect(source).to.be(rawScript.exec);
+                    expect(source).to.equal(rawScript.exec);
                 });
             });
         });
@@ -76,9 +75,9 @@ describe('Script', function () {
             var script = new Script(),
                 nonScript = {};
 
-            expect(Script.isScript(script)).to.be(true);
-            expect(Script.isScript({})).to.be(false);
-            expect(Script.isScript(nonScript)).to.be(false);
+            expect(Script.isScript(script)).to.be.true;
+            expect(Script.isScript({})).to.be.false;
+            expect(Script.isScript(nonScript)).to.be.false;
         });
     });
 
@@ -88,8 +87,10 @@ describe('Script', function () {
                 scriptJSON = script.toJSON();
 
             expect(scriptJSON).to.have.property('id');
-            expect(scriptJSON).to.have.property('type', 'text/javascript');
-            expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
+            expect(scriptJSON).to.deep.include({
+                type: 'text/javascript',
+                exec: ['console.log("This is a line of test script code");']
+            });
         });
 
         it('should support non-wrapped arrays', function () {
@@ -97,8 +98,10 @@ describe('Script', function () {
                 scriptJSON = script.toJSON();
 
             expect(scriptJSON).to.have.property('id');
-            expect(scriptJSON).to.have.property('type', 'text/javascript');
-            expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
+            expect(scriptJSON).to.deep.include({
+                type: 'text/javascript',
+                exec: ['console.log("This is a line of test script code");']
+            });
         });
     });
 
@@ -110,14 +113,14 @@ describe('Script', function () {
                 script2BeforeId = script2.id;
 
             script1.update('new script');
-            expect(script1.id).to.be(script1BeforeId);
+            expect(script1.id).to.equal(script1BeforeId);
             script1.update({ exec: 'new script' });
-            expect(script1.id).to.be(script1BeforeId);
+            expect(script1.id).to.equal(script1BeforeId);
 
             script2.update('new script');
-            expect(script2.id).to.be(script2BeforeId);
+            expect(script2.id).to.equal(script2BeforeId);
             script2.update({ exec: 'new script' });
-            expect(script2.id).to.be(script2BeforeId);
+            expect(script2.id).to.equal(script2BeforeId);
         });
 
         it('should handle the src property correctly', function () {
@@ -128,7 +131,7 @@ describe('Script', function () {
             });
 
             expect(script).to.not.have.property('exec');
-            expect(Url.isUrl(script.src)).to.be(true);
+            expect(Url.isUrl(script.src)).to.be.true;
         });
 
         it('should default to undefined for script code if neither an array of strings or a string is provided',
@@ -149,8 +152,10 @@ describe('Script', function () {
                 scriptJSON = script.toJSON();
 
                 expect(scriptJSON).to.have.property('id');
-                expect(scriptJSON).to.have.property('type', 'text/javascript');
-                expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
+                expect(scriptJSON).to.deep.include({
+                    type: 'text/javascript',
+                    exec: ['console.log("This is a line of test script code");']
+                });
             });
 
             it('should support non-wrapped arrays', function () {
@@ -162,8 +167,10 @@ describe('Script', function () {
                 scriptJSON = script.toJSON();
 
                 expect(scriptJSON).to.have.property('id');
-                expect(scriptJSON).to.have.property('type', 'text/javascript');
-                expect(scriptJSON.exec).to.eql(['console.log("This is a line of test script code");']);
+                expect(scriptJSON).to.deep.include({
+                    type: 'text/javascript',
+                    exec: ['console.log("This is a line of test script code");']
+                });
             });
         });
     });
@@ -176,22 +183,24 @@ describe('Script', function () {
                 exec: ['console.log("Foo isn\'t bar!");']
             });
 
-            expect(script.toSource()).to.be('console.log("Foo isn\'t bar!");');
+            expect(script.toSource()).to.equal('console.log("Foo isn\'t bar!");');
         });
 
         it('should return undefined for a malformed script', function () {
             var script = new Script({ type: 'text/javascript' });
 
-            expect(script.toSource()).to.be(undefined);
+            expect(script.toSource()).to.be.undefined;
         });
     });
 
     describe('json representation', function () {
         it('must match what the script was initialized with', function () {
             var jsonified = script.toJSON();
-            expect(jsonified.type).to.eql(rawScript.type);
+            expect(jsonified).to.deep.include({
+                type: rawScript.type,
+                exec: rawScript.exec.split('\n')
+            });
             expect(jsonified.src).to.eql(rawScript.src);
-            expect(jsonified.exec).to.eql(rawScript.exec.split('\n'));
         });
     });
 });

@@ -1,16 +1,15 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
 
     Request = require('../../').Request,
     RequestAuth = require('../../').RequestAuth;
 
-/* global describe, it */
 describe('RequestAuth', function () {
     it('should be properly initialised from Request', function () {
         var request = new Request({
             url: 'https://postman-echo.com/get',
             auth: {}
         });
-        expect(request.auth.current()).to.eql(undefined);
+        expect(request.auth.current()).to.be.undefined;
     });
 
     it('should be properly initialised when set from Request constructor', function () {
@@ -47,7 +46,7 @@ describe('RequestAuth', function () {
         expect(auth.current()).to.eql({ foo: 'bar' });
 
         auth.use('basic');
-        expect(auth.type).to.eql('basic');
+        expect(auth.type).to.equal('basic');
         expect(auth.basic.toJSON()).to.eql([]);
         expect(auth.current()).to.eql({});
     });
@@ -68,7 +67,7 @@ describe('RequestAuth', function () {
         });
 
         auth.use('basic');
-        expect(auth.type).to.eql('basic');
+        expect(auth.type).to.equal('basic');
         expect(auth.current()).to.eql({
             username: 'u', password: 'p'
         });

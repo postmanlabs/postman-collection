@@ -1,11 +1,10 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     fixtures = require('../fixtures'),
     sdk = require('../../lib/index.js'),
 
     Request = require('../../lib/index.js').Request,
     Item = require('../../lib/index.js').Item;
 
-/* global describe, it */
 describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
         item = new sdk.Item(rawItem);
@@ -60,19 +59,17 @@ describe('Item', function () {
                 item = new Item(rawItem);
 
             it('initializes successfully', function () {
-                expect(item).to.be.ok();
+                expect(item).to.be.ok;
             });
 
             describe('has property', function () {
                 it('description', function () {
-                    expect(item).to.have.property('description');
-                    expect(item.description).to.be.an('object');
+                    expect(item).to.have.property('description').that.is.an('object');
                 });
 
                 it('events', function () {
                     expect(item).to.have.property('events');
-                    expect(item.events.all()).to.be.an('array');
-                    expect(item.events.all()).to.not.be.empty();
+                    expect(item.events.all()).to.be.an('array').that.has.lengthOf(2);
                 });
 
                 it('id', function () {
@@ -84,21 +81,18 @@ describe('Item', function () {
                 });
 
                 it('request', function () {
-                    expect(item).to.have.property('request');
-                    expect(item.request).to.be.an('object');
-                    expect(item.request).to.not.be.empty();
+                    expect(item).to.have.property('request').that.is.an('object');
+                    expect(item.request).to.not.be.empty;
                 });
 
                 it('responses', function () {
                     expect(item).to.have.property('responses');
-                    expect(item.responses.all()).to.be.an('array');
-                    expect(item.responses.all()).to.not.be.empty();
+                    expect(item.responses.all()).to.be.an('array').that.has.lengthOf(1);
                 });
 
                 it('protocolProfileBehavior', function () {
-                    expect(item).to.have.property('protocolProfileBehavior');
-                    expect(item.protocolProfileBehavior).to.be.an('object');
-                    expect(item.protocolProfileBehavior).to.not.be.empty();
+                    expect(item).to.have.property('protocolProfileBehavior').that.is.an('object');
+                    expect(item.protocolProfileBehavior).to.not.be.empty;
                 });
             });
         });
@@ -108,7 +102,7 @@ describe('Item', function () {
                 item = new Item(rawItem);
 
             it('initializes successfully', function () {
-                expect(item).to.be.ok();
+                expect(item).to.be.ok;
             });
 
             describe('has property', function () {
@@ -121,8 +115,7 @@ describe('Item', function () {
                 });
 
                 it('request', function () {
-                    expect(item).to.have.property('request');
-                    expect(item.request).to.be.a(Request);
+                    expect(item).to.have.property('request').that.is.an.instanceOf(Request);
                 });
             });
         });
@@ -135,8 +128,7 @@ describe('Item', function () {
                         random: true
                     }
                 });
-                expect(item).to.have.property('protocolProfileBehavior');
-                expect(item.protocolProfileBehavior).to.eql({
+                expect(item).to.have.property('protocolProfileBehavior').that.eql({
                     disableBodyPruning: true,
                     random: true
                 });
@@ -165,11 +157,8 @@ describe('Item', function () {
             expect(jsonified.id).to.eql(rawItem.id);
 
             // All of these have their own proper tests
-            expect(jsonified).to.have.property('description');
-            expect(jsonified).to.have.property('request');
-            expect(jsonified).to.have.property('response');
-            expect(jsonified).to.have.property('event');
-            expect(jsonified).to.have.property('protocolProfileBehavior');
+            // eslint-disable-next-line max-len
+            expect(jsonified).to.include.all.keys('description', 'request', 'response', 'event', 'protocolProfileBehavior');
         });
     });
 
@@ -177,14 +166,14 @@ describe('Item', function () {
         var collection = new sdk.Collection(fixtures.nestedCollectionV2);
 
         it('must return a falsy result for a standalone item', function () {
-            expect(item.parent()).to.not.be.ok();
+            expect(item.parent()).to.be.undefined;
         });
 
         it('must work correctly for a nested item', function () {
             var nestedItem = collection.items.members[1].items.members[0].items.members[0],
                 parent = nestedItem.parent();
 
-            expect(parent.name).to.be('F2.F3');
+            expect(parent.name).to.equal('F2.F3');
         });
 
         it('must work correctly for a regular folder item', function () {
@@ -192,14 +181,14 @@ describe('Item', function () {
                 r1 = f1.items.members[0],
                 parent = r1.parent();
 
-            expect(parent.name).to.be(f1.name);
+            expect(parent.name).to.equal(f1.name);
         });
 
         it('must work correctly for a first level item', function () {
             var firstLevelItem = collection.items.members[2], // root level request R1
                 parent = firstLevelItem.parent();
 
-            expect(parent.name).to.be(collection.name);
+            expect(parent.name).to.equal(collection.name);
         });
     });
 
@@ -313,7 +302,7 @@ describe('Item', function () {
 
             var auth = item.getAuth();
 
-            expect(auth).to.be(undefined);
+            expect(auth).to.be.undefined;
         });
 
         it('should handle parent lookup for empty but defined auth in item', function () {
@@ -370,7 +359,7 @@ describe('Item', function () {
         it('should return all events if no name/falsy name is provided', function () {
             var events = item.getEvents();
 
-            expect(events).to.have.length(2);
+            expect(events).to.have.lengthOf(2);
             expect(events[0]).to.have.property('listen', 'prerequest');
             expect(events[1]).to.have.property('listen', 'test');
         });
@@ -378,7 +367,7 @@ describe('Item', function () {
         it('should filter down to the provided name', function () {
             var events = item.getEvents('test');
 
-            expect(events).to.have.length(1);
+            expect(events).to.have.lengthOf(1);
             expect(events[0]).to.have.property('listen', 'test');
         });
     });
@@ -413,15 +402,15 @@ describe('Item', function () {
         var rawItem = fixtures.collectionV2.item[0];
 
         it('should return true for a Item instance', function () {
-            expect(sdk.Item.isItem(new sdk.Item(rawItem))).to.be(true);
+            expect(sdk.Item.isItem(new sdk.Item(rawItem))).to.be.true;
         });
 
         it('should return false for a raw Item object', function () {
-            expect(sdk.Item.isItem(rawItem)).to.be(false);
+            expect(sdk.Item.isItem(rawItem)).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(sdk.Item.isItem()).to.be(false);
+            expect(sdk.Item.isItem()).to.be.false;
         });
     });
 });

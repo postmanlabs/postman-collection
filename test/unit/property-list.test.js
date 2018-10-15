@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    expect = require('expect.js'),
+    expect = require('chai').expect,
     PropertyList = require('../../lib/index.js').PropertyList,
     Item = require('../../lib/index.js').Item,
 
@@ -8,7 +8,6 @@ var _ = require('lodash'),
         return item.id;
     };
 
-/* global describe, it, beforeEach, afterEach */
 describe('PropertyList', function () {
     it('should look up one single value with the custom key attribute', function () {
         var FakeType,
@@ -28,8 +27,8 @@ describe('PropertyList', function () {
             value: 'what'
         });
 
-        expect(list.one('woahwoah')).to.not.be.ok();
-        expect(list.one('Yololo')).to.not.be.ok(); // cross check lowercase lookup to fail
+        expect(list.one('woahwoah')).to.be.undefined;
+        expect(list.one('Yololo')).to.be.undefined; // cross check lowercase lookup to fail
         expect(list.one('yoLoLo').valueOf()).to.eql({
             id: 'woahwoah',
             keyAttr: 'yoLoLo',
@@ -81,13 +80,13 @@ describe('PropertyList', function () {
             value: 'what'
         });
 
-        expect(list.count()).to.be(1);
+        expect(list.count()).to.equal(1);
         list.remove('Yololo'); // remove using different case. it should not work
-        expect(list.count()).to.be(1);
+        expect(list.count()).to.equal(1);
         expect(Object.keys(list.reference)).to.eql(['yoLoLo']);
 
         list.remove('yoLoLo');
-        expect(list.count()).to.be(0);
+        expect(list.count()).to.equal(0);
         expect(Object.keys(list.reference)).to.eql([]);
     });
 
@@ -108,10 +107,10 @@ describe('PropertyList', function () {
             value: 'what'
         });
 
-        expect(list.count()).to.be(1);
+        expect(list.count()).to.equal(1);
         expect(Object.keys(list.reference)).to.eql(['yololo']);
         list.remove('Yololo');
-        expect(list.count()).to.be(0);
+        expect(list.count()).to.equal(0);
         expect(Object.keys(list.reference)).to.eql([]);
     });
 
@@ -135,12 +134,12 @@ describe('PropertyList', function () {
             value: 'where'
         }]);
 
-        expect(list.count()).to.be(2);
+        expect(list.count()).to.equal(2);
         list.remove(function (item) {
             return (item.keyAttr === 'yoLoLo1');
         });
 
-        expect(list.count()).to.be(1);
+        expect(list.count()).to.equal(1);
         expect(Object.keys(list.reference)).to.eql(['yoLoLo2']);
     });
 
@@ -166,7 +165,7 @@ describe('PropertyList', function () {
 
         list.clear();
 
-        expect(list.count()).to.be(0);
+        expect(list.count()).to.equal(0);
     });
 
     it('should repopulate a list', function () {
@@ -197,7 +196,7 @@ describe('PropertyList', function () {
             value: 'where'
         }]);
 
-        expect(list.count()).to.be(2);
+        expect(list.count()).to.equal(2);
 
         expect(list.map('keyAttr')).to.eql(['yoLoLo3', 'yoLoLo4']);
     });
@@ -223,16 +222,16 @@ describe('PropertyList', function () {
             stinger = null;
         });
 
-        it('test fixtures must be available', function () {
-            expect(enterprise instanceof PropertyList).to.be.ok();
-            expect(enterprise.count()).to.be(0);
-            expect(maverick instanceof Item).to.be.ok();
-            expect(goose instanceof Item).to.be.ok();
-            expect(maverick).to.not.be(goose);
-            expect(goose).to.not.be(stinger);
-            expect(maverick.id).to.be('maverick');
-            expect(goose.id).to.be('goose');
-            expect(stinger.id).to.be('stinger');
+        it('test fixtures should be available', function () {
+            expect(enterprise).to.be.an.instanceof(PropertyList);
+            expect(enterprise.count()).to.equal(0);
+            expect(maverick).to.be.an.instanceof(Item);
+            expect(goose).to.be.an.instanceof(Item);
+            expect(maverick).to.not.equal(goose);
+            expect(goose).to.not.equal(stinger);
+            expect(maverick.id).to.equal('maverick');
+            expect(goose.id).to.equal('goose');
+            expect(stinger.id).to.equal('stinger');
         });
 
         describe('appends an item', function () {
@@ -452,12 +451,12 @@ describe('PropertyList', function () {
             });
 
             it('.one() should return undefined if item is not found', function () {
-                expect(list.one('asdjhaks')).to.be(undefined);
+                expect(list.one('asdjhaks')).to.be.undefined;
             });
 
             it('.remove() should remove all associated values with the key', function () {
                 list.remove('key1');
-                expect(list.reference.key1).to.be(undefined);
+                expect(list.reference.key1).to.be.undefined;
             });
 
             afterEach(function () {
@@ -489,15 +488,15 @@ describe('PropertyList', function () {
         list = new PropertyList(FakeType, {}, rawList);
 
         it('should return true for a PropertyList instance', function () {
-            expect(PropertyList.isPropertyList(list)).to.be(true);
+            expect(PropertyList.isPropertyList(list)).to.be.true;
         });
 
         it('should return false for a raw PropertyList object', function () {
-            expect(PropertyList.isPropertyList(rawList)).to.be(false);
+            expect(PropertyList.isPropertyList(rawList)).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(PropertyList.isPropertyList()).to.be(false);
+            expect(PropertyList.isPropertyList()).to.be.false;
         });
     });
 
@@ -707,19 +706,21 @@ describe('PropertyList', function () {
             }]);
 
             // Ensure that the reference array contains an array of values for `key1`
-            expect(list.reference.key1).to.be.an(Array);
-            expect(list.reference.key1).to.have.length(2);
+            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(2);
 
             list.remove(function (fake) {
                 return fake.keyAttr === 'key1' && fake.value === 'val2';
             });
 
             // should have removed the correct element from the reference map, and removed the array of values
-            expect(list.reference.key1).to.not.be.an(Array);
-            expect(list.reference.key1).to.eql({
+            expect(list.reference.key1).to.not.be.an('array');
+            expect(list.toJSON()).to.eql([{
                 keyAttr: 'key1',
                 value: 'val1'
-            });
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
         });
 
         it('should remove an element from the property list reference map and remove associated array', function () {
@@ -735,8 +736,7 @@ describe('PropertyList', function () {
             }]);
 
             // Ensure that the reference array contains an array of values for `key1`
-            expect(list.reference.key1).to.be.an(Array);
-            expect(list.reference.key1).to.have.length(2);
+            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(2);
 
             list.remove(function (fake) {
                 return fake.keyAttr === 'key1';
@@ -768,9 +768,9 @@ describe('PropertyList', function () {
                 { key: 'foo', value: 'bar' }
             ]);
 
-            expect(pList.each.bind(pList)).withArgs({ foo: 'bar' }).to.not.throwError();
-            expect(pList.each.bind(pList)).withArgs(undefined).to.not.throwError();
-            expect(pList.each.bind(pList)).to.not.throwError();
+            expect(function () { pList.each.bind(pList)({ foo: 'bar' }); }).to.not.throw();
+            expect(function () { pList.each.bind(pList)(undefined); }).to.not.throw();
+            expect(pList.each.bind(pList)).to.not.throw();
         });
     });
 
@@ -783,9 +783,9 @@ describe('PropertyList', function () {
         it('should bail out if the iterator is not a function', function () {
             var pList = new PropertyList(FakeType, {}, []);
 
-            expect(pList.eachParent.bind(pList)).withArgs('random').to.not.throwError();
-            expect(pList.eachParent.bind(pList)).withArgs(undefined).to.not.throwError();
-            expect(pList.eachParent.bind(pList)).to.not.throwError();
+            expect(function () { pList.eachParent.bind(pList)('random'); }).to.not.throw();
+            expect(function () { pList.eachParent.bind(pList)(undefined); }).to.not.throw();
+            expect(pList.eachParent.bind(pList)).to.not.throw();
         });
 
         it('should correctly bind the context to the iterator if one is provided', function () {
@@ -873,13 +873,13 @@ describe('PropertyList', function () {
             var pList = new PropertyList();
 
             pList.add(null);
-            expect(pList.members).to.be.empty();
+            expect(pList.members).to.be.empty;
 
             pList.add(undefined);
-            expect(pList.members).to.be.empty();
+            expect(pList.members).to.be.empty;
 
             pList.add(NaN);
-            expect(pList.members).to.be.empty();
+            expect(pList.members).to.be.empty;
         });
     });
 
@@ -1065,7 +1065,7 @@ describe('PropertyList', function () {
                 value: 'val3'
             }]);
 
-            expect(list.has('key1')).to.eql(true);
+            expect(list.has('key1')).to.be.true;
         });
 
         it('should return a falsey value if the key does not exist', function () {
@@ -1080,7 +1080,7 @@ describe('PropertyList', function () {
                 value: 'val3'
             }]);
 
-            expect(list.has('something')).to.eql(false);
+            expect(list.has('something')).to.be.false;
         });
 
         it('should handle if a key has multiple values', function () {
@@ -1095,7 +1095,7 @@ describe('PropertyList', function () {
                 value: 'val3'
             }]);
 
-            expect(list.has('key1')).to.eql(true);
+            expect(list.has('key1')).to.be.true;
         });
 
         it('should handle if a particular value is provided for lookup', function () {
@@ -1113,9 +1113,9 @@ describe('PropertyList', function () {
                 value: 'val4'
             }]);
 
-            expect(list.has('key1', 'val1')).to.eql(true);
-            expect(list.has('key1', 'val2')).to.eql(true);
-            expect(list.has('key1', 'val3')).to.eql(true);
+            expect(list.has('key1', 'val1')).to.be.true;
+            expect(list.has('key1', 'val2')).to.be.true;
+            expect(list.has('key1', 'val3')).to.be.true;
         });
 
         it('should return false if a particular value is provided for lookup but does not exist', function () {
@@ -1133,7 +1133,7 @@ describe('PropertyList', function () {
                 value: 'val4'
             }]);
 
-            expect(list.has('key1', 'val4')).to.eql(false);
+            expect(list.has('key1', 'val4')).to.be.false;
         });
 
         it('should return false if the key-value pair does not exist', function () {
@@ -1148,7 +1148,7 @@ describe('PropertyList', function () {
                 value: 'val3'
             }]);
 
-            expect(list.has('key4', 'val3')).to.eql(false);
+            expect(list.has('key4', 'val3')).to.be.false;
         });
 
         it('should return true if the item is provided', function () {
@@ -1163,7 +1163,7 @@ describe('PropertyList', function () {
                 value: 'val3'
             }]);
 
-            expect(list.has(list.members[0])).to.eql(true);
+            expect(list.has(list.members[0])).to.be.true;
         });
 
         it('should return true if key and value exist, but no duplicate values exist', function () {
@@ -1178,7 +1178,7 @@ describe('PropertyList', function () {
                 value: 'val3'
             }]);
 
-            expect(list.has('key1', 'val1')).to.eql(true);
+            expect(list.has('key1', 'val1')).to.be.true;
         });
     });
 });

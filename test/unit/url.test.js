@@ -1,27 +1,27 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     _ = require('lodash'),
     Url = require('../../').Url,
     PropertyList = require('../../').PropertyList,
     VariableList = require('../../').VariableList,
     rawUrls = require('../fixtures/').rawUrls;
 
-/* global describe, it */
 describe('Url', function () {
     describe('sanity', function () {
         var rawUrl = 'https://user:pass@postman-echo.com/:path/get?a=1&b=2#heading',
             url = new Url(rawUrl);
 
         it('parsed successfully', function () {
-            expect(url).to.be.ok();
+            expect(url).to.be.ok;
             expect(url).to.be.an('object');
         });
 
         describe('has property', function () {
             it('auth', function () {
-                expect(url).to.have.property('auth');
-                expect(url.auth).to.be.an('object');
-                expect(url.auth).to.have.property('user', 'user');
-                expect(url.auth).to.have.property('password', 'pass');
+                expect(url).to.have.property('auth').that.is.an('object');
+                expect(url.auth).to.deep.include({
+                    user: 'user',
+                    password: 'pass'
+                });
             });
 
             it('hash', function () {
@@ -29,13 +29,11 @@ describe('Url', function () {
             });
 
             it('host', function () {
-                expect(url).to.have.property('host');
-                expect(url.host).to.eql(['postman-echo', 'com']);
+                expect(url).to.have.property('host').that.eql(['postman-echo', 'com']);
             });
 
             it('path', function () {
-                expect(url).to.have.property('path');
-                expect(url.path).to.eql([':path', 'get']);
+                expect(url).to.have.property('path').that.eql([':path', 'get']);
             });
 
             it('port', function () {
@@ -47,17 +45,15 @@ describe('Url', function () {
             });
 
             it('query', function () {
-                expect(url).to.have.property('query');
-                expect(url.query).to.be.an('object');
+                expect(url).to.have.property('query').that.is.an('object');
             });
 
             it('variables', function () {
-                expect(url).to.have.property('variables');
-                expect(url.variables).to.be.an('object');
+                expect(url).to.have.property('variables').that.is.an('object');
             });
 
             it('update', function () {
-                expect(url.update).to.be.ok();
+                expect(url.update).to.be.ok;
                 expect(url.update).to.be.a('function');
             });
         });
@@ -87,7 +83,7 @@ describe('Url', function () {
                 expect(url.toJSON()).to.eql({
                     host: ['localhost'],
                     path: ['api', 'validate-email'],
-                    port: 80,
+                    port: '80',
                     query: [{ key: 'user_email', value: 'fred@gmail.com' }],
                     variable: []
                 });
@@ -98,16 +94,16 @@ describe('Url', function () {
     describe('Constructor', function () {
         it('should be able to construct a URL from empty string', function () {
             var u = new Url('');
-
-            expect(u.auth).to.be(undefined);
-            expect(u.protocol).to.be(undefined);
-            expect(u.port).to.be(undefined);
-            expect(u.path).to.be(undefined);
-            expect(u.hash).to.be(undefined);
-            expect(u.host).to.be(undefined);
-
-            expect(u.query).to.be.a(PropertyList);
-            expect(u.variables).to.be.a(VariableList);
+            expect(u).to.include.keys({
+                auth: undefined,
+                protocol: undefined,
+                port: undefined,
+                path: undefined,
+                hash: undefined,
+                host: undefined
+            });
+            expect(u).to.have.property('query').that.is.an.instanceOf(PropertyList);
+            expect(u).to.have.property('variables').that.is.an.instanceOf(VariableList);
         });
     });
 
@@ -129,337 +125,389 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse bare ipv4 addresses with variables', function () {
             var subject = Url.parse('127.0.{{subnet}}.1');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '{{subnet}}', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '{{subnet}}', '1'],
+                port: undefined,
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse bare ipv4 addresses with protocol', function () {
             var subject = Url.parse('http://127.0.0.1');
-            expect(subject.protocol).to.be('http');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'http',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse bare ipv4 addresses with non standard protocol', function () {
             var subject = Url.parse('{{my-protocol}}://127.0.0.1');
-            expect(subject.protocol).to.be('{{my-protocol}}');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: '{{my-protocol}}',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse bare ipv4 addresses with port', function () {
             var subject = Url.parse('127.0.0.1:80');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('80');
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '80',
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse invalid port of bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1:{{my-port}}');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('{{my-port}}');
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '{{my-port}}',
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse bare ipv4 addresses with protocol and port', function () {
             var subject = Url.parse('http://127.0.0.1:80');
-            expect(subject.protocol).to.be('http');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('80');
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'http',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '80',
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
         it('must parse bare ipv4 addresses with protocol and port as variables', function () {
             var subject = Url.parse('{{my-protocol}}://127.0.0.1:{{my-port}}');
-            expect(subject.protocol).to.be('{{my-protocol}}');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('{{my-port}}');
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: '{{my-protocol}}',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '{{my-port}}',
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
         it('must parse variable as host with protocol and port as variables', function () {
             var subject = Url.parse('{{my-protocol}}://{{my-host}}:{{my-port}}');
-            expect(subject.protocol).to.be('{{my-protocol}}');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['{{my-host}}']);
-            expect(subject.port).to.be('{{my-port}}');
-            expect(subject.path).to.be(undefined);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: '{{my-protocol}}',
+                auth: undefined,
+                host: ['{{my-host}}'],
+                port: '{{my-port}}',
+                path: undefined,
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse trailing path backslash in ipv4 address', function () {
             var subject = Url.parse('http://127.0.0.1/');
-            expect(subject.protocol).to.be('http');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.eql(undefined);
-            expect(subject.path).to.eql(['']);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'http',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: [''],
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse trailing path backslash in ipv4 address and port', function () {
             var subject = Url.parse('http://127.0.0.1:8080/');
-            expect(subject.protocol).to.be('http');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('8080');
-            expect(subject.path).to.eql(['']);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'http',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '8080',
+                path: [''],
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse path backslash in ipv4 address and port', function () {
             var subject = Url.parse('http://127.0.0.1:8080/hello/world');
-            expect(subject.protocol).to.be('http');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('8080');
-            expect(subject.path).to.eql(['hello', 'world']);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'http',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '8080',
+                path: ['hello', 'world'],
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse path backslash in ipv4 address and port and retain trailing slash marker', function () {
             var subject = Url.parse('http://127.0.0.1:8080/hello/world/');
-            expect(subject.protocol).to.be('http');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be('8080');
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.be(undefined);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'http',
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: '8080',
+                path: ['hello', 'world', ''],
+                query: undefined,
+                hash: undefined
+            });
         });
 
         it('must parse path and query in ipv4 address and port and retain trailing slash marker', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.eql([{
-                key: 'query',
-                value: 'param'
-            }]);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: ['hello', 'world', ''],
+                query: [{
+                    key: 'query',
+                    value: 'param'
+                }],
+                hash: undefined
+            });
         });
 
         it('must parse ip address host with query param and hash', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param#test-api');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.eql([{
-                key: 'query',
-                value: 'param'
-            }]);
-            expect(subject.hash).to.be('test-api');
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: ['hello', 'world', ''],
+                query: [{
+                    key: 'query',
+                    value: 'param'
+                }],
+                hash: 'test-api'
+            });
         });
 
         it('must parse url query-param even if `?` is present in the URL hash', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param#?test-api=true');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.eql([{
-                key: 'query',
-                value: 'param'
-            }]);
-            expect(subject.hash).to.be('?test-api=true');
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: ['hello', 'world', ''],
+                query: [{
+                    key: 'query',
+                    value: 'param'
+                }],
+                hash: '?test-api=true'
+            });
         });
 
         it('must parse url even if dulicate `?` is present in query-param', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param&err?ng=v_l?e@!');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.eql([{
-                key: 'query',
-                value: 'param'
-            }, {
-                key: 'err?ng',
-                value: 'v_l?e@!'
-            }]);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: ['hello', 'world', ''],
+                query: [{
+                    key: 'query',
+                    value: 'param'
+                }, {
+                    key: 'err?ng',
+                    value: 'v_l?e@!'
+                }],
+                hash: undefined
+            });
         });
 
         it('must parse url having auth even if dulicate `@` is present in query-param', function () {
             var subject = Url.parse('username:password@127.0.0.1/hello/world/?query=param&err?ng=v_l?e@!');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.eql({
-                user: 'username',
-                password: 'password'
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: {
+                    user: 'username',
+                    password: 'password'
+                },
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: ['hello', 'world', ''],
+                query: [{
+                    key: 'query',
+                    value: 'param'
+                }, {
+                    key: 'err?ng',
+                    value: 'v_l?e@!'
+                }],
+                hash: undefined
             });
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.eql([{
-                key: 'query',
-                value: 'param'
-            }, {
-                key: 'err?ng',
-                value: 'v_l?e@!'
-            }]);
-            expect(subject.hash).to.be(undefined);
         });
 
         it('must parse query params with no values and save the value as null', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param&valueless1&valueless2');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '0', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['hello', 'world', '']);
-            expect(subject.query).to.eql([{
-                key: 'query',
-                value: 'param'
-            }, {
-                key: 'valueless1',
-                value: null
-            }, {
-                key: 'valueless2',
-                value: null
-            }]);
-            expect(subject.hash).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '0', '1'],
+                port: undefined,
+                path: ['hello', 'world', ''],
+                query: [{
+                    key: 'query',
+                    value: 'param'
+                }, {
+                    key: 'valueless1',
+                    value: null
+                }, {
+                    key: 'valueless2',
+                    value: null
+                }],
+                hash: undefined
+            });
         });
 
         it('must parse url hosts having dots within variables', function () {
             var subject = Url.parse('127.0.{{ip.subnet}}.1/get');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '{{ip.subnet}}', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['get']);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '{{ip.subnet}}', '1'],
+                port: undefined,
+                path: ['get']
+            });
         });
 
         it('must parse url hosts having dots within variables and with values around variable', function () {
             var subject = Url.parse('127.0.1{{ip.subnet}}2.1/get');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '1{{ip.subnet}}2', '1']);
-            expect(subject.port).to.be(undefined);
-            expect(subject.path).to.eql(['get']);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '1{{ip.subnet}}2', '1'],
+                port: undefined,
+                path: ['get']
+            });
         });
 
         it('must parse url hosts with invalid non-closing double braces', function () {
             var subject = Url.parse('127.0.{{ip.subnet.1');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['127', '0', '{{ip', 'subnet', '1']);
-            expect(subject.port).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['127', '0', '{{ip', 'subnet', '1'],
+                port: undefined
+            });
         });
 
         it('must parse url hosts with multiple variables with dots', function () {
             var subject = Url.parse('{{ip.network_identifier}}.{{ip.subnet}}.1');
-            expect(subject.protocol).to.be(undefined);
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['{{ip.network_identifier}}', '{{ip.subnet}}', '1']);
-            expect(subject.port).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: undefined,
+                auth: undefined,
+                host: ['{{ip.network_identifier}}', '{{ip.subnet}}', '1'],
+                port: undefined
+            });
         });
 
         it('must parse url with file protocol', function () {
             var subject = Url.parse('file://hostname/path/to/file.txt');
-            expect(subject.protocol).to.be('file');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['hostname']);
-            expect(subject.path).to.eql(['path', 'to', 'file.txt']);
-            expect(subject.port).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'file',
+                auth: undefined,
+                host: ['hostname'],
+                path: ['path', 'to', 'file.txt'],
+                port: undefined
+            });
         });
 
         it('must parse url with file protocol and file name without extension', function () {
             var subject = Url.parse('file://hostname/path/to/file');
-            expect(subject.protocol).to.be('file');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['hostname']);
-            expect(subject.path).to.eql(['path', 'to', 'file']);
-            expect(subject.port).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'file',
+                auth: undefined,
+                host: ['hostname'],
+                path: ['path', 'to', 'file'],
+                port: undefined
+            });
         });
 
         it('must parse url with file protocol and relative path to files', function () {
             var subject = Url.parse('file://../path/to/file');
-            expect(subject.protocol).to.be('file');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(['']);
-            expect(subject.path).to.eql(['path', 'to', 'file']);
-            expect(subject.port).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'file',
+                auth: undefined,
+                host: [''],
+                path: ['path', 'to', 'file'],
+                port: undefined
+            });
         });
 
         it('must parse url with file protocol and with leading / in path', function () {
             var subject = Url.parse('file:///etc/hosts');
-            expect(subject.protocol).to.be('file');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(undefined);
+            expect(subject.protocol).to.equal('file');
+            expect(subject.auth).to.be.undefined;
+            expect(subject.host).to.be.undefined;
             expect(subject.path).to.eql(['etc', 'hosts']);
-            expect(subject.port).to.be(undefined);
+            expect(subject.port).to.be.undefined;
         });
 
         it('must parse url with file protocol and with leading / in path and relative path', function () {
             var subject = Url.parse('file:///../etc/hosts');
-            expect(subject.protocol).to.be('file');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(undefined);
+            expect(subject.protocol).to.equal('file');
+            expect(subject.auth).to.be.undefined;
+            expect(subject.host).to.be.undefined;
             expect(subject.path).to.eql(['..', 'etc', 'hosts']);
-            expect(subject.port).to.be(undefined);
+            expect(subject.port).to.be.undefined;
         });
 
         it('must parse url with file protocol and with multiple leading / in path and relative path', function () {
             var subject = Url.parse('file:////../etc/hosts');
-            expect(subject.protocol).to.be('file');
-            expect(subject.auth).to.be(undefined);
-            expect(subject.host).to.eql(undefined);
-            expect(subject.path).to.eql(['', '..', 'etc', 'hosts']);
-            expect(subject.port).to.be(undefined);
+            expect(subject).to.deep.include({
+                protocol: 'file',
+                host: undefined,
+                path: ['', '..', 'etc', 'hosts']
+            });
+            expect(subject.auth).to.be.undefined;
+            expect(subject.port).to.be.undefined;
         });
 
         it('should parse path variables properly', function () {
             var subject = Url.parse('http://127.0.0.1/:a/:ab.json/:a+b');
-            expect(subject).to.have.property('variable');
-            expect(subject.variable).to.have.length(3);
-            expect(subject.variable).to.eql([
+            expect(subject).to.have.property('variable').that.has.lengthOf(3).that.eql([
                 { key: 'a' }, { key: 'ab.json' }, { key: 'a+b' }
             ]);
         });
@@ -467,8 +515,7 @@ describe('Url', function () {
         it('should not parse empty path variables', function () {
             var subject = Url.parse('http://127.0.0.1/:/:/:var');
             expect(subject.path).to.eql([':', ':', ':var']);
-            expect(subject.variable).to.have.length(1);
-            expect(subject.variable).to.eql([{ key: 'var' }]);
+            expect(subject.variable).to.have.lengthOf(1).that.eql([{ key: 'var' }]);
         });
     });
 
@@ -519,10 +566,10 @@ describe('Url', function () {
         });
 
         it('must handle falsy input correctly', function () {
-            expect(new Url().toString()).to.be('');
-            expect(new Url('').toString()).to.be('');
-            expect(new Url(null).toString()).to.be('');
-            expect(new Url(undefined).toString()).to.be('');
+            expect(new Url().toString()).to.equal('');
+            expect(new Url('').toString()).to.equal('');
+            expect(new Url(null).toString()).to.equal('');
+            expect(new Url(undefined).toString()).to.equal('');
         });
 
         it('must not include disabled query params in the unparsed result', function () {
@@ -534,7 +581,7 @@ describe('Url', function () {
                 ]
             });
 
-            expect(url.toString()).to.be('postman-echo.com?foo=bar');
+            expect(url.toString()).to.equal('postman-echo.com?foo=bar');
         });
     });
 
@@ -574,27 +621,33 @@ describe('Url', function () {
                 ]
             }).toJSON();
 
-            expect(parsedUrl).to.be.ok();
-            expect(parsedUrl.protocol).to.eql('http');
-            expect(parsedUrl.host).to.eql(['postman-echo', 'com']);
-            expect(parsedUrl.port).to.eql('80');
-            expect(parsedUrl.path).to.eql([':resource']);
-            expect(parsedUrl.query).to.eql([{
-                key: 'id',
-                value: '123'
-            }]);
-            expect(parsedUrl.hash).to.eql(undefined);
+            expect(parsedUrl).to.be.ok;
+            expect(parsedUrl).to.deep.include({
+                protocol: 'http',
+                host: ['postman-echo', 'com'],
+                path: [':resource'],
+                port: '80',
+                query: [{
+                    key: 'id',
+                    value: '123'
+                }]
+            });
+            expect(parsedUrl.hash).to.be.undefined;
 
-            expect(parsedUrl.variable).to.be.ok();
+            expect(parsedUrl.variable).to.be.ok;
             expect(parsedUrl.variable.length).to.eql(2);
 
-            expect(parsedUrl.variable[0]).to.be.ok();
-            expect(parsedUrl.variable[0].id).to.eql('resource');
-            expect(parsedUrl.variable[0].value).to.eql('post');
+            expect(parsedUrl.variable[0]).to.be.ok;
+            expect(parsedUrl.variable[0]).to.deep.include({
+                id: 'resource',
+                value: 'post'
+            });
 
-            expect(parsedUrl.variable[1]).to.be.ok();
-            expect(parsedUrl.variable[1].id).to.eql('foo');
-            expect(parsedUrl.variable[1].value).to.eql('bar');
+            expect(parsedUrl.variable[1]).to.be.ok;
+            expect(parsedUrl.variable[1]).to.deep.include({
+                id: 'foo',
+                value: 'bar'
+            });
         });
 
         it('should parse host even if sent as string', function () {
@@ -604,7 +657,7 @@ describe('Url', function () {
                 path: ':resource'
             }).toJSON();
 
-            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl).to.be.ok;
             expect(parsedUrl.host).to.eql(['postman-echo', 'com']);
         });
 
@@ -615,7 +668,7 @@ describe('Url', function () {
                 path: ':resource'
             }).toJSON();
 
-            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl).to.be.ok;
             expect(parsedUrl.path).to.eql([':resource']);
         });
 
@@ -626,7 +679,7 @@ describe('Url', function () {
                 path: '/:resource'
             }).toJSON();
 
-            expect(parsedUrl).to.be.ok();
+            expect(parsedUrl).to.be.ok;
             expect(parsedUrl.path).to.eql([':resource']);
         });
     });
@@ -825,12 +878,12 @@ describe('Url', function () {
         describe('isUrl', function () {
             it('Should return true for the ProxyConfigList constructor', function () {
                 var url = new Url({}, []);
-                expect(Url.isUrl(url)).to.eql(true);
+                expect(Url.isUrl(url)).to.be.true;
             });
 
             it('Should return false for the invalid ProxyConfigList', function () {
                 var url = { _postman_propertyName: 'Url' };
-                expect(Url.isUrl(url)).to.eql(false);
+                expect(Url.isUrl(url)).to.be.false;
             });
         });
     });
@@ -839,10 +892,10 @@ describe('Url', function () {
         it('should handle string based hosts correctly', function () {
             var url = new Url('postman-echo.com');
 
-            expect(url.getHost()).to.be('postman-echo.com');
+            expect(url.getHost()).to.equal('postman-echo.com');
 
             url.host = url.host.join('.'); // hijack the host form to ensure sanity in the next assertion
-            expect(url.getHost()).to.be('postman-echo.com');
+            expect(url.getHost()).to.equal('postman-echo.com');
         });
     });
 
@@ -851,20 +904,20 @@ describe('Url', function () {
             var url = new Url('https://postman-echo.com/auth/oauth1');
 
             delete url.protocol;
-            expect(url.getOAuth1BaseUrl()).to.be('http://postman-echo.com/auth/oauth1');
+            expect(url.getOAuth1BaseUrl()).to.equal('http://postman-echo.com/auth/oauth1');
         });
 
         it('should use the the port if one is provided', function () {
             var url = new Url('https://postman-echo.com:8443/auth/oauth1');
 
-            expect(url.getOAuth1BaseUrl()).to.be('https://postman-echo.com:8443/auth/oauth1');
+            expect(url.getOAuth1BaseUrl()).to.equal('https://postman-echo.com:8443/auth/oauth1');
         });
 
         it('should not append superfluous protocol separators', function () {
             var url = new Url('https://postman-echo.com/auth/oauth1');
 
             url.protocol = 'https://';
-            expect(url.getOAuth1BaseUrl()).to.be('https://postman-echo.com/auth/oauth1');
+            expect(url.getOAuth1BaseUrl()).to.equal('https://postman-echo.com/auth/oauth1');
         });
     });
 
@@ -891,7 +944,7 @@ describe('Url', function () {
         it('should return an empty string if there are no query parameters', function () {
             var url = new Url('https://postman-echo.com/getbaz');
 
-            expect(url.getQueryString()).to.be('');
+            expect(url.getQueryString()).to.equal('');
         });
 
         it('must be able to convert query params to object', function () {
@@ -936,23 +989,23 @@ describe('Url', function () {
                 var url = new Url(longUrl),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
-                expect(json.auth.user).to.have.length(fk);
-                expect(json.auth.password).to.have.length(fk);
-                expect(json.protocol).to.have.length(fk);
-                expect(json.port).to.be(1e100.toString());
-                expect(json.path).to.have.length(fk);
-                expect(json.hash).to.have.length(fk);
-                expect(json.host).to.have.length(101);
-                expect(json.query).to.have.length(fk + 1);
+                expect(url).to.be.ok;
+                expect(json.auth.user).to.have.lengthOf(fk);
+                expect(json.auth.password).to.have.lengthOf(fk);
+                expect(json.protocol).to.have.lengthOf(fk);
+                expect(json.port).to.equal(1e100.toString());
+                expect(json.path).to.have.lengthOf(fk);
+                expect(json.hash).to.have.lengthOf(fk);
+                expect(json.host).to.have.lengthOf(101);
+                expect(json.query).to.have.lengthOf(fk + 1);
             });
 
             it('should be thwarted for a long protocol', function () {
                 var url = new Url(longProto),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
-                expect(json.protocol).to.have.length(1e7);
+                expect(url).to.be.ok;
+                expect(json.protocol).to.have.lengthOf(1e7);
                 expect(json).to.not.have.keys(['auth', 'port', 'path', 'hash', 'query']);
                 expect(json.host).to.eql(['postman-echo', 'com']);
             });
@@ -961,10 +1014,10 @@ describe('Url', function () {
                 var url = new Url(longAuth),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
+                expect(url).to.be.ok;
                 expect(json).to.not.have.keys(['port', 'path', 'hash', 'query']);
-                expect(json.auth.user).to.have.length(1e7);
-                expect(json.auth.password).to.have.length(1e7);
+                expect(json.auth.user).to.have.lengthOf(1e7);
+                expect(json.auth.password).to.have.lengthOf(1e7);
                 expect(json.host).to.eql(['postman-echo', 'com']);
             });
 
@@ -972,39 +1025,39 @@ describe('Url', function () {
                 var url = new Url(longPath),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
+                expect(url).to.be.ok;
                 expect(json).to.not.have.keys(['port', 'auth', 'hash', 'query']);
                 expect(json.host).to.eql(['postman-echo', 'com']);
-                expect(json.path).to.have.length(1e4);
+                expect(json.path).to.have.lengthOf(1e4);
             });
 
             it('should be thwarted for a long hash', function () {
                 var url = new Url(longHash),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
+                expect(url).to.be.ok;
                 expect(json).to.not.have.keys(['port', 'auth', 'query', 'path']);
                 expect(json.host).to.eql(['postman-echo', 'com']);
-                expect(json.hash).to.have.length(1e8);
+                expect(json.hash).to.have.lengthOf(1e8);
             });
 
             it('should be thwarted for a long host', function () {
                 var url = new Url(longHost),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
+                expect(url).to.be.ok;
                 expect(json).to.not.have.keys(['port', 'auth', 'query', 'path', 'hash', 'protocol']);
-                expect(json.host).to.have.length(101);
+                expect(json.host).to.have.lengthOf(101);
             });
 
             it('should be thwarted for a long query', function () {
                 var url = new Url(longQuery),
                     json = url.toJSON();
 
-                expect(url).to.be.ok();
+                expect(url).to.be.ok;
                 expect(json).to.not.have.keys(['port', 'auth', 'query', 'path', 'hash', 'protocol']);
                 expect(json.host).to.eql(['postman-echo', 'com']);
-                expect(json.query).to.have.length(fk + 1);
+                expect(json.query).to.have.lengthOf(fk + 1);
             });
         });
     });
@@ -1017,8 +1070,7 @@ describe('Url', function () {
             it('should handle empty path properly', function () {
                 var url = new Url('https://postman-echo.com////////get/');
 
-                expect(url.path).to.be.an('array');
-                expect(url.path).to.have.length(9);
+                expect(url.path).to.be.an('array').that.has.lengthOf(9);
                 expect(url.toString()).to.eql('https://postman-echo.com////////get/');
             });
 
@@ -1029,8 +1081,7 @@ describe('Url', function () {
                     path: '/get'
                 });
 
-                expect(url.path).to.be.an('array');
-                expect(url.path).to.eql(['get']);
+                expect(url.path).to.be.an('array').that.eql(['get']);
             });
 
             it('should parse multiple empty path properly for JSON representation', function () {
@@ -1040,8 +1091,7 @@ describe('Url', function () {
                     path: '///get'
                 });
 
-                expect(url.path).to.be.an('array');
-                expect(url.path).to.eql(['', '', 'get']);
+                expect(url.path).to.be.an('array').that.eql(['', '', 'get']);
             });
         });
     });

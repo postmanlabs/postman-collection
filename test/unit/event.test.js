@@ -1,11 +1,10 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     fixtures = require('../fixtures'),
     sdk = require('../../lib/index.js'),
 
     Event = sdk.Event,
     Script = sdk.Script;
 
-/* global describe, it */
 describe('Event', function () {
     var rawEvent = {
         listen: 'test',
@@ -22,7 +21,7 @@ describe('Event', function () {
                 postmanEvent = new Event(rawEvent);
 
             it('initializes successfully', function () {
-                expect(postmanEvent).to.be.ok();
+                expect(postmanEvent).to.be.ok;
             });
 
             describe('has property', function () {
@@ -41,7 +40,7 @@ describe('Event', function () {
                 postmanEvent = new Event(rawEvent);
 
             it('initializes successfully', function () {
-                expect(postmanEvent).to.be.ok();
+                expect(postmanEvent).to.be.ok;
             });
 
             describe('has property', function () {
@@ -50,13 +49,9 @@ describe('Event', function () {
                 });
 
                 it('script', function () {
-                    expect(postmanEvent).to.have.property('script');
-                    expect(postmanEvent.script).to.be.an('object');
-
+                    expect(postmanEvent).to.have.property('script').that.is.an('object');
                     expect(postmanEvent.script).to.have.property('type', 'text/javascript');
-
-                    expect(postmanEvent.script).to.have.property('exec');
-                    expect(postmanEvent.script.exec).to.be.an('array');
+                    expect(postmanEvent.script).to.have.property('exec').that.is.an('array');
                 });
             });
         });
@@ -112,12 +107,15 @@ describe('Event', function () {
 
             eventJSON = event.toJSON();
 
-            expect(eventJSON).to.have.property('id', 'my-global-script-1');
-            expect(eventJSON).to.have.property('listen', 'test');
-            expect(eventJSON).to.have.property('script');
-            expect(eventJSON.script).to.have.property('id');
-            expect(eventJSON.script).to.have.property('type', 'text/javascript');
-            expect(eventJSON.script.exec).to.eql(['console.log("hello");']);
+            expect(eventJSON).to.deep.include({
+                id: 'my-global-script-1',
+                listen: 'test'
+            });
+            expect(eventJSON).to.have.property('script').that.has.property('id');
+            expect(eventJSON.script).to.deep.include({
+                type: 'text/javascript',
+                exec: ['console.log("hello");']
+            });
         });
 
         it('should update script id', function () {
@@ -125,17 +123,18 @@ describe('Event', function () {
                 beforeJSON = event.toJSON(),
                 afterJSON;
 
-            expect(beforeJSON).to.have.property('script');
-            expect(beforeJSON.script).to.have.property('id');
-            expect(beforeJSON.script).to.have.property('type', 'text/javascript');
-            expect(beforeJSON.script.exec).to.eql(['console.log("hello");']);
+            expect(beforeJSON).to.have.property('script').that.has.property('id');
+            expect(beforeJSON.script).to.deep.include({
+                type: 'text/javascript',
+                exec: ['console.log("hello");']
+            });
 
             event.update({ script: { id: 'my-new-script' } });
             afterJSON = event.toJSON();
 
-            expect(beforeJSON.script.id).to.not.be(afterJSON.script.id);
+            expect(beforeJSON.script.id).to.not.equal(afterJSON.script.id);
             expect(afterJSON.script).to.have.property('id', 'my-new-script');
-            expect(afterJSON.script.exec).to.not.be.ok();
+            expect(afterJSON.script.exec).to.be.undefined;
         });
     });
 });

@@ -1,15 +1,14 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     fixtures = require('../fixtures'),
     Description = require('../../lib/index.js').Description;
 
-/* global describe, it */
 describe('Description', function () {
     var rawDescription = fixtures.collectionV2.item[0].description,
         description = new Description(rawDescription);
 
     describe('sanity', function () {
         it('initializes successfully', function () {
-            expect(description).to.be.ok();
+            expect(description).to.be.ok;
         });
 
         describe('has property', function () {
@@ -24,8 +23,7 @@ describe('Description', function () {
 
         describe('has method', function () {
             it('Stringificaton (toString)', function () {
-                expect(description).to.have.property('toString');
-                expect(description.toString).to.be.a('function');
+                expect(description).to.have.property('toString').that.is.a('function');
             });
         });
     });
@@ -34,8 +32,10 @@ describe('Description', function () {
         it('must match what the description was initialized with', function () {
             var jsonified = description.toJSON();
 
-            expect(jsonified.content).to.eql(rawDescription.content);
-            expect(jsonified.type).to.eql(rawDescription.type || 'text/plain');
+            expect(jsonified).to.deep.include({
+                content: rawDescription.content,
+                type: rawDescription.type || 'text/plain'
+            });
         });
     });
 
@@ -46,15 +46,15 @@ describe('Description', function () {
         };
 
         it('should return true for a description instance', function () {
-            expect(Description.isDescription(new Description(rawDescription))).to.be(true);
+            expect(Description.isDescription(new Description(rawDescription))).to.be.true;
         });
 
         it('should return false for a raw description object', function () {
-            expect(Description.isDescription(rawDescription)).to.be(false);
+            expect(Description.isDescription(rawDescription)).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(Description.isDescription()).to.be(false);
+            expect(Description.isDescription()).to.be.false;
         });
     });
 
@@ -65,7 +65,7 @@ describe('Description', function () {
                 type: 'text/markdown'
             });
 
-            expect(description.toString()).to.be('Description\n');
+            expect(description.toString()).to.equal('Description\n');
         });
 
         it('should correctly handle HTML', function () {
@@ -74,7 +74,7 @@ describe('Description', function () {
                 type: 'text/html'
             });
 
-            expect(description.toString()).to.be('<h1>Description</h1>');
+            expect(description.toString()).to.equal('<h1>Description</h1>');
         });
 
         it('should escape HTML for arbitrary formats', function () {
@@ -83,11 +83,11 @@ describe('Description', function () {
                 type: 'text/random'
             });
 
-            expect(description.toString()).to.be('&lt;%= template %&gt;');
+            expect(description.toString()).to.equal('&lt;%= template %&gt;');
         });
 
         it('should return an empty string for falsy input', function () {
-            expect(new Description().toString()).to.be('');
+            expect(new Description().toString()).to.equal('');
         });
     });
 });

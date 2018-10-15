@@ -1,13 +1,12 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     MutationTracker = require('../../').MutationTracker;
 
-/* global describe, it */
 describe('MutationTracker', function () {
     describe('construction', function () {
         it('should be disabled without definition or options', function () {
             var tracker = new MutationTracker();
 
-            expect(tracker).to.be.ok();
+            expect(tracker).to.be.ok;
         });
 
         it('should allow options', function () {
@@ -53,9 +52,11 @@ describe('MutationTracker', function () {
                 compacted: []
             });
 
-            expect(tracker.autoCompact).to.equal(true);
-            expect(tracker.stream).to.eql([]);
-            expect(tracker.compacted).to.eql({});
+            expect(tracker).to.deep.include({
+                autoCompact: true,
+                stream: [],
+                compacted: {}
+            });
         });
     });
 
@@ -87,8 +88,7 @@ describe('MutationTracker', function () {
             tracker.compact();
 
             expect(tracker.count()).to.equal(2);
-            expect(tracker.compacted).to.have.property('foo');
-            expect(tracker.compacted).to.have.property('bar');
+            expect(tracker.compacted).to.include.keys(['foo', 'bar']);
         });
 
         it('should preserved existing compacted changes', function () {
@@ -102,9 +102,7 @@ describe('MutationTracker', function () {
             tracker.compact();
 
             expect(tracker.count()).to.equal(3);
-            expect(tracker.compacted).to.have.property('foo');
-            expect(tracker.compacted).to.have.property('bar');
-            expect(tracker.compacted).to.have.property('baz');
+            expect(tracker.compacted).to.include.keys(['foo', 'bar', 'baz']);
         });
     });
 
@@ -121,9 +119,8 @@ describe('MutationTracker', function () {
             tracker.track('unset', 'bar');
 
             expect(tracker.count()).to.equal(3);
-            expect(tracker.stream).to.have.length(0);
-            expect(tracker.compacted).to.have.property('foo');
-            expect(tracker.compacted).to.have.property('bar');
+            expect(tracker.stream).to.have.lengthOf(0);
+            expect(tracker.compacted).to.include.keys(['foo', 'bar']);
         });
     });
 
@@ -251,12 +248,12 @@ describe('MutationTracker', function () {
         it('should detect mutation tracker instances', function () {
             var tracker = new MutationTracker();
 
-            expect(MutationTracker.isMutationTracker(tracker)).to.equal(true);
+            expect(MutationTracker.isMutationTracker(tracker)).to.be.true;
         });
 
         it('should not detect non mutation tracker instances', function () {
-            expect(MutationTracker.isMutationTracker({})).to.equal(false);
-            expect(MutationTracker.isMutationTracker({ _postman_propertyName: 'MutationTracker' })).to.equal(false);
+            expect(MutationTracker.isMutationTracker({})).to.be.false;
+            expect(MutationTracker.isMutationTracker({ _postman_propertyName: 'MutationTracker' })).to.be.false;
         });
     });
 });

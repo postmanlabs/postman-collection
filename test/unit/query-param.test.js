@@ -1,9 +1,8 @@
 var _ = require('lodash'),
-    expect = require('expect.js'),
+    expect = require('chai').expect,
     QueryParam = require('../../').QueryParam,
     rawQueryStrings = require('../fixtures/index').rawQueryStrings;
 
-/* global describe, it */
 describe('QueryParam', function () {
     describe('construction', function () {
         it('should handle null keys and values correctly', function () {
@@ -12,20 +11,24 @@ describe('QueryParam', function () {
                 value: null
             });
 
-            expect(qp).to.be.ok();
-            expect(qp).to.have.property('key', null);
-            expect(qp).to.have.property('value', null);
+            expect(qp).to.be.ok;
+            expect(qp).to.deep.include({
+                key: null,
+                value: null
+            });
 
-            expect(qp.toString()).to.be('');
-            expect(qp.valueOf()).to.be('');
+            expect(qp.toString()).to.equal('');
+            expect(qp.valueOf()).to.equal('');
         });
 
         it('should handle string input correctly', function () {
             var qp = new QueryParam('foo=bar');
 
-            expect(qp).to.be.ok();
-            expect(qp).to.have.property('key', 'foo');
-            expect(qp).to.have.property('value', 'bar');
+            expect(qp).to.be.ok;
+            expect(qp).to.deep.include({
+                key: 'foo',
+                value: 'bar'
+            });
         });
 
         it('should handle system property correctly', function () {
@@ -78,7 +81,7 @@ describe('QueryParam', function () {
 
         describe('.unparse', function () {
             it('should bail out of the provided set of params is falsy', function () {
-                expect(QueryParam.unparse()).to.be('');
+                expect(QueryParam.unparse()).to.equal('');
             });
 
             it('should set value as empty for null and drop undefined', function () {
@@ -112,18 +115,18 @@ describe('QueryParam', function () {
 
         describe('.unparseSingle', function () {
             it('should return an empty string for non object arguments', function () {
-                expect(QueryParam.unparseSingle()).to.be('');
-                expect(QueryParam.unparseSingle([])).to.be('');
+                expect(QueryParam.unparseSingle()).to.equal('');
+                expect(QueryParam.unparseSingle([])).to.equal('');
             });
 
             it('should return an empty string for undefined values', function () {
-                expect(QueryParam.unparseSingle({})).to.be('');
-                expect(QueryParam.unparseSingle({ key: 'foo' })).to.be('');
+                expect(QueryParam.unparseSingle({})).to.equal('');
+                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('');
             });
 
             it('should encode keys when value is null and encode is true', function () {
-                expect(QueryParam.unparseSingle({ key: ' ', value: null }, true)).to.be('%20');
-                expect(QueryParam.unparseSingle({ key: 'foo', value: null }, true)).to.be('foo');
+                expect(QueryParam.unparseSingle({ key: ' ', value: null }, true)).to.equal('%20');
+                expect(QueryParam.unparseSingle({ key: 'foo', value: null }, true)).to.equal('foo');
             });
         });
     });
@@ -132,7 +135,7 @@ describe('QueryParam', function () {
         describe(rawQueryString, function () {
             it('should be parsed properly', function () {
                 var params = QueryParam.parse(rawQueryString);
-                expect(params.length).to.be(4);
+                expect(params.length).to.equal(4);
             });
 
             it('should be unparsed properly', function () {
@@ -325,7 +328,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=c{{b}}&c=d');
+            })).to.equal('a=c{{b}}&c=d');
         });
 
         it('a=обязательный&c=d', function () {
@@ -335,21 +338,21 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9&c=d');
+            })).to.equal('a=%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9&c=d');
         });
 
         it('email=foo+bar-xyz@gmail.com', function () {
             var parsed = [
                 { key: 'email', value: 'foo+bar-xyz@gmail.com' }
             ];
-            expect(QueryParam.unparse(parsed)).to.be('email=foo+bar-xyz@gmail.com');
+            expect(QueryParam.unparse(parsed)).to.equal('email=foo+bar-xyz@gmail.com');
         });
 
         it('pre encoded text( must avoid double encoding) - "email=foo%2Bbar%40domain.com"', function () {
             var parsed = [
                 { key: 'email', value: 'foo%2Bbar%40domain.com' }
             ];
-            expect(QueryParam.unparse(parsed)).to.be('email=foo%2Bbar%40domain.com');
+            expect(QueryParam.unparse(parsed)).to.equal('email=foo%2Bbar%40domain.com');
         });
 
         it('multibyte character - "multibyte=𝌆"', function () {
@@ -358,14 +361,14 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('multibyte=%F0%9D%8C%86');
+            })).to.equal('multibyte=%F0%9D%8C%86');
         });
 
         it('pre-encoded multibyte character - "multibyte=%F0%9D%8C%86"', function () {
             var parsed = [
                 { key: 'multibyte', value: '%F0%9D%8C%86' }
             ];
-            expect(QueryParam.unparse(parsed)).to.be('multibyte=%F0%9D%8C%86');
+            expect(QueryParam.unparse(parsed)).to.equal('multibyte=%F0%9D%8C%86');
         });
 
         it('encoding percentage - "charwithPercent=%foo"', function () {
@@ -374,7 +377,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('multibyte=%25foo');
+            })).to.equal('multibyte=%25foo');
         });
 
         it('a[0]=foo&a[1]=bar', function () {
@@ -382,7 +385,7 @@ describe('QueryParam', function () {
                 { key: 'a[0]', value: 'foo' },
                 { key: 'a[1]', value: 'bar' }
             ];
-            expect(QueryParam.unparse(parsed)).to.be('a[0]=foo&a[1]=bar');
+            expect(QueryParam.unparse(parsed)).to.equal('a[0]=foo&a[1]=bar');
         });
 
         it('encodes ( and )- "a=foo(a)"', function () {
@@ -391,7 +394,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=foo%28a%29');
+            })).to.equal('a=foo%28a%29');
         });
 
         it('Russian - "a=Привет Почтальон"', function () {
@@ -400,7 +403,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be(
+            })).to.equal(
                 'a=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD'
             );
         });
@@ -411,7 +414,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=%E4%BD%A0%E5%A5%BD');
+            })).to.equal('a=%E4%BD%A0%E5%A5%BD');
         });
 
         it('Japanese- "a=ハローポストマン"', function () {
@@ -420,7 +423,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=%E3%83%8F%E3%83%AD%E3%83%BC%E3%83%9D%E3%82%B9%E3%83%88%E3%83%9E%E3%83%B3');
+            })).to.equal('a=%E3%83%8F%E3%83%AD%E3%83%BC%E3%83%9D%E3%82%B9%E3%83%88%E3%83%9E%E3%83%B3');
         });
 
         it('Partial Russian - "a=Hello Почтальон"', function () {
@@ -429,7 +432,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD');
+            })).to.equal('a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD');
         });
 
         it('pre encoded russian text - a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD', function () {
@@ -438,7 +441,7 @@ describe('QueryParam', function () {
             ];
             expect(QueryParam.unparse(parsed, {
                 encode: true
-            })).to.be('a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD');
+            })).to.equal('a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD');
         });
     });
 });
