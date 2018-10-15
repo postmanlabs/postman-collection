@@ -320,13 +320,13 @@ describe('Variable', function () {
     });
 
     describe('sanity', function () {
-        it('constructor must be exported', function () {
+        it('constructor should be exported', function () {
             expect(Variable).to.be.a('function');
         });
 
         it('should create a new instance', function () {
             var v = new Variable();
-            expect(v instanceof Variable).to.be.ok;
+            expect(v).to.be.an.instanceof(Variable);
         });
 
         it('should not update if a non-object parameter is provided', function () {
