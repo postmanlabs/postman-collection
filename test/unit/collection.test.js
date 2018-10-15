@@ -64,7 +64,7 @@ describe('Collection', function () {
 
             it('items', function () {
                 expect(collection).to.have.property('items').that.is.an('object');
-                expect(collection.items.all()).to.be.an('array').that.has.lengthOf(3);
+                expect(collection.items.all()).to.be.an('array');
                 expect(collection.items.all()).to.not.be.empty;
             });
 
@@ -74,7 +74,7 @@ describe('Collection', function () {
 
             it('events', function () {
                 expect(collection).to.have.property('events');
-                expect(collection.events.all()).to.be.an('array').that.has.lengthOf(2);
+                expect(collection.events.all()).to.be.an('array');
                 expect(collection.items.all()).to.not.be.empty;
             });
         });
