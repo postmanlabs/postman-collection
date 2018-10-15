@@ -222,11 +222,11 @@ describe('PropertyList', function () {
             stinger = null;
         });
 
-        it('test fixtures must be available', function () {
-            expect(enterprise instanceof PropertyList).to.be.ok;
+        it('test fixtures should be available', function () {
+            expect(enterprise).to.be.an.instanceof(PropertyList);
             expect(enterprise.count()).to.equal(0);
-            expect(maverick instanceof Item).to.be.ok;
-            expect(goose instanceof Item).to.be.ok;
+            expect(maverick).to.be.an.instanceof(Item);
+            expect(goose).to.be.an.instanceof(Item);
             expect(maverick).to.not.equal(goose);
             expect(goose).to.not.equal(stinger);
             expect(maverick.id).to.equal('maverick');
