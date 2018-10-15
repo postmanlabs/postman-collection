@@ -26,7 +26,7 @@ describe('Header', function () {
         });
     });
 
-    it('must have a .create to create new instance', function () {
+    it('should have a .create to create a new instance', function () {
         expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date').toJSON()).to.eql({
             key: 'Date',
             value: 'Mon, 25 Jul 2016 13:11:41 GMT'
@@ -108,7 +108,7 @@ describe('Header', function () {
     });
 
     describe('inside PropertyList', function () {
-        it('must load a header string', function () {
+        it('should load a header string', function () {
             var list = new PropertyList(Header, {}, 'name1:value1\r\nname2:value2');
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
@@ -118,7 +118,7 @@ describe('Header', function () {
                 value: 'value2'
             }]);
         });
-        it('must load an array of strings', function () {
+        it('should load an array of strings', function () {
             var list = new PropertyList(Header, {}, ['name1:value1', 'name2:value2']);
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
@@ -128,7 +128,7 @@ describe('Header', function () {
                 value: 'value2'
             }]);
         });
-        it('must load an array of objects', function () {
+        it('should load an array of objects', function () {
             var list = new PropertyList(Header, {}, [{
                 key: 'name1',
                 value: 'value1'
@@ -144,7 +144,7 @@ describe('Header', function () {
                 value: 'value2'
             }]);
         });
-        it('must load a plain header key:value object', function () {
+        it('should load a plain header key:value object', function () {
             var list = new PropertyList(Header, {}, {
                 name1: 'value1',
                 name2: 'value2'
@@ -159,7 +159,7 @@ describe('Header', function () {
         });
 
         // @todo - this is not supported yet, unskip this test when this method of header construction is supported
-        it.skip('must load a plain header key:value object, with values being an array', function () {
+        it.skip('should load a plain header key:value object, with values being an array', function () {
             var list = new PropertyList(Header, {}, {
                 name1: ['value1', 'value2'],
                 name2: 'value3'
@@ -175,7 +175,7 @@ describe('Header', function () {
                 value: 'value3'
             }]);
         });
-        it('must load headers with empty values', function () {
+        it('should load headers with empty values', function () {
             var list = new PropertyList(Header, {}, {
                 name1: 'value1',
                 name2: ''
