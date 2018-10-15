@@ -148,12 +148,12 @@ describe('Request', function () {
             });
 
             it('method', function () {
-                expect(request).to.have.property('method').which.is.a('string');
+                expect(request).to.have.property('method').that.is.a('string');
             });
 
             describe('url', function () {
                 it('an object', function () {
-                    expect(request).to.have.property('url').which.is.an('object');
+                    expect(request).to.have.property('url').that.is.an('object');
                     expect(request.url).to.not.be.empty;
                 });
 
@@ -207,7 +207,7 @@ describe('Request', function () {
     });
 
     describe('isRequest', function () {
-        it('must distinguish between requests and other objects', function () {
+        it('should distinguish between requests and other objects', function () {
             var request = new Request(),
                 nonRequest = {};
 
@@ -218,7 +218,7 @@ describe('Request', function () {
     });
 
     describe('json representation', function () {
-        it('must match what the request was initialized with', function () {
+        it('should match what the request was initialized with', function () {
             var jsonified = request.toJSON();
 
             expect(jsonified.method).to.eql(rawRequest.method);
