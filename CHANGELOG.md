@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### Unreleased
+- Migrated tests to chai expect assertions
+
 #### v3.3.0 (September 21, 2018)
 * #709 Added support for `protocolProfileBehaviour` overrides
 * #701 Added support for disabled request bodies
