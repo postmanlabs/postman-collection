@@ -28,7 +28,9 @@
     "test-system": "node npm/test-system.js",
     "test-browser": "node npm/test-browser.js",
     "test-lint": "node npm/test-lint.js",
-    "test-unit": "node npm/test-unit.js"
+    "test-unit": "node npm/test-unit.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "escape-html": "1.0.3",
@@ -43,7 +45,8 @@
     "postman-url-encoder": "1.0.1",
     "sanitize-html": "1.19.1",
     "semver": "5.6.0",
-    "uuid": "3.3.2"
+    "uuid": "3.3.2",
+    "snyk": "^1.104.2"
   },
   "devDependencies": {
     "async": "2.6.1",
@@ -88,5 +91,6 @@
     "ignore": [
       "file-type"
     ]
-  }
+  },
+  "snyk": true
 }
