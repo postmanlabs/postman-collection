@@ -118,6 +118,16 @@ describe('project repository', function () {
         });
     });
 
+    describe('.gitattributes', function () {
+        it('should exist', function (done) {
+            fs.stat('./.gitattributes', done);
+        });
+
+        it('should have readable content', function () {
+            expect(fs.readFileSync('./.gitattributes').toString()).to.be.ok;
+        });
+    });
+
     describe('.ignore files', function () {
         var gitignorePath = '.gitignore',
             npmignorePath = '.npmignore',
