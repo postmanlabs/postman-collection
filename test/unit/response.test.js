@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    os = require('os'),
     _ = require('lodash'),
     expect = require('chai').expect,
     reason = require('http-reasons'),
@@ -610,7 +611,7 @@ describe('Response', function () {
                         value: 'text/html; charset=Shift_JIS'
                     }],
                     stream: fs.readFileSync('test/fixtures/japaneseCharacters.txt')
-                })).text()).to.equal('ハローポストマン\n'); // Harōposutoman
+                })).text()).to.equal(`ハローポストマン${os.EOL}`); // Harōposutoman
             });
 
             it('charset(windows-1251)- Cyrillic', function () {
@@ -620,7 +621,7 @@ describe('Response', function () {
                         value: 'text/html; charset=windows-1251'
                     }],
                     stream: fs.readFileSync('test/fixtures/russianCharacters.txt')
-                })).text()).to.equal('Привет почтальон\n'); // Privet pochtal'on
+                })).text()).to.equal(`Привет почтальон${os.EOL}`); // Privet pochtal'on
             });
 
             it('Fallback to utf8, if it is not supported by iconvlite, say (ISO-8859-1)', function () {
