@@ -954,9 +954,7 @@ describe('Url', function () {
     });
 
     describe('Security', function () {
-        // This test fails on travis when running on node v4.x, so skipping it
-        (process.env.TRAVIS && process.env.TRAVIS_NODE_VERSION === '4' ? // eslint-disable-line no-process-env
-            describe.skip : describe)('ReDoS', function () {
+        describe('ReDoS', function () {
             // as per NSP guidelines, anything that blocks the event loop for a second or more is a potential DOS threat
             this.timeout(2000);
 
@@ -973,7 +971,7 @@ describe('Url', function () {
                 protoSep = sep + slash.repeat(2),
                 // ~76 million characters
                 longUrl = 'h'.repeat(fk) + protoSep + 'u'.repeat(fk) + sep + 'p'.repeat(fk) + at +
-                    ('d'.repeat(fk) + dot).repeat(100) + 'com' + sep + 1e100 + (slash + 'x'.repeat(fk)).repeat(fk) +
+                    ('d'.repeat(fk) + dot).repeat(50) + 'com' + sep + 1e10 + (slash + 'x'.repeat(fk)).repeat(fk) +
                     q + ('k'.repeat(fk) + eq + 'v'.repeat(fk) + amp).repeat(fk) + hash + 'r'.repeat(fk),
                 longProto = 'h'.repeat(1e7) + protoSep + 'postman-echo.com',
                 longAuth = 'https://' + 'u'.repeat(1e7) + sep + 'p'.repeat(1e7) + '@postman-echo.com',
@@ -993,10 +991,10 @@ describe('Url', function () {
                 expect(json.auth.user).to.have.lengthOf(fk);
                 expect(json.auth.password).to.have.lengthOf(fk);
                 expect(json.protocol).to.have.lengthOf(fk);
-                expect(json.port).to.equal(1e100.toString());
+                expect(json.port).to.equal(1e10.toString());
                 expect(json.path).to.have.lengthOf(fk);
                 expect(json.hash).to.have.lengthOf(fk);
-                expect(json.host).to.have.lengthOf(101);
+                expect(json.host).to.have.lengthOf(51);
                 expect(json.query).to.have.lengthOf(fk + 1);
             });
 

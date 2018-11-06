@@ -72,6 +72,7 @@
     "parse-gitignore": "0.5.1",
     "postman-jsdoc-theme": "0.0.3",
     "postman-request": "2.88.1-postman.1",
+    "puppeteer": "1.10.0",
     "recursive-readdir": "2.2.2",
     "require-all": "3.0.0",
     "schema-compiler": "0.0.3",

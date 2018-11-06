@@ -144,10 +144,10 @@ describe('UrlMatchPattern', function () {
                 var specials = ['.', '+', '^', '$', '{', '}', '(', ')', '|', '[', ']', '\\'];
 
                 it('should be thwarted for long patterns', function () {
-                    var pattern = specials.join('a'.repeat(3e6)),
+                    var pattern = specials.join('a'.repeat(3e5)),
                         convertedPattern = new UrlMatchPattern().globPatternToRegexp(pattern);
 
-                    expect(convertedPattern.toString()).to.have.lengthOf(33000028);
+                    expect(convertedPattern.toString()).to.have.lengthOf(3300028);
                 });
             });
         });
