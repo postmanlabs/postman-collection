@@ -73,7 +73,7 @@ describe('project repository', function () {
 
             it('should point to specific package version; (*, ^, ~) not expected', function () {
                 _.forEach(json.devDependencies, function (dep) {
-                    expect(/^\d/.test(dep)).to.be.ok;
+                    expect((/^\d/).test(dep)).to.be.ok;
                 });
             });
         });
@@ -85,7 +85,7 @@ describe('project repository', function () {
 
             it('should point to specific package version; (*, ^, ~) not expected', function () {
                 _.forEach(json.dependencies, function (dep) {
-                    expect(/^\d/.test(dep)).to.be.ok;
+                    expect((/^\d/).test(dep)).to.be.ok;
                 });
             });
         });
