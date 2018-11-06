@@ -27,17 +27,7 @@ describe('travis.yml', function () {
 
         it('should have the language set to node', function () {
             expect(travisYAML).to.have.property('language').that.equal('node_js');
-            expect(travisYAML).to.have.property('node_js').that.eql(['4', '6', '8']);
-        });
-
-        it('should have a valid before_install sequence', function () {
-            expect(travisYAML).to.have.property('before_install').that.include.ordered.members([
-                'export CHROME_BIN=google-chrome', 'export DISPLAY=:99.0', 'sh -e /etc/init.d/xvfb start', 'sleep 3'
-            ]);
-        });
-
-        it('should use the stable google chrome package', function () {
-            expect(travisYAML).to.have.property('addons').that.eql({ apt: { packages: ['google-chrome-stable'] } });
+            expect(travisYAML).to.have.property('node_js').that.eql(['6', '8', '10']);
         });
     });
 });
