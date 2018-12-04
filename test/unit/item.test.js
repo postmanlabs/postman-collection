@@ -3,7 +3,8 @@ var expect = require('chai').expect,
     sdk = require('../../lib/index.js'),
 
     Request = require('../../lib/index.js').Request,
-    Item = require('../../lib/index.js').Item;
+    Item = require('../../lib/index.js').Item,
+    ItemGroup = require('../../lib/index.js').ItemGroup;
 
 describe('Item', function () {
     var rawItem = fixtures.collectionV2.item[0],
@@ -411,6 +412,74 @@ describe('Item', function () {
 
         it('should return false when called without arguments', function () {
             expect(sdk.Item.isItem()).to.be.false;
+        });
+    });
+
+    describe('.setProtocolProfileBehavior', function () {
+        it('should set protocolProfileBehavior on an Item', function () {
+            var item = new Item();
+            item.setProtocolProfileBehavior('key1', 'value')
+                .setProtocolProfileBehavior('key2', true)
+                .setProtocolProfileBehavior('key3', 123);
+
+            expect(item.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    key1: 'value',
+                    key2: true,
+                    key3: 123
+                }
+            });
+        });
+
+        it('should not set protocolProfileBehavior for non-string keys', function () {
+            var item = new Item();
+
+            item.setProtocolProfileBehavior(true, 'value');
+            expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            item.setProtocolProfileBehavior({}, 'value');
+            expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            item.setProtocolProfileBehavior(123, 'value');
+            expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+    });
+
+    describe('.getProtocolProfileBehavior', function () {
+        it('should get protocolProfileBehavior on an Item', function () {
+            var item = new Item({
+                protocolProfileBehavior: { key: 'value' }
+            });
+
+            expect(item.getProtocolProfileBehavior()).to.eql({ key: 'value' });
+        });
+
+        it('should not inherit protocolProfileBehavior by default', function () {
+            var itemGroup = new ItemGroup({
+                    protocolProfileBehavior: { key: 'value' },
+                    item: [{ name: 'I1' }]
+                }),
+                item = itemGroup.items.members[0];
+
+            expect(sdk.Item.isItem(item)).to.be.true;
+            expect(item.getProtocolProfileBehavior()).to.be.empty;
+        });
+
+        it('should inherit protocolProfileBehavior using options.inherit', function () {
+            var itemGroup = new ItemGroup({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        name: 'I1',
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                item = itemGroup.items.members[0];
+
+            expect(sdk.Item.isItem(item)).to.be.true;
+            expect(item.getProtocolProfileBehavior({ inherit: true })).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
         });
     });
 });

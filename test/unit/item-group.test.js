@@ -678,23 +678,29 @@ describe('ItemGroup', function () {
 
         it('should not inherit protocolProfileBehavior by default', function () {
             var itemGroup = new ItemGroup({
-                protocolProfileBehavior: { key: 'value' },
-                item: [{ name: 'IG' }]
-            });
+                    protocolProfileBehavior: { key: 'value' },
+                    item: [{
+                        item: [{ name: 'I1' }]
+                    }]
+                }),
+                group = itemGroup.items.members[0];
 
-            expect(itemGroup.items.members[0].getProtocolProfileBehavior()).to.be.empty;
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehavior()).to.be.empty;
         });
 
         it('should inherit protocolProfileBehavior using options.inherit', function () {
             var itemGroup = new ItemGroup({
-                protocolProfileBehavior: { key: 'value', hello: 'world' },
-                item: [{
-                    name: 'IG',
-                    protocolProfileBehavior: { key: 'new-value' }
-                }]
-            });
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        item: [{ name: 'I1' }],
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                group = itemGroup.items.members[0];
 
-            expect(itemGroup.items.members[0].getProtocolProfileBehavior({ inherit: true })).to.eql({
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehavior({ inherit: true })).to.eql({
                 hello: 'world',
                 key: 'new-value'
             });
