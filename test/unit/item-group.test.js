@@ -29,13 +29,17 @@ describe('ItemGroup', function () {
                             type: 'text/javascript',
                             exec: ['console.log("This doesn\'t matter");']
                         }
-                    }]
+                    }],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition);
 
             expect(itemGroup).to.deep.include({
                 events: new sdk.EventList({}, itemGroupDefinition.event),
-                auth: new sdk.RequestAuth(itemGroupDefinition.auth)
+                auth: new sdk.RequestAuth(itemGroupDefinition.auth),
+                protocolProfileBehavior: { disableBodyPruning: true }
             });
             expect(itemGroup).to.have.property('items');
         });
@@ -50,6 +54,7 @@ describe('ItemGroup', function () {
             expect(itemGroup.toJSON()).to.not.have.property('auth');
         });
     });
+
     it('should be able to iterate over all subfolders', function () {
         var rawCollection = fixtures.collectionV2,
             collection = new Collection(rawCollection),
@@ -122,12 +127,69 @@ describe('ItemGroup', function () {
                 expect(itemGroup).to.have.property('events');
                 expect(itemGroup.events.all()).to.be.an('array').that.has.lengthOf(2);
             });
+            it('protocolProfileBehavior', function () {
+                expect(itemGroup).to.have.property('protocolProfileBehavior').that.is.an('object');
+                expect(itemGroup.protocolProfileBehavior).to.not.be.empty;
+            });
         });
 
         describe('has function', function () {
             it('forEachItem', function () {
                 expect(itemGroup.forEachItem).to.be.ok;
                 expect(itemGroup.forEachItem).to.be.a('function');
+            });
+
+            it('forEachItemGroup', function () {
+                expect(itemGroup.forEachItemGroup).to.be.ok;
+                expect(itemGroup.forEachItemGroup).to.be.a('function');
+            });
+
+            it('oneDeep', function () {
+                expect(itemGroup.oneDeep).to.be.ok;
+                expect(itemGroup.oneDeep).to.be.a('function');
+            });
+
+            it('setProtocolProfileBehavior', function () {
+                expect(itemGroup.setProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.setProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('getProtocolProfileBehavior', function () {
+                expect(itemGroup.getProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.getProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('authorizeRequestsUsing', function () {
+                expect(itemGroup.authorizeRequestsUsing).to.be.ok;
+                expect(itemGroup.authorizeRequestsUsing).to.be.a('function');
+            });
+        });
+
+        describe('protocolProfileBehavior', function () {
+            it('should not filter unknown protocol profile behaviors', function () {
+                expect(new ItemGroup({
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true,
+                        random: true
+                    }
+                })).to.have.property('protocolProfileBehavior').that.eql({
+                    disableBodyPruning: true,
+                    random: true
+                });
+            });
+
+            it('should not be included if its not an object', function () {
+                expect(new ItemGroup({
+                    protocolProfileBehavior: true
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new ItemGroup({
+                    protocolProfileBehavior: 'foo'
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new ItemGroup({
+                    protocolProfileBehavior: 123
+                })).to.not.have.property('protocolProfileBehavior');
             });
         });
     });
@@ -227,7 +289,7 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('.oneDeep()', function () {
+    describe('.oneDeep', function () {
         var itemGroupData = {
                 id: 'F0',
                 name: 'F0-name',
@@ -426,7 +488,7 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('isItemGroup', function () {
+    describe('.isItemGroup', function () {
         it('should return true for a ItemGroup instance', function () {
             expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be.true;
         });
@@ -466,12 +528,176 @@ describe('ItemGroup', function () {
                             }
                         },
                         response: []
-                    }]
+                    }],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition),
                 itemGroupJSON = itemGroup.toJSON();
 
             expect(itemGroupJSON).to.eql(itemGroupDefinition);
+        });
+    });
+
+    describe('.setProtocolProfileBehavior', function () {
+        it('should set protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup();
+            itemGroup.setProtocolProfileBehavior('key1', 'value')
+                .setProtocolProfileBehavior('key2', true)
+                .setProtocolProfileBehavior('key3', 123);
+
+            expect(itemGroup.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    key1: 'value',
+                    key2: true,
+                    key3: 123
+                }
+            });
+        });
+
+        it('should skip setting protocolProfileBehavior on self using options.self=false', function () {
+            var itemGroup = new ItemGroup();
+            itemGroup.setProtocolProfileBehavior('key1', 'value', { self: false });
+
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+
+        it('should not set protocolProfileBehavior for non-string keys', function () {
+            var itemGroup = new ItemGroup();
+
+            itemGroup.setProtocolProfileBehavior(true, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            itemGroup.setProtocolProfileBehavior({}, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            itemGroup.setProtocolProfileBehavior(123, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+
+        it('should set protocolProfileBehavior on each Item using - options.eachItem', function () {
+            var itemGroup = new ItemGroup({
+                    item: [{
+                        item: [{
+                            id: 'I1',
+                            name: 'N1',
+                            request: 'R1'
+                        }, {
+                            id: 'I2',
+                            name: 'N2',
+                            request: 'R2'
+                        }]
+                    }, {
+                        id: 'I3',
+                        name: 'N3',
+                        request: 'R3'
+                    }]
+                }),
+                result = [];
+
+            // set on each Item
+            itemGroup.setProtocolProfileBehavior('key', 'value', { eachItem: true, self: false });
+            // set only on I1 and I2
+            itemGroup.items.members[0].setProtocolProfileBehavior('key', 'value2', { eachItem: true, self: false });
+
+            itemGroup.forEachItem(function (item) {
+                result.push({
+                    name: item.name,
+                    protocolProfileBehavior: item.protocolProfileBehavior
+                });
+            });
+            expect(result).to.eql([
+                { name: 'N1', protocolProfileBehavior: { key: 'value2' } },
+                { name: 'N2', protocolProfileBehavior: { key: 'value2' } },
+                { name: 'N3', protocolProfileBehavior: { key: 'value' } }
+            ]);
+        });
+
+        it('should set protocolProfileBehavior on each ItemGroup using options.eachItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                    name: 'IG0',
+                    item: [{
+                        name: 'IG1',
+                        item: [{
+                            name: 'IG2',
+                            item: [{
+                                id: 'I1',
+                                name: 'N1',
+                                request: 'R1'
+                            }]
+                        }, {
+                            name: 'IG3',
+                            item: [{
+                                id: 'I2',
+                                name: 'N2',
+                                request: 'R2'
+                            }]
+                        }]
+                    }]
+                }),
+                result = [];
+
+            // set on each ItemGroup including self
+            itemGroup.setProtocolProfileBehavior('key', 'value', { eachItemGroup: true });
+            // set only on IG2 and IG3
+            itemGroup.items.members[0]
+                .setProtocolProfileBehavior('key1', 'value1', { eachItemGroup: true, self: false });
+            // override self value
+            itemGroup.setProtocolProfileBehavior('key', 'new-value');
+
+            itemGroup.forEachItemGroup(function (itemGroup) {
+                result.push({
+                    name: itemGroup.name,
+                    protocolProfileBehavior: itemGroup.protocolProfileBehavior
+                });
+            });
+
+            expect(result).to.eql([
+                { name: 'IG2', protocolProfileBehavior: { key: 'value', key1: 'value1' } },
+                { name: 'IG3', protocolProfileBehavior: { key: 'value', key1: 'value1' } },
+                { name: 'IG1', protocolProfileBehavior: { key: 'value' } }
+            ]);
+
+            expect(itemGroup.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    key: 'new-value'
+                }
+            });
+        });
+    });
+
+    describe('.getProtocolProfileBehavior', function () {
+        it('should get protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'value' }
+            });
+
+            expect(itemGroup.getProtocolProfileBehavior()).to.eql({ key: 'value' });
+        });
+
+        it('should not inherit protocolProfileBehavior by default', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'value' },
+                item: [{ name: 'IG' }]
+            });
+
+            expect(itemGroup.items.members[0].getProtocolProfileBehavior()).to.be.empty;
+        });
+
+        it('should inherit protocolProfileBehavior using options.inherit', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'value', hello: 'world' },
+                item: [{
+                    name: 'IG',
+                    protocolProfileBehavior: { key: 'new-value' }
+                }]
+            });
+
+            expect(itemGroup.items.members[0].getProtocolProfileBehavior({ inherit: true })).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
         });
     });
 });
