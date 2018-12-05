@@ -417,9 +417,9 @@ describe('Item', function () {
     describe('.setProtocolProfileBehavior', function () {
         it('should set protocolProfileBehavior on an Item', function () {
             var item = new Item();
-            item.setProtocolProfileBehavior({ key: 'key1', value: 'value' })
-                .setProtocolProfileBehavior({ key: 'key2', value: true })
-                .setProtocolProfileBehavior({ key: 'key3', value: 123 });
+            item.setProtocolProfileBehavior('key1', 'value')
+                .setProtocolProfileBehavior('key2', true)
+                .setProtocolProfileBehavior('key3', 123);
 
             expect(item.toJSON()).to.deep.include({
                 protocolProfileBehavior: {
@@ -435,21 +435,12 @@ describe('Item', function () {
                 protocolProfileBehavior: { keyName: 'initialValue' }
             });
 
-            item.setProtocolProfileBehavior({ key: 'keyName', value: 'updatedValue' });
+            item.setProtocolProfileBehavior('keyName', 'updatedValue');
             expect(item.toJSON()).to.deep.include({
                 protocolProfileBehavior: {
                     keyName: 'updatedValue'
                 }
             });
-        });
-
-        it('should delete protocolProfileBehavior if value is not defined', function () {
-            var item = new Item({
-                protocolProfileBehavior: { keyName: 'value' }
-            });
-
-            item.setProtocolProfileBehavior({ key: 'keyName' });
-            expect(item.toJSON()).to.have.property('protocolProfileBehavior').that.is.empty;
         });
 
         it('should not set protocolProfileBehavior for non-string keys', function () {
@@ -458,11 +449,22 @@ describe('Item', function () {
             item.setProtocolProfileBehavior(true);
             expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
 
-            item.setProtocolProfileBehavior({ key: {}, value: 'value' });
+            item.setProtocolProfileBehavior({}, 'value');
             expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
 
-            item.setProtocolProfileBehavior({ key: 123, value: 'value' });
+            item.setProtocolProfileBehavior(123, 'value');
             expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+    });
+
+    describe('unsetProtocolProfileBehavior', function () {
+        it('should unset protocolProfileBehavior from an Item', function () {
+            var item = new Item({
+                protocolProfileBehavior: { keyName: 'value' }
+            });
+
+            item.unsetProtocolProfileBehavior('keyName');
+            expect(item.toJSON()).to.have.property('protocolProfileBehavior').that.is.empty;
         });
     });
 
@@ -499,7 +501,7 @@ describe('Item', function () {
                 item = itemGroup.items.members[0];
 
             expect(sdk.Item.isItem(item)).to.be.true;
-            expect(item.getProtocolProfileBehaviorResolved({ inherit: true })).to.eql({
+            expect(item.getProtocolProfileBehaviorResolved()).to.eql({
                 hello: 'world',
                 key: 'new-value'
             });
@@ -516,7 +518,7 @@ describe('Item', function () {
                 item = itemGroup.items.members[0];
 
             expect(sdk.Item.isItem(item)).to.be.true;
-            expect(item.getProtocolProfileBehaviorResolved({ inherit: true })).to.eql({
+            expect(item.getProtocolProfileBehaviorResolved()).to.eql({
                 hello: 'world',
                 key: 'new-value'
             });
