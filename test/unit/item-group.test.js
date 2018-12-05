@@ -29,13 +29,17 @@ describe('ItemGroup', function () {
                             type: 'text/javascript',
                             exec: ['console.log("This doesn\'t matter");']
                         }
-                    }]
+                    }],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition);
 
             expect(itemGroup).to.deep.include({
                 events: new sdk.EventList({}, itemGroupDefinition.event),
-                auth: new sdk.RequestAuth(itemGroupDefinition.auth)
+                auth: new sdk.RequestAuth(itemGroupDefinition.auth),
+                protocolProfileBehavior: { disableBodyPruning: true }
             });
             expect(itemGroup).to.have.property('items');
         });
@@ -50,6 +54,7 @@ describe('ItemGroup', function () {
             expect(itemGroup.toJSON()).to.not.have.property('auth');
         });
     });
+
     it('should be able to iterate over all subfolders', function () {
         var rawCollection = fixtures.collectionV2,
             collection = new Collection(rawCollection),
@@ -122,12 +127,79 @@ describe('ItemGroup', function () {
                 expect(itemGroup).to.have.property('events');
                 expect(itemGroup.events.all()).to.be.an('array').that.has.lengthOf(2);
             });
+            it('protocolProfileBehavior', function () {
+                expect(itemGroup).to.have.property('protocolProfileBehavior').that.is.an('object');
+                expect(itemGroup.protocolProfileBehavior).to.not.be.empty;
+            });
         });
 
         describe('has function', function () {
             it('forEachItem', function () {
                 expect(itemGroup.forEachItem).to.be.ok;
                 expect(itemGroup.forEachItem).to.be.a('function');
+            });
+
+            it('forEachItemGroup', function () {
+                expect(itemGroup.forEachItemGroup).to.be.ok;
+                expect(itemGroup.forEachItemGroup).to.be.a('function');
+            });
+
+            it('oneDeep', function () {
+                expect(itemGroup.oneDeep).to.be.ok;
+                expect(itemGroup.oneDeep).to.be.a('function');
+            });
+
+            it('setProtocolProfileBehavior', function () {
+                expect(itemGroup.setProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.setProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('unsetProtocolProfileBehavior', function () {
+                expect(itemGroup.setProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.setProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('getProtocolProfileBehavior', function () {
+                expect(itemGroup.getProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.getProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('getProtocolProfileBehaviorResolved', function () {
+                expect(itemGroup.getProtocolProfileBehaviorResolved).to.be.ok;
+                expect(itemGroup.getProtocolProfileBehaviorResolved).to.be.a('function');
+            });
+
+            it('authorizeRequestsUsing', function () {
+                expect(itemGroup.authorizeRequestsUsing).to.be.ok;
+                expect(itemGroup.authorizeRequestsUsing).to.be.a('function');
+            });
+        });
+
+        describe('protocolProfileBehavior', function () {
+            it('should not filter unknown protocol profile behaviors', function () {
+                expect(new ItemGroup({
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true,
+                        random: true
+                    }
+                })).to.have.property('protocolProfileBehavior').that.eql({
+                    disableBodyPruning: true,
+                    random: true
+                });
+            });
+
+            it('should not be included if its not an object', function () {
+                expect(new ItemGroup({
+                    protocolProfileBehavior: true
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new ItemGroup({
+                    protocolProfileBehavior: 'foo'
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new ItemGroup({
+                    protocolProfileBehavior: 123
+                })).to.not.have.property('protocolProfileBehavior');
             });
         });
     });
@@ -227,7 +299,7 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('.oneDeep()', function () {
+    describe('.oneDeep', function () {
         var itemGroupData = {
                 id: 'F0',
                 name: 'F0-name',
@@ -426,7 +498,7 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('isItemGroup', function () {
+    describe('.isItemGroup', function () {
         it('should return true for a ItemGroup instance', function () {
             expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be.true;
         });
@@ -466,12 +538,126 @@ describe('ItemGroup', function () {
                             }
                         },
                         response: []
-                    }]
+                    }],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition),
                 itemGroupJSON = itemGroup.toJSON();
 
             expect(itemGroupJSON).to.eql(itemGroupDefinition);
+        });
+    });
+
+    describe('.setProtocolProfileBehavior', function () {
+        it('should set protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup();
+            itemGroup.setProtocolProfileBehavior('key1', 'value')
+                .setProtocolProfileBehavior('key2', true)
+                .setProtocolProfileBehavior('key3', 123);
+
+            expect(itemGroup.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    key1: 'value',
+                    key2: true,
+                    key3: 123
+                }
+            });
+        });
+
+        it('should update protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'initialValue' }
+            });
+
+            itemGroup.setProtocolProfileBehavior('key', 'updatedValue');
+            expect(itemGroup.toJSON()).to.deep.include({
+                protocolProfileBehavior: { key: 'updatedValue' }
+            });
+        });
+
+        it('should not set protocolProfileBehavior for non-string keys', function () {
+            var itemGroup = new ItemGroup();
+
+            itemGroup.setProtocolProfileBehavior(true);
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            itemGroup.setProtocolProfileBehavior({}, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            itemGroup.setProtocolProfileBehavior(123, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+    });
+
+    describe('.unsetProtocolProfileBehavior', function () {
+        it('should delete protocolProfileBehavior from an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { keyName: 'value' }
+            });
+
+            itemGroup.unsetProtocolProfileBehavior('keyName');
+            expect(itemGroup.toJSON()).to.have.property('protocolProfileBehavior').that.is.empty;
+        });
+    });
+
+    describe('.getProtocolProfileBehavior', function () {
+        it('should get protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'value' }
+            });
+
+            expect(itemGroup.getProtocolProfileBehavior()).to.eql({ key: 'value' });
+        });
+
+        it('should not inherit protocolProfileBehavior from parent', function () {
+            var itemGroup = new ItemGroup({
+                    protocolProfileBehavior: { key: 'value' },
+                    item: [{
+                        item: [{ name: 'I1' }]
+                    }]
+                }),
+                group = itemGroup.items.members[0];
+
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehavior()).to.be.empty;
+        });
+    });
+
+    describe('.getProtocolProfileBehaviorResolved', function () {
+        it('should inherit protocolProfileBehavior from parent ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        item: [{ name: 'I1' }],
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                group = itemGroup.items.members[0];
+
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehaviorResolved()).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
+        });
+
+        it('should inherit protocolProfileBehavior from Collection', function () {
+            var itemGroup = new sdk.Collection({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        item: [{ name: 'I1' }],
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                group = itemGroup.items.members[0];
+
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehaviorResolved()).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
         });
     });
 });
