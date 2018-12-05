@@ -488,7 +488,7 @@ describe('Item', function () {
     });
 
     describe('.getProtocolProfileBehaviorResolved', function () {
-        it('should inherit protocolProfileBehavior from parent', function () {
+        it('should inherit protocolProfileBehavior from parent ItemGroup', function () {
             var itemGroup = new sdk.ItemGroup({
                     protocolProfileBehavior: { key: 'value', hello: 'world' },
                     item: [{
