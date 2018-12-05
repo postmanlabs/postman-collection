@@ -413,4 +413,115 @@ describe('Item', function () {
             expect(sdk.Item.isItem()).to.be.false;
         });
     });
+
+    describe('.setProtocolProfileBehavior', function () {
+        it('should set protocolProfileBehavior on an Item', function () {
+            var item = new Item();
+            item.setProtocolProfileBehavior('key1', 'value')
+                .setProtocolProfileBehavior('key2', true)
+                .setProtocolProfileBehavior('key3', 123);
+
+            expect(item.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    key1: 'value',
+                    key2: true,
+                    key3: 123
+                }
+            });
+        });
+
+        it('should update protocolProfileBehavior on an Item', function () {
+            var item = new Item({
+                protocolProfileBehavior: { keyName: 'initialValue' }
+            });
+
+            item.setProtocolProfileBehavior('keyName', 'updatedValue');
+            expect(item.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    keyName: 'updatedValue'
+                }
+            });
+        });
+
+        it('should not set protocolProfileBehavior for non-string keys', function () {
+            var item = new Item();
+
+            item.setProtocolProfileBehavior(true);
+            expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            item.setProtocolProfileBehavior({}, 'value');
+            expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            item.setProtocolProfileBehavior(123, 'value');
+            expect(item.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+    });
+
+    describe('unsetProtocolProfileBehavior', function () {
+        it('should unset protocolProfileBehavior from an Item', function () {
+            var item = new Item({
+                protocolProfileBehavior: { keyName: 'value' }
+            });
+
+            item.unsetProtocolProfileBehavior('keyName');
+            expect(item.toJSON()).to.have.property('protocolProfileBehavior').that.is.empty;
+        });
+    });
+
+    describe('.getProtocolProfileBehavior', function () {
+        it('should get protocolProfileBehavior on an Item', function () {
+            var item = new Item({
+                protocolProfileBehavior: { key: 'value' }
+            });
+
+            expect(item.getProtocolProfileBehavior()).to.eql({ key: 'value' });
+        });
+
+        it('should not inherit protocolProfileBehavior from parent', function () {
+            var itemGroup = new sdk.ItemGroup({
+                    protocolProfileBehavior: { key: 'value' },
+                    item: [{ name: 'I1' }]
+                }),
+                item = itemGroup.items.members[0];
+
+            expect(sdk.Item.isItem(item)).to.be.true;
+            expect(item.getProtocolProfileBehavior()).to.be.empty;
+        });
+    });
+
+    describe('.getProtocolProfileBehaviorResolved', function () {
+        it('should inherit protocolProfileBehavior from parent ItemGroup', function () {
+            var itemGroup = new sdk.ItemGroup({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        name: 'I1',
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                item = itemGroup.items.members[0];
+
+            expect(sdk.Item.isItem(item)).to.be.true;
+            expect(item.getProtocolProfileBehaviorResolved()).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
+        });
+
+        it('should inherit protocolProfileBehavior from collection', function () {
+            var itemGroup = new sdk.Collection({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        name: 'I1',
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                item = itemGroup.items.members[0];
+
+            expect(sdk.Item.isItem(item)).to.be.true;
+            expect(item.getProtocolProfileBehaviorResolved()).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
+        });
+    });
 });
