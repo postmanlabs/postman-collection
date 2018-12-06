@@ -2,7 +2,6 @@
 
 #### v3.4.0 (December 6, 2018)
 * #743 Added support for ItemGroup and Collection level protocolProfileBehaviour
-* Dropped Node v4 support
 * Migrated tests to chai expect assertions
 * Switched over to Travis for Windows builds
 * Updated dependencies
