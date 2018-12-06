@@ -1,13 +1,12 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     Version = require('../../lib/index.js').Version;
 
-/* global describe, it */
 describe('Version', function () {
     var rawVersion = '3.1.4-pi+rounded',
         version = new Version(rawVersion);
 
     it('parsed successfully', function () {
-        expect(version).to.be.ok();
+        expect(version).to.be.ok;
         expect(version).to.be.an('object');
     });
 
@@ -41,7 +40,7 @@ describe('Version', function () {
         });
 
         it('set', function () {
-            expect(version.set).to.be.ok();
+            expect(version.set).to.be.ok;
             expect(version.set).to.be.a('function');
         });
     });
@@ -50,7 +49,7 @@ describe('Version', function () {
         it('should not set if the provided options are invalid', function () {
             var version = new Version();
 
-            expect(version.toJSON()).to.be.empty();
+            expect(version.toJSON()).to.be.empty;
         });
 
         it('should default to a blank object if no version details are provided', function () {
@@ -67,15 +66,15 @@ describe('Version', function () {
             });
 
             version.set();
-            expect(version.toJSON()).to.be.empty();
+            expect(version.toJSON()).to.be.empty;
         });
 
         it('should stringify the version instance correctly', function () {
             var v1 = new Version('0.0.0'),
                 v2 = new Version('');
 
-            expect(v1.toString()).to.be('0.0.0');
-            expect(v2.toString()).to.be(undefined); // not '', so that empty versions can be selectively pruned
+            expect(v1.toString()).to.equal('0.0.0');
+            expect(v2.toString()).to.be.undefined; // not '', so that empty versions can be selectively pruned
         });
     });
 });

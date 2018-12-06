@@ -1,11 +1,8 @@
-/* global describe, it */
-/* eslint-env node, es6 */
-var expect = require('expect.js');
+var fs = require('fs'),
+    yaml = require('js-yaml');
 
 describe('travis.yml', function () {
-    var fs = require('fs'),
-        yaml = require('js-yaml'),
-        travisYAML,
+    var travisYAML,
         travisYAMLError;
 
     try {
@@ -15,33 +12,22 @@ describe('travis.yml', function () {
         travisYAMLError = e;
     }
 
-    it('must exist', function (done) {
+    it('should exist', function (done) {
         fs.stat('.travis.yml', done);
     });
 
-    it('must be a valid yml', function () {
-        expect(travisYAMLError && travisYAMLError.message || travisYAMLError).to.not.be.ok();
+    it('should be a valid yml', function () {
+        expect(travisYAMLError && travisYAMLError.message || travisYAMLError).to.be.undefined;
     });
 
-    describe('structure', function () {
+    describe('strucure', function () {
         it('should use the trusty Ubuntu distribution', function () {
-            expect(travisYAML.dist).to.be('trusty');
+            expect(travisYAML).to.have.property('dist').that.equal('trusty');
         });
 
-        it('language must be set to node', function () {
-            expect(travisYAML.language).to.be('node_js');
-            expect(travisYAML.node_js).to.eql(['4', '6', '8']);
-        });
-
-        it('should have a valid before_install sequence', function () {
-            expect(travisYAML.before_install).to.have.property(0, 'export CHROME_BIN=google-chrome');
-            expect(travisYAML.before_install).to.have.property(1, 'export DISPLAY=:99.0');
-            expect(travisYAML.before_install).to.have.property(2, 'sh -e /etc/init.d/xvfb start');
-            expect(travisYAML.before_install).to.have.property(3, 'sleep 3');
-        });
-
-        it('should use the stable google chrome package', function () {
-            expect(travisYAML.addons).to.eql({ apt: { packages: ['google-chrome-stable'] } });
+        it('should have the language set to node', function () {
+            expect(travisYAML).to.have.property('language').that.equal('node_js');
+            expect(travisYAML).to.have.property('node_js').that.eql(['6', '8', '10']);
         });
     });
 });

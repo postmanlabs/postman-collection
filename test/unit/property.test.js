@@ -1,21 +1,23 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     sdk = require('../../lib/index.js'),
     VariableList = sdk.VariableList,
     Property = sdk.Property;
 
-/* global describe, it */
 describe('Property', function () {
     describe('sanity', function () {
         it('initializes successfully', function () {
-            expect((new Property()) instanceof Property).to.be.ok();
+            expect((new Property())).to.be.an.instanceof(Property);
         });
         it('allows a description to be set', function () {
             var prop = new Property();
             expect(prop.describe).to.be.a('function');
-            expect(prop.describe.bind(prop)).withArgs('Hello Postman').to.not.throwException();
-            expect(prop.description).to.be.ok();
-            expect(prop.description.toString()).to.be('Hello Postman');
-            expect(prop.description.type).to.be('text/plain');
+            expect(function () {
+                prop.describe.bind(prop)('Hello Postman');
+            }).to.not.throw();
+            // expect(prop.describe.bind(prop)).withArgs('Hello Postman').to.not.throwException();
+            expect(prop.description).to.be.ok;
+            expect(prop.description.toString()).to.equal('Hello Postman');
+            expect(prop.description.type).to.equal('text/plain');
         });
     });
 
@@ -24,7 +26,7 @@ describe('Property', function () {
             var property = new Property({ description: 'Sample description' });
 
             property.describe('New description');
-            expect(property.description).to.eql({ content: 'New description', type: 'text/plain' });
+            expect(property.description.toJSON()).to.eql({ content: 'New description', type: 'text/plain' });
         });
     });
 
@@ -32,7 +34,7 @@ describe('Property', function () {
         it('should throw an error for invalid arguments', function () {
             var property = new Property();
 
-            expect(property.toObjectResolved.bind(property)).to.throwError();
+            expect(property.toObjectResolved.bind(property)).to.throw();
         });
 
         it('should resolve and exclude its own .variables', function () {
@@ -220,7 +222,7 @@ describe('Property', function () {
 
     describe('.replaceSubstitutionsIn', function () {
         it('should bail out if a non-object argument is passed', function () {
-            expect(Property.replaceSubstitutionsIn('random')).to.be('random');
+            expect(Property.replaceSubstitutionsIn('random')).to.equal('random');
         });
     });
 

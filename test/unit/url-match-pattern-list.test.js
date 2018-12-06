@@ -1,4 +1,4 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     UrlMatchPatternList = require('../../lib/url-pattern/url-match-pattern-list').UrlMatchPatternList,
 
     // return a target to run specs on
@@ -19,26 +19,26 @@ describe('UrlMatchPatternList', function () {
 
         it('should match for any', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['https://example.com/*']);
-            expect(matchPatternList.test('https://example.com')).to.eql(true);
-            expect(matchPatternList.test('https://example.com/')).to.eql(true);
-            expect(matchPatternList.test('https://www.example.com/')).to.eql(false);
-            expect(matchPatternList.test('https://example.com/hello')).to.eql(true);
-            expect(matchPatternList.test('https://example.com/foo/bar')).to.eql(true);
-            expect(matchPatternList.test('https://foo.example.com')).to.eql(false);
-            expect(matchPatternList.test('https://foo.com')).to.eql(false);
+            expect(matchPatternList.test('https://example.com')).to.be.true;
+            expect(matchPatternList.test('https://example.com/')).to.be.true;
+            expect(matchPatternList.test('https://www.example.com/')).to.be.false;
+            expect(matchPatternList.test('https://example.com/hello')).to.be.true;
+            expect(matchPatternList.test('https://example.com/foo/bar')).to.be.true;
+            expect(matchPatternList.test('https://foo.example.com')).to.be.false;
+            expect(matchPatternList.test('https://foo.com')).to.be.false;
         });
         it('should match any url for <all_urls>', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['<all_urls>']);
-            expect(matchPatternList.test('https://google.com')).to.eql(true);
-            expect(matchPatternList.test('https://www.google.com')).to.eql(true);
-            expect(matchPatternList.test('https://example.com')).to.eql(true);
-            expect(matchPatternList.test('https://foo.com')).to.eql(true);
+            expect(matchPatternList.test('https://google.com')).to.be.true;
+            expect(matchPatternList.test('https://www.google.com')).to.be.true;
+            expect(matchPatternList.test('https://example.com')).to.be.true;
+            expect(matchPatternList.test('https://foo.com')).to.be.true;
         });
         it('should match url is pattern list', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['https://google.com/*', 'https://example.com/*']);
-            expect(matchPatternList.test('https://google.com')).to.eql(true);
-            expect(matchPatternList.test('https://example.com')).to.eql(true);
-            expect(matchPatternList.test('https://foo.com')).to.eql(false);
+            expect(matchPatternList.test('https://google.com')).to.be.true;
+            expect(matchPatternList.test('https://example.com')).to.be.true;
+            expect(matchPatternList.test('https://foo.com')).to.be.false;
         });
     });
 

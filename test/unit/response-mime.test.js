@@ -1,11 +1,10 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     Response = require('../../lib/index.js').Response;
 
-/* global describe, it */
 describe('response mime', function () {
     it('must treat lack of information as plain text', function () {
         var response = new Response();
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'text',
             format: 'plain',
             name: 'response',
@@ -27,7 +26,7 @@ describe('response mime', function () {
                 value: 'application/json'
             }]
         });
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'text',
             format: 'json',
             name: 'response',
@@ -49,7 +48,7 @@ describe('response mime', function () {
                 value: '  application  / hal+ json '
             }]
         });
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'text',
             format: 'json',
             name: 'response',
@@ -71,7 +70,7 @@ describe('response mime', function () {
                 value: 'application/ogg; charset=utf8'
             }]
         });
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'audio',
             format: 'ogg',
             name: 'response',
@@ -93,7 +92,7 @@ describe('response mime', function () {
                 value: 'application/x-ecmascript'
             }]
         });
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'text',
             format: 'script',
             name: 'response',
@@ -117,7 +116,7 @@ describe('response mime', function () {
             }]
         });
 
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'text',
             format: 'xml',
             name: 'response',
@@ -135,7 +134,7 @@ describe('response mime', function () {
         // reusing the same response object
         response.headers.one('content-type').value = 'application/vnd.route66.link66+xml';
 
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'text',
             format: 'xml',
             name: 'response',
@@ -157,7 +156,7 @@ describe('response mime', function () {
                 value: 'machine/samaritan'
             }]
         });
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'unknown',
             format: 'raw',
             name: 'response',
@@ -186,7 +185,7 @@ describe('response mime', function () {
                 stream: isNode4 ? new Buffer(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
             });
 
-        expect(response.mime()).be.eql({
+        expect(response.mime()).to.eql({
             type: 'unknown',
             format: 'raw',
             name: 'response',

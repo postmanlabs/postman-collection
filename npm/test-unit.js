@@ -10,6 +10,7 @@ require('shelljs/global');
 var path = require('path'),
 
     chalk = require('chalk'),
+    expect = require('chai').expect,
 
     IS_WINDOWS = (/^win/).test(process.platform),
     COV_REPORT_PATH = '.coverage',
@@ -32,6 +33,8 @@ module.exports = function (exit) {
 
     mkdir('-p', '.tmp');
     test('-d', COV_REPORT_PATH) && rm('-rf', COV_REPORT_PATH) && mkdir('-p', COV_REPORT_PATH);
+
+    global.expect = expect;
 
     // windows istanbul and mocha commands need some special attention.
     if (IS_WINDOWS) {

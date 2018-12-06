@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Mon Nov 09 2015 18:53:12 GMT+0530 (IST)
+process.env.CHROME_BIN = require('puppeteer').executablePath(); // eslint-disable-line no-process-env
 
 module.exports = function (config) {
     var configuration = {
@@ -48,7 +49,7 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['ChromeHeadless'],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
@@ -78,7 +79,7 @@ module.exports = function (config) {
     if (process.env.TRAVIS) { // eslint-disable-line no-process-env
         configuration.customLaunchers = {
             chromeTravis: {
-                base: 'Chrome',
+                base: 'ChromeHeadless',
                 flags: ['--no-sandbox']
             }
         };

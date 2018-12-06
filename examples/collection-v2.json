@@ -347,5 +347,8 @@
                 }
             ]
         }
-    ]
+    ],
+    "protocolProfileBehavior": {
+        "disableBodyPruning": false
+    }
 }
