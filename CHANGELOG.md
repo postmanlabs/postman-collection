@@ -1,7 +1,10 @@
 # Postman Collection SDK Changelog
 
-#### Unreleased
-- Migrated tests to chai expect assertions
+#### v3.4.0 (December 6, 2018)
+* #743 Added support for ItemGroup and Collection level protocolProfileBehaviour
+* Migrated tests to chai expect assertions
+* Switched over to Travis for Windows builds
+* Updated dependencies
 
 #### v3.3.0 (September 21, 2018)
 * #709 Added support for `protocolProfileBehaviour` overrides
