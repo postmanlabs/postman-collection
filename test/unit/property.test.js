@@ -215,8 +215,66 @@ describe('Property', function () {
     });
 
     describe('.replaceSubstitutions', function () {
+        /**
+         * Generates a object with n variables
+         *
+         * @example
+         * getVariables(2)
+         * {
+         *    '0': '',
+         *    '1': ''
+         * }
+         *
+         * @param {Integer} n - Number of variables
+         * @returns {Object}
+         */
+        function getVariables (n) {
+            var i,
+                obj = {};
+
+            for (i = 0; i < n; i++) {
+                obj[String(i)] = '';
+            }
+
+            return obj;
+        }
+
         it('should bail out if a non-string argument is passed', function () {
             expect(Property.replaceSubstitutions(['random'])).to.eql(['random']);
+        });
+
+        it('should resolve poly chained variable 19 times', function () {
+            // eslint-disable-next-line max-len
+            var str = '{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
+                variables = getVariables(19);
+
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{19}}');
+        });
+
+        it('should correctly resolve multiple poly chained variables', function () {
+            // eslint-disable-next-line max-len
+            var str = '{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
+                // eslint-disable-next-line max-len
+                '{{ - {{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
+                '{{hello{{world}}}} {{random}}',
+                variables = getVariables(19);
+
+            variables = Object.assign(variables, {
+                world: 'World',
+                helloWorld: 'Hello World'
+            });
+
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{19}}{{ - }}Hello World {{random}}');
+        });
+
+        it('should correctly resolve all unique variables', function () {
+            // eslint-disable-next-line max-len
+            var str = '{{0}}{{1}}{{2}}{{3}}{{4}}{{5}}{{6}}{{7}}{{8}}{{9}}' +
+                '{{10}}{{11}}{{12}}{{13}}{{14}}{{15}}{{16}}{{17}}{{18}}{{19}}' +
+                '{{xyz{{1{{0}}}}}}',
+                variables = getVariables(20);
+
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{xyz}}');
         });
     });
 
