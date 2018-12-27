@@ -245,19 +245,19 @@ describe('Property', function () {
 
         it('should resolve poly chained variable 19 times', function () {
             // eslint-disable-next-line max-len
-            var str = '{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
-                variables = getVariables(19);
+            var str = '{{20{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
+                variables = getVariables(21);
 
-            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{19}}');
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{20{{19}}}}');
         });
 
         it('should correctly resolve multiple poly chained variables', function () {
             // eslint-disable-next-line max-len
             var str = '{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
                 // eslint-disable-next-line max-len
-                '{{ - {{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
+                '{{ - {{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
                 '{{hello{{world}}}} {{random}}',
-                variables = getVariables(19);
+                variables = getVariables(20);
 
             variables = Object.assign(variables, {
                 world: 'World',
