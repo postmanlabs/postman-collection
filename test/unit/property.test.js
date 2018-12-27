@@ -239,23 +239,44 @@ describe('Property', function () {
             return obj;
         }
 
+        /**
+         * Generates a poly chained variable nested n times
+         *
+         * @example
+         * getPolyChainedVariable(2)
+         * '{{1{{0}}}}'
+         *
+         * @param {Integer} n
+         * @returns {String}
+         */
+        function getPolyChainedVariable (n) {
+            var i,
+                str = '';
+
+            for (i = 0; i < n; i++) {
+                str = `{{${i}` + str;
+            }
+
+            str += '}}'.repeat(n);
+
+            return str;
+        }
+
         it('should bail out if a non-string argument is passed', function () {
             expect(Property.replaceSubstitutions(['random'])).to.eql(['random']);
         });
 
         it('should resolve poly chained variable 19 times', function () {
-            // eslint-disable-next-line max-len
-            var str = '{{20{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}',
+            var str = getPolyChainedVariable(21),
                 variables = getVariables(21);
 
+            // resolves {{0}} to {{18}} poly-chained variables
             expect(Property.replaceSubstitutions(str, variables)).to.eql('{{20{{19}}}}');
         });
 
         it('should correctly resolve multiple poly chained variables', function () {
-            // eslint-disable-next-line max-len
-            var str = '{{19{{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1{{0}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
-                // eslint-disable-next-line max-len
-                '{{ - {{18{{17{{16{{15{{14{{13{{12{{11{{10{{9{{8{{7{{6{{5{{4{{3{{2{{1}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}' +
+            var str = getPolyChainedVariable(20) +
+                `{{ - ${getPolyChainedVariable(19)}}}` +
                 '{{hello{{world}}}} {{random}}',
                 variables = getVariables(20);
 
@@ -264,6 +285,7 @@ describe('Property', function () {
                 helloWorld: 'Hello World'
             });
 
+            // resolves {{0}} to {{18}} poly-chained variables, {{world}} & {{hello}}
             expect(Property.replaceSubstitutions(str, variables)).to.eql('{{19}}{{ - }}Hello World {{random}}');
         });
 
@@ -274,6 +296,7 @@ describe('Property', function () {
                 '{{xyz{{1{{0}}}}}}',
                 variables = getVariables(20);
 
+            // resolves all independent unique variables as well as poly-chained {{0}} & {{1}}
             expect(Property.replaceSubstitutions(str, variables)).to.eql('{{xyz}}');
         });
     });
