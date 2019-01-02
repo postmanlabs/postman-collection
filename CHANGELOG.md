@@ -1,5 +1,9 @@
 # Postman Collection SDK Changelog
 
+#### v3.4.1 (January 2, 2019)
+* #763 Fixed a bug where poly chained variables are not resolved correctly
+* Updated dependencies
+
 #### v3.4.0 (December 6, 2018)
 * #743 Added support for ItemGroup and Collection level protocolProfileBehaviour
 * Migrated tests to chai expect assertions
