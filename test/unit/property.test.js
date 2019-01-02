@@ -51,6 +51,29 @@ describe('Property', function () {
             expect(property.toObjectResolved()).to.eql({});
         });
 
+        it('should not resolve disabled variables', function () {
+            var property = new Property(),
+                parent = new Property();
+
+            parent.variables = new VariableList(parent, [{
+                key: 'disabled',
+                value: 'disabled-value',
+                disabled: true
+            }, {
+                key: 'enabled',
+                value: 'enabled-value'
+            }]);
+
+            property.setParent(parent);
+            property.disabled = 'substituted-{{disabled}}';
+            property.enabled = 'substituted-{{enabled}}';
+
+            expect(property.toObjectResolved()).to.eql({
+                disabled: 'substituted-{{disabled}}',
+                enabled: 'substituted-enabled-value'
+            });
+        });
+
         it('should resolve variables defined in its own tree, up one parent', function () {
             var property = new Property(),
                 parent = new Property();
