@@ -1,8 +1,7 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     ProxyConfigList = require('../../').ProxyConfigList,
     Url = require('../../').Url;
 
-/* global describe, it */
 describe('Proxy Config List', function () {
     describe('sanity', function () {
         it('Assigns, <all_urls> as match pattern and resolves any url provided', function () {
@@ -23,7 +22,7 @@ describe('Proxy Config List', function () {
                         { host: 'proxy.com', tunnel: true, disabled: true }
                     ]
                 );
-            expect(list.resolve('foo://www.foo/bar')).to.eql(undefined);
+            expect(list.resolve('foo://www.foo/bar')).to.be.undefined;
         });
 
         it('Do not matches URLs that does not have any valid protocol', function () {
@@ -33,15 +32,15 @@ describe('Proxy Config List', function () {
                         { match: '://*/*', host: 'proxy.com' }
                     ]
                 );
-            expect(list.resolve('example.org')).to.eql(undefined);
-            expect(list.resolve('http://example.org')).to.eql(undefined);
+            expect(list.resolve('example.org')).to.be.undefined;
+            expect(list.resolve('http://example.org')).to.be.undefined;
 
             list = new ProxyConfigList(parent,
                 [
                     { match: 'http://*/*', host: 'proxy.com' }
                 ]
             );
-            expect(list.resolve('foo://example.org')).to.eql(undefined);
+            expect(list.resolve('foo://example.org')).to.be.undefined;
         });
 
         it('Matches only the URLs that uses the https protocol', function () {
@@ -53,7 +52,7 @@ describe('Proxy Config List', function () {
                 );
             expect(list.resolve('https://www.google.com/').host).to.eql('proxy.com');
             expect(list.resolve('https://example.org/foo/bar.html').host).to.eql('proxy.com');
-            expect(list.resolve('http://example.org/foo/bar.html')).to.eql(undefined);
+            expect(list.resolve('http://example.org/foo/bar.html')).to.be.undefined;
         });
 
         it('Matches any URL that uses the http or https protocol', function () {
@@ -87,7 +86,7 @@ describe('Proxy Config List', function () {
                 );
             expect(list.resolve('https://www.google.com/foo/baz/bar').host).to.eql('proxy.com');
             expect(list.resolve('https://docs.google.com/foobar').host).to.eql('proxy.com');
-            expect(list.resolve('http://docs.google.com/foobar')).to.eql(undefined);
+            expect(list.resolve('http://docs.google.com/foobar')).to.be.undefined;
         });
 
         it('Matches the specified URL', function () {
@@ -109,7 +108,7 @@ describe('Proxy Config List', function () {
                 );
             expect(list.resolve('http://127.0.0.1/').host).to.eql('proxy.com');
             expect(list.resolve('http://127.0.0.1/foo/bar.html').host).to.eql('proxy.com');
-            expect(list.resolve('https://127.0.0.1/')).to.eql(undefined);
+            expect(list.resolve('https://127.0.0.1/')).to.be.undefined;
         });
 
         it('Matches any URL that uses the http protocol and is on the host ends with 0.0.1', function () {
@@ -121,7 +120,7 @@ describe('Proxy Config List', function () {
                 );
             expect(list.resolve('http://127.0.0.1/').host).to.eql('proxy.com');
             expect(list.resolve('http://125.0.0.1/').host).to.eql('proxy.com');
-            expect(list.resolve('https://125.0.0.1/')).to.eql(undefined);
+            expect(list.resolve('https://125.0.0.1/')).to.be.undefined;
         });
 
         it('Matches any URL which has host mail.google.com', function () {
@@ -133,7 +132,7 @@ describe('Proxy Config List', function () {
                 );
             expect(list.resolve('http://mail.google.com/foo/baz/bar').host).to.eql('proxy.com');
             expect(list.resolve('https://mail.google.com/foobar').host).to.eql('proxy.com');
-            expect(list.resolve('https://google.com/foobar')).to.eql(undefined);
+            expect(list.resolve('https://google.com/foobar')).to.be.undefined;
         });
 
         it('Bad Match pattern [No Path]', function () {
@@ -143,7 +142,7 @@ describe('Proxy Config List', function () {
                         { match: 'www.google.com', host: 'proxy.com' }
                     ]
                 );
-            expect(list.resolve('http://www.google.com')).to.eql(undefined);
+            expect(list.resolve('http://www.google.com')).to.be.undefined;
         });
 
         it('Bad Match pattern ["*" in the host can be followed only by a "." or "/"]', function () {
@@ -153,7 +152,7 @@ describe('Proxy Config List', function () {
                         { match: '*foo/bar', host: 'proxy.com' }
                     ]
                 );
-            expect(list.resolve('http://www.foo/bar')).to.eql(undefined);
+            expect(list.resolve('http://www.foo/bar')).to.be.undefined;
         });
 
         it('Bad Match pattern [If "*" is in the host, it must be the first character]', function () {
@@ -163,7 +162,7 @@ describe('Proxy Config List', function () {
                         { match: 'foo.*.bar/baz', host: 'proxy.com' }
                     ]
                 );
-            expect(list.resolve('http://foo.z.bar/baz')).to.eql(undefined);
+            expect(list.resolve('http://foo.z.bar/baz')).to.be.undefined;
         });
 
         it('Bad Match pattern [Missing protocol separator ("/" should be "//")]', function () {
@@ -173,7 +172,7 @@ describe('Proxy Config List', function () {
                         { match: 'http:/bar', host: 'proxy.com' }
                     ]
                 );
-            expect(list.resolve('http:/bar')).to.eql(undefined);
+            expect(list.resolve('http:/bar')).to.be.undefined;
         });
 
         it('Bad Match pattern [Invalid protocol]', function () {
@@ -183,7 +182,7 @@ describe('Proxy Config List', function () {
                         { match: 'foo://www.foo.com/bar', host: 'proxy.com' }
                     ]
                 );
-            expect(list.resolve('foo://www.foo.com/bar')).to.eql(undefined);
+            expect(list.resolve('foo://www.foo.com/bar')).to.be.undefined;
         });
 
     });
@@ -281,7 +280,7 @@ describe('Proxy Config List', function () {
                         { match: 'http://www.google.com', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve('http://www.google.com')).to.eql(undefined);
+            expect(list.resolve('http://www.google.com')).to.be.undefined;
         });
 
         it('Bad Match pattern ["*" in the host can be followed only by a "." or "/"]', function () {
@@ -291,7 +290,7 @@ describe('Proxy Config List', function () {
                         { match: 'http://*foo/bar', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve('http://www.foo/bar')).to.eql(undefined);
+            expect(list.resolve('http://www.foo/bar')).to.be.undefined;
         });
 
         it('Bad Match pattern [If "*" is in the host, it must be the first character]', function () {
@@ -301,7 +300,7 @@ describe('Proxy Config List', function () {
                         { match: 'http://foo.*.bar/baz', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve('http://foo.z.bar/baz')).to.eql(undefined);
+            expect(list.resolve('http://foo.z.bar/baz')).to.be.undefined;
         });
 
         it('Bad Match pattern [Missing protocol separator ("/" should be "//")]', function () {
@@ -311,7 +310,7 @@ describe('Proxy Config List', function () {
                         { match: 'http:/bar', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve('http:/bar')).to.eql(undefined);
+            expect(list.resolve('http:/bar')).to.be.undefined;
         });
 
         it('Bad Match pattern [Invalid protocol]', function () {
@@ -321,7 +320,7 @@ describe('Proxy Config List', function () {
                         { match: 'foo://*', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve('foo://www.foo/bar')).to.eql(undefined);
+            expect(list.resolve('foo://www.foo/bar')).to.be.undefined;
         });
 
         it('Bad url for the match [Empty url]', function () {
@@ -331,7 +330,7 @@ describe('Proxy Config List', function () {
                         { match: 'foo://*', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve('')).to.eql(undefined);
+            expect(list.resolve('')).to.be.undefined;
         });
 
         it('Bad url for the match [Non String url]', function () {
@@ -341,23 +340,23 @@ describe('Proxy Config List', function () {
                         { match: 'foo://*', host: 'proxy.com', tunnel: true }
                     ]
                 );
-            expect(list.resolve({ remote: 'random remote' })).to.eql(undefined);
+            expect(list.resolve({ remote: 'random remote' })).to.be.undefined;
         });
     });
 
     describe('isProxyConfigList', function () {
         it('Should return true for the ProxyConfigList constructor', function () {
             var list = new ProxyConfigList({}, []);
-            expect(ProxyConfigList.isProxyConfigList(list)).to.eql(true);
+            expect(ProxyConfigList.isProxyConfigList(list)).to.be.true;
         });
 
         it('Should return false for the invalid ProxyConfigList', function () {
             var list = { _postman_propertyName: 'ProxyConfigList' };
-            expect(ProxyConfigList.isProxyConfigList(list)).to.eql(false);
+            expect(ProxyConfigList.isProxyConfigList(list)).to.be.false;
         });
 
         it('should return false when called witohut arguments', function () {
-            expect(ProxyConfigList.isProxyConfigList()).to.eql(false);
+            expect(ProxyConfigList.isProxyConfigList()).to.be.false;
         });
     });
 });

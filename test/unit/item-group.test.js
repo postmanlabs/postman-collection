@@ -1,12 +1,11 @@
 var _ = require('lodash'),
-    expect = require('expect.js'),
+    expect = require('chai').expect,
     fixtures = require('../fixtures'),
     sdk = require('../../lib/index.js'),
     Item = sdk.Item,
     ItemGroup = sdk.ItemGroup,
     Collection = sdk.Collection;
 
-/* global describe, it */
 describe('ItemGroup', function () {
     describe('constructor', function () {
         it('should handle all properties', function () {
@@ -30,14 +29,18 @@ describe('ItemGroup', function () {
                             type: 'text/javascript',
                             exec: ['console.log("This doesn\'t matter");']
                         }
-                    }]
+                    }],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition);
 
-            expect(itemGroup).to.have.property('events');
-            expect(itemGroup.events).to.eql(new sdk.EventList({}, itemGroupDefinition.event));
-            expect(itemGroup).to.have.property('auth');
-            expect(itemGroup.auth).to.eql(new sdk.RequestAuth(itemGroupDefinition.auth));
+            expect(itemGroup).to.deep.include({
+                events: new sdk.EventList({}, itemGroupDefinition.event),
+                auth: new sdk.RequestAuth(itemGroupDefinition.auth),
+                protocolProfileBehavior: { disableBodyPruning: true }
+            });
             expect(itemGroup).to.have.property('items');
         });
 
@@ -51,7 +54,8 @@ describe('ItemGroup', function () {
             expect(itemGroup.toJSON()).to.not.have.property('auth');
         });
     });
-    it('must be able to iterate over all subfolders', function () {
+
+    it('should be able to iterate over all subfolders', function () {
         var rawCollection = fixtures.collectionV2,
             collection = new Collection(rawCollection),
             groups = [];
@@ -59,7 +63,7 @@ describe('ItemGroup', function () {
         collection.forEachItemGroup(function (group) {
             groups.push(group);
         });
-        expect(groups.length).to.be(4);
+        expect(groups.length).to.equal(4);
     });
 
     it('should correctly handle incoming items/item groups and/or plain objects', function () {
@@ -77,19 +81,23 @@ describe('ItemGroup', function () {
             })),
             group = ItemGroup._createNewGroupOrItem(new sdk.ItemGroup({ name: 'Blank folder' }));
 
-        expect(plain).to.be.ok();
-        expect(plain.events).to.be.ok();
-        expect(plain.responses).to.be.ok();
+        expect(plain).to.be.ok;
+        expect(plain.events).to.be.ok;
+        expect(plain.responses).to.be.ok;
         expect(plain.request).to.have.property('method', 'GET');
-        expect(plain.request.url.path).to.eql(['get']);
-        expect(plain.request.url.host).to.eql(['postman-echo', 'com']);
+        expect(plain.request.url).to.deep.include({
+            path: ['get'],
+            host: ['postman-echo', 'com']
+        });
 
-        expect(item).to.be.ok();
-        expect(item.events).to.be.ok();
-        expect(item.responses).to.be.ok();
+        expect(item).to.be.ok;
+        expect(item.events).to.be.ok;
+        expect(item.responses).to.be.ok;
         expect(item.request).to.have.property('method', 'GET');
-        expect(item.request.url.path).to.eql(['get']);
-        expect(item.request.url.host).to.eql(['postman-echo', 'com']);
+        expect(item.request.url).to.deep.include({
+            path: ['get'],
+            host: ['postman-echo', 'com']
+        });
 
         expect(_.omit(group.toJSON(), 'id')).to.eql({ name: 'Blank folder', item: [], event: [] });
     });
@@ -99,7 +107,7 @@ describe('ItemGroup', function () {
             itemGroup = new ItemGroup(rawItemGroup);
 
         it('initializes successfully', function () {
-            expect(itemGroup).to.be.ok();
+            expect(itemGroup).to.be.ok;
         });
 
         describe('has property', function () {
@@ -108,10 +116,8 @@ describe('ItemGroup', function () {
             });
 
             it('item', function () {
-                expect(itemGroup).to.have.property('items');
-                expect(itemGroup.items).to.be.an('object');
-                expect(itemGroup.items.all()).to.be.an('array');
-                expect(itemGroup.items.all()).to.not.be.empty();
+                expect(itemGroup).to.have.property('items').that.is.an('object');
+                expect(itemGroup.items.all()).to.be.an('array').that.has.lengthOf(3);
             });
 
             it('name', function () {
@@ -119,15 +125,81 @@ describe('ItemGroup', function () {
             });
             it('events', function () {
                 expect(itemGroup).to.have.property('events');
-                expect(itemGroup.events.all()).to.be.an('array');
-                expect(itemGroup.events.all()).to.not.be.empty();
+                expect(itemGroup.events.all()).to.be.an('array').that.has.lengthOf(2);
+            });
+            it('protocolProfileBehavior', function () {
+                expect(itemGroup).to.have.property('protocolProfileBehavior').that.is.an('object');
+                expect(itemGroup.protocolProfileBehavior).to.not.be.empty;
             });
         });
 
         describe('has function', function () {
             it('forEachItem', function () {
-                expect(itemGroup.forEachItem).to.be.ok();
+                expect(itemGroup.forEachItem).to.be.ok;
                 expect(itemGroup.forEachItem).to.be.a('function');
+            });
+
+            it('forEachItemGroup', function () {
+                expect(itemGroup.forEachItemGroup).to.be.ok;
+                expect(itemGroup.forEachItemGroup).to.be.a('function');
+            });
+
+            it('oneDeep', function () {
+                expect(itemGroup.oneDeep).to.be.ok;
+                expect(itemGroup.oneDeep).to.be.a('function');
+            });
+
+            it('setProtocolProfileBehavior', function () {
+                expect(itemGroup.setProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.setProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('unsetProtocolProfileBehavior', function () {
+                expect(itemGroup.setProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.setProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('getProtocolProfileBehavior', function () {
+                expect(itemGroup.getProtocolProfileBehavior).to.be.ok;
+                expect(itemGroup.getProtocolProfileBehavior).to.be.a('function');
+            });
+
+            it('getProtocolProfileBehaviorResolved', function () {
+                expect(itemGroup.getProtocolProfileBehaviorResolved).to.be.ok;
+                expect(itemGroup.getProtocolProfileBehaviorResolved).to.be.a('function');
+            });
+
+            it('authorizeRequestsUsing', function () {
+                expect(itemGroup.authorizeRequestsUsing).to.be.ok;
+                expect(itemGroup.authorizeRequestsUsing).to.be.a('function');
+            });
+        });
+
+        describe('protocolProfileBehavior', function () {
+            it('should not filter unknown protocol profile behaviors', function () {
+                expect(new ItemGroup({
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true,
+                        random: true
+                    }
+                })).to.have.property('protocolProfileBehavior').that.eql({
+                    disableBodyPruning: true,
+                    random: true
+                });
+            });
+
+            it('should not be included if its not an object', function () {
+                expect(new ItemGroup({
+                    protocolProfileBehavior: true
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new ItemGroup({
+                    protocolProfileBehavior: 'foo'
+                })).to.not.have.property('protocolProfileBehavior');
+
+                expect(new ItemGroup({
+                    protocolProfileBehavior: 123
+                })).to.not.have.property('protocolProfileBehavior');
             });
         });
     });
@@ -143,7 +215,7 @@ describe('ItemGroup', function () {
 
                 while (parent) {
                     parentIds.push(parent.id);
-                    expect(parent).to.have.keys(['description', 'id', 'name', 'items', 'events']);
+                    expect(parent).to.include.keys(['description', 'id', 'name', 'items', 'events']);
                     parent = parent.parent();
                 }
 
@@ -152,28 +224,28 @@ describe('ItemGroup', function () {
                 });
 
                 // The top most parent is always the collection, check that here
-                expect(parentIds.pop()).to.be(collection.id);
+                expect(parentIds.pop()).to.equal(collection.id);
 
                 // Check that the parents returned by .parent are in the same order as those of the itemGroup list
                 _.forEach(parentIds, function (id, index) {
-                    expect(id).to.be(groupIds[index]);
+                    expect(id).to.equal(groupIds[index]);
                 });
             });
         });
 
-        it('must work correctly for a nested itemGroup', function () {
+        it('should work correctly for a nested itemGroup', function () {
             var f2 = collection.items.members[1],
                 f3 = f2.items.members[0],
                 parent = f3.parent();
 
-            expect(parent.name).to.be(f2.name);
+            expect(parent.name).to.equal(f2.name);
         });
 
-        it('must work correctly for a first level itemGroup', function () {
+        it('should work correctly for a first level itemGroup', function () {
             var f1 = collection.items.members[0],
                 parent = f1.parent();
 
-            expect(parent.name).to.be(collection.name);
+            expect(parent.name).to.equal(collection.name);
         });
     });
 
@@ -227,7 +299,7 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('.oneDeep()', function () {
+    describe('.oneDeep', function () {
         var itemGroupData = {
                 id: 'F0',
                 name: 'F0-name',
@@ -283,13 +355,13 @@ describe('ItemGroup', function () {
             describe('in the root', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R1');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R1-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R1-name');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R1');
                 });
             });
@@ -297,13 +369,13 @@ describe('ItemGroup', function () {
             describe('in an immediate sub-group', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R2');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R2-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R2-name');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R2');
                 });
             });
@@ -311,13 +383,13 @@ describe('ItemGroup', function () {
             describe('in a nested subgroup', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R4');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R4-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R4-name');
-                    expect(Item.isItem(r)).to.be(true);
+                    expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R4');
                 });
             });
@@ -329,11 +401,11 @@ describe('ItemGroup', function () {
                     var f1, f2;
 
                     f1 = itemGroup.oneDeep('F2');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('name', 'F2-name');
 
                     f2 = itemGroup.oneDeep('F5');
-                    expect(ItemGroup.isItemGroup(f2)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f2)).to.be.true;
                     expect(f2).to.have.property('name', 'F5-name');
                 });
 
@@ -341,11 +413,11 @@ describe('ItemGroup', function () {
                     var f1, f2;
 
                     f1 = itemGroup.oneDeep('F2-name');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('id', 'F2');
 
                     f2 = itemGroup.oneDeep('F5-name');
-                    expect(ItemGroup.isItemGroup(f2)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f2)).to.be.true;
                     expect(f2).to.have.property('id', 'F5');
                 });
             });
@@ -355,7 +427,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F3');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('name', 'F3-name');
                 });
 
@@ -363,7 +435,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F3-name');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('id', 'F3');
                 });
             });
@@ -373,7 +445,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F4');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('name', 'F4-name');
                 });
 
@@ -381,7 +453,7 @@ describe('ItemGroup', function () {
                     var f1;
 
                     f1 = itemGroup.oneDeep('F4-name');
-                    expect(ItemGroup.isItemGroup(f1)).to.be(true);
+                    expect(ItemGroup.isItemGroup(f1)).to.be.true;
                     expect(f1).to.have.property('id', 'F4');
                 });
             });
@@ -392,11 +464,11 @@ describe('ItemGroup', function () {
 
             i = itemGroup.oneDeep('non-existent');
 
-            expect(i).to.be(undefined);
+            expect(i).to.be.undefined;
         });
 
         it('should return `undefined` if the specified id is not a string', function () {
-            expect(itemGroup.oneDeep(1)).to.be(undefined);
+            expect(itemGroup.oneDeep(1)).to.be.undefined;
         });
     });
 
@@ -426,17 +498,17 @@ describe('ItemGroup', function () {
         });
     });
 
-    describe('isItemGroup', function () {
+    describe('.isItemGroup', function () {
         it('should return true for a ItemGroup instance', function () {
-            expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be(true);
+            expect(sdk.ItemGroup.isItemGroup(new sdk.ItemGroup(fixtures.collectionV2.item))).to.be.true;
         });
 
         it('should return false for a raw ItemGroup object', function () {
-            expect(sdk.ItemGroup.isItemGroup(fixtures.collectionV2.item)).to.be(false);
+            expect(sdk.ItemGroup.isItemGroup(fixtures.collectionV2.item)).to.be.false;
         });
 
         it('should return false when called without arguments', function () {
-            expect(sdk.ItemGroup.isItemGroup()).to.be(false);
+            expect(sdk.ItemGroup.isItemGroup()).to.be.false;
         });
     });
 
@@ -466,12 +538,126 @@ describe('ItemGroup', function () {
                             }
                         },
                         response: []
-                    }]
+                    }],
+                    protocolProfileBehavior: {
+                        disableBodyPruning: true
+                    }
                 },
                 itemGroup = new ItemGroup(itemGroupDefinition),
                 itemGroupJSON = itemGroup.toJSON();
 
             expect(itemGroupJSON).to.eql(itemGroupDefinition);
+        });
+    });
+
+    describe('.setProtocolProfileBehavior', function () {
+        it('should set protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup();
+            itemGroup.setProtocolProfileBehavior('key1', 'value')
+                .setProtocolProfileBehavior('key2', true)
+                .setProtocolProfileBehavior('key3', 123);
+
+            expect(itemGroup.toJSON()).to.deep.include({
+                protocolProfileBehavior: {
+                    key1: 'value',
+                    key2: true,
+                    key3: 123
+                }
+            });
+        });
+
+        it('should update protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'initialValue' }
+            });
+
+            itemGroup.setProtocolProfileBehavior('key', 'updatedValue');
+            expect(itemGroup.toJSON()).to.deep.include({
+                protocolProfileBehavior: { key: 'updatedValue' }
+            });
+        });
+
+        it('should not set protocolProfileBehavior for non-string keys', function () {
+            var itemGroup = new ItemGroup();
+
+            itemGroup.setProtocolProfileBehavior(true);
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            itemGroup.setProtocolProfileBehavior({}, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+
+            itemGroup.setProtocolProfileBehavior(123, 'value');
+            expect(itemGroup.toJSON()).to.not.have.property('protocolProfileBehavior');
+        });
+    });
+
+    describe('.unsetProtocolProfileBehavior', function () {
+        it('should delete protocolProfileBehavior from an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { keyName: 'value' }
+            });
+
+            itemGroup.unsetProtocolProfileBehavior('keyName');
+            expect(itemGroup.toJSON()).to.have.property('protocolProfileBehavior').that.is.empty;
+        });
+    });
+
+    describe('.getProtocolProfileBehavior', function () {
+        it('should get protocolProfileBehavior on an ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                protocolProfileBehavior: { key: 'value' }
+            });
+
+            expect(itemGroup.getProtocolProfileBehavior()).to.eql({ key: 'value' });
+        });
+
+        it('should not inherit protocolProfileBehavior from parent', function () {
+            var itemGroup = new ItemGroup({
+                    protocolProfileBehavior: { key: 'value' },
+                    item: [{
+                        item: [{ name: 'I1' }]
+                    }]
+                }),
+                group = itemGroup.items.members[0];
+
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehavior()).to.be.empty;
+        });
+    });
+
+    describe('.getProtocolProfileBehaviorResolved', function () {
+        it('should inherit protocolProfileBehavior from parent ItemGroup', function () {
+            var itemGroup = new ItemGroup({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        item: [{ name: 'I1' }],
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                group = itemGroup.items.members[0];
+
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehaviorResolved()).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
+        });
+
+        it('should inherit protocolProfileBehavior from Collection', function () {
+            var itemGroup = new sdk.Collection({
+                    protocolProfileBehavior: { key: 'value', hello: 'world' },
+                    item: [{
+                        item: [{ name: 'I1' }],
+                        protocolProfileBehavior: { key: 'new-value' }
+                    }]
+                }),
+                group = itemGroup.items.members[0];
+
+            expect(ItemGroup.isItemGroup(group)).to.be.true;
+            expect(group.getProtocolProfileBehaviorResolved()).to.eql({
+                hello: 'world',
+                key: 'new-value'
+            });
         });
     });
 });

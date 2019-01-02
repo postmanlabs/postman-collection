@@ -1,7 +1,6 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     FormParam = require('../../lib/index.js').FormParam;
 
-/* global describe, it */
 describe('FormParam', function () {
     describe('constructor', function () {
         it('should correctly construct a FormParam instance', function () {
@@ -22,7 +21,7 @@ describe('FormParam', function () {
         it('should unparse the FormParam instance correctly', function () {
             var fp = new FormParam({ key: 'foo', value: 'bar' });
 
-            expect(fp.toString()).to.be('foo=bar');
+            expect(fp.toString()).to.equal('foo=bar');
         });
     });
 

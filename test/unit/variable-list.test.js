@@ -1,8 +1,7 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     sdk = require('../../'),
     VariableList = sdk.VariableList;
 
-/* global describe, it */
 describe('VariableList', function () {
     it('should resolve a single reference properly', function () {
         var list = new VariableList(null, [{
@@ -16,7 +15,7 @@ describe('VariableList', function () {
         expect(list.one('root').valueOf()).to.eql('one');
     });
 
-    it('must support function variables', function () {
+    it('should support function variables', function () {
         var list = new VariableList(null, [{
                 key: 'somevar',
                 value: 'asdasd'
@@ -40,7 +39,7 @@ describe('VariableList', function () {
                 /in 3rd layer/
             ];
         expectations.forEach(function (regex, index) {
-            expect(regex.test(values[index])).to.be(true);
+            expect(regex.test(values[index])).to.be.true;
         });
     });
 
@@ -59,7 +58,7 @@ describe('VariableList', function () {
                 value: 'foo'
             }]),
             resolved = mylist.substitute(unresolved);
-        expect(resolved.xyz).to.eql('foo-bar');
+        expect(resolved.xyz).to.equal('foo-bar');
     });
 
     it('should correctly resolve variables with a forward slash in their name', function () {
@@ -71,7 +70,7 @@ describe('VariableList', function () {
                 value: 'beta'
             }]),
             resolved = mylist.substitute(unresolved);
-        expect(resolved.xyz).to.eql('beta');
+        expect(resolved.xyz).to.equal('beta');
     });
 
     it('should correctly resolve variables with a backslash in their name', function () {
@@ -84,7 +83,7 @@ describe('VariableList', function () {
                 value: 'beta'
             }]),
             resolved = mylist.substitute(unresolved);
-        expect(resolved.xyz).to.eql('beta');
+        expect(resolved.xyz).to.equal('beta');
     });
 
     it('should correctly handle cyclic resolution loops', function () {
@@ -105,7 +104,7 @@ describe('VariableList', function () {
                 value: '{{beta}}'
             }]),
             resolved = cyclicList.substitute(unresolved);
-        expect(resolved.xyz).to.eql('{{beta}}');
+        expect(resolved.xyz).to.equal('{{beta}}');
     });
 
     it('should correctly handle poly chained variable resolution(s)', function () {
@@ -123,7 +122,7 @@ describe('VariableList', function () {
                 value: 'epsilon'
             }]),
             resolved = polyChainList.substitute(unresolved);
-        expect(resolved.xyz).to.eql('epsilon');
+        expect(resolved.xyz).to.equal('epsilon');
     });
 
     it('should correctly handle recursive poly chained variable resolution(s)', function () {
@@ -141,7 +140,7 @@ describe('VariableList', function () {
                 value: '{{gamma}}'
             }]),
             resolved = polyChainList.substitute(unresolved);
-        expect(resolved.xyz).to.eql('delta');
+        expect(resolved.xyz).to.equal('delta');
     });
 
     it('should correctly handle nested variable resolutions', function () {
@@ -165,7 +164,7 @@ describe('VariableList', function () {
                 value: 'z'
             }]),
             resolved = polyChainList.substitute(unresolved);
-        expect(resolved.xyz).to.eql('z');
+        expect(resolved.xyz).to.equal('z');
     });
 
     it.skip('should correctly handle variables with single braces in their name', function () {
@@ -180,11 +179,11 @@ describe('VariableList', function () {
                 }
             ]),
             resolved = polyChainList.substitute(unresolved);
-        expect(resolved.xyz).to.eql('delta');
+        expect(resolved.xyz).to.equal('delta');
     });
 
     describe('sanity', function () {
-        it('constructor must be exported', function () {
+        it('constructor should be exported', function () {
             expect(VariableList).to.be.a('function');
         });
 
@@ -200,7 +199,7 @@ describe('VariableList', function () {
                     key: 'third',
                     value: 'in 3rd layer'
                 }]);
-            expect(v instanceof VariableList).to.be.ok();
+            expect(v).to.be.an.instanceof(VariableList);
         });
 
         it('should store variables as an object as well', function () {
@@ -223,9 +222,9 @@ describe('VariableList', function () {
         var variableList = new VariableList();
 
         it('should work correctly for isVariableList', function () {
-            expect(VariableList.isVariableList(variableList)).to.be(true);
-            expect(VariableList.isVariableList({})).to.be(false);
-            expect(VariableList.isVariableList()).to.be(false);
+            expect(VariableList.isVariableList(variableList)).to.be.true;
+            expect(VariableList.isVariableList({})).to.be.false;
+            expect(VariableList.isVariableList()).to.be.false;
         });
     });
 
@@ -235,14 +234,12 @@ describe('VariableList', function () {
                 { key: 'foo', value: 'bar' }
             ]);
 
-            expect(list.syncFromObject()).to.be(undefined);
-            expect(list.reference).to.eql({
-                foo: {
-                    key: 'foo',
-                    value: 'bar',
-                    type: 'any'
-                }
-            });
+            expect(list.syncFromObject()).to.be.undefined;
+            expect(list.toJSON()).to.eql([{
+                key: 'foo',
+                value: 'bar',
+                type: 'any'
+            }]);
         });
     });
 
@@ -264,7 +261,7 @@ describe('VariableList', function () {
                 { key: 'foo', value: 'bar' }
             ]);
 
-            expect(list.replace('{{foo}}')).to.be('bar');
+            expect(list.replace('{{foo}}')).to.equal('bar');
         });
     });
 });

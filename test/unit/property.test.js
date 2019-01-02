@@ -1,21 +1,23 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     sdk = require('../../lib/index.js'),
     VariableList = sdk.VariableList,
     Property = sdk.Property;
 
-/* global describe, it */
 describe('Property', function () {
     describe('sanity', function () {
         it('initializes successfully', function () {
-            expect((new Property()) instanceof Property).to.be.ok();
+            expect((new Property())).to.be.an.instanceof(Property);
         });
         it('allows a description to be set', function () {
             var prop = new Property();
             expect(prop.describe).to.be.a('function');
-            expect(prop.describe.bind(prop)).withArgs('Hello Postman').to.not.throwException();
-            expect(prop.description).to.be.ok();
-            expect(prop.description.toString()).to.be('Hello Postman');
-            expect(prop.description.type).to.be('text/plain');
+            expect(function () {
+                prop.describe.bind(prop)('Hello Postman');
+            }).to.not.throw();
+            // expect(prop.describe.bind(prop)).withArgs('Hello Postman').to.not.throwException();
+            expect(prop.description).to.be.ok;
+            expect(prop.description.toString()).to.equal('Hello Postman');
+            expect(prop.description.type).to.equal('text/plain');
         });
     });
 
@@ -24,7 +26,7 @@ describe('Property', function () {
             var property = new Property({ description: 'Sample description' });
 
             property.describe('New description');
-            expect(property.description).to.eql({ content: 'New description', type: 'text/plain' });
+            expect(property.description.toJSON()).to.eql({ content: 'New description', type: 'text/plain' });
         });
     });
 
@@ -32,7 +34,7 @@ describe('Property', function () {
         it('should throw an error for invalid arguments', function () {
             var property = new Property();
 
-            expect(property.toObjectResolved.bind(property)).to.throwError();
+            expect(property.toObjectResolved.bind(property)).to.throw();
         });
 
         it('should resolve and exclude its own .variables', function () {
@@ -213,14 +215,95 @@ describe('Property', function () {
     });
 
     describe('.replaceSubstitutions', function () {
+        /**
+         * Generates a object with n variables
+         *
+         * @example
+         * getVariables(2)
+         * {
+         *    '0': '',
+         *    '1': ''
+         * }
+         *
+         * @param {Integer} n - Number of variables
+         * @returns {Object}
+         */
+        function getVariables (n) {
+            var i,
+                obj = {};
+
+            for (i = 0; i < n; i++) {
+                obj[String(i)] = '';
+            }
+
+            return obj;
+        }
+
+        /**
+         * Generates a poly chained variable nested n times
+         *
+         * @example
+         * getPolyChainedVariable(2)
+         * '{{1{{0}}}}'
+         *
+         * @param {Integer} n
+         * @returns {String}
+         */
+        function getPolyChainedVariable (n) {
+            var i,
+                str = '';
+
+            for (i = 0; i < n; i++) {
+                str = `{{${i}` + str;
+            }
+
+            str += '}}'.repeat(n);
+
+            return str;
+        }
+
         it('should bail out if a non-string argument is passed', function () {
             expect(Property.replaceSubstitutions(['random'])).to.eql(['random']);
+        });
+
+        it('should resolve poly chained variable 19 times', function () {
+            var str = getPolyChainedVariable(21),
+                variables = getVariables(21);
+
+            // resolves {{0}} to {{18}} poly-chained variables
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{20{{19}}}}');
+        });
+
+        it('should correctly resolve multiple poly chained variables', function () {
+            var str = getPolyChainedVariable(20) +
+                `{{ - ${getPolyChainedVariable(19)}}}` +
+                '{{hello{{world}}}} {{random}}',
+                variables = getVariables(20);
+
+            variables = Object.assign(variables, {
+                world: 'World',
+                helloWorld: 'Hello World'
+            });
+
+            // resolves {{0}} to {{18}} poly-chained variables, {{world}} & {{hello}}
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{19}}{{ - }}Hello World {{random}}');
+        });
+
+        it('should correctly resolve all unique variables', function () {
+            // eslint-disable-next-line max-len
+            var str = '{{0}}{{1}}{{2}}{{3}}{{4}}{{5}}{{6}}{{7}}{{8}}{{9}}' +
+                '{{10}}{{11}}{{12}}{{13}}{{14}}{{15}}{{16}}{{17}}{{18}}{{19}}' +
+                '{{xyz{{1{{0}}}}}}',
+                variables = getVariables(20);
+
+            // resolves all independent unique variables as well as poly-chained {{0}} & {{1}}
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('{{xyz}}');
         });
     });
 
     describe('.replaceSubstitutionsIn', function () {
         it('should bail out if a non-object argument is passed', function () {
-            expect(Property.replaceSubstitutionsIn('random')).to.be('random');
+            expect(Property.replaceSubstitutionsIn('random')).to.equal('random');
         });
     });
 

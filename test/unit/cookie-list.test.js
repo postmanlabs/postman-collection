@@ -1,7 +1,6 @@
-var expect = require('expect.js'),
+var expect = require('chai').expect,
     CookieList = require('../../lib/index.js').CookieList;
 
-/* global describe, it */
 describe('CookieList', function () {
     describe('.isCookieList', function () {
         it('should correctly identify a CookieList instance', function () {
@@ -18,10 +17,10 @@ describe('CookieList', function () {
                 value: 'GA1.2.113558537.1435817423'
             }]);
 
-            expect(CookieList.isCookieList()).to.eql(false);
-            expect(CookieList.isCookieList(cookieList)).to.eql(true);
-            expect(CookieList.isCookieList({})).to.eql(false);
-            expect(CookieList.isCookieList({ _postman_propertyName: 'CookieList' })).to.eql(false);
+            expect(CookieList.isCookieList()).to.be.false;
+            expect(CookieList.isCookieList(cookieList)).to.be.true;
+            expect(CookieList.isCookieList({})).to.be.false;
+            expect(CookieList.isCookieList({ _postman_propertyName: 'CookieList' })).to.be.false;
         });
     });
 });
