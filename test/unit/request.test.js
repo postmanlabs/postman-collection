@@ -282,6 +282,46 @@ describe('Request', function () {
             var request = new Request();
             expect(request.getHeaders()).to.eql({});
         });
+
+        it('should handle duplicate headers using `multiValue` option', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'name',
+                        value: 'alpha'
+                    }, {
+                        key: 'name',
+                        value: 'beta'
+                    }, {
+                        key: 'name',
+                        value: 'gamma',
+                        disabled: true
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ enabled: true, multiValue: true })).to.eql({
+                name: ['alpha', 'beta']
+            });
+        });
+
+        it('should lowercase header keys using `ignoreCase` option', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }, {
+                        key: 'HOST',
+                        value: 'postman-echo.com',
+                        disabled: true
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ ignoreCase: true })).to.eql({
+                'content-type': 'application/json',
+                host: 'postman-echo.com'
+            });
+        });
     });
 
     describe('upsertHeader', function () {
