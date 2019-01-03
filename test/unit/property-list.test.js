@@ -636,6 +636,18 @@ describe('PropertyList', function () {
             }, {
                 keyAttr: null,
                 value: 'val3'
+            }, {
+                keyAttr: 0,
+                value: 'val4'
+            }, {
+                keyAttr: false,
+                value: 'val5'
+            }, {
+                keyAttr: undefined,
+                value: 'val6'
+            }, {
+                keyAttr: NaN,
+                value: 'val7'
             }]);
 
             expect(list.toObject()).to.eql({ key1: 'val2' });
