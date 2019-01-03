@@ -510,8 +510,8 @@ describe('PropertyList', function () {
                 this.disabled = options.disabled;
             };
 
-            FakeType._postman_sanitizeKeys = false;
             FakeType._postman_propertyIndexKey = 'keyAttr';
+            FakeType._postman_propertySanitizeKeys = false;
             FakeType._postman_propertyIndexCaseInsensitive = true;
             FakeType._postman_propertyAllowsMultipleValues = false;
             FakeType.prototype.valueOf = function () {
@@ -622,6 +622,23 @@ describe('PropertyList', function () {
             }]);
 
             expect(list.toObject(false, false, false, true)).to.eql({ key1: 'val2' });
+        });
+
+        it('should correctly handle the falsy keys with the sanitize option', function () {
+            FakeType._postman_propertySanitizeKeys = true;
+
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: '',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: null,
+                value: 'val3'
+            }]);
+
+            expect(list.toObject()).to.eql({ key1: 'val2' });
         });
     });
 
