@@ -256,7 +256,37 @@ describe('Request', function () {
     });
 
     describe('getHeaders', function () {
-        it('should get only enabled headers', function () {
+        it('should return an empty object for empty requests', function () {
+            var request = new Request();
+            expect(request.getHeaders()).to.eql({});
+        });
+
+        it('should handle duplicate headers correctly', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'name',
+                        value: 'alpha'
+                    }, {
+                        key: 'name',
+                        value: 'beta'
+                    }, {
+                        key: 'Name',
+                        value: 'alpha, beta'
+                    }, {
+                        key: 'name',
+                        value: 'gamma',
+                        disabled: true
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders()).to.eql({
+                name: ['alpha', 'beta', 'gamma'],
+                Name: 'alpha, beta'
+            });
+        });
+
+        it('should get only enabled headers using `enabled` option', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
                     method: 'GET',
@@ -278,32 +308,6 @@ describe('Request', function () {
             });
         });
 
-        it('should return an empty object for empty requests', function () {
-            var request = new Request();
-            expect(request.getHeaders()).to.eql({});
-        });
-
-        it('should handle duplicate headers using `multiValue` option', function () {
-            var rawRequest = {
-                    url: 'postman-echo.com',
-                    header: [{
-                        key: 'name',
-                        value: 'alpha'
-                    }, {
-                        key: 'name',
-                        value: 'beta'
-                    }, {
-                        key: 'name',
-                        value: 'gamma',
-                        disabled: true
-                    }]
-                },
-                request = new Request(rawRequest);
-            expect(request.getHeaders({ enabled: true, multiValue: true })).to.eql({
-                name: ['alpha', 'beta']
-            });
-        });
-
         it('should lowercase header keys using `ignoreCase` option', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
@@ -320,6 +324,64 @@ describe('Request', function () {
             expect(request.getHeaders({ ignoreCase: true })).to.eql({
                 'content-type': 'application/json',
                 host: 'postman-echo.com'
+            });
+        });
+
+        it('should handle duplicate headers with `ignoreCase` option correctly', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }, {
+                        key: 'content-type',
+                        value: 'application/xml'
+                    }, {
+                        key: 'x-forward-port',
+                        value: 443
+                    }, {
+                        key: 'X-Forward-Port',
+                        value: 443
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ ignoreCase: true })).to.eql({
+                'content-type': ['application/json', 'application/xml'],
+                'x-forward-port': [443, 443]
+            });
+        });
+
+        it('should avoid header with falsy keys using `sanitizeKeys` option', function () {
+            // @todo: this should be handled by default.
+            // @note: all falsy keys are stored as empty string.
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }, {
+                        key: '',
+                        value: 'value'
+                    }, {
+                        key: 0,
+                        value: 'value'
+                    }, {
+                        key: false,
+                        value: 'value'
+                    }, {
+                        key: null,
+                        value: 'value'
+                    }, {
+                        key: NaN,
+                        value: 'value'
+                    }, {
+                        key: undefined,
+                        value: 'value'
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ sanitizeKeys: true })).to.eql({
+                'Content-Type': 'application/json'
             });
         });
     });
