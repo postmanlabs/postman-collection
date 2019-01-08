@@ -4,6 +4,7 @@
 * #769 Avoid substitution of disabled variables
 * #770 Added an option to exclude disabled listeners in `EventList~listeners` and `EventList~listenersOwn`
 * #773 Added an option to exclude headers with falsy keys in `Request~getHeaders`
+* #778 Handle disabled property in `VariableScope` methods.
 * Updated dependencies
 
 #### v3.4.1 (January 2, 2019)
