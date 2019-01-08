@@ -297,11 +297,19 @@ describe('VariableScope', function () {
                 }, {
                     key: 'var-2',
                     value: 'var-2-value'
+                }, {
+                    key: 'var-3',
+                    value: 'var-3-value',
+                    disabled: true
                 }]
             });
 
             it('should correctly return the specified value', function () {
                 expect(scope.get('var-1')).to.equal('var-1-value');
+            });
+
+            it('should return undefined for disabled variable', function () {
+                expect(scope.get('var-3')).to.be.undefined;
             });
 
             it('should return undefined for ', function () {
@@ -312,11 +320,16 @@ describe('VariableScope', function () {
                 var newScope = new VariableScope();
 
                 newScope.addLayer(new VariableList({}, [
-                    { key: 'alpha', value: 'foo' }
+                    { key: 'alpha', value: 'foo' },
+                    { key: 'beta', value: 'bar', disabled: true }
                 ]));
 
                 it('should work correctly', function () {
                     expect(newScope.get('alpha')).to.equal('foo');
+                });
+
+                it('should bail out if variable is undefined', function () {
+                    expect(newScope.get('beta')).to.be.undefined;
                 });
 
                 it('should bail out if no matches are found', function () {
@@ -333,12 +346,24 @@ describe('VariableScope', function () {
                 }, {
                     key: 'var-2',
                     value: 'var-2-value'
+                }, {
+                    key: 'var-3',
+                    value: 'var-3-value',
+                    disabled: true
                 }]
             });
 
             it('should correctly update an existing value', function () {
                 scope.set('var-1', 'new-var-1-value');
                 expect(scope.get('var-1')).to.equal('new-var-1-value');
+            });
+
+            it('should handle disabled variable correctly', function () {
+                expect(scope.has('var-3')).to.be.false;
+                expect(scope.get('var-3')).to.be.undefined;
+                scope.set('var-3', 'new-var-3-value');
+                expect(scope.has('var-3')).to.be.true;
+                expect(scope.get('var-3')).to.equal('new-var-3-value');
             });
 
             it('should create a new variable if non-existent', function () {
@@ -731,11 +756,13 @@ describe('VariableScope', function () {
     describe('has', function () {
         var scope = new VariableScope([
             { key: 'alpha', value: 'foo' },
-            { key: 'beta', value: 'bar' }
+            { key: 'beta', value: 'bar' },
+            { key: 'gamma', value: 'baz', disabled: true }
         ]);
 
         it('should correctly determine if the current scope contains a provided identifier', function () {
             expect(scope.has('alpha')).to.be.true;
+            expect(scope.has('gamma')).to.be.false;
             expect(scope.has('random')).to.be.false;
         });
     });
