@@ -1,0 +1,35 @@
+{
+    "type": "object",
+    "title": "SSHConfig",
+    "id": "#/definitions/ssh-config",
+    "description": "Information required to login to a ssh server",
+    "properties": {
+        "enablePortForwarding": {
+            "description": "Specifies if port should be forwarded",
+            "type": "boolean"
+        },
+        "forwardPort": {
+            "description": "Port number the requests should be forwarded to",
+            "type": "integer"
+        },
+        "auth": {
+            "$ref": "#/definitions/ssh-auth"
+        },
+        "keepaliveIntervel": {
+            "description": "How often (in milliseconds) to send SSH-level keepalive packets to the server, set to 0 to disable.",
+            "type": "integer"
+        },
+        "keepaliveCountMax": {
+            "description": "How many consecutive, unanswered SSH-level keepalive packets that can be sent to the server before disconnection",
+            "type": "integer"
+        },
+        "readyTimeOut": {
+            "description": "How long (in milliseconds) to wait for the SSH handshake to complete.",
+            "type": "integer"
+        }
+    },
+    "required": [
+        "auth",
+        "forwardPort"
+    ]
+}
