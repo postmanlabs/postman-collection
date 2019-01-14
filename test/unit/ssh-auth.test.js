@@ -7,7 +7,7 @@ var expect = require('chai').expect,
         host: '127.0.0.1',
         port: 23,
         username: 'ubuntu',
-        userPassword: 'someSecurepass',
+        password: 'someSecurepass',
         privateKeyPath: './path/to/keyFile'
     };
 
@@ -20,7 +20,7 @@ describe('SSH Auth', function () {
                 host: undefined,
                 port: DEFAULT_SSH_PORT,
                 username: E,
-                userPassword: E,
+                password: E,
                 privateKeyPath: E,
                 passPhrase: E
             });
