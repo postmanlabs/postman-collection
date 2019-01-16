@@ -214,9 +214,9 @@ describe('EventList', function () {
                 item.__parent = parent;
             });
 
-            it('should exclude disabled events if excludeDisabled is set', function () {
-                var testListeners = item.events.listeners('test', { excludeDisabled: true }),
-                    prScriptListeners = item.events.listeners('prerequest', { excludeDisabled: true });
+            it('should exclude disabled events correctly', function () {
+                var testListeners = item.events.listeners('test'),
+                    prScriptListeners = item.events.listeners('prerequest');
 
                 expect(testListeners).to.have.lengthOf(1);
 
@@ -333,9 +333,9 @@ describe('EventList', function () {
                 }]);
             });
 
-            it('should correctly filter disabled event listeners if excludeDisabled is set', function () {
-                var testListeners = item.events.listenersOwn('test', { excludeDisabled: true }),
-                    prScriptListeners = item.events.listenersOwn('prerequest', { excludeDisabled: true });
+            it('should filter disabled event listeners correctly', function () {
+                var testListeners = item.events.listenersOwn('test'),
+                    prScriptListeners = item.events.listenersOwn('prerequest');
 
                 expect(testListeners).to.have.lengthOf(1);
                 expect(testListeners[0]).to.have.property('listen', 'test');
