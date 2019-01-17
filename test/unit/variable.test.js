@@ -244,7 +244,7 @@ describe('Variable', function () {
         expect(v.get()).to.equal('1,2,[object Object]');
 
         v.valueType('array');
-        expect(v.get()).to.be.null;
+        expect(v.get()).to.be.undefined;
     });
 
     it('should recast values when type is changed (object)', function () {
@@ -256,7 +256,7 @@ describe('Variable', function () {
         expect(v.get()).to.equal('[object Object]');
 
         v.valueType('object');
-        expect(v.get()).to.be.null;
+        expect(v.get()).to.be.undefined;
     });
 
     it('should handle functions correctly', function () {
