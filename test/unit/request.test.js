@@ -404,7 +404,9 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             request.upsertHeader({ key: 'third', value: 'header' });
+
             expect(request.headers.toJSON()).to.eql([
                 {
                     key: 'some',
@@ -421,6 +423,7 @@ describe('Request', function () {
                 }
             ]);
         });
+
         it('should replace the header value if it exists', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
@@ -438,7 +441,9 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             request.upsertHeader({ key: 'other', value: 'changedvalue' });
+
             expect(request.headers.toJSON()).to.eql([
                 {
                     key: 'some',
@@ -451,6 +456,7 @@ describe('Request', function () {
                 }
             ]);
         });
+
         it('should do nothing if no header is given', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
@@ -468,7 +474,9 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             request.upsertHeader();
+
             expect(request.headers.toJSON()).to.eql([
                 {
                     key: 'some',
@@ -480,6 +488,97 @@ describe('Request', function () {
                     disabled: true
                 }
             ]);
+        });
+
+        it('should handle multiValue upsert correctly', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    header: [{
+                        key: 'head1',
+                        value: 'value0'
+                    }, {
+                        key: 'head2',
+                        value: 'value0'
+                    }]
+                },
+                request = new Request(rawRequest);
+
+            request.upsertHeader({
+                key: 'head1',
+                value: ['value1', 'value2']
+            });
+
+            expect(request.headers.toJSON()).to.eql([{
+                // @todo: retain order in case of multiValue
+                key: 'head2',
+                value: 'value0'
+            }, {
+                key: 'head1',
+                value: 'value1'
+            }, {
+                key: 'head1',
+                value: 'value2'
+            }]);
+        });
+
+        it('should handle multiValue upsert with multiple-case correctly', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    header: [{
+                        key: 'head1',
+                        value: 'value0'
+                    }, {
+                        key: 'head1',
+                        value: 'value1'
+                    }, {
+                        key: 'HEAD1',
+                        value: 'VALUE0'
+                    }]
+                },
+                request = new Request(rawRequest);
+
+            request.upsertHeader({
+                key: 'head1',
+                value: ['value2', 'value3']
+            });
+
+            expect(request.headers.toJSON()).to.eql([{
+                key: 'HEAD1',
+                value: 'VALUE0'
+            }, {
+                key: 'head1',
+                value: 'value2'
+            }, {
+                key: 'head1',
+                value: 'value3'
+            }]);
+        });
+
+        it('should overwrite multiValue header with a single value', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    header: [{
+                        key: 'head1',
+                        value: 'value0'
+                    }, {
+                        key: 'head1',
+                        value: 'value1'
+                    }]
+                },
+                request = new Request(rawRequest);
+
+            request.upsertHeader({
+                key: 'head1',
+                value: 'value2'
+            });
+
+            expect(request.headers.toJSON()).to.eql([{
+                key: 'head1',
+                value: 'value2'
+            }]);
         });
     });
 
