@@ -3,14 +3,14 @@ var expect = require('chai').expect,
 
     E = '',
     DEFAULT_SSH_PORT = 22,
-    DEFAULT_SSH_FORWARD_PORT = 22,
+    DEFAULT_PROXY_PORT = 22,
     DEFAULT_KEEP_ALIVE_INTERVAL = 0,
     DEFAULT_KEEP_ALIVE_COUNT_MAX = 3,
     DEFAULT_SSH_TIMEOUT = 20000,
 
     rawSshConfig = {
         enablePortForwarding: true,
-        forwardPort: 3128,
+        proxyPort: 3128,
         auth: {
             host: '127.0.0.1',
             port: 23,
@@ -30,7 +30,7 @@ describe('SSH Config', function () {
 
             expect(sshc).to.deep.include({
                 enablePortForwarding: false,
-                forwardPort: DEFAULT_SSH_FORWARD_PORT,
+                proxyPort: DEFAULT_PROXY_PORT,
                 keepAliveInterval: DEFAULT_KEEP_ALIVE_INTERVAL,
                 keepAliveCountMax: DEFAULT_KEEP_ALIVE_COUNT_MAX,
                 readyTimeOut: DEFAULT_SSH_TIMEOUT
@@ -51,7 +51,7 @@ describe('SSH Config', function () {
 
             expect(sshc).to.deep.include({
                 enablePortForwarding: true,
-                forwardPort: 3128,
+                proxyPort: 3128,
                 keepAliveInterval: 21000,
                 keepAliveCountMax: 4,
                 readyTimeOut: 1
@@ -75,7 +75,7 @@ describe('SSH Config', function () {
             expect(serialisedConfig.auth).to.deep.include(rawSshConfig.auth);
             expect(serialisedConfig).to.deep.include({
                 enablePortForwarding: true,
-                forwardPort: 3128,
+                proxyPort: 3128,
                 keepAliveInterval: 21000,
                 keepAliveCountMax: 4,
                 readyTimeOut: 1

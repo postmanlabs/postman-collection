@@ -14,6 +14,10 @@
         "tunnel": {
             "description": "The tunneling details for the proxy config",
             "type": "boolean"
+        },
+        "sshTunnelConfig": {
+            "description": "SSH auth and other connection details required to establish a ssh tunnel",
+            "type": "SshConfig"
         }
     }
 }

@@ -8,8 +8,8 @@
             "description": "Specifies if port should be forwarded",
             "type": "boolean"
         },
-        "forwardPort": {
-            "description": "Port number the requests should be forwarded to",
+        "proxyPort": {
+            "description": "Port number the proxy is running on",
             "type": "integer"
         },
         "auth": {
@@ -30,6 +30,6 @@
     },
     "required": [
         "auth",
-        "forwardPort"
+        "proxyPort"
     ]
 }
