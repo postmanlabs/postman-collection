@@ -565,6 +565,54 @@ describe('Request', function () {
         });
     });
 
+    describe('.size', function () {
+        it('should handle blank request correctly', function () {
+            var request = new Request();
+            expect(request.size()).to.eql({
+                body: 0, header: 40, total: 40
+            });
+        });
+
+        it('should handle raw request body correctly', function () {
+            var request = new Request({
+                body: {
+                    mode: 'raw',
+                    raw: 'POSTMAN'
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 40, total: 47
+            });
+        });
+
+        it('should handle urlencoded request body correctly', function () {
+            var request = new Request({
+                body: {
+                    mode: 'urlencoded',
+                    urlencoded: [{
+                        key: 'foo',
+                        value: 'bar'
+                    }]
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 40, total: 47 // foo=bar
+            });
+        });
+
+        it('should handle connection header correctly', function () {
+            var request = new Request({
+                header: [{
+                    key: 'Connection',
+                    value: 'foo'
+                }]
+            });
+            expect(request.size()).to.eql({
+                body: 0, header: 35, total: 35
+            });
+        });
+    });
+
     describe('empty requests', function () {
 
         it('should have a url', function () {
