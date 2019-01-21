@@ -259,6 +259,18 @@ describe('Variable', function () {
         expect(v.get()).to.be.undefined;
     });
 
+    it('should strictly check for valid object type', function () {
+        var v = new Variable({
+            type: 'object'
+        });
+
+        v.set([{ foo: 'bar' }]);
+        expect(v.get()).to.be.undefined;
+
+        v.set(null);
+        expect(v.get()).to.be.undefined;
+    });
+
     it('should handle functions correctly', function () {
         var v = new Variable({ type: 'string', key: 'foo', value: function () { return 'bar'; } });
 
