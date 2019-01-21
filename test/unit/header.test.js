@@ -80,6 +80,20 @@ describe('Header', function () {
             expect(Header.unparseSingle('')).to.equal('');
         });
 
+        it('should should handle disabled and falsy headers correctly', function () {
+            expect(Header.unparse([{
+                key: undefined,
+                value: 'bar'
+            }, {
+                key: 'foo',
+                value: 'bar',
+                disabled: true
+            }])).to.equal('');
+
+            expect(Header.unparseSingle({ key: '', value: 'bar' })).to.equal('');
+            expect(Header.unparseSingle({ key: 'foo', value: 'bar', disabled: true })).to.equal('');
+        });
+
         it('should unparse headers to a string', function () {
             var raw = 'name1: value1\r\nname2: value2',
                 list = new PropertyList(Header, {}, raw);
