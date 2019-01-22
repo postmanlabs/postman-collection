@@ -568,6 +568,7 @@ describe('Request', function () {
     describe('.size', function () {
         it('should handle blank request correctly', function () {
             var request = new Request();
+            // HTTP request-line + Keep-Alive header
             expect(request.size()).to.eql({
                 body: 0, header: 40, total: 40
             });
