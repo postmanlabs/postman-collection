@@ -757,7 +757,7 @@ describe('PropertyList', function () {
         });
     });
 
-    describe('.lastEnabled', function () {
+    describe('.lastEnabled()', function () {
         var FakeType = function (options) {
             this.keyAttr = options.keyAttr;
             this.value = options.value;
@@ -811,6 +811,117 @@ describe('PropertyList', function () {
             }]);
 
             expect(list.lastEnabled('key1')).to.be.undefined;
+        });
+    });
+
+    describe('.removeLastEnabled()', function () {
+        var FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            _.has(options, 'disabled') && (this.disabled = options.disabled);
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = false;
+        FakeType._postman_propertyAllowsMultipleValues = true;
+        FakeType.prototype.valueOf = function () {
+            return this.value;
+        };
+
+        it('should remove an element from the property list members array as well as reference map', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key1',
+                value: 'val3',
+                disabled: true
+            }]);
+
+            // make sure members and reference list are initialized correctly
+            expect(list.members).to.be.an('array').that.has.lengthOf(3);
+            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(3);
+
+            list.removeLastEnabled('key1');
+
+            // make sure element is removed from the members list correctly
+            expect(list.members).to.be.an('array').that.has.lengthOf(2);
+            expect(list.members).to.eql(new PropertyList(FakeType, {}, [
+                { keyAttr: 'key1', value: 'val1' },
+                { keyAttr: 'key1', value: 'val3', disabled: true }
+            ]).members);
+
+            // make sure element is removed from the reference list correctly
+            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(2);
+            expect(list.reference.key1).to.be.an('array').to.eql(new PropertyList(FakeType, {}, [
+                { keyAttr: 'key1', value: 'val1' },
+                { keyAttr: 'key1', value: 'val3', disabled: true }
+            ]).reference.key1);
+        });
+
+        it('should transform the reference map from array to single-valued correctly', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.reference.key1).to.be.an('array').that.has.lengthOf(2);
+
+            list.removeLastEnabled('key1');
+            expect(list.reference.key1).to.be.an('object'); // converted to object, i.e, last element
+
+            expect(list.toJSON()).to.eql([{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            // clear all elements as well as a random key for sanity
+            list.removeLastEnabled('key1');
+            list.removeLastEnabled('key2');
+            list.removeLastEnabled('random');
+
+            expect(list.reference.key1).to.be.undefined;
+            expect(list.toJSON()).to.eql([]);
+        });
+
+        it('should not remove disabled elements from the list', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1',
+                disabled: true
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }]);
+
+            expect(list.members).to.be.an('array').that.has.lengthOf(2);
+
+            // remove enabled property
+            list.removeLastEnabled('key1');
+            expect(list.members).to.be.an('array').that.has.lengthOf(1);
+
+            // try removing a disabled element
+            list.removeLastEnabled('key1');
+            expect(list.members).to.be.an('array').that.has.lengthOf(1);
+
+            // disabled element can't be removed
+            expect(list.toJSON()).to.eql([{
+                keyAttr: 'key1',
+                value: 'val1',
+                disabled: true
+            }]);
         });
     });
 
