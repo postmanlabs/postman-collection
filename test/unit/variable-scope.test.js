@@ -369,7 +369,7 @@ describe('VariableScope', function () {
             it('should create a new variable if non-existent', function () {
                 scope.set('var-3', 'var-3-value');
 
-                expect(scope.values.count()).to.equal(3);
+                expect(scope.values.count()).to.equal(4);
                 expect(scope.get('var-3')).to.equal('var-3-value');
             });
 
@@ -652,7 +652,7 @@ describe('VariableScope', function () {
             expect(scope.toObject()).to.eql({
                 'key1': 'val1',
                 'key2': 'val2',
-                'key3': 'duplicate-val3'
+                'key3': ['val3', 'duplicate-val3']
             });
         });
 
