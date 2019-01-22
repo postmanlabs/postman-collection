@@ -757,6 +757,63 @@ describe('PropertyList', function () {
         });
     });
 
+    describe('.lastEnabled', function () {
+        var FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            this.disabled = options.disabled;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = false;
+        FakeType._postman_propertyAllowsMultipleValues = true;
+        FakeType.prototype.valueOf = function () {
+            return this.value;
+        };
+
+        it('should handle empty list correctly', function () {
+            var list = new PropertyList(FakeType, {});
+
+            expect(list.lastEnabled('key1')).to.be.undefined;
+        });
+
+        it('should handle multiple values correctly', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key1',
+                value: 'val3',
+                disabled: true
+            }]);
+
+            expect(list.lastEnabled('key1').valueOf()).to.equal('val2');
+            expect(list.lastEnabled('random')).to.be.undefined;
+        });
+
+        it('should handle single values correctly', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }]);
+
+            expect(list.lastEnabled('key1').valueOf()).to.equal('val1');
+        });
+
+        it('should handle disabled values correctly', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1',
+                disabled: true
+            }]);
+
+            expect(list.lastEnabled('key1')).to.be.undefined;
+        });
+    });
+
     describe('.each', function () {
         var FakeType = function (options) {
             this.key = options.key;
