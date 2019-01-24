@@ -87,6 +87,32 @@ describe('Variable', function () {
         });
     });
 
+    it('should prepopulate value and type when passed to the constructor (array)', function () {
+        var vValue = [1, '2', true],
+            v = new Variable({
+                value: vValue,
+                type: 'array'
+            });
+
+        expect(v).to.deep.include({
+            value: JSON.stringify(vValue),
+            type: 'array'
+        });
+    });
+
+    it('should prepopulate value and type when passed to the constructor (object)', function () {
+        var vValue = { foo: 'bar' },
+            v = new Variable({
+                value: vValue,
+                type: 'object'
+            });
+
+        expect(v).to.deep.include({
+            value: JSON.stringify(vValue),
+            type: 'object'
+        });
+    });
+
     it('should typecast value during construction when type is provided (number)', function () {
         var v = new Variable({
             value: '108',
@@ -122,6 +148,34 @@ describe('Variable', function () {
             v1 = new Variable({
                 value: '{"foo":"bar"}',
                 type: 'json'
+            });
+
+        expect(v.value).to.equal('null');
+        expect(v1.value).to.equal('{"foo":"bar"}');
+    });
+
+    it('should typecast value during construction when type is provided (array)', function () {
+        var v = new Variable({
+                value: null,
+                type: 'array'
+            }),
+            v1 = new Variable({
+                value: '[1,2,"3"]',
+                type: 'array'
+            });
+
+        expect(v.value).to.equal('null');
+        expect(v1.value).to.equal('[1,2,"3"]');
+    });
+
+    it('should typecast value during construction when type is provided (object)', function () {
+        var v = new Variable({
+                value: null,
+                type: 'object'
+            }),
+            v1 = new Variable({
+                value: '{"foo":"bar"}',
+                type: 'object'
             });
 
         expect(v.value).to.equal('null');
@@ -179,6 +233,42 @@ describe('Variable', function () {
 
         v.valueType('json');
         expect(v.get()).to.be.null;
+    });
+
+    it('should recast values when type is changed (array)', function () {
+        var v = new Variable({
+            type: 'string'
+        });
+
+        v.set([1, 2, { '3': true }]);
+        expect(v.get()).to.equal('1,2,[object Object]');
+
+        v.valueType('array');
+        expect(v.get()).to.be.undefined;
+    });
+
+    it('should recast values when type is changed (object)', function () {
+        var v = new Variable({
+            type: 'string'
+        });
+
+        v.set({ foo: 'bar' });
+        expect(v.get()).to.equal('[object Object]');
+
+        v.valueType('object');
+        expect(v.get()).to.be.undefined;
+    });
+
+    it('should strictly check for valid object type', function () {
+        var v = new Variable({
+            type: 'object'
+        });
+
+        v.set([{ foo: 'bar' }]);
+        expect(v.get()).to.be.undefined;
+
+        v.set(null);
+        expect(v.get()).to.be.undefined;
     });
 
     it('should handle functions correctly', function () {
