@@ -90,8 +90,9 @@ describe('Header', function () {
                 disabled: true
             }])).to.equal('');
 
-            expect(Header.unparseSingle({ key: '', value: 'bar' })).to.equal('');
-            expect(Header.unparseSingle({ key: 'foo', value: 'bar', disabled: true })).to.equal('');
+            // @note disabled and falsy headers are not filtered in `Header.unparseSingle`
+            expect(Header.unparseSingle({ key: '', value: 'bar' })).to.equal(': bar');
+            expect(Header.unparseSingle({ key: 'foo', value: 'bar', disabled: true })).to.equal('foo: bar');
         });
 
         it('should unparse headers to a string', function () {
