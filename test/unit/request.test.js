@@ -570,7 +570,7 @@ describe('Request', function () {
             var request = new Request();
             // HTTP request-line + Keep-Alive header
             expect(request.size()).to.eql({
-                body: 0, header: 40, total: 40
+                body: 0, header: 40, total: 40, source: 'COMPUTED'
             });
         });
 
@@ -582,7 +582,7 @@ describe('Request', function () {
                 }
             });
             expect(request.size()).to.eql({
-                body: 7, header: 40, total: 47
+                body: 7, header: 40, total: 47, source: 'COMPUTED'
             });
         });
 
@@ -597,7 +597,7 @@ describe('Request', function () {
                 }
             });
             expect(request.size()).to.eql({
-                body: 7, header: 40, total: 47 // foo=bar
+                body: 7, header: 40, total: 47, source: 'COMPUTED' // foo=bar
             });
         });
 
@@ -609,7 +609,23 @@ describe('Request', function () {
                 }]
             });
             expect(request.size()).to.eql({
-                body: 0, header: 35, total: 35
+                body: 0, header: 35, total: 35, source: 'COMPUTED'
+            });
+        });
+
+        it('should set body size equal to content-length if header exists', function () {
+            var request = new Request({
+                header: [{
+                    key: 'Content-Length',
+                    value: 7
+                }],
+                body: {
+                    mode: 'raw',
+                    raw: 'POSTMAN'
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 61, total: 68, source: 'CONTENT-LENGTH'
             });
         });
     });
