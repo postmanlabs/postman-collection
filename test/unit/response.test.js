@@ -319,7 +319,7 @@ describe('Response', function () {
         it('should handle blank responses correctly', function () {
             var response = new Response();
             expect(response.size()).to.eql({
-                body: 0, header: 34, total: 34
+                body: 0, header: 32, total: 32
             });
         });
     });
