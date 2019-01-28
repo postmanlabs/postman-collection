@@ -21,12 +21,24 @@ describe('HeaderList', function () {
     describe('.contentSize', function () {
         it('should be able to return header size', function () {
             var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
-            expect(hl.contentSize(200, 'OK')).to.equal(38);
+            expect(hl.contentSize(200, 'OK')).to.equal(36);
         });
 
-        it('should return 0 for an empty header set', function () {
+        it('should return 2 (CRLF) for an empty header set', function () {
             var hl = new HeaderList();
-            expect(hl.contentSize()).to.equal(0);
+            expect(hl.contentSize()).to.equal(2);
+        });
+
+        it('should should handle disabled and falsy headers correctly', function () {
+            var hl = new HeaderList(null, [{
+                key: undefined,
+                value: 'bar'
+            }, {
+                key: 'foo',
+                value: 'bar',
+                disabled: true
+            }]);
+            expect(hl.contentSize()).to.equal(2);
         });
     });
 
