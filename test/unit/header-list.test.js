@@ -38,7 +38,7 @@ describe('HeaderList', function () {
                 value: 'bar',
                 disabled: true
             }]);
-            expect(hl.contentSize()).to.equal(0);
+            expect(hl.contentSize()).to.equal(7); // ": bar + CRLF"
         });
     });
 
