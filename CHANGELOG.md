@@ -1,6 +1,7 @@
 # Postman Collection SDK Changelog
 
 #### v3.4.2 (unreleased)
+* #781 Added function `Request~size` to calculate request size
 * #769 Avoid substitution of disabled variables
 * #773 Added an option to exclude headers with falsy keys in `Request~getHeaders`
 * #777 Handle disabled events in `EventList~listeners` and `EventList~listenersOwn` correctly

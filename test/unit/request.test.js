@@ -565,6 +565,71 @@ describe('Request', function () {
         });
     });
 
+    describe('.size', function () {
+        it('should handle blank request correctly', function () {
+            var request = new Request();
+            // HTTP request-line + Keep-Alive header + CRLF
+            expect(request.size()).to.eql({
+                body: 0, header: 42, total: 42, source: 'COMPUTED'
+            });
+        });
+
+        it('should handle raw request body correctly', function () {
+            var request = new Request({
+                body: {
+                    mode: 'raw',
+                    raw: 'POSTMAN'
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 42, total: 49, source: 'COMPUTED'
+            });
+        });
+
+        it('should handle urlencoded request body correctly', function () {
+            var request = new Request({
+                body: {
+                    mode: 'urlencoded',
+                    urlencoded: [{
+                        key: 'foo',
+                        value: 'bar'
+                    }]
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 42, total: 49, source: 'COMPUTED' // foo=bar
+            });
+        });
+
+        it('should handle connection header correctly', function () {
+            var request = new Request({
+                header: [{
+                    key: 'Connection',
+                    value: 'foo'
+                }]
+            });
+            expect(request.size()).to.eql({
+                body: 0, header: 35, total: 35, source: 'COMPUTED'
+            });
+        });
+
+        it('should set body size equal to content-length if header exists', function () {
+            var request = new Request({
+                header: [{
+                    key: 'Content-Length',
+                    value: 7
+                }],
+                body: {
+                    mode: 'raw',
+                    raw: 'POSTMAN'
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 61, total: 68, source: 'CONTENT-LENGTH'
+            });
+        });
+    });
+
     describe('empty requests', function () {
 
         it('should have a url', function () {
