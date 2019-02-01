@@ -1,5 +1,21 @@
 # Postman Collection SDK Changelog
 
+#### v3.4.2 (February 1, 2019)
+* #783 Added support for Array and Object variable type
+  * Deprecated JSON variable type
+* #780 Reorganized URL parameters to always honour `disabled` status
+  * Deprecated Url~getOAuth1BaseUrl, discontinue in v4.0
+  * Deprecated object argument variant of:
+    * `Url~getPath`
+    * `Url~getQueryString`
+    * `Url~getRemote`
+* #769 Avoid substitution of disabled variables
+* #781 Added function `Request~size` to calculate request size
+* #792 Fixed headers size calculation on `HeaderList~contentSize`
+* #773 Added an option to exclude headers with falsy keys in `Request~getHeaders`
+* #777 Handle disabled events in `EventList~listeners` and `EventList~listenersOwn` correctly
+* Updated dependencies
+
 #### v3.4.1 (January 2, 2019)
 * #763 Fixed a bug where poly chained variables are not resolved correctly
 * Updated dependencies

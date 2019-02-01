@@ -187,6 +187,46 @@ describe('EventList', function () {
                 expect(item.__parent.events.count()).to.equal(1);
             });
         });
+
+        describe('with disabled events', function () {
+            before(function () {
+                parent = {};
+                item = {};
+
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    disabled: true,
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    disabled: true,
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+
+                parent.events = new EventList(parent, [{
+                    listen: 'test',
+                    id: 'my-parent-level-test-script',
+                    script: { exec: 'console.log("hello from up here")' }
+                }]);
+
+                item.__parent = parent;
+            });
+
+            it('should exclude disabled events correctly', function () {
+                var testListeners = item.events.listeners('test'),
+                    prScriptListeners = item.events.listeners('prerequest');
+
+                expect(testListeners).to.have.lengthOf(1);
+
+                expect(testListeners[0]).to.have.property('listen', 'test');
+                expect(testListeners[0]).to.have.property('id', 'my-parent-level-test-script');
+                expect(testListeners[0]).to.have.property('script');
+
+                expect(prScriptListeners).to.eql([]);
+            });
+        });
     });
 
     describe('.listenersOwn', function () {
@@ -266,6 +306,43 @@ describe('EventList', function () {
                 expect(prScriptListeners[0]).to.have.property('listen', 'prerequest');
                 expect(prScriptListeners[0]).to.have.property('id', 'my-prerequest-script-1');
                 expect(prScriptListeners[0]).to.have.property('script');
+            });
+        });
+
+        describe('with disabled listeners', function () {
+            before(function () {
+                item = {};
+
+                item.events = new EventList(item, [{
+                    listen: 'test',
+                    id: 'my-test-script-1',
+                    disabled: true,
+                    script: { exec: 'console.log("hello");' }
+                }, {
+                    listen: 'test',
+                    id: 'my-test-script-2',
+                    disabled: false,
+                    script: {
+                        exec: 'console.log("hello");'
+                    }
+                }, {
+                    listen: 'prerequest',
+                    id: 'my-prerequest-script-1',
+                    disabled: true,
+                    script: { exec: 'console.log("hello again");' }
+                }]);
+            });
+
+            it('should filter disabled event listeners correctly', function () {
+                var testListeners = item.events.listenersOwn('test'),
+                    prScriptListeners = item.events.listenersOwn('prerequest');
+
+                expect(testListeners).to.have.lengthOf(1);
+                expect(testListeners[0]).to.have.property('listen', 'test');
+                expect(testListeners[0]).to.have.property('id', 'my-test-script-2');
+                expect(testListeners[0]).to.have.property('script');
+
+                expect(prScriptListeners).to.eql([]);
             });
         });
     });

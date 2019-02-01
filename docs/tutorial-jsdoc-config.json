@@ -1,5 +1,8 @@
 {
     "concepts": {
         "title": "Postman SDK Concepts"
+    },
+    "mutation-tracking": {
+        "title": "Tracking Variable Mutations with Postman Collection SDK"
     }
 }

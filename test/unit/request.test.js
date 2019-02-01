@@ -256,7 +256,37 @@ describe('Request', function () {
     });
 
     describe('getHeaders', function () {
-        it('should get only enabled headers', function () {
+        it('should return an empty object for empty requests', function () {
+            var request = new Request();
+            expect(request.getHeaders()).to.eql({});
+        });
+
+        it('should handle duplicate headers correctly', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'name',
+                        value: 'alpha'
+                    }, {
+                        key: 'name',
+                        value: 'beta'
+                    }, {
+                        key: 'Name',
+                        value: 'alpha, beta'
+                    }, {
+                        key: 'name',
+                        value: 'gamma',
+                        disabled: true
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders()).to.eql({
+                name: ['alpha', 'beta', 'gamma'],
+                Name: 'alpha, beta'
+            });
+        });
+
+        it('should get only enabled headers using `enabled` option', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
                     method: 'GET',
@@ -278,9 +308,81 @@ describe('Request', function () {
             });
         });
 
-        it('should return an empty object for empty requests', function () {
-            var request = new Request();
-            expect(request.getHeaders()).to.eql({});
+        it('should lowercase header keys using `ignoreCase` option', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }, {
+                        key: 'HOST',
+                        value: 'postman-echo.com',
+                        disabled: true
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ ignoreCase: true })).to.eql({
+                'content-type': 'application/json',
+                host: 'postman-echo.com'
+            });
+        });
+
+        it('should handle duplicate headers with `ignoreCase` option correctly', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }, {
+                        key: 'content-type',
+                        value: 'application/xml'
+                    }, {
+                        key: 'x-forward-port',
+                        value: 443
+                    }, {
+                        key: 'X-Forward-Port',
+                        value: 443
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ ignoreCase: true })).to.eql({
+                'content-type': ['application/json', 'application/xml'],
+                'x-forward-port': [443, 443]
+            });
+        });
+
+        it('should avoid header with falsy keys using `sanitizeKeys` option', function () {
+            // @todo: this should be handled by default.
+            // @note: all falsy keys are stored as empty string.
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    header: [{
+                        key: 'Content-Type',
+                        value: 'application/json'
+                    }, {
+                        key: '',
+                        value: 'value'
+                    }, {
+                        key: 0,
+                        value: 'value'
+                    }, {
+                        key: false,
+                        value: 'value'
+                    }, {
+                        key: null,
+                        value: 'value'
+                    }, {
+                        key: NaN,
+                        value: 'value'
+                    }, {
+                        key: undefined,
+                        value: 'value'
+                    }]
+                },
+                request = new Request(rawRequest);
+            expect(request.getHeaders({ sanitizeKeys: true })).to.eql({
+                'Content-Type': 'application/json'
+            });
         });
     });
 
@@ -459,6 +561,71 @@ describe('Request', function () {
                     { type: 'any', value: 'foo', key: 'username' },
                     { type: 'any', value: 'bar', key: 'password' }
                 ]
+            });
+        });
+    });
+
+    describe('.size', function () {
+        it('should handle blank request correctly', function () {
+            var request = new Request();
+            // HTTP request-line + Keep-Alive header + CRLF
+            expect(request.size()).to.eql({
+                body: 0, header: 42, total: 42, source: 'COMPUTED'
+            });
+        });
+
+        it('should handle raw request body correctly', function () {
+            var request = new Request({
+                body: {
+                    mode: 'raw',
+                    raw: 'POSTMAN'
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 42, total: 49, source: 'COMPUTED'
+            });
+        });
+
+        it('should handle urlencoded request body correctly', function () {
+            var request = new Request({
+                body: {
+                    mode: 'urlencoded',
+                    urlencoded: [{
+                        key: 'foo',
+                        value: 'bar'
+                    }]
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 42, total: 49, source: 'COMPUTED' // foo=bar
+            });
+        });
+
+        it('should handle connection header correctly', function () {
+            var request = new Request({
+                header: [{
+                    key: 'Connection',
+                    value: 'foo'
+                }]
+            });
+            expect(request.size()).to.eql({
+                body: 0, header: 35, total: 35, source: 'COMPUTED'
+            });
+        });
+
+        it('should set body size equal to content-length if header exists', function () {
+            var request = new Request({
+                header: [{
+                    key: 'Content-Length',
+                    value: 7
+                }],
+                body: {
+                    mode: 'raw',
+                    raw: 'POSTMAN'
+                }
+            });
+            expect(request.size()).to.eql({
+                body: 7, header: 61, total: 68, source: 'CONTENT-LENGTH'
             });
         });
     });
