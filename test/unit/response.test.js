@@ -831,8 +831,7 @@ describe('Response', function () {
 
                     var response = Response.createFromNode(res);
 
-                    expect(response).to.not.have.property('timingStart');
-                    expect(response).to.not.have.property('timings');
+                    expect(response).to.not.include.all.keys('timingStart', 'timings');
                     done();
                 });
             });
@@ -848,13 +847,14 @@ describe('Response', function () {
 
                     var response = Response.createFromNode(res);
 
-                    expect(response).to.have.property('timingStart');
-                    expect(response).to.have.property('timings');
-                    expect(response.timings).to.have.property('socket');
-                    expect(response.timings).to.have.property('lookup');
-                    expect(response.timings).to.have.property('connect');
-                    expect(response.timings).to.have.property('response');
-                    expect(response.timings).to.have.property('end');
+                    expect(response).to.include.all.keys('timingStart', 'timings');
+                    expect(response.timings).to.be.an('object').that.have.all.keys([
+                        'socket',
+                        'lookup',
+                        'connect',
+                        'response',
+                        'end'
+                    ]);
                     done();
                 });
             });
