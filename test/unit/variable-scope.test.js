@@ -297,11 +297,30 @@ describe('VariableScope', function () {
                 }, {
                     key: 'var-2',
                     value: 'var-2-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value2'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value3',
+                    disabled: true
+                }, {
+                    key: 'var-3',
+                    value: 'var-3-value',
+                    disabled: true
                 }]
             });
 
             it('should correctly return the specified value', function () {
                 expect(scope.get('var-1')).to.equal('var-1-value');
+            });
+
+            it('should return last enabled value from multi value list', function () {
+                expect(scope.get('var-2')).to.equal('var-2-value2');
+            });
+
+            it('should return undefined for disabled variable', function () {
+                expect(scope.get('var-3')).to.be.undefined;
             });
 
             it('should return undefined for ', function () {
@@ -312,15 +331,26 @@ describe('VariableScope', function () {
                 var newScope = new VariableScope();
 
                 newScope.addLayer(new VariableList({}, [
-                    { key: 'alpha', value: 'foo' }
+                    { key: 'alpha', value: 'foo' },
+                    { key: 'beta', value: 'bar', disabled: true },
+                    { key: 'gamma', value: 'foo' },
+                    { key: 'gamma', value: 'bar', disabled: true }
                 ]));
 
                 it('should work correctly', function () {
                     expect(newScope.get('alpha')).to.equal('foo');
                 });
 
+                it('should bail out if variable is undefined', function () {
+                    expect(newScope.get('beta')).to.be.undefined;
+                });
+
                 it('should bail out if no matches are found', function () {
                     expect(newScope.get('random')).to.be.undefined;
+                });
+
+                it('should pick last enabled from multi value list', function () {
+                    expect(newScope.get('gamma')).to.equal('foo');
                 });
             });
         });
@@ -333,6 +363,17 @@ describe('VariableScope', function () {
                 }, {
                     key: 'var-2',
                     value: 'var-2-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value2',
+                    disabled: true
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value3'
+                }, {
+                    key: 'var-3',
+                    value: 'var-3-value',
+                    disabled: true
                 }]
             });
 
@@ -341,11 +382,27 @@ describe('VariableScope', function () {
                 expect(scope.get('var-1')).to.equal('new-var-1-value');
             });
 
-            it('should create a new variable if non-existent', function () {
-                scope.set('var-3', 'var-3-value');
+            it('should correctly update the last enabled item in multi value list', function () {
+                scope.set('var-2', 'new-var-2-value');
+                expect(scope.get('var-2')).to.equal('new-var-2-value');
+            });
 
-                expect(scope.values.count()).to.equal(3);
-                expect(scope.get('var-3')).to.equal('var-3-value');
+            it('should handle disabled variable correctly', function () {
+                expect(scope.has('var-3')).to.be.false;
+                expect(scope.get('var-3')).to.be.undefined;
+
+                scope.set('var-3', 'new-var-3-value');
+
+                // creates new variable with same name, won't overwrite disabled
+                expect(scope.has('var-3')).to.be.true;
+                expect(scope.get('var-3')).to.equal('new-var-3-value');
+            });
+
+            it('should create a new variable if non-existent', function () {
+                scope.set('var-4', 'var-4-value');
+
+                expect(scope.values.count()).to.equal(7); // previous 5 + disabled set + this
+                expect(scope.get('var-4')).to.equal('var-4-value');
             });
 
             it('should correctly update type of existing value', function () {
@@ -356,6 +413,18 @@ describe('VariableScope', function () {
             it('should correctly create a new typed value', function () {
                 scope.set('var-4', 3.142, 'boolean');
                 expect(scope.get('var-4')).to.be.true;
+            });
+
+            it('should correctly maintain the members list', function () {
+                expect(scope.values.toJSON()).to.eql([
+                    { key: 'var-1', type: 'number', value: 3.142 },
+                    { key: 'var-2', type: 'any', value: 'var-2-value' },
+                    { key: 'var-2', disabled: true, type: 'any', value: 'var-2-value2' },
+                    { key: 'var-2', type: 'any', value: 'new-var-2-value' }, // updated last enabled in multi value
+                    { key: 'var-3', disabled: true, type: 'any', value: 'var-3-value' },
+                    { key: 'var-3', type: 'any', value: 'new-var-3-value' }, // new variable created on disabled set
+                    { key: 'var-4', type: 'boolean', value: true }
+                ]);
             });
         });
 
@@ -391,6 +460,37 @@ describe('VariableScope', function () {
                 scope.unset('random');
                 expect(scope.values.count()).to.equal(2);
             });
+
+            it('should remove the last enabled from the multi value list', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-2',
+                        value: 'var-2-value1'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value2'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value3',
+                        disabled: true
+                    }]
+                });
+
+                // delete last enabled
+                scope.unset('var-2');
+                expect(scope.values.count()).to.equal(2);
+                expect(scope.get('var-2')).to.equal('var-2-value1');
+
+                // delete last enabled
+                scope.unset('var-2');
+                expect(scope.values.count()).to.equal(1);
+                expect(scope.get('var-2')).to.be.undefined;
+
+                // try deleting disabled
+                scope.unset('var-2');
+                expect(scope.values.count()).to.equal(1);
+                expect(scope.get('var-2')).to.be.undefined;
+            });
         });
 
         describe('clear', function () {
@@ -401,6 +501,13 @@ describe('VariableScope', function () {
                 }, {
                     key: 'var-2',
                     value: 'var-2-value'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value2'
+                }, {
+                    key: 'var-2',
+                    value: 'var-2-value3',
+                    disabled: true
                 }]
             });
 
@@ -731,12 +838,44 @@ describe('VariableScope', function () {
     describe('has', function () {
         var scope = new VariableScope([
             { key: 'alpha', value: 'foo' },
-            { key: 'beta', value: 'bar' }
+            { key: 'beta', value: 'bar' },
+            { key: 'gamma', value: 'baz', disabled: true }
         ]);
 
         it('should correctly determine if the current scope contains a provided identifier', function () {
             expect(scope.has('alpha')).to.be.true;
+            expect(scope.has('gamma')).to.be.false;
             expect(scope.has('random')).to.be.false;
+        });
+    });
+
+    describe('disabled variable', function () {
+        var scope = new VariableScope([
+            { key: 'foo', value: 'bar', disabled: true }
+        ]);
+
+        it('should return undefined on .get()', function () {
+            expect(scope.has('foo')).to.be.false;
+            expect(scope.get('foo')).to.be.undefined;
+        });
+
+        it('should not remove on .unset()', function () {
+            scope.unset('foo');
+            expect(scope.values.count()).to.equal(1);
+        });
+
+        it('should create new enabled variable on .set()', function () {
+            scope.set('foo', 'baz');
+            expect(scope.has('foo')).to.be.true;
+            expect(scope.get('foo')).to.equal('baz');
+            expect(scope.values.count()).to.equal(2);
+        });
+
+        it('should correctly maintain the members list', function () {
+            expect(scope.values.toJSON()).to.eql([
+                { key: 'foo', value: 'bar', type: 'any', disabled: true },
+                { key: 'foo', value: 'baz', type: 'any' }
+            ]);
         });
     });
 
