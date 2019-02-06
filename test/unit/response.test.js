@@ -831,7 +831,7 @@ describe('Response', function () {
 
                     var response = Response.createFromNode(res);
 
-                    expect(response).to.not.include.all.keys('timingStart', 'timings');
+                    expect(response).to.not.have.property('timings');
                     done();
                 });
             });
@@ -847,8 +847,9 @@ describe('Response', function () {
 
                     var response = Response.createFromNode(res);
 
-                    expect(response).to.include.all.keys('timingStart', 'timings');
+                    expect(response).to.have.property('timings');
                     expect(response.timings).to.be.an('object').that.have.all.keys([
+                        'start',
                         'socket',
                         'lookup',
                         'connect',
