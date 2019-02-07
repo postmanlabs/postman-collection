@@ -562,6 +562,7 @@ describe('Response', function () {
             var response = new Response({
                     code: 200,
                     timings: {
+                        start: 1549521843038,
                         socket: 1.4010989999997037,
                         lookup: 1.6057000000000698,
                         connect: 44.453799999999774,
