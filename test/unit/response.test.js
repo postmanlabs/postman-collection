@@ -821,7 +821,7 @@ describe('Response', function () {
         });
 
         describe('timings', function () {
-            it('should not include timing information', function (done) {
+            it('should not include timing information when time is false', function (done) {
                 request.get({
                     uri: baseUrl + '/get',
                     time: false
@@ -837,7 +837,7 @@ describe('Response', function () {
                 });
             });
 
-            it('should include timing information', function (done) {
+            it('should include timing information when time is true', function (done) {
                 request.get({
                     uri: baseUrl + '/get',
                     time: true
