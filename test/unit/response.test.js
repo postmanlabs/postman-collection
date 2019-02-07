@@ -579,7 +579,7 @@ describe('Response', function () {
                     total: 277.628099
                 };
 
-            expect(response.timingPhases()).to.deep.equal(timingPhases);
+            expect(response.timingPhases()).to.eql(timingPhases);
         });
 
         it('should return if timings are not provided', function () {
@@ -587,7 +587,7 @@ describe('Response', function () {
                 code: 200
             });
 
-            expect(response.timingPhases()).to.equal(undefined);
+            expect(response.timingPhases()).to.be.undefined;
         });
     });
 
@@ -849,7 +849,7 @@ describe('Response', function () {
                     var response = Response.createFromNode(res);
 
                     expect(response).to.have.property('timings');
-                    expect(response.timings).to.be.an('object').that.have.all.keys([
+                    expect(response.timings).to.be.an('object').that.has.all.keys([
                         'start',
                         'socket',
                         'lookup',
