@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### v3.4.3 (unreleased)
+* #798 Handle disabled property in `VariableScope` methods
+
 #### v3.4.2 (February 1, 2019)
 * #783 Added support for Array and Object variable type
   * Deprecated JSON variable type
