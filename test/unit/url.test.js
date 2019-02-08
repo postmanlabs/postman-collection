@@ -952,27 +952,27 @@ describe('Url', function () {
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
         });
 
-        describe('with # in them', function () {
-            it('should ignore # if used for variable names', function () {
+        describe('Containing #', function () {
+            it('should not truncate variables with # in their names', function () {
                 var url = new Url('https://postman-echo.com/get?foo=bar&hello={{#world}}');
 
                 expect(url.query.toObject()).to.eql({ foo: 'bar', hello: '{{#world}}' });
             });
 
-            it('should ignore # if multiple variables are chained containing #', function () {
+            it('should not truncate multiple chained variables with # in their names', function () {
                 var url = new Url('https://postman-echo.com/get?user={{user#1{{user#2{{user#3}}}}}}');
 
                 expect(url.query.toObject()).to.eql({ user: '{{user#1{{user#2{{user#3}}}}}}' });
             });
 
-            it('should ignore # if multiple hashes are used in variable names', function () {
+            it('should not truncate variables with multiple # in their names', function () {
                 var url = new Url('https://postman-echo.com/get?foo=bar&hello={{#world}}&alice=bob&user={{user#1}}');
 
                 expect(url.query.toObject()).to.eql({ foo: 'bar', hello: '{{#world}}',
                     alice: 'bob', user: '{{user#1}}' });
             });
 
-            it('should ignore # if leading and trailing hashes are present in variable name', function () {
+            it('should not truncate variables with leading and trailing # in their names', function () {
                 var url;
                 url = new Url('https://postman-echo.com/get?user={{#user1#}}&fo=ba&user2={{#user1}}&user3={{user3#}}');
 
@@ -980,13 +980,13 @@ describe('Url', function () {
                     user2: '{{#user1}}', user3: '{{user3#}}' });
             });
 
-            it('should ignore # if used for variable name at middle position', function () {
+            it('should not truncate variables with # at middle position in their names', function () {
                 var url = new Url('https://postman-echo.com/get?foo=bar&hello={{wor#ld}}');
 
                 expect(url.query.toObject()).to.eql({ foo: 'bar', hello: '{{wor#ld}}' });
             });
 
-            it('should split at # if not a variable', function () {
+            it('should truncate query if # is used for something other than naming variables', function () {
                 var url = new Url('https://postman-echo.com/get?foo=bar#1&user={{user#1}}');
 
                 expect(url.query.toObject()).to.eql({ foo: 'bar' });
