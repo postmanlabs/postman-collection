@@ -1,6 +1,7 @@
 var expect = require('chai').expect,
     _ = require('lodash'),
     Url = require('../../').Url,
+    Collection = require('./../../').Collection,
     PropertyList = require('../../').PropertyList,
     VariableList = require('../../').VariableList,
     rawUrls = require('../fixtures/').rawUrls;
@@ -950,6 +951,27 @@ describe('Url', function () {
         it('must be able to convert query params to object', function () {
             var url = new Url('http://127.0.0.1/hello/world/?query=param&query2=param2#test-api');
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
+        });
+
+        it('should ignore # in case of variables', function () {
+            var collection = new Collection({
+                item: [{
+                    request: 'https://postman-echo.com/get?foo=bar&hello={{#world}}'
+                }]
+            });
+
+            expect(collection.items.members[0].request.url.getQueryString()).to.equal('foo=bar&hello={{#world}}');
+        });
+
+        it('should ignore # in case of chained variables', function () {
+            var collection = new Collection({
+                item: [{
+                    request: 'https://postman-echo.com/get?foo=bar&test={{#world{{hello#}}}}'
+                }]
+            });
+
+            expect(collection.items.members[0].request.url.getQueryString()).to
+                .equal('foo=bar&test={{#world{{hello#}}}}');
         });
     });
 
