@@ -1,7 +1,6 @@
 var expect = require('chai').expect,
     _ = require('lodash'),
     Url = require('../../').Url,
-    Collection = require('./../../').Collection,
     PropertyList = require('../../').PropertyList,
     VariableList = require('../../').VariableList,
     rawUrls = require('../fixtures/').rawUrls;
@@ -953,29 +952,7 @@ describe('Url', function () {
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
         });
 
-        it('should ignore # in case of variables', function () {
-            var collection = new Collection({
-                item: [{
-                    request: 'https://postman-echo.com/get?foo=bar&hello={{#world}}'
-                }]
-            });
-
-            expect(collection.items.members[0].request.url.getQueryString()).to.equal('foo=bar&hello={{#world}}');
-        });
-
-        it('should ignore # in case of chained variables', function () {
-            var collection = new Collection({
-                item: [{
-                    request: 'https://postman-echo.com/get?foo=bar&test={{#world{{hello#}}}}'
-                }]
-            });
-
-            expect(collection.items.members[0].request.url.getQueryString()).to
-                .equal('foo=bar&test={{#world{{hello#}}}}');
-        });
-
         describe('with # in them', function () {
-
             it('should ignore # if used for variable names', function () {
                 var url = new Url('https://postman-echo.com/get?foo=bar&hello={{#world}}');
 
