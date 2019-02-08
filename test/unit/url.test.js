@@ -973,6 +973,48 @@ describe('Url', function () {
             expect(collection.items.members[0].request.url.getQueryString()).to
                 .equal('foo=bar&test={{#world{{hello#}}}}');
         });
+
+        describe('with # in them', function () {
+
+            it('should ignore # if used for variable names', function () {
+                var url = new Url('https://postman-echo.com/get?foo=bar&hello={{#world}}');
+
+                expect(url.query.toObject()).to.eql({ foo: 'bar', hello: '{{#world}}' });
+            });
+
+            it('should ignore # if multiple variables are chained containing #', function () {
+                var url = new Url('https://postman-echo.com/get?user={{user#1{{user#2{{user#3}}}}}}');
+
+                expect(url.query.toObject()).to.eql({ user: '{{user#1{{user#2{{user#3}}}}}}' });
+            });
+
+            it('should ignore # if multiple hashes are used in variable names', function () {
+                var url = new Url('https://postman-echo.com/get?foo=bar&hello={{#world}}&alice=bob&user={{user#1}}');
+
+                expect(url.query.toObject()).to.eql({ foo: 'bar', hello: '{{#world}}',
+                    alice: 'bob', user: '{{user#1}}' });
+            });
+
+            it('should ignore # if leading and trailing hashes are present in variable name', function () {
+                var url;
+                url = new Url('https://postman-echo.com/get?user={{#user1#}}&fo=ba&user2={{#user1}}&user3={{user3#}}');
+
+                expect(url.query.toObject()).to.eql({ user: '{{#user1#}}', fo: 'ba',
+                    user2: '{{#user1}}', user3: '{{user3#}}' });
+            });
+
+            it('should ignore # if used for variable name at middle position', function () {
+                var url = new Url('https://postman-echo.com/get?foo=bar&hello={{wor#ld}}');
+
+                expect(url.query.toObject()).to.eql({ foo: 'bar', hello: '{{wor#ld}}' });
+            });
+
+            it('should split at # if not a variable', function () {
+                var url = new Url('https://postman-echo.com/get?foo=bar#1&user={{user#1}}');
+
+                expect(url.query.toObject()).to.eql({ foo: 'bar' });
+            });
+        });
     });
 
     describe('Security', function () {
