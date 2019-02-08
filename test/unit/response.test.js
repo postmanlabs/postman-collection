@@ -557,6 +557,40 @@ describe('Response', function () {
         });
     });
 
+    describe('timingPhases', function () {
+        it('should correctly calculate timing phases from provided timings', function () {
+            var response = new Response({
+                    code: 200,
+                    timings: {
+                        start: 1549521843038,
+                        socket: 1.4010989999997037,
+                        lookup: 1.6057000000000698,
+                        connect: 44.453799999999774,
+                        response: 269.9753989999999,
+                        end: 277.628099
+                    }
+                }),
+                timingPhases = {
+                    wait: 1.4010989999997037,
+                    dns: 0.20460100000036618,
+                    tcp: 43.05270100000007,
+                    firstByte: 225.52159900000015,
+                    download: 7.652700000000095,
+                    total: 277.628099
+                };
+
+            expect(response.timingPhases()).to.eql(timingPhases);
+        });
+
+        it('should return if timings are not provided', function () {
+            var response = new Response({
+                code: 200
+            });
+
+            expect(response.timingPhases()).to.be.undefined;
+        });
+    });
+
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
         var isNode4 = (/^v4\./).test(process.version),
@@ -781,6 +815,48 @@ describe('Response', function () {
 
                     expect(response.cookie).to.eql([]);
                     validateResponse(response);
+                    done();
+                });
+            });
+        });
+
+        describe('timings', function () {
+            it('should not include timing information when time is false', function (done) {
+                request.get({
+                    uri: baseUrl + '/get',
+                    time: false
+                }, function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var response = Response.createFromNode(res);
+
+                    expect(response).to.not.have.property('timings');
+                    done();
+                });
+            });
+
+            it('should include timing information when time is true', function (done) {
+                request.get({
+                    uri: baseUrl + '/get',
+                    time: true
+                }, function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    var response = Response.createFromNode(res);
+
+                    expect(response).to.have.property('timings');
+                    expect(response.timings).to.be.an('object').that.has.all.keys([
+                        'start',
+                        'socket',
+                        'lookup',
+                        'connect',
+                        'response',
+                        'end'
+                    ]);
                     done();
                 });
             });
