@@ -21,6 +21,7 @@ describe('UrlMatchPatternList', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['https://example.com/*']);
             expect(matchPatternList.test('https://example.com')).to.be.true;
             expect(matchPatternList.test('https://example.com/')).to.be.true;
+            expect(matchPatternList.test('https://example.com:443')).to.be.true;
             expect(matchPatternList.test('https://www.example.com/')).to.be.false;
             expect(matchPatternList.test('https://example.com/hello')).to.be.true;
             expect(matchPatternList.test('https://example.com/foo/bar')).to.be.true;

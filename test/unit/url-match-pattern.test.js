@@ -176,10 +176,11 @@ describe('UrlMatchPattern', function () {
         });
 
         it('should parse any URL that uses the http protocol', function () {
-            var matchPatternObject = new UrlMatchPattern('http://*/*').createMatchPattern();
+            var matchPatternObject = new UrlMatchPattern('http://*:*/*').createMatchPattern();
             expect(matchPatternObject).to.deep.include({
                 protocols: ['http'],
                 host: '*',
+                port: '*',
                 path: /^\/.*$/
             });
         });
@@ -220,6 +221,16 @@ describe('UrlMatchPattern', function () {
             });
         });
 
+        it('should parse any URL that uses the 8080 port', function () {
+            var matchPatternObject = new UrlMatchPattern('*://*:8080/').createMatchPattern();
+            expect(matchPatternObject).to.deep.include({
+                protocols: ['*'],
+                host: '*',
+                port: '8080',
+                path: /^\/$/
+            });
+        });
+
         it('should parse any URL which has host mail.google.com', function () {
             var matchPatternObject = new UrlMatchPattern('*://mail.google.com/*').createMatchPattern();
             expect(matchPatternObject).to.deep.include({
@@ -231,6 +242,11 @@ describe('UrlMatchPattern', function () {
 
         it('Bad Match pattern [No Path]', function () {
             var matchPatternObject = new UrlMatchPattern('http://www.google.com').createMatchPattern();
+            expect(matchPatternObject).to.be.undefined;
+        });
+
+        it('Bad Match pattern [No Host]', function () {
+            var matchPatternObject = new UrlMatchPattern('http:///').createMatchPattern();
             expect(matchPatternObject).to.be.undefined;
         });
 
@@ -249,8 +265,13 @@ describe('UrlMatchPattern', function () {
             expect(matchPatternObject).to.be.undefined;
         });
 
-        it('Bad Match pattern [Invalid protocol', function () {
+        it('Bad Match pattern [Invalid protocol]', function () {
             var matchPatternObject = new UrlMatchPattern('foo://*').createMatchPattern();
+            expect(matchPatternObject).to.be.undefined;
+        });
+
+        it('Bad Match pattern [Invalid port]', function () {
+            var matchPatternObject = new UrlMatchPattern('http://*:123abc/').createMatchPattern();
             expect(matchPatternObject).to.be.undefined;
         });
     });
@@ -306,6 +327,49 @@ describe('UrlMatchPattern', function () {
             var matchPattern = new UrlMatchPattern('*://foo.com/*'),
                 hostMatched = matchPattern.testHost(new URL('foo.com').getRemote());
             expect(hostMatched).to.be.true;
+        });
+    });
+
+    describe('testPort', function () {
+        it('should work without port pattern', function () {
+            var matchPattern = new UrlMatchPattern('*://*/*');
+            expect(matchPattern.testPort()).to.be.true;
+            expect(matchPattern.testPort(443)).to.be.false;
+        });
+
+        it('should match any port', function () {
+            var matchPattern = new UrlMatchPattern('*://*:*/*');
+            expect(matchPattern.testPort(0)).to.be.true;
+            expect(matchPattern.testPort(443)).to.be.true;
+            expect(matchPattern.testPort('8080')).to.be.true;
+        });
+
+        it('should match a specific port', function () {
+            var matchPattern = new UrlMatchPattern('https://*:1234/*');
+            expect(matchPattern.testPort(1234)).to.be.true;
+            expect(matchPattern.testPort('1234')).to.be.true;
+            expect(matchPattern.testPort(4321)).to.be.false;
+        });
+
+        it('should implicitly match with default http port if protocol is defined', function () {
+            var matchPattern = new UrlMatchPattern('http://*/*');
+            expect(matchPattern.testPort(undefined, 'http')).to.be.true;
+            expect(matchPattern.testPort('80', 'http')).to.be.true;
+            expect(matchPattern.testPort('8080', 'http')).to.be.false;
+        });
+
+        it('should implicitly match with default https port if protocol is defined', function () {
+            var matchPattern = new UrlMatchPattern('https://*/*');
+            expect(matchPattern.testPort(undefined, 'https')).to.be.true;
+            expect(matchPattern.testPort('443', 'https')).to.be.true;
+            expect(matchPattern.testPort(8080, 'https')).to.be.false;
+        });
+
+        it('should implicitly match with default ftp port if protocol is defined', function () {
+            var matchPattern = new UrlMatchPattern('ftp://*/*');
+            expect(matchPattern.testPort(undefined, 'ftp')).to.be.true;
+            expect(matchPattern.testPort(21, 'ftp')).to.be.true;
+            expect(matchPattern.testPort('8080', 'ftp')).to.be.false;
         });
     });
 
