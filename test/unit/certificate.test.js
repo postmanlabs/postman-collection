@@ -53,6 +53,38 @@ describe('Certificate', function () {
             expect(certificate.canApplyTo('http://www.google.com')).to.be.false;
             expect(certificate.canApplyTo('https://www.google.com')).to.be.false;
         });
+
+        it('should match given port correctly', function () {
+            var certificate = new Certificate({ matches: ['https://example.com:8080/*'] });
+            expect(certificate.canApplyTo('https://example.com:443')).to.be.false;
+            expect(certificate.canApplyTo('https://example.com:8080')).to.be.true;
+
+            certificate = new Certificate({ matches: ['https://example.com:*/*'] });
+            expect(certificate.canApplyTo('https://example.com')).to.be.true;
+            expect(certificate.canApplyTo('https://example.com:443')).to.be.true;
+            expect(certificate.canApplyTo('https://example.com:8080')).to.be.true;
+        });
+
+        it('should implicitly match port 443 if given in Url', function () {
+            var certificate = new Certificate({ matches: ['https://example.com/*'] });
+            expect(certificate.canApplyTo('https://example.com')).to.be.true;
+            expect(certificate.canApplyTo('https://example.com:443')).to.be.true;
+            expect(certificate.canApplyTo('https://example.com:8080')).to.be.false;
+        });
+
+        it('should implicitly match port 443 if given in matches', function () {
+            var certificate = new Certificate({ matches: ['https://example.com:443/*'] });
+            expect(certificate.canApplyTo('https://example.com')).to.be.true;
+            expect(certificate.canApplyTo('https://example.com:443')).to.be.true;
+            expect(certificate.canApplyTo('https://example.com:8080')).to.be.false;
+        });
+
+        it('should match non 443 port correctly', function () {
+            var certificate = new Certificate({ matches: ['https://example.com:8080/*'] });
+            expect(certificate.canApplyTo('https://example.com')).to.be.false;
+            expect(certificate.canApplyTo('https://example.com:443')).to.be.false;
+            expect(certificate.canApplyTo('https://example.com:8080')).to.be.true;
+        });
     });
 
     describe('toJSON', function () {
