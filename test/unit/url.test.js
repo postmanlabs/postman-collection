@@ -957,11 +957,9 @@ describe('Url', function () {
                 url2 = new Url('https://postman-echo.com/get?foo=bar&user=}}user'),
                 url3 = new Url('https://postman-echo.com/get?foo=bar&user={user#soemthing');
 
-
             expect(url1.query.toObject()).to.eql({ foo: 'bar', user: '{{user' });
             expect(url2.query.toObject()).to.eql({ foo: 'bar', user: '}}user' });
             expect(url3.query.toObject()).to.eql({ foo: 'bar', user: '{user' });
-
         });
 
         describe('Containing #', function () {
