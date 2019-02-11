@@ -18,6 +18,9 @@ describe('CertificateList', function () {
             var matchedCertificate = certificateList.resolveOne('https://www.google.com');
             expect(matchedCertificate).to.be.an.instanceof(Certificate);
 
+            matchedCertificate = certificateList.resolveOne('https://www.google.com:443');
+            expect(matchedCertificate).to.be.an.instanceof(Certificate);
+
             matchedCertificate = certificateList.resolveOne('https://www.bla.com');
             expect(matchedCertificate).to.be.undefined;
         });
