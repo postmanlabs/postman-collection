@@ -354,6 +354,7 @@ describe('UrlMatchPattern', function () {
         it('should implicitly match with default http port if protocol is defined', function () {
             var matchPattern = new UrlMatchPattern('http://*/*');
             expect(matchPattern.testPort(undefined, 'http')).to.be.true;
+            expect(matchPattern.testPort(80, 'http')).to.be.true;
             expect(matchPattern.testPort('80', 'http')).to.be.true;
             expect(matchPattern.testPort('8080', 'http')).to.be.false;
         });
@@ -361,6 +362,7 @@ describe('UrlMatchPattern', function () {
         it('should implicitly match with default https port if protocol is defined', function () {
             var matchPattern = new UrlMatchPattern('https://*/*');
             expect(matchPattern.testPort(undefined, 'https')).to.be.true;
+            expect(matchPattern.testPort(443, 'https')).to.be.true;
             expect(matchPattern.testPort('443', 'https')).to.be.true;
             expect(matchPattern.testPort(8080, 'https')).to.be.false;
         });
@@ -369,6 +371,7 @@ describe('UrlMatchPattern', function () {
             var matchPattern = new UrlMatchPattern('ftp://*/*');
             expect(matchPattern.testPort(undefined, 'ftp')).to.be.true;
             expect(matchPattern.testPort(21, 'ftp')).to.be.true;
+            expect(matchPattern.testPort('21', 'ftp')).to.be.true;
             expect(matchPattern.testPort('8080', 'ftp')).to.be.false;
         });
     });
