@@ -562,32 +562,33 @@ describe('Response', function () {
             var response = new Response({
                     code: 200,
                     timings: {
-                        start: 1549521843038,
-                        socket: 1.4010989999997037,
-                        lookup: 1.6057000000000698,
-                        connect: 44.453799999999774,
-                        response: 269.9753989999999,
-                        end: 277.628099
+                        start: 1549987247444,
+                        offset: {
+                            socket: 2.1825869999999554,
+                            lookup: 2.7018810000000144,
+                            connect: 3.1573360000000434,
+                            secureConnect: 6.102764000000036,
+                            response: 6.9003399999999715,
+                            end: 7.221480999999983
+                        }
                     }
                 }),
                 timingPhases = {
-                    wait: 1.4010989999997037,
-                    dns: 0.20460100000036618,
-                    tcp: 43.05270100000007,
-                    firstByte: 225.52159900000015,
-                    download: 7.652700000000095,
-                    total: 277.628099
+                    wait: 2.1825869999999554,
+                    dns: 0.519294000000059,
+                    tcp: 0.45545500000002903,
+                    sslHandshake: 2.9454279999999926,
+                    firstByte: 0.7975759999999354,
+                    download: 0.32114100000001145,
+                    total: 7.221480999999983
                 };
 
-            expect(response.timingPhases()).to.eql(timingPhases);
+
+            expect(Response.timingPhases(response.timings)).to.eql(timingPhases);
         });
 
         it('should return if timings are not provided', function () {
-            var response = new Response({
-                code: 200
-            });
-
-            expect(response.timingPhases()).to.be.undefined;
+            expect(Response.timingPhases()).to.be.undefined;
         });
     });
 
@@ -849,11 +850,12 @@ describe('Response', function () {
                     var response = Response.createFromNode(res);
 
                     expect(response).to.have.property('timings');
-                    expect(response.timings).to.be.an('object').that.has.all.keys([
-                        'start',
+                    expect(response.timings).to.be.an('object').that.has.all.keys(['start', 'offset']);
+                    expect(response.timings.offset).to.have.all.keys([
                         'socket',
                         'lookup',
                         'connect',
+                        'secureConnect',
                         'response',
                         'end'
                     ]);
