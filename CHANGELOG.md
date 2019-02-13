@@ -2,6 +2,7 @@
 
 #### v3.4.3 (Unreleased)
 * #800 Added support for port match in `UrlMatchPattern`
+* #802 Added detailed timing parameters in Response
 
 #### v3.4.2 (February 1, 2019)
 * #783 Added support for Array and Object variable type
