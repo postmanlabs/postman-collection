@@ -577,7 +577,7 @@ describe('Response', function () {
                     wait: 2.1825869999999554,
                     dns: 0.519294000000059,
                     tcp: 0.45545500000002903,
-                    sslHandshake: 2.9454279999999926,
+                    secureHandshake: 2.9454279999999926,
                     firstByte: 0.7975759999999354,
                     download: 0.32114100000001145,
                     total: 7.221480999999983
