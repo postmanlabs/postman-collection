@@ -1,6 +1,6 @@
 # Postman Collection SDK Changelog
 
-#### v3.4.3 (Unreleased)
+#### v3.4.3 (February 15, 2019)
 * #800 Added support for port match in `UrlMatchPattern`
 * #802 Added detailed timing parameters in Response
 
