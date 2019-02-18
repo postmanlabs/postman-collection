@@ -461,7 +461,8 @@ describe('VariableScope', function () {
                 expect(scope.values.count()).to.equal(2);
             });
 
-            it('should remove the last enabled from the multi value list', function () {
+            // @todo delete last enabled on unset
+            it.skip('should remove the last enabled from the multi value list', function () {
                 var scope = new VariableScope({
                     values: [{
                         key: 'var-2',
@@ -490,6 +491,40 @@ describe('VariableScope', function () {
                 scope.unset('var-2');
                 expect(scope.values.count()).to.equal(1);
                 expect(scope.get('var-2')).to.be.undefined;
+            });
+
+            it('should remove all the enabled from the multi value list', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-2',
+                        value: 'var-2-value1'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value2'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value3',
+                        disabled: true
+                    }]
+                });
+
+                // delete all enabled
+                scope.unset('var-2');
+                expect(scope.values.count()).to.equal(1);
+                expect(scope.get('var-2')).to.be.undefined;
+
+                // try deleting disabled
+                scope.unset('var-2');
+                expect(scope.values.count()).to.equal(1);
+                expect(scope.get('var-2')).to.be.undefined;
+
+                // check members list
+                expect(scope.values.toJSON()).to.eql([
+                    { key: 'var-2', value: 'var-2-value3', type: 'any', disabled: true }
+                ]);
+
+                // check reference list
+                expect(scope.values.reference).to.have.property('var-2');
             });
         });
 
