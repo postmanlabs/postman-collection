@@ -356,75 +356,104 @@ describe('VariableScope', function () {
         });
 
         describe('set', function () {
-            var scope = new VariableScope({
-                values: [{
-                    key: 'var-1',
-                    value: 'var-1-value'
-                }, {
-                    key: 'var-2',
-                    value: 'var-2-value'
-                }, {
-                    key: 'var-2',
-                    value: 'var-2-value2',
-                    disabled: true
-                }, {
-                    key: 'var-2',
-                    value: 'var-2-value3'
-                }, {
-                    key: 'var-3',
-                    value: 'var-3-value',
-                    disabled: true
-                }]
-            });
-
             it('should correctly update an existing value', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }]
+                });
+
                 scope.set('var-1', 'new-var-1-value');
                 expect(scope.get('var-1')).to.equal('new-var-1-value');
             });
 
             it('should correctly update the last enabled item in multi value list', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-2',
+                        value: 'var-2-value'
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value2',
+                        disabled: true
+                    }, {
+                        key: 'var-2',
+                        value: 'var-2-value3'
+                    }]
+                });
+
                 scope.set('var-2', 'new-var-2-value');
                 expect(scope.get('var-2')).to.equal('new-var-2-value');
+                expect(scope.values.toJSON()).to.eql([
+                    { key: 'var-2', type: 'any', value: 'var-2-value' },
+                    { key: 'var-2', disabled: true, type: 'any', value: 'var-2-value2' },
+                    { key: 'var-2', type: 'any', value: 'new-var-2-value' } // updated last enabled in multi value
+                ]);
             });
 
             it('should handle disabled variable correctly', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-3',
+                        value: 'var-3-value',
+                        disabled: true
+                    }]
+                });
+
+                expect(scope.values.count()).to.equal(1);
                 expect(scope.has('var-3')).to.be.false;
                 expect(scope.get('var-3')).to.be.undefined;
 
                 scope.set('var-3', 'new-var-3-value');
 
                 // creates new variable with same name, won't overwrite disabled
+                expect(scope.values.count()).to.equal(2);
                 expect(scope.has('var-3')).to.be.true;
                 expect(scope.get('var-3')).to.equal('new-var-3-value');
+
+                expect(scope.values.toJSON()).to.eql([
+                    { key: 'var-3', disabled: true, type: 'any', value: 'var-3-value' },
+                    { key: 'var-3', type: 'any', value: 'new-var-3-value' } // new variable created on disabled set
+                ]);
             });
 
             it('should create a new variable if non-existent', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }]
+                });
+
                 scope.set('var-4', 'var-4-value');
 
-                expect(scope.values.count()).to.equal(7); // previous 5 + disabled set + this
+                expect(scope.values.count()).to.equal(2);
                 expect(scope.get('var-4')).to.equal('var-4-value');
             });
 
             it('should correctly update type of existing value', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }]
+                });
+
                 scope.set('var-1', 3.142, 'number');
                 expect(scope.get('var-1')).to.equal(3.142);
             });
 
             it('should correctly create a new typed value', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var-1',
+                        value: 'var-1-value'
+                    }]
+                });
+
                 scope.set('var-4', 3.142, 'boolean');
                 expect(scope.get('var-4')).to.be.true;
-            });
-
-            it('should correctly maintain the members list', function () {
-                expect(scope.values.toJSON()).to.eql([
-                    { key: 'var-1', type: 'number', value: 3.142 },
-                    { key: 'var-2', type: 'any', value: 'var-2-value' },
-                    { key: 'var-2', disabled: true, type: 'any', value: 'var-2-value2' },
-                    { key: 'var-2', type: 'any', value: 'new-var-2-value' }, // updated last enabled in multi value
-                    { key: 'var-3', disabled: true, type: 'any', value: 'var-3-value' },
-                    { key: 'var-3', type: 'any', value: 'new-var-3-value' }, // new variable created on disabled set
-                    { key: 'var-4', type: 'boolean', value: true }
-                ]);
             });
         });
 
