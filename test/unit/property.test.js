@@ -195,6 +195,48 @@ describe('Property', function () {
             });
         });
 
+        it('should resolve duplicate and disabled variables correctly', function () {
+            var property = new Property(),
+                parent = new Property();
+
+            property.variables = new VariableList(property, [{
+                key: 'var1',
+                value: 'child-value-1'
+            }, {
+                key: 'var1',
+                value: 'child-value-2'
+            }, {
+                key: 'var1',
+                value: 'child-value-3',
+                disabled: true
+            }]);
+
+            parent.variables = new VariableList(parent, [{
+                key: 'var1',
+                value: 'parent-value-1'
+            }, {
+                key: 'var1',
+                value: 'parent-value-2',
+                disabled: true
+            }, {
+                key: 'var2',
+                value: 'parent-value-1'
+            }, {
+                key: 'var2',
+                value: 'parent-value-2',
+                disabled: true
+            }]);
+
+            property.setParent(parent);
+            property.testProp1 = 'substituted-{{var1}}';
+            property.testProp2 = 'substituted-{{var2}}';
+
+            expect(property.toObjectResolved()).to.eql({
+                testProp1: 'substituted-child-value-2',
+                testProp2: 'substituted-parent-value-1'
+            });
+        });
+
         it('should ignore own variables when `ignoreOwnVariables` is set', function () {
             var property = new Property(),
                 variables = new VariableList({}, [{

@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### v3.4.34(unreleased)
+* #798 Handle disabled property in `VariableScope` methods
+
 #### v3.4.3 (February 15, 2019)
 * #800 Added support for port match in `UrlMatchPattern`
 * #802 Added detailed timing parameters in Response
