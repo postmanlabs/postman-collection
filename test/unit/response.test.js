@@ -562,27 +562,30 @@ describe('Response', function () {
             var response = new Response({
                     code: 200,
                     timings: {
-                        start: 1549987247444,
+                        start: 1550571957689,
                         offset: {
-                            socket: 2.1825869999999554,
-                            lookup: 2.7018810000000144,
-                            connect: 3.1573360000000434,
-                            secureConnect: 6.102764000000036,
-                            response: 6.9003399999999715,
-                            end: 7.221480999999983
+                            request: 42,
+                            socket: 60.32290899999998,
+                            lookup: 886.8630629999998,
+                            connect: 1124.8914719999998,
+                            secureConnect: 1581.137341,
+                            response: 1840.1438239999998,
+                            end: 1845.5300419999999,
+                            done: 1864
                         }
                     }
                 }),
                 timingPhases = {
-                    wait: 2.1825869999999554,
-                    dns: 0.519294000000059,
-                    tcp: 0.45545500000002903,
-                    secureHandshake: 2.9454279999999926,
-                    firstByte: 0.7975759999999354,
-                    download: 0.32114100000001145,
-                    total: 7.221480999999983
+                    prepare: 42,
+                    wait: 18.32290899999998,
+                    dns: 826.5401539999998,
+                    tcp: 238.028409,
+                    firstByte: 259.00648299999966,
+                    download: 5.386218000000099,
+                    process: 18.469958000000133,
+                    total: 1864,
+                    secureHandshake: 456.2458690000003
                 };
-
 
             expect(Response.timingPhases(response.timings)).to.eql(timingPhases);
         });
@@ -852,13 +855,17 @@ describe('Response', function () {
                     expect(response).to.have.property('timings');
                     expect(response.timings).to.be.an('object').that.has.all.keys(['start', 'offset']);
                     expect(response.timings.offset).to.have.all.keys([
+                        'request',
                         'socket',
                         'lookup',
                         'connect',
                         'secureConnect',
                         'response',
-                        'end'
+                        'end',
+                        'done'
                     ]);
+                    expect(response.timings.offset.request).to.equal(0);
+                    expect(response.timings.offset.done).to.equal(response.timings.offset.end);
                     done();
                 });
             });
