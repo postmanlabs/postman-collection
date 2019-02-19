@@ -38,6 +38,18 @@ describe('Variable', function () {
         expect(v.system).to.be.false;
     });
 
+    it('should update the disabled property of a variable', function () {
+        var v = new Variable();
+        v.update({ disabled: true });
+        expect(v.disabled).to.be.true;
+
+        v = new Variable({
+            disabled: true
+        });
+        v.update({ disabled: false });
+        expect(v.disabled).to.be.false;
+    });
+
     it('should prepopulate value and type when passed to the constructor (string)', function () {
         var v = new Variable({
             value: 'Picard',
