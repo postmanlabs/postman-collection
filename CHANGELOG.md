@@ -1,6 +1,6 @@
 # Postman Collection SDK Changelog
 
-#### v3.4.4 (unreleased)
+#### v3.4.4 (February 19, 2019)
 * #798 Handle disabled property in `VariableScope` methods
 * #809 Added client overhead properties in timing phases
 * Updated dependencies
