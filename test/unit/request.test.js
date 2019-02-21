@@ -568,9 +568,9 @@ describe('Request', function () {
     describe('.size', function () {
         it('should handle blank request correctly', function () {
             var request = new Request();
-            // HTTP request-line + Keep-Alive header + CRLF
+            // GET / HTTP/1.1 + CRLF + CRLF
             expect(request.size()).to.eql({
-                body: 0, header: 42, total: 42, source: 'COMPUTED'
+                body: 0, header: 18, total: 18, source: 'COMPUTED'
             });
         });
 
@@ -582,7 +582,7 @@ describe('Request', function () {
                 }
             });
             expect(request.size()).to.eql({
-                body: 7, header: 42, total: 49, source: 'COMPUTED'
+                body: 7, header: 18, total: 25, source: 'COMPUTED'
             });
         });
 
@@ -597,7 +597,7 @@ describe('Request', function () {
                 }
             });
             expect(request.size()).to.eql({
-                body: 7, header: 42, total: 49, source: 'COMPUTED' // foo=bar
+                body: 7, header: 18, total: 25, source: 'COMPUTED' // foo=bar
             });
         });
 
@@ -625,7 +625,7 @@ describe('Request', function () {
                 }
             });
             expect(request.size()).to.eql({
-                body: 7, header: 61, total: 68, source: 'CONTENT-LENGTH'
+                body: 7, header: 37, total: 44, source: 'CONTENT-LENGTH'
             });
         });
     });
