@@ -1,5 +1,8 @@
 # Postman Collection SDK Changelog
 
+#### v3.4.5 (Unreleased)
+* #813 Added support for PFX certificate
+
 #### v3.4.4 (February 19, 2019)
 * #798 Handle disabled property in `VariableScope` methods
 * #809 Added client overhead properties in timing phases
