@@ -105,14 +105,16 @@ describe('Certificate', function () {
                     matches: ['https://postman-echo.com/*', 'https://bla.com/*'],
                     key: { src: '/Users/here' },
                     cert: { src: '/Users/here' },
+                    pfx: { src: '/Users/here' },
                     passphrase: 'iamhere'
                 },
                 certificate = new Certificate(rawCert),
                 serialisedCertificate = certificate.toJSON();
 
             expect(serialisedCertificate).to.deep.include({
-                key: rawCert.cert,
+                key: rawCert.key,
                 cert: rawCert.cert,
+                pfx: rawCert.pfx,
                 passphrase: rawCert.passphrase
             });
         });
@@ -122,6 +124,7 @@ describe('Certificate', function () {
                     matches: ['https://postman-echo.com/*', 'https://bla.com/*'],
                     key: { src: '/Users/here' },
                     cert: { src: '/Users/here' },
+                    pfx: { src: '/Users/here' },
                     passphrase: 'iamhere'
                 },
                 certificate = new Certificate(rawCert),
@@ -129,10 +132,12 @@ describe('Certificate', function () {
 
             certificate.key.value = 'something';
             certificate.cert.value = 'something-else';
+            certificate.pfx.value = 'something-else-as-well';
             serialisedCertificate = certificate.toJSON();
 
             expect(serialisedCertificate.key).to.not.have.property('value');
             expect(serialisedCertificate.cert).to.not.have.property('value');
+            expect(serialisedCertificate.pfx).to.not.have.property('value');
         });
     });
 });
