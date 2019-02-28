@@ -79,7 +79,8 @@
     "shelljs": "0.8.3",
     "strip-json-comments": "2.0.1",
     "tv4": "1.3.0",
-    "watchify": "3.11.1"
+    "watchify": "3.11.1",
+    "yankee": "1.0.8"
   },
   "homepage": "https://github.com/postmanlabs/postman-collection#readme",
   "bugs": {
