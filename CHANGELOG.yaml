@@ -1,6 +1,11 @@
-master:
+3.4.5:
+  date: 2019-03-01
   new features:
     - GH-813 Added support for PFX certificate
+  chores:
+    - GH-814 Removed connection header(forced) from request size calculation
+    - GH-819 Switched to a YAML changelog
+    - Updated dependencies
 
 3.4.4:
   date: 2019-02-19
