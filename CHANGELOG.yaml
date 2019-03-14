@@ -1,3 +1,9 @@
+master:
+  new features:
+    - Updated `ProxyConfig` to support proxy authentication
+  chores:
+    - Updated dependencies
+
 3.4.5:
   date: 2019-03-01
   new features:
