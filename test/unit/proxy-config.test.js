@@ -41,7 +41,6 @@ describe('Proxy Config', function () {
             });
         });
 
-
         it('should prepopulate the values of match to * if it is not provided', function () {
             var p = new ProxyConfig({
                 host: 'http://proxy.com'
@@ -62,17 +61,25 @@ describe('Proxy Config', function () {
                 newMatch = 'https://google.com/*',
                 newHost = 'new-host',
                 newPort = 9090,
+                newUsername = 'user',
+                newPassword = 'pass',
                 p2 = new ProxyConfig({
                     match: newMatch,
                     host: newHost,
                     port: newPort,
-                    tunnel: true
+                    tunnel: true,
+                    authenticate: true,
+                    username: newUsername,
+                    password: newPassword
                 });
 
             expect(p1.match.pattern).to.equal(DEFAULT_PATTERN);
             expect(p1).to.deep.include({
                 host: DEFAULT_HOST,
                 port: DEFAULT_PORT,
+                authenticate: false,
+                username: undefined,
+                password: undefined,
                 tunnel: false
             });
 
@@ -80,6 +87,9 @@ describe('Proxy Config', function () {
             expect(p2).to.deep.include({
                 host: newHost,
                 port: newPort,
+                authenticate: true,
+                username: 'user',
+                password: 'pass',
                 tunnel: true
             });
 
@@ -147,6 +157,19 @@ describe('Proxy Config', function () {
             pc.match.pattern = 'http://';
             pc.updateProtocols(['https']);
             expect(pc.match.pattern).to.equal('http://');
+        });
+
+        it('should handle proxy authentication correctly', function () {
+            var p = new ProxyConfig({
+                match: 'http://*.google.com/foo*bar',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true,
+                username: 'user',
+                password: 'pass'
+            });
+
+            expect(p.getProxyUrl()).to.eql('http://user:pass@proxy.com:9090');
         });
     });
 
@@ -246,7 +269,15 @@ describe('Proxy Config', function () {
 
     describe('toJSON', function () {
         it('should retain properties from original json', function () {
-            var rawConfig = { match: 'http+https://*/*', host: 'proxy.com', tunnel: true, disabled: false },
+            var rawConfig = {
+                    match: 'http+https://*/*',
+                    host: 'proxy.com',
+                    tunnel: true,
+                    disabled: false,
+                    authenticate: true,
+                    username: 'user',
+                    password: 'pass'
+                },
                 proxyConfig = new ProxyConfig(rawConfig),
                 serialisedConfig = proxyConfig.toJSON();
 
@@ -255,7 +286,10 @@ describe('Proxy Config', function () {
                     pattern: rawConfig.match
                 },
                 tunnel: rawConfig.tunnel,
-                disabled: rawConfig.disabled
+                disabled: rawConfig.disabled,
+                authenticate: rawConfig.authenticate,
+                username: rawConfig.username,
+                password: rawConfig.password
             });
         });
     });
