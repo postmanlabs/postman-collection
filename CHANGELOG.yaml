@@ -1,6 +1,8 @@
 master:
   new features:
     - Updated `ProxyConfig` to support proxy authentication
+  breaking changes:
+    - Moved timings out of response instance
   chores:
     - Updated dependencies
 
