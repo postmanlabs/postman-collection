@@ -1,6 +1,8 @@
 master:
   new features:
     - Updated `ProxyConfig` to support proxy authentication
+  breaking changes:
+    - Moved timings out of response instance
   chores:
     - Updated dependencies
 
@@ -348,7 +350,7 @@ master:
       `ProxyConfig` and `ProxyConfigList` now accept the `host` and `port` keys
       instead of `server`. The `match` property also takes in multiple
       protocols:
-        
+
         // v1.2.9
         var proxyConfig = new ProxyConfig({
             match: 'http://*/foo',

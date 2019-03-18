@@ -559,22 +559,19 @@ describe('Response', function () {
 
     describe('timingPhases', function () {
         it('should correctly calculate timing phases from provided timings', function () {
-            var response = new Response({
-                    code: 200,
-                    timings: {
-                        start: 1550571957689,
-                        offset: {
-                            request: 42,
-                            socket: 60.32290899999998,
-                            lookup: 886.8630629999998,
-                            connect: 1124.8914719999998,
-                            secureConnect: 1581.137341,
-                            response: 1840.1438239999998,
-                            end: 1845.5300419999999,
-                            done: 1864
-                        }
+            var timings = {
+                    start: 1550571957689,
+                    offset: {
+                        request: 42,
+                        socket: 60.32290899999998,
+                        lookup: 886.8630629999998,
+                        connect: 1124.8914719999998,
+                        secureConnect: 1581.137341,
+                        response: 1840.1438239999998,
+                        end: 1845.5300419999999,
+                        done: 1864
                     }
-                }),
+                },
                 timingPhases = {
                     prepare: 42,
                     wait: 18.32290899999998,
@@ -587,7 +584,7 @@ describe('Response', function () {
                     secureHandshake: 456.2458690000003
                 };
 
-            expect(Response.timingPhases(response.timings)).to.eql(timingPhases);
+            expect(Response.timingPhases(timings)).to.eql(timingPhases);
         });
 
         it('should return if timings are not provided', function () {
@@ -819,53 +816,6 @@ describe('Response', function () {
 
                     expect(response.cookie).to.eql([]);
                     validateResponse(response);
-                    done();
-                });
-            });
-        });
-
-        describe('timings', function () {
-            it('should not include timing information when time is false', function (done) {
-                request.get({
-                    uri: baseUrl + '/get',
-                    time: false
-                }, function (err, res) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var response = Response.createFromNode(res);
-
-                    expect(response).to.not.have.property('timings');
-                    done();
-                });
-            });
-
-            it('should include timing information when time is true', function (done) {
-                request.get({
-                    uri: baseUrl + '/get',
-                    time: true
-                }, function (err, res) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var response = Response.createFromNode(res);
-
-                    expect(response).to.have.property('timings');
-                    expect(response.timings).to.be.an('object').that.has.all.keys(['start', 'offset']);
-                    expect(response.timings.offset).to.have.all.keys([
-                        'request',
-                        'socket',
-                        'lookup',
-                        'connect',
-                        'secureConnect',
-                        'response',
-                        'end',
-                        'done'
-                    ]);
-                    expect(response.timings.offset.request).to.equal(0);
-                    expect(response.timings.offset.done).to.equal(response.timings.offset.end);
                     done();
                 });
             });

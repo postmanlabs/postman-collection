@@ -41,7 +41,6 @@ describe('Proxy Config', function () {
             });
         });
 
-
         it('should prepopulate the values of match to * if it is not provided', function () {
             var p = new ProxyConfig({
                 host: 'http://proxy.com'
@@ -62,43 +61,41 @@ describe('Proxy Config', function () {
                 newMatch = 'https://google.com/*',
                 newHost = 'new-host',
                 newPort = 9090,
-                newAuth = {
-                    type: 'basic',
-                    basic: {
-                        username: 'user',
-                        password: 'pass'
-                    }
-                },
+                newUsername = 'user',
+                newPassword = 'pass',
                 p2 = new ProxyConfig({
                     match: newMatch,
                     host: newHost,
                     port: newPort,
-                    auth: newAuth,
-                    tunnel: true
+                    tunnel: true,
+                    authenticate: true,
+                    username: newUsername,
+                    password: newPassword
                 });
 
             expect(p1.match.pattern).to.equal(DEFAULT_PATTERN);
             expect(p1).to.deep.include({
                 host: DEFAULT_HOST,
                 port: DEFAULT_PORT,
-                auth: undefined,
+                authenticate: false,
+                username: undefined,
+                password: undefined,
                 tunnel: false
             });
 
             expect(p2.match.pattern).to.equal(newMatch);
-            expect(p2.auth.type).to.equal('basic');
-            expect(p2.auth.current()).to.eql(newAuth.basic);
             expect(p2).to.deep.include({
                 host: newHost,
                 port: newPort,
+                authenticate: true,
+                username: 'user',
+                password: 'pass',
                 tunnel: true
             });
 
             p1.update(p2);
 
             expect(p1.match.pattern).to.equal(newMatch);
-            expect(p1.auth.type).to.equal('basic');
-            expect(p1.auth.current()).to.eql(newAuth.basic);
             expect(p1).to.deep.include({
                 host: newHost,
                 port: newPort,
@@ -167,42 +164,11 @@ describe('Proxy Config', function () {
                 match: 'http://*.google.com/foo*bar',
                 host: 'proxy.com',
                 port: 9090,
-                auth: {
-                    type: 'basic',
-                    basic: [
-                        { type: 'any', value: 'user', key: 'username' },
-                        { type: 'any', value: 'pass', key: 'password' }
-                    ]
-                }
+                authenticate: true,
+                username: 'user',
+                password: 'pass'
             });
 
-            expect(p.auth.type).to.equal('basic');
-            expect(p.getProxyUrl()).to.eql('http://user:pass@proxy.com:9090');
-        });
-
-        it('should only support basic auth method', function () {
-            var p = new ProxyConfig({
-                match: 'http://*.google.com/foo*bar',
-                host: 'proxy.com',
-                port: 9090,
-                auth: {
-                    type: 'digest',
-                    basic: {
-                        username: 'user',
-                        password: 'pass'
-                    },
-                    digest: [
-                        { key: 'nonce', value: 'aef54cde' },
-                        { key: 'realm', value: 'items.x' }
-                    ]
-                }
-            });
-
-            expect(p.auth.type).to.equal('digest');
-            expect(p.getProxyUrl()).to.eql('http://proxy.com:9090');
-
-            p.auth.use('basic');
-            expect(p.auth.type).to.equal('basic');
             expect(p.getProxyUrl()).to.eql('http://user:pass@proxy.com:9090');
         });
     });
@@ -308,13 +274,9 @@ describe('Proxy Config', function () {
                     host: 'proxy.com',
                     tunnel: true,
                     disabled: false,
-                    auth: {
-                        type: 'basic',
-                        basic: [
-                            { type: 'any', value: 'user', key: 'username' },
-                            { type: 'any', value: 'pass', key: 'password' }
-                        ]
-                    }
+                    authenticate: true,
+                    username: 'user',
+                    password: 'pass'
                 },
                 proxyConfig = new ProxyConfig(rawConfig),
                 serialisedConfig = proxyConfig.toJSON();
@@ -325,7 +287,9 @@ describe('Proxy Config', function () {
                 },
                 tunnel: rawConfig.tunnel,
                 disabled: rawConfig.disabled,
-                auth: rawConfig.auth
+                authenticate: rawConfig.authenticate,
+                username: rawConfig.username,
+                password: rawConfig.password
             });
         });
     });
