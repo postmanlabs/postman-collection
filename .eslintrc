@@ -52,7 +52,7 @@
     "block-scoped-var": "error",
     "class-methods-use-this": "error",
     "complexity": "off",
-    "consistent-return": "warn",
+    "consistent-return": "off",
     "curly": "error",
     "default-case": "error",
     "dot-location": ["error", "property"],
