@@ -1,12 +1,13 @@
-master:
+3.4.6:
+  date: 2019-03-19
   new features:
-    - Updated `ProxyConfig` to support proxy authentication
+    - GH-825 Updated `ProxyConfig` to support proxy authentication
   breaking changes:
-    - Moved timings out of response instance
+    - GH-832 Moved timings out of response instance
   chores:
+    - GH-834 Suppressed lint warnings and fixed a few
+    - GH-834 Removed unwanted dev dependencies
     - Updated dependencies
-    - Removed unwanted dev dependencies
-    - Suppressed lint warnings and fixed a few
 
 3.4.5:
   date: 2019-03-01
