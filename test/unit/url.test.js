@@ -1092,5 +1092,17 @@ describe('Url', function () {
                 expect(url.path).to.be.an('array').that.eql(['', '', 'get']);
             });
         });
+
+        describe('query', function () {
+            // Tests issue where trailing spaces were removed from value of query parameter
+            // Reference: https://github.com/postmanlabs/postman-app-support/issues/6097
+            it('should not remove trailing whitespace from value of last query parameter', function () {
+                var url = new Url('https://postman-echo.com/get?foo1  =bar1  &foo2  =bar2  ');
+                expect(url.query.all()[0].key).to.eql('foo1  ');
+                expect(url.query.all()[0].value).to.eql('bar1  ');
+                expect(url.query.all()[1].key).to.eql('foo2  ');
+                expect(url.query.all()[1].value).to.eql('bar2  ');
+            });
+        });
     });
 });
