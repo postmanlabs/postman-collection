@@ -86,6 +86,23 @@ describe('RequestBody', function () {
         });
     });
 
+    it('should support graphql mode', function () {
+        var graphql = {
+                mode: 'graphql',
+                graphql: {
+                    query: 'query Test { hello }',
+                    operationName: 'Test',
+                    variables: '{"foo":"bar"}'
+                }
+            },
+            reqData = new RequestBody(graphql);
+        expect(reqData.graphql).to.eql({
+            query: 'query Test { hello }',
+            operationName: 'Test',
+            variables: '{"foo":"bar"}'
+        });
+    });
+
     it('should reject invalid body types', function () {
         expect(new RequestBody([])).to.be.empty;
         expect(new RequestBody(2)).to.be.empty;
@@ -221,6 +238,41 @@ describe('RequestBody', function () {
             rBody.mode = 'random';
             expect(rBody.toString()).to.equal('');
         });
+
+        it('should correctly stringify graphql bodies', function () {
+            var graphql = {
+                    query: 'query Test { hello }',
+                    operationName: 'Test',
+                    variables: { foo: 'bar' }
+                },
+                rBody = new RequestBody({
+                    mode: 'graphql',
+                    graphql: graphql
+                });
+
+            expect(rBody.toString()).to.equal(JSON.stringify(graphql));
+        });
+
+        it('should correctly stringify graphql bodies with undefined operationName', function () {
+            var rBody = new RequestBody({
+                mode: 'graphql',
+                graphql: {
+                    query: '{ foo }',
+                    operationName: undefined,
+                    variables: '{"foo":"bar"}'
+                }
+            });
+
+            expect(rBody.toString()).to.equal('{"query":"{ foo }","variables":{"foo":"bar"}}');
+        });
+
+        it('should correctly stringify empty graphql body', function () {
+            var rBody = new RequestBody({
+                mode: 'graphql'
+            });
+
+            expect(rBody.toString()).to.equal('{"query":""}');
+        });
     });
 
     describe('sanity', function () {
@@ -316,6 +368,27 @@ describe('RequestBody', function () {
                     value: { some: 'random', javascript: 'object' } // this functionality is used in the app
                 }]
             });
+            expect(body.isEmpty()).to.be.false;
+        });
+
+        it('should return false if mode is graphql and nothing is available', function () {
+            var body = new RequestBody({
+                mode: 'graphql'
+            });
+
+            // add empty query string
+            expect(body.isEmpty()).to.be.false;
+            expect(body.graphql).to.have.property('query', '');
+        });
+
+        it('should return false if mode is graphql and data is available', function () {
+            var body = new RequestBody({
+                mode: 'graphql',
+                graphql: {
+                    query: '{ foo }'
+                }
+            });
+
             expect(body.isEmpty()).to.be.false;
         });
     });
