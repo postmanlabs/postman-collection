@@ -103,6 +103,25 @@ describe('RequestBody', function () {
         });
     });
 
+    it('should handle variables object in graphql correctly', function () {
+        var reqData = new RequestBody({
+            mode: 'graphql',
+            graphql: {
+                query: 'query Test { hello }',
+                operationName: 'Test',
+                variables: {
+                    foo: 'bar'
+                }
+            }
+        });
+
+        expect(reqData.graphql).to.eql({
+            query: 'query Test { hello }',
+            operationName: 'Test',
+            variables: '{"foo":"bar"}'
+        });
+    });
+
     it('should reject invalid body types', function () {
         expect(new RequestBody([])).to.be.empty;
         expect(new RequestBody(2)).to.be.empty;
@@ -237,41 +256,6 @@ describe('RequestBody', function () {
 
             rBody.mode = 'random';
             expect(rBody.toString()).to.equal('');
-        });
-
-        it('should correctly stringify graphql bodies', function () {
-            var graphql = {
-                    query: 'query Test { hello }',
-                    operationName: 'Test',
-                    variables: { foo: 'bar' }
-                },
-                rBody = new RequestBody({
-                    mode: 'graphql',
-                    graphql: graphql
-                });
-
-            expect(rBody.toString()).to.equal(JSON.stringify(graphql));
-        });
-
-        it('should correctly stringify graphql bodies with undefined operationName', function () {
-            var rBody = new RequestBody({
-                mode: 'graphql',
-                graphql: {
-                    query: '{ foo }',
-                    operationName: undefined,
-                    variables: '{"foo":"bar"}'
-                }
-            });
-
-            expect(rBody.toString()).to.equal('{"query":"{ foo }","variables":{"foo":"bar"}}');
-        });
-
-        it('should correctly stringify empty graphql body', function () {
-            var rBody = new RequestBody({
-                mode: 'graphql'
-            });
-
-            expect(rBody.toString()).to.equal('{"query":""}');
         });
     });
 
