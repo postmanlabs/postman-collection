@@ -118,7 +118,9 @@ describe('RequestBody', function () {
         expect(reqData.graphql).to.eql({
             query: 'query Test { hello }',
             operationName: 'Test',
-            variables: '{"foo":"bar"}'
+            variables: {
+                foo: 'bar'
+            }
         });
     });
 
