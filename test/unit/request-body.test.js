@@ -357,14 +357,12 @@ describe('RequestBody', function () {
             expect(body.isEmpty()).to.be.false;
         });
 
-        it('should return false if mode is graphql and nothing is available', function () {
+        it('should return true if mode is graphql and nothing is available', function () {
             var body = new RequestBody({
                 mode: 'graphql'
             });
 
-            // add empty query string
-            expect(body.isEmpty()).to.be.false;
-            expect(body.graphql).to.have.property('query', '');
+            expect(body.isEmpty()).to.be.true;
         });
 
         it('should return false if mode is graphql and data is available', function () {
