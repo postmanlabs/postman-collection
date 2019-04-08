@@ -40,7 +40,7 @@
     "marked": "0.6.1",
     "mime-format": "2.0.0",
     "mime-types": "2.1.22",
-    "postman-url-encoder": "1.0.1",
+    "postman-url-encoder": "1.0.2",
     "sanitize-html": "1.20.0",
     "semver": "6.0.0",
     "uuid": "3.3.2"
