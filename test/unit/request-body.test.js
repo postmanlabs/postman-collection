@@ -86,6 +86,44 @@ describe('RequestBody', function () {
         });
     });
 
+    it('should support graphql mode', function () {
+        var graphql = {
+                mode: 'graphql',
+                graphql: {
+                    query: 'query Test { hello }',
+                    operationName: 'Test',
+                    variables: '{"foo":"bar"}'
+                }
+            },
+            reqData = new RequestBody(graphql);
+        expect(reqData.graphql).to.eql({
+            query: 'query Test { hello }',
+            operationName: 'Test',
+            variables: '{"foo":"bar"}'
+        });
+    });
+
+    it('should handle variables object in graphql correctly', function () {
+        var reqData = new RequestBody({
+            mode: 'graphql',
+            graphql: {
+                query: 'query Test { hello }',
+                operationName: 'Test',
+                variables: {
+                    foo: 'bar'
+                }
+            }
+        });
+
+        expect(reqData.graphql).to.eql({
+            query: 'query Test { hello }',
+            operationName: 'Test',
+            variables: {
+                foo: 'bar'
+            }
+        });
+    });
+
     it('should reject invalid body types', function () {
         expect(new RequestBody([])).to.be.empty;
         expect(new RequestBody(2)).to.be.empty;
@@ -316,6 +354,25 @@ describe('RequestBody', function () {
                     value: { some: 'random', javascript: 'object' } // this functionality is used in the app
                 }]
             });
+            expect(body.isEmpty()).to.be.false;
+        });
+
+        it('should return true if mode is graphql and nothing is available', function () {
+            var body = new RequestBody({
+                mode: 'graphql'
+            });
+
+            expect(body.isEmpty()).to.be.true;
+        });
+
+        it('should return false if mode is graphql and data is available', function () {
+            var body = new RequestBody({
+                mode: 'graphql',
+                graphql: {
+                    query: '{ foo }'
+                }
+            });
+
             expect(body.isEmpty()).to.be.false;
         });
     });

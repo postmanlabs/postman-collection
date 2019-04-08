@@ -1,3 +1,12 @@
+3.4.7:
+  date: 2019-04-08
+  new features:
+    - GH-843 Added `graphql` request body mode
+  fixed bugs:
+    - GH-842 Fixed a bug where trailing spaces in an URL was getting removed
+  chores:
+    - Updated dependencies
+
 3.4.6:
   date: 2019-03-19
   new features:
