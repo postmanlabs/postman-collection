@@ -517,6 +517,20 @@ describe('Url', function () {
             expect(subject.path).to.eql([':', ':', ':var']);
             expect(subject.variable).to.have.lengthOf(1).that.eql([{ key: 'var' }]);
         });
+
+        it('should parse a path variable only once if it is used multiple times', function () {
+            var subject = Url.parse('http://127.0.0.1/:foo/:bar/:foo');
+            expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
+                { key: 'foo' }, { key: 'bar' }
+            ]);
+        });
+
+        it('should parse path variables containing special characters properly', function () {
+            var subject = Url.parse('http://127.0.0.1/:郵差/:foo.json');
+            expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
+                { key: '郵差' }, { key: 'foo.json' }
+            ]);
+        });
     });
 
     describe('unparsing', function () {
