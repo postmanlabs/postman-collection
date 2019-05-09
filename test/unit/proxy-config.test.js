@@ -114,7 +114,7 @@ describe('Proxy Config', function () {
 
             p1.updateProtocols(newProtocols);
             expect(p1.getProtocols()).to.eql(newProtocolsAfterUpdate);
-            expect(p1.match.pattern).to.eql('http://*/*');
+            expect(p1.match.pattern).to.eql('http://*:*/*');
 
             p1 = new ProxyConfig({ match: 'https://google.com/*' });
             protocols = ['https'];
@@ -145,10 +145,10 @@ describe('Proxy Config', function () {
             var pc = new ProxyConfig({ host: 'proxy.com' });
 
             pc.updateProtocols(['http']);
-            expect(pc.match.pattern).to.equal('http://*/*');
+            expect(pc.match.pattern).to.equal('http://*:*/*');
 
             pc.updateProtocols();
-            expect(pc.match.pattern).to.equal('http://*/*');
+            expect(pc.match.pattern).to.equal('http://*:*/*');
         });
 
         it('should ignore falsy host-path combinations whilst updating', function () {
@@ -177,7 +177,14 @@ describe('Proxy Config', function () {
         it('should match all urls provided', function () {
             var pc = new ProxyConfig({ host: 'proxy.com', tunnel: true });
             expect(pc.test('http://www.google.com/')).to.be.true;
+            expect(pc.test('http://www.google.com:80/')).to.be.true;
+            expect(pc.test('http://www.google.com:3000/')).to.be.true;
+            expect(pc.test('https://www.google.com/')).to.be.true;
+            expect(pc.test('https://www.google.com:80/')).to.be.true;
+            expect(pc.test('https://www.google.com:3000/')).to.be.true;
             expect(pc.test('foo.bar.com/')).to.be.true;
+            expect(pc.test('foo.bar.com:80/')).to.be.true;
+            expect(pc.test('foo.bar.com:3000/')).to.be.true;
         });
 
         it('should match all sdk Url provided', function () {
@@ -187,15 +194,24 @@ describe('Proxy Config', function () {
         });
 
         it('should parse any URL that uses the http protocol', function () {
-            var pc = new ProxyConfig({ match: 'http://*/*', host: 'proxy.com' });
+            var pc = new ProxyConfig({ match: 'http://*:*/*', host: 'proxy.com' });
             expect(pc.test('http://www.google.com/')).to.be.true;
+            expect(pc.test('http://www.google.com:80/')).to.be.true;
+            expect(pc.test('http://www.google.com:3000/')).to.be.true;
             expect(pc.test('foo.bar.com/')).to.be.true;
+            expect(pc.test('foo.bar.com:80/')).to.be.true;
+            expect(pc.test('foo.bar.com:3000/')).to.be.true;
         });
 
         it('should parse any URL that uses the http protocol, on any host, with path starts with /foo', function () {
-            var pc = new ProxyConfig({ match: 'http://*/foo*', host: 'proxy.com' });
+            var pc = new ProxyConfig({ match: 'http://*:*/foo*', host: 'proxy.com' });
             expect(pc.test('http://example.com/foo/bar.html')).to.be.true;
             expect(pc.test('http://www.google.com/foo')).to.be.true;
+            expect(pc.test('http://www.google.com:80/foo')).to.be.true;
+            expect(pc.test('http://www.google.com:3000/foo')).to.be.true;
+            expect(pc.test('foo.bar.com/foo/bar.html')).to.be.true;
+            expect(pc.test('foo.bar.com:80/foo/bar.html')).to.be.true;
+            expect(pc.test('foo.bar.com:3000/foo/bar.html')).to.be.true;
         });
 
         it('should parse any URL that uses the https protocol, is on a google.com host', function () {
