@@ -1,3 +1,10 @@
+master:
+  fixed bugs:
+    - GH-863 Fixed a bug that caused proxy matching for URL with ports to fail
+    - GH-864 Fixed a bug where duplicate path variables are not handled
+  chores:
+    - Updated dependencies
+
 3.4.7:
   date: 2019-04-08
   new features:
