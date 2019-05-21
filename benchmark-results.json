@@ -1,0 +1,51 @@
+{
+  "suites": [
+    {
+      "name": "SuperString variable substitution",
+      "scenarios": [
+        {
+          "name": "single constant dynamic variable",
+          "executions": 411989,
+          "time": 12136.21698637585,
+          "error": 2.9153562603877248
+        },
+        {
+          "name": "two constant dynamic variables",
+          "executions": 223254,
+          "time": 22395.94219588451,
+          "error": 0.5184261312204904
+        },
+        {
+          "name": "four constant dynamic variables",
+          "executions": 96120,
+          "time": 52018.067613399915,
+          "error": 0.7425831865647227
+        },
+        {
+          "name": "eight constant dynamic variables",
+          "executions": 73825,
+          "time": 67727.10917710802,
+          "error": 0.6059831169932062
+        },
+        {
+          "name": "sixteen constant dynamic variables",
+          "executions": 59716,
+          "time": 83729.05474244758,
+          "error": 0.8958354666864753
+        },
+        {
+          "name": "thirty-two constant dynamic variables",
+          "executions": 19165,
+          "time": 260888.65687451084,
+          "error": 0.6319144162829673
+        },
+        {
+          "name": "sixty-four constant dynamic variables",
+          "executions": 8866,
+          "time": 563898.6565531243,
+          "error": 68.6127576990454
+        }
+      ]
+    }
+  ]
+}

@@ -28,7 +28,8 @@
     "test-system": "node npm/test-system.js",
     "test-browser": "node npm/test-browser.js",
     "test-lint": "node npm/test-lint.js",
-    "test-unit": "node npm/test-unit.js"
+    "test-unit": "node npm/test-unit.js",
+    "test-benchmark": "node npm/test-benchmark.js"
   },
   "dependencies": {
     "escape-html": "1.0.3",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "async": "2.6.2",
+    "bipbip": "0.4.1",
     "browserify": "16.2.3",
     "btoa": "1.2.1",
     "chai": "4.2.0",
