@@ -24,6 +24,13 @@ describe('String utilities', function () {
                     expect(Substitutor.DEFAULT_VARS.$randomInt()).to.be.within(0, 1000);
                 });
             });
+
+            describe('faker variables', function () {
+                it('should resolve (sampled)', function () {
+                    expect(Substitutor.DEFAULT_VARS.$randomProductMaterial).to.be.a('function');
+                });
+            });
         });
     });
+
 });
