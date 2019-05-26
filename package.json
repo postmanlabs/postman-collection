@@ -46,7 +46,7 @@
     "uuid": "3.3.2"
   },
   "devDependencies": {
-    "async": "2.6.2",
+    "async": "3.0.1",
     "browserify": "16.2.3",
     "btoa": "1.2.1",
     "chai": "4.2.0",
