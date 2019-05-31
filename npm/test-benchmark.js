@@ -10,7 +10,9 @@ var chalk = require('chalk');
 
 module.exports = function (exit) {
     console.log(chalk.yellow.bold('Running benchmark tests'));
-    exec('bipbip test/benchmark/ --save benchmark-results.json --compare benchmark-results.json', exit);
+    exec('bipbip test/benchmark/ ' +
+         '--save benchmark/benchmark-results.json ' +
+         '--compare benchmark/benchmark-results.json', exit);
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
