@@ -1,3 +1,10 @@
+master:
+  improvements:
+    - added faker library support to add `$random*` dynamic variables
+
+  chores:
+    - added benchmark test running system `bipbip`
+
 3.4.8:
   date: 2019-05-09
   fixed bugs:
