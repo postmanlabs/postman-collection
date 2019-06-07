@@ -1,9 +1,10 @@
-master:
+3.4.9:
+  date: 2019-06-07
   improvements:
-    - added faker library support to add `$random*` dynamic variables
-
+    - GH-873 Added faker library support to add `$random*` dynamic variables
   chores:
-    - added benchmark test running system `bipbip`
+    - GH-873 Added benchmark test running system `bipbip`
+    - Updated dependencies
 
 3.4.8:
   date: 2019-05-09
