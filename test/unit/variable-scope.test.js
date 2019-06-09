@@ -906,10 +906,34 @@ describe('VariableScope', function () {
             { key: 'gamma', value: 'baz', disabled: true }
         ]);
 
+        scope.addLayer(new VariableList(null, [
+            { key: 'alpha_layer1', value: 'foo_layer1' },
+            { key: 'beta_layer1', value: 'bar_layer1', disabled: true }
+        ]));
+
+        scope.addLayer(new VariableList(null, [
+            { key: 'alpha_layer2', value: 'foo_layer2' },
+            { key: 'beta_layer2', value: 'bar_layer2', disabled: true }
+        ]));
+
+        scope.addLayer(new VariableList(null, [
+            { key: 'alpha_layer3', value: 'foo_layer3' },
+            { key: 'beta_layer3', value: 'bar_layer3', disabled: true }
+        ]));
+
         it('should correctly determine if the current scope contains a provided identifier', function () {
             expect(scope.has('alpha')).to.be.true;
             expect(scope.has('gamma')).to.be.false;
             expect(scope.has('random')).to.be.false;
+        });
+
+        it('should correctly determine if the current scope contains a provided identifier in layers', function () {
+            expect(scope.has('alpha_layer1')).to.be.true;
+            expect(scope.has('alpha_layer2')).to.be.true;
+            expect(scope.has('alpha_layer3')).to.be.true;
+            expect(scope.has('beta_layer1')).to.be.false;
+            expect(scope.has('beta_layer2')).to.be.false;
+            expect(scope.has('beta_layer3')).to.be.false;
         });
     });
 
