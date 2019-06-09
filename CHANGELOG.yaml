@@ -1,3 +1,7 @@
+master:
+  new features:
+    - GH-882 Updated `variableScope.has()` method to search in layers
+
 3.4.9:
   date: 2019-06-07
   improvements:
