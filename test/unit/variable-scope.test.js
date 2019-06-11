@@ -903,22 +903,35 @@ describe('VariableScope', function () {
         var scope = new VariableScope([
             { key: 'alpha', value: 'foo' },
             { key: 'beta', value: 'bar' },
-            { key: 'gamma', value: 'baz', disabled: true }
+            { key: 'gamma', value: 'baz', disabled: true },
+            { key: 'alpha_disabled', value: 'foo_disabled', disabled: true },
+            { key: 'beta_duplicate', value: 'bar_duplicate' },
+            { key: 'gamma_single_enabled', value: 'baz_single_enabled', disabled: true }
         ]);
 
         scope.addLayer(new VariableList(null, [
             { key: 'alpha_layer1', value: 'foo_layer1' },
-            { key: 'beta_layer1', value: 'bar_layer1', disabled: true }
+            { key: 'beta_layer1', value: 'bar_layer1', disabled: true },
+            { key: 'alpha_disabled', value: 'foo_disabled', disabled: true },
+            { key: 'beta_duplicate', value: 'bar_duplicate' },
+            { key: 'gamma_single_enabled', value: 'baz_single_enabled', disabled: true },
+            { key: 'theta_single', value: 'only_in_one_layer' }
         ]));
 
         scope.addLayer(new VariableList(null, [
             { key: 'alpha_layer2', value: 'foo_layer2' },
-            { key: 'beta_layer2', value: 'bar_layer2', disabled: true }
+            { key: 'beta_layer2', value: 'bar_layer2', disabled: true },
+            { key: 'alpha_disabled', value: 'foo_disabled', disabled: true },
+            { key: 'beta_duplicate', value: 'bar_duplicate' },
+            { key: 'gamma_single_enabled', value: 'baz_single_enabled' }
         ]));
 
         scope.addLayer(new VariableList(null, [
             { key: 'alpha_layer3', value: 'foo_layer3' },
-            { key: 'beta_layer3', value: 'bar_layer3', disabled: true }
+            { key: 'beta_layer3', value: 'bar_layer3', disabled: true },
+            { key: 'alpha_disabled', value: 'foo_disabled', disabled: true },
+            { key: 'beta_duplicate', value: 'bar_duplicate' },
+            { key: 'gamma_single_enabled', value: 'baz_single_enabled', disabled: true }
         ]));
 
         it('should correctly determine if the current scope contains a provided identifier', function () {
@@ -935,6 +948,23 @@ describe('VariableScope', function () {
             expect(scope.has('beta_layer2')).to.be.false;
             expect(scope.has('beta_layer3')).to.be.false;
         });
+
+        it('should not consider disabled variables from any layer', function () {
+            expect(scope.has('alpha_disabled')).to.be.false;
+        });
+
+        it('should return true if variable with same name is present in all layers', function () {
+            expect(scope.has('beta_duplicate')).to.be.true;
+        });
+
+        it('should correctly find variable that exists in only one layer', function () {
+            expect(scope.has('theta_single')).to.be.true;
+        });
+
+        it('should correctly find only enabled variable from duplicate variables in all layers with only one enabled',
+            function () {
+                expect(scope.has('gamma_single_enabled')).to.be.true;
+            });
     });
 
     describe('disabled variable', function () {
