@@ -981,6 +981,36 @@ describe('VariableScope', function () {
             expect(scope.has('beta')).to.be.true;
         });
 
+        it('should correctly find only enabled variable from duplicate variables in current scope', function () {
+            var scope = new VariableScope([
+                { key: 'alpha', value: 'foo_disabled_1', disabled: true },
+                { key: 'alpha', value: 'foo' },
+                { key: 'alpha', value: 'foo_disabled_2', disabled: true }
+            ]);
+
+            expect(scope.has('alpha')).to.be.true;
+        });
+
+        it('should correctly find only enabled variable from duplicate variables in parent scopes', function () {
+            var scope = new VariableScope([
+                { key: 'alpha', value: 'foo_disabled_1', disabled: true },
+                { key: 'alpha', value: 'foo_disabled_2', disabled: true }
+            ]);
+
+            scope.addLayer(new VariableList(null, [
+                { key: 'alpha', value: 'foo_disabled_1_layer_1', disabled: true },
+                { key: 'alpha', value: 'foo_layer_1' },
+                { key: 'alpha', value: 'foo_disabled_2_layer_1', disabled: true }
+            ]));
+
+            scope.addLayer(new VariableList(null, [
+                { key: 'alpha', value: 'foo_disabled_1_layer_2', disabled: true },
+                { key: 'alpha', value: 'foo_disabled_2_layer_2', disabled: true }
+            ]));
+
+            expect(scope.has('alpha')).to.be.true;
+        });
+
         it('should correctly find only enabled variable from duplicate variables in all scopes with only one enabled',
             function () {
                 var scope = new VariableScope([
