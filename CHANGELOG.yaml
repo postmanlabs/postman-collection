@@ -1,5 +1,5 @@
 master:
-  new features:
+  fixed bugs:
     - GH-883 Fixed a bug where `VariableScope~get` method falsely returned `undefined`
 
 3.4.9:
