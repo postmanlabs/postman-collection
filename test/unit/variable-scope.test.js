@@ -290,7 +290,7 @@ describe('VariableScope', function () {
 
     describe('PM API helpers', function () {
         describe('get', function () {
-            it('should correctly return the specified value', function () {
+            it('should get the specified variable', function () {
                 var scope = new VariableScope([
                     { key: 'var-1', value: 'var-1-value' },
                     { key: 'var-2', value: 'var-2-value' }
@@ -299,7 +299,7 @@ describe('VariableScope', function () {
                 expect(scope.get('var-2')).to.equal('var-2-value');
             });
 
-            it('should return last enabled value from multi value list', function () {
+            it('should get last enabled from multi value list', function () {
                 var scope = new VariableScope([
                     { key: 'var-2', value: 'var-2-value' },
                     { key: 'var-2', value: 'var-2-value2' },
@@ -309,7 +309,7 @@ describe('VariableScope', function () {
                 expect(scope.get('var-2')).to.equal('var-2-value2');
             });
 
-            it('should return undefined for disabled variable', function () {
+            it('should bail out if variable is disabled', function () {
                 var scope = new VariableScope([
                     { key: 'var-3', value: 'var-3-value3', disabled: true }
                 ]);
@@ -317,7 +317,7 @@ describe('VariableScope', function () {
                 expect(scope.get('var-3')).to.be.undefined;
             });
 
-            it('should return undefined for unknown key', function () {
+            it('should bail out if no matches are found', function () {
                 var scope = new VariableScope([
                     { key: 'var-2', value: 'var-3-value3', disabled: true }
                 ]);
@@ -326,7 +326,7 @@ describe('VariableScope', function () {
             });
 
             describe('multi layer search', function () {
-                it('should get variable from parent layers', function () {
+                it('should get from parent scope', function () {
                     var scope = new VariableScope([
                         { key: 'alpha', value: 'foo' }
                     ]);
@@ -362,7 +362,7 @@ describe('VariableScope', function () {
                     expect(scope.get('random')).to.be.undefined;
                 });
 
-                it('should pick last enabled from multi value list', function () {
+                it('should get last enabled from multi value list', function () {
                     var scope = new VariableScope([
                         { key: 'alpha', value: 'foo' }
                     ]);
@@ -376,7 +376,7 @@ describe('VariableScope', function () {
                     expect(scope.get('gamma')).to.equal('foo_2');
                 });
 
-                it('should pick from current scope in case of duplicates', function () {
+                it('should get from current scope in case of duplicates', function () {
                     var scope = new VariableScope([
                         { key: 'alpha', value: 'foo' }
                     ]);
@@ -388,7 +388,7 @@ describe('VariableScope', function () {
                     expect(scope.get('alpha')).to.equal('foo');
                 });
 
-                it('should pick from first layer with enabled value in case of duplicates', function () {
+                it('should get first enabled in case of duplicates', function () {
                     var scope = new VariableScope([
                         { key: 'alpha', value: 'foo', disabled: true }
                     ]);
