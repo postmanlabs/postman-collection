@@ -900,7 +900,7 @@ describe('VariableScope', function () {
     });
 
     describe('has', function () {
-        it('should correctly determine if the current scope contains a provided identifier', function () {
+        it('should find variable from current scope', function () {
             var scope = new VariableScope([
                 { key: 'alpha', value: 'foo' },
                 { key: 'gamma', value: 'baz', disabled: true }
@@ -911,45 +911,43 @@ describe('VariableScope', function () {
             expect(scope.has('random')).to.be.false;
         });
 
-        it('should correctly determine if the current or parent scope contains provided identifier when it is enabled',
-            function () {
-                var scope = new VariableScope([
-                    { key: 'alpha', value: 'foo' }
-                ]);
+        it('should find variables from all scopes', function () {
+            var scope = new VariableScope([
+                { key: 'alpha', value: 'foo' }
+            ]);
 
-                scope.addLayer(new VariableList(null, [
-                    { key: 'alpha_layer1', value: 'foo_layer1' }
-                ]));
+            scope.addLayer(new VariableList(null, [
+                { key: 'alpha_layer1', value: 'foo_layer1' }
+            ]));
 
-                scope.addLayer(new VariableList(null, [
-                    { key: 'alpha_layer2', value: 'foo_layer2' }
-                ]));
+            scope.addLayer(new VariableList(null, [
+                { key: 'alpha_layer2', value: 'foo_layer2' }
+            ]));
 
-                expect(scope.has('alpha')).to.be.true;
-                expect(scope.has('alpha_layer1')).to.be.true;
-                expect(scope.has('alpha_layer2')).to.be.true;
-            });
+            expect(scope.has('alpha')).to.be.true;
+            expect(scope.has('alpha_layer1')).to.be.true;
+            expect(scope.has('alpha_layer2')).to.be.true;
+        });
 
-        it('should correctly determine if the current or parent scope contains provided identifier when it is disabled',
-            function () {
-                var scope = new VariableScope([
-                    { key: 'alpha', value: 'foo', disabled: true }
-                ]);
+        it('should not consider disabled variables from any scopes', function () {
+            var scope = new VariableScope([
+                { key: 'alpha', value: 'foo', disabled: true }
+            ]);
 
-                scope.addLayer(new VariableList(null, [
-                    { key: 'alpha_layer1', value: 'foo_layer1', disabled: true }
-                ]));
+            scope.addLayer(new VariableList(null, [
+                { key: 'alpha_layer1', value: 'foo_layer1', disabled: true }
+            ]));
 
-                scope.addLayer(new VariableList(null, [
-                    { key: 'alpha_layer2', value: 'foo_layer2', disabled: true }
-                ]));
+            scope.addLayer(new VariableList(null, [
+                { key: 'alpha_layer2', value: 'foo_layer2', disabled: true }
+            ]));
 
-                expect(scope.has('alpha')).to.be.false;
-                expect(scope.has('alpha_layer1')).to.be.false;
-                expect(scope.has('alpha_layer2')).to.be.false;
-            });
+            expect(scope.has('alpha')).to.be.false;
+            expect(scope.has('alpha_layer1')).to.be.false;
+            expect(scope.has('alpha_layer2')).to.be.false;
+        });
 
-        it('should return true if variable with same name is present in all scopes', function () {
+        it('should return true incase of duplicates across the scopes', function () {
             var scope = new VariableScope([
                 { key: 'alpha', value: 'foo' }
             ]);
@@ -965,7 +963,7 @@ describe('VariableScope', function () {
             expect(scope.has('alpha')).to.be.true;
         });
 
-        it('should correctly find variable that exists in only one scope', function () {
+        it('should find variable that exists in only one scope', function () {
             var scope = new VariableScope([
                 { key: 'alpha', value: 'foo' }
             ]);
@@ -981,7 +979,7 @@ describe('VariableScope', function () {
             expect(scope.has('beta')).to.be.true;
         });
 
-        it('should correctly find only enabled variable from duplicate variables in current scope', function () {
+        it('should find enabled variable from duplicates in current scope', function () {
             var scope = new VariableScope([
                 { key: 'alpha', value: 'foo_disabled_1', disabled: true },
                 { key: 'alpha', value: 'foo' },
@@ -991,7 +989,7 @@ describe('VariableScope', function () {
             expect(scope.has('alpha')).to.be.true;
         });
 
-        it('should correctly find only enabled variable from duplicate variables in parent scopes', function () {
+        it('should find enabled variable from duplicates across the scopes', function () {
             var scope = new VariableScope([
                 { key: 'alpha', value: 'foo_disabled_1', disabled: true },
                 { key: 'alpha', value: 'foo_disabled_2', disabled: true }
@@ -1010,23 +1008,6 @@ describe('VariableScope', function () {
 
             expect(scope.has('alpha')).to.be.true;
         });
-
-        it('should correctly find only enabled variable from duplicate variables in all scopes with only one enabled',
-            function () {
-                var scope = new VariableScope([
-                    { key: 'alpha', value: 'foo', disabled: true }
-                ]);
-
-                scope.addLayer(new VariableList(null, [
-                    { key: 'alpha', value: 'foo_layer1' }
-                ]));
-
-                scope.addLayer(new VariableList(null, [
-                    { key: 'alpha', value: 'foo_layer2', disabled: true }
-                ]));
-
-                expect(scope.has('alpha')).to.be.true;
-            });
     });
 
     describe('disabled variable', function () {

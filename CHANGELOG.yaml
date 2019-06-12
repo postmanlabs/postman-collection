@@ -1,6 +1,6 @@
 master:
   new features:
-    - GH-882 Updated `VariableScope~has` method to search in layers
+    - GH-882 Updated `VariableScope~has` method to search in all the scopes
 
 3.4.9:
   date: 2019-06-07
