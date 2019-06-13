@@ -794,6 +794,18 @@ describe('Url', function () {
             var url = new Url('https://postman-echo.com///get');
             expect(url.toString()).to.eql('https://postman-echo.com///get');
         });
+
+        it('should handle disabled query parameters', function () {
+            var url = new Url({
+                host: 'https://postman-echo.com',
+                query: [{
+                    key: 'foo',
+                    value: 'bar',
+                    disabled: true
+                }]
+            });
+            expect(url.toString()).to.eql('https://postman-echo.com');
+        });
     });
 
     describe('getHost', function () {
