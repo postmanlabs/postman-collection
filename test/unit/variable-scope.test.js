@@ -290,67 +290,118 @@ describe('VariableScope', function () {
 
     describe('PM API helpers', function () {
         describe('get', function () {
-            var scope = new VariableScope({
-                values: [{
-                    key: 'var-1',
-                    value: 'var-1-value'
-                }, {
-                    key: 'var-2',
-                    value: 'var-2-value'
-                }, {
-                    key: 'var-2',
-                    value: 'var-2-value2'
-                }, {
-                    key: 'var-2',
-                    value: 'var-2-value3',
-                    disabled: true
-                }, {
-                    key: 'var-3',
-                    value: 'var-3-value',
-                    disabled: true
-                }]
+            it('should get the specified variable', function () {
+                var scope = new VariableScope([
+                    { key: 'var-1', value: 'var-1-value' },
+                    { key: 'var-2', value: 'var-2-value' }
+                ]);
+
+                expect(scope.get('var-2')).to.equal('var-2-value');
             });
 
-            it('should correctly return the specified value', function () {
-                expect(scope.get('var-1')).to.equal('var-1-value');
-            });
+            it('should get last enabled from multi value list', function () {
+                var scope = new VariableScope([
+                    { key: 'var-2', value: 'var-2-value' },
+                    { key: 'var-2', value: 'var-2-value2' },
+                    { key: 'var-2', value: 'var-2-value3', disabled: true }
+                ]);
 
-            it('should return last enabled value from multi value list', function () {
                 expect(scope.get('var-2')).to.equal('var-2-value2');
             });
 
-            it('should return undefined for disabled variable', function () {
+            it('should bail out if variable is disabled', function () {
+                var scope = new VariableScope([
+                    { key: 'var-3', value: 'var-3-value3', disabled: true }
+                ]);
+
                 expect(scope.get('var-3')).to.be.undefined;
             });
 
-            it('should return undefined for ', function () {
+            it('should bail out if no matches are found', function () {
+                var scope = new VariableScope([
+                    { key: 'var-2', value: 'var-3-value3', disabled: true }
+                ]);
+
                 expect(scope.get('random')).to.be.undefined;
             });
 
             describe('multi layer search', function () {
-                var newScope = new VariableScope();
+                it('should get from parent scope', function () {
+                    var scope = new VariableScope([
+                        { key: 'alpha', value: 'foo' }
+                    ]);
 
-                newScope.addLayer(new VariableList({}, [
-                    { key: 'alpha', value: 'foo' },
-                    { key: 'beta', value: 'bar', disabled: true },
-                    { key: 'gamma', value: 'foo' },
-                    { key: 'gamma', value: 'bar', disabled: true }
-                ]));
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'alpha_layer_1', value: 'foo_layer_1' }
+                    ]));
 
-                it('should work correctly', function () {
-                    expect(newScope.get('alpha')).to.equal('foo');
+                    expect(scope.get('alpha_layer_1')).to.equal('foo_layer_1');
                 });
 
-                it('should bail out if variable is undefined', function () {
-                    expect(newScope.get('beta')).to.be.undefined;
+                it('should bail out if variable is disabled', function () {
+                    var scope = new VariableScope([
+                        { key: 'alpha', value: 'foo' }
+                    ]);
+
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'beta', value: 'bar', disabled: true }
+                    ]));
+
+                    expect(scope.get('beta')).to.be.undefined;
                 });
 
                 it('should bail out if no matches are found', function () {
-                    expect(newScope.get('random')).to.be.undefined;
+                    var scope = new VariableScope([
+                        { key: 'alpha', value: 'foo' }
+                    ]);
+
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'alpha_layer_1', value: 'foo_layer_1' }
+                    ]));
+
+                    expect(scope.get('random')).to.be.undefined;
                 });
 
-                it('should pick last enabled from multi value list', function () {
-                    expect(newScope.get('gamma')).to.equal('foo');
+                it('should get last enabled from multi value list', function () {
+                    var scope = new VariableScope([
+                        { key: 'alpha', value: 'foo' }
+                    ]);
+
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'gamma', value: 'foo' },
+                        { key: 'gamma', value: 'foo_2' },
+                        { key: 'gamma', value: 'foo_3', disabled: true }
+                    ]));
+
+                    expect(scope.get('gamma')).to.equal('foo_2');
+                });
+
+                it('should get from current scope in case of duplicates', function () {
+                    var scope = new VariableScope([
+                        { key: 'alpha', value: 'foo' }
+                    ]);
+
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'alpha', value: 'foo_layer_1' }
+                    ]));
+
+                    expect(scope.get('alpha')).to.equal('foo');
+                });
+
+                it('should get first enabled in case of duplicates', function () {
+                    var scope = new VariableScope([
+                        { key: 'alpha', value: 'foo', disabled: true }
+                    ]);
+
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'alpha', value: 'foo_layer_1' }
+                    ]));
+
+                    scope.addLayer(new VariableList({}, [
+                        { key: 'alpha', value: 'foo_layer_2', disabled: true }
+                    ]));
+
+                    expect(scope.get('alpha')).to.equal('foo_layer_1');
                 });
             });
         });
