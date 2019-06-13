@@ -5,6 +5,9 @@ master:
     - >-
       GH-883 Fixed a bug where `VariableScope~get` method doesn't search
       all the scopes if the variable is disabled in local scope
+    - >-
+      GH-884 Fixed a bug where `Request~authorizeUsing` was not handling
+      arguments passed as object correctly
 
 3.4.9:
   date: 2019-06-07
