@@ -563,6 +563,24 @@ describe('Request', function () {
                 ]
             });
         });
+
+        it('should handle all the arguments passed as object', function () {
+            var request = new Request();
+
+            request.authorizeUsing({
+                type: 'basic',
+                username: 'foo',
+                password: 'bar'
+            });
+
+            expect(request.auth.toJSON()).to.eql({
+                type: 'basic',
+                basic: [
+                    { type: 'any', value: 'foo', key: 'username' },
+                    { type: 'any', value: 'bar', key: 'password' }
+                ]
+            });
+        });
     });
 
     describe('.size', function () {
