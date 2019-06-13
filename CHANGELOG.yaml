@@ -1,11 +1,10 @@
 master:
-  fixed bugs:
-    - >-
-      GH-883 Fixed a bug where `VariableScope~get` method falsely returned `undefined` when variable
-      with same name is present in both, current and parent scopes, but it is disabled in current scope
-      and enabled in parent scope.
   new features:
     - GH-882 Updated `VariableScope~has` method to search in all the scopes
+  fixed bugs:
+    - >-
+      GH-883 Fixed a bug where `VariableScope~get` method doesn't search
+      all the scopes if the variable is disabled in local scope
 
 3.4.9:
   date: 2019-06-07
