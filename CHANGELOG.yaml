@@ -1,6 +1,7 @@
 master:
   new features:
     - GH-882 Updated `VariableScope~has` method to search in all the scopes
+    - Deprecated `Description` formatter based on `Description.type`
   fixed bugs:
     - >-
       GH-883 Fixed a bug where `VariableScope~get` method doesn't search
