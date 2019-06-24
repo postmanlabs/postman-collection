@@ -655,6 +655,54 @@ describe('PropertyList', function () {
         });
     });
 
+    describe('.getAll()', function () {
+        var FakeType = function (options) {
+            this.keyAttr = options.keyAttr;
+            this.value = options.value;
+            this.disabled = options.disabled;
+        };
+
+        FakeType._postman_propertyIndexKey = 'keyAttr';
+        FakeType._postman_propertyIndexCaseInsensitive = true;
+        FakeType._postman_propertyAllowsMultipleValues = true;
+        FakeType.prototype.valueOf = function () {
+            return this.value;
+        };
+
+        it('should return an array of all values', function () {
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1'
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.getAll('key1')).to.eql(['val1', 'val2']);
+            expect(list.getAll('key2')).to.eql(['val3']);
+        });
+
+        it('should return an array with the newest value', function () {
+            FakeType._postman_propertyAllowsMultipleValues = false;
+            var list = new PropertyList(FakeType, {}, [{
+                keyAttr: 'key1',
+                value: 'val1' // this value is ignored
+            }, {
+                keyAttr: 'key1',
+                value: 'val2'
+            }, {
+                keyAttr: 'key2',
+                value: 'val3'
+            }]);
+
+            expect(list.getAll('key1')).to.eql(['val2']);
+            expect(list.getAll('key2')).to.eql(['val3']);
+        });
+    });
+
     describe('.remove()', function () {
         var FakeType = function (options) {
             this.keyAttr = options.keyAttr;
