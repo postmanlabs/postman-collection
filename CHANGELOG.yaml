@@ -1,3 +1,10 @@
+master:
+  fixed bugs:
+    - >-
+      GH-891 Modified behavior of `$randomPhoneNumber` to not include phone
+      extension and added `$randomPhoneNumberExt` and
+      `$randomPhoneNumberWithExt`
+
 3.5.0:
   date: 2019-06-17
   new features:
@@ -13,10 +20,6 @@
     - >-
       GH-885 Fixed a bug where `Url~toString` adds query separator `?` even if
       all query params are disabled
-    - >-
-      GH-891 Modified behavior of `$randomPhoneNumber` to not include phone
-      extension and added `$randomPhoneNumberExt` and
-      `$randomPhoneNumberWithExt`
 
 3.4.9:
   date: 2019-06-07
