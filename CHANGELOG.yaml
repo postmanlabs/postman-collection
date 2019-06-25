@@ -1,3 +1,8 @@
+master:
+  new features:
+    - GH-893 Added a new method `getAll(key)` to `PropertyList` which returns an
+      array of all values of the list.
+
 3.5.0:
   date: 2019-06-17
   new features:
