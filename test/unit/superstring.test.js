@@ -52,5 +52,12 @@ describe('String utilities', function () {
                 generatorSet[extension] = name;
             });
         });
+
+        it('should not include generators that are incomplete', function () {
+            _.forOwn(fakermap, function (extension) {
+                var generator = _.get(faker, extension);
+                expect(generator()).to.not.be.undefined;
+            });
+        });
     });
 });
