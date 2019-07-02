@@ -29,8 +29,8 @@ describe('Overridden generator', function () {
             var phone1 = dynamicGenerators.PhoneNumberExt(),
                 phone2 = dynamicGenerators.PhoneNumberExt();
 
-            expect(phone1.length).to.equal(14);
-            expect(phone1.length).to.equal(14);
+            expect(phone1.length).to.be.at.least(15);
+            expect(phone2.length).to.be.at.least(15);
             expect(phone1).to.not.equal(phone2);
         });
     });
