@@ -1,8 +1,8 @@
 master:
   fixed bugs:
     - >-
-      GH-900 Added dynamic generators for `superstring` module and removed
-      invalid/unsupported faker generators.
+      GH-897, GH-900, GH-901 Added dynamic generators for `superstring` module
+      and removed invalid/unsupported faker generators.
 
 3.5.0:
   date: 2019-06-17
