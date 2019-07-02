@@ -1,7 +1,7 @@
 var dynamicGenerators = require('../../lib/superstring/dynamic-generators'),
     expect = require('chai').expect;
 
-describe('Overridden generator', function () {
+describe('Dynamic generator', function () {
     describe('PhoneNumber', function () {
         it('returns a random phone number without extension', function () {
             var phone1 = dynamicGenerators.PhoneNumber(),
@@ -18,8 +18,8 @@ describe('Overridden generator', function () {
             var locale1 = dynamicGenerators.Locale(),
                 locale2 = dynamicGenerators.Locale();
 
-            expect(locale1.length).to.equal(2);
-            expect(locale2.length).to.equal(2);
+            expect(locale1.length).to.be.at.least(2).and.at.most(3);
+            expect(locale2.length).to.be.at.least(2).and.at.most(3);
             expect(locale1).to.not.equal(locale2);
         });
     });
