@@ -19,16 +19,8 @@ describe('String utilities', function () {
 
     describe('Substitutor', function () {
         describe('default vars', function () {
-            describe('$randomInt', function () {
-                it('should work correctly', function () {
-                    expect(Substitutor.DEFAULT_VARS.$randomInt()).to.be.within(0, 1000);
-                });
-            });
-
-            describe('faker variables', function () {
-                it('should resolve (sampled)', function () {
-                    expect(Substitutor.DEFAULT_VARS.$randomProductMaterial).to.be.a('function');
-                });
+            it('should not be empty', function () {
+                expect(Substitutor.DEFAULT_VARS).to.not.be.empty;
             });
         });
     });

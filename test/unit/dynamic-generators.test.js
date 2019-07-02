@@ -27,6 +27,25 @@ describe('Dynamic variable', function () {
         });
     });
 
+    describe('randomInt', function () {
+        it('should return a random number', function () {
+            expect(dynamicGenerators.randomInt()).to.be.within(0, 1000);
+        });
+    });
+
+    describe('timeStamp', function () {
+        it('should return a valid timestamp', function () {
+            expect(dynamicGenerators.timestamp()).to.be.a('number');
+        });
+    });
+
+    describe('guid', function () {
+        it('should return a valid uuid', function () {
+            expect(dynamicGenerators.guid())
+                .to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+        });
+    });
+
     describe('randomPhoneNumber', function () {
         it('returns a random phone number without extension', function () {
             var phone1 = dynamicGenerators.randomPhoneNumber(),
@@ -43,8 +62,8 @@ describe('Dynamic variable', function () {
             var locale1 = dynamicGenerators.randomLocale(),
                 locale2 = dynamicGenerators.randomLocale();
 
-            expect(locale1.length).to.equal(2);
-            expect(locale2.length).to.equal(2);
+            expect(locale1.length).to.be.at.least(2).and.at.most(3);
+            expect(locale2.length).to.be.at.least(2).and.at.most(3);
             expect(locale1).to.not.equal(locale2);
         });
     });
