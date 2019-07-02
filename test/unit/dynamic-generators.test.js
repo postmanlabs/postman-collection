@@ -44,5 +44,23 @@ describe('Overridden generator', function () {
             expect(wordsArray.length).to.be.at.least(2);
         });
     });
+
+    describe('FilePath', function () {
+        it('returns a file path', function () {
+            var filePath = dynamicGenerators.FilePath();
+
+            expect(filePath).to.not.be.undefined;
+            expect(filePath).to.not.be.null;
+        });
+    });
+
+    describe('DirectoryPath', function () {
+        it('returns a directory path', function () {
+            var directoryPath = dynamicGenerators.DirectoryPath();
+
+            expect(directoryPath).to.not.be.undefined;
+            expect(directoryPath).to.not.be.null;
+        });
+    });
 });
 
