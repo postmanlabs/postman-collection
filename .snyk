@@ -1,0 +1,38 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-450202:
+    - jsdoc > catharsis > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - karma-browserify > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - karma > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - eslint > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - eslint-plugin-jsdoc > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - eslint-plugin-lodash > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - async > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - schema-compiler > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - jsdoc > requizzle > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - karma > combine-lists > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - eslint > table > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - eslint > inquirer > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - mocha > yargs-unparser > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - jsdoc-to-markdown > jsdoc-api > jsdoc > requizzle > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
+    - jsdoc-to-markdown > jsdoc-api > jsdoc > catharsis > lodash:
+        patched: '2019-07-03T23:16:59.854Z'
