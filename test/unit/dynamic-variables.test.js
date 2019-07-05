@@ -19,6 +19,12 @@ describe('Dynamic variable', function () {
             });
         });
 
+        it('should start with $', function () {
+            _.forOwn(dynamicVariables, function (variable, name) {
+                expect(name[0]).to.equal('$');
+            });
+        });
+
         it('$randomInt should return a random number', function () {
             expect(dynamicVariables.$randomInt.generator()).to.be.within(0, 1000);
         });
