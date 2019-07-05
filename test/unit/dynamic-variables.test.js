@@ -12,16 +12,6 @@ describe('Dynamic variable', function () {
         });
     });
 
-    it('should not be a duplicate', function () {
-        var dynamicVariableSet = [];
-
-        _.forOwn(dynamicVariables, function (dynamicVariable, name) {
-            expect(dynamicVariableSet[name]).to.be.undefined;
-            dynamicVariableSet[name] = dynamicVariable;
-        });
-    });
-
-
     describe('generator', function () {
         it('should return random data', function () {
             _.forOwn(dynamicVariables, function (variable) {
