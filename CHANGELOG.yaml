@@ -1,4 +1,8 @@
 master:
+  chores:
+    - >-
+      GH-904 Modify dynamic generators key-value pairs to key-object pairs which
+      can store variable descriptions as well
   fixed bugs:
     - >-
       GH-897, GH-900, GH-901 Added dynamic generators for `superstring` module
