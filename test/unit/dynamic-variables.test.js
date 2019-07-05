@@ -4,6 +4,7 @@ var _ = require('lodash'),
 
 describe('Dynamic variable', function () {
     it('should have all attributes', function () {
+        expect(dynamicVariables).to.be.an('object');
         _.forOwn(dynamicVariables, function (dynamicVariable) {
             expect(dynamicVariable).to.be.an('object');
             expect(dynamicVariable.description).to.be.a('string');
@@ -27,29 +28,21 @@ describe('Dynamic variable', function () {
                 expect(variable.generator()).to.not.be.undefined;
             });
         });
-    });
 
-    describe('$randomInt', function () {
-        it('should return a random number', function () {
+        it('$randomInt should return a random number', function () {
             expect(dynamicVariables.$randomInt.generator()).to.be.within(0, 1000);
         });
-    });
 
-    describe('$timeStamp', function () {
-        it('should return a valid timestamp', function () {
+        it('$timeStamp should return a valid timestamp', function () {
             expect(dynamicVariables.$timestamp.generator()).to.be.a('number');
         });
-    });
 
-    describe('$guid', function () {
-        it('should return a valid uuid', function () {
+        it('$guid should return a valid uuid', function () {
             expect(dynamicVariables.$guid.generator())
                 .to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
         });
-    });
 
-    describe('$randomPhoneNumber', function () {
-        it('returns a random phone number without extension', function () {
+        it('$randomPhoneNumber returns a random phone number without extension', function () {
             var phone1 = dynamicVariables.$randomPhoneNumber.generator(),
                 phone2 = dynamicVariables.$randomPhoneNumber.generator();
 
@@ -57,10 +50,8 @@ describe('Dynamic variable', function () {
             expect(phone2.length).to.equal(12);
             expect(phone1).to.not.equal(phone2);
         });
-    });
 
-    describe('$randomLocale', function () {
-        it('returns a random locale', function () {
+        it('$randomLocale returns a random locale', function () {
             var locale1 = dynamicVariables.$randomLocale.generator(),
                 locale2 = dynamicVariables.$randomLocale.generator();
 
@@ -68,10 +59,8 @@ describe('Dynamic variable', function () {
             expect(locale2.length).to.be.at.least(2).and.at.most(3);
             expect(locale1).to.not.equal(locale2);
         });
-    });
 
-    describe('$randomPhoneNumberExt', function () {
-        it('returns a random phone number with extension', function () {
+        it('$randomPhoneNumberExt returns a random phone number with extension', function () {
             var phone1 = dynamicVariables.$randomPhoneNumberExt.generator(),
                 phone2 = dynamicVariables.$randomPhoneNumberExt.generator();
 
@@ -79,29 +68,23 @@ describe('Dynamic variable', function () {
             expect(phone2.length).to.be.at.least(14);
             expect(phone1).to.not.equal(phone2);
         });
-    });
 
-    describe('$randomWords', function () {
-        it('returns some random numbers', function () {
+        it('$randomWords returns some random numbers', function () {
             var words = dynamicVariables.$randomWords.generator(),
                 wordsArray = words.split(' ');
 
             expect(words).to.not.be.null;
             expect(wordsArray.length).to.be.at.least(2);
         });
-    });
 
-    describe('$randomFilePath', function () {
-        it('returns a file path', function () {
+        it('$randomFilePath returns a file path', function () {
             var filePath = dynamicVariables.$randomFilePath.generator();
 
             expect(filePath).to.not.be.undefined;
             expect(filePath).to.not.be.null;
         });
-    });
 
-    describe('$randomDirectoryPath', function () {
-        it('returns a directory path', function () {
+        it('$randomDirectoryPath returns a directory path', function () {
             var directoryPath = dynamicVariables.$randomDirectoryPath.generator();
 
             expect(directoryPath).to.not.be.undefined;
