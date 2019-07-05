@@ -1,8 +1,11 @@
 master:
-  fixed bugs:
+  chores:
     - >-
       GH-897, GH-900, GH-901 Added dynamic generators for `superstring` module
       and removed invalid/unsupported faker generators.
+    - >-
+      GH-904 Modify dynamic generators key-value pairs to key-object pairs which
+      can store variable descriptions as well
 
 3.5.0:
   date: 2019-06-17
