@@ -86,7 +86,8 @@
   },
   "greenkeeper": {
     "ignore": [
-      "file-type"
+      "file-type",
+      "eslint-plugin-jsdoc"
     ]
   }
 }
