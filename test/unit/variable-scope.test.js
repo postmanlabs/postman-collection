@@ -631,6 +631,40 @@ describe('VariableScope', function () {
                 expect(scope.values.count()).to.equal(0);
             });
         });
+
+        describe('replaceIn', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'name',
+                    value: 'Cooper'
+                }, {
+                    key: 'job',
+                    value: 'Postman'
+                }, {
+                    key: 'nothing',
+                    value: 'disabled value',
+                    disabled: true
+                }]
+            });
+
+            it('should resolve all variables in object', function () {
+                var obj = { name: '{{name}}', job: '{{job}}' };
+                expect(scope.replaceIn(obj)).to.eql({
+                    name: 'Cooper',
+                    job: 'Postman'
+                });
+            });
+
+            it('should resolve all variables in string', function () {
+                expect(scope.replaceIn('I am {{name}} and I work at {{job}}'))
+                    .to.equal('I am Cooper and I work at Postman');
+            });
+
+            it('should not resolve disabled variables', function () {
+                expect(scope.replaceIn('I am {{name}} and I work at {{nothing}}'))
+                    .to.equal('I am Cooper and I work at {{nothing}}');
+            });
+        });
     });
 
     describe('isVariableScope', function () {
