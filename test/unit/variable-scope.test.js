@@ -633,25 +633,25 @@ describe('VariableScope', function () {
         });
 
         describe('replaceIn', function () {
-            var scope = new VariableScope({
-                values: [{
-                    key: 'name',
-                    value: 'Cooper'
-                }, {
-                    key: 'job',
-                    value: 'Postman'
-                }, {
-                    key: 'nothing',
-                    value: 'disabled value',
-                    disabled: true
-                }]
-            });
+            var layer1 = new VariableList({}, [{ key: 'name', value: 'Cooper' }]),
+                layer2 = new VariableList({}, [{ key: 'job', value: 'Postman' }]),
+                scope = new VariableScope({
+                    values: [{
+                        key: 'place',
+                        value: 'Bangalore'
+                    }, {
+                        key: 'nothing',
+                        value: 'disabled value',
+                        disabled: true
+                    }]
+                }, [layer1, layer2]);
 
             it('should resolve all variables in object', function () {
-                var obj = { name: '{{name}}', job: '{{job}}' };
+                var obj = { name: '{{name}}', job: '{{job}}', place: '{{place}}' };
                 expect(scope.replaceIn(obj)).to.eql({
                     name: 'Cooper',
-                    job: 'Postman'
+                    job: 'Postman',
+                    place: 'Bangalore'
                 });
             });
 
