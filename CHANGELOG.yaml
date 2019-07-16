@@ -1,4 +1,8 @@
 master:
+  new features:
+    - >-
+      GH-914 Added a new function `replaceIn` to resolve variables in a given
+      template to their values
   chores:
     - >-
       GH-897, GH-900, GH-901 Added dynamic generators for `superstring` module
