@@ -1,8 +1,8 @@
 master:
   new features:
     - >-
-      GH-914 Added a new function `replaceIn` to resolve variables in a given
-      template to their values
+      GH-914 Added a new method `VariableScope~replaceIn` to resolve variables
+      to their values in a given template
   chores:
     - >-
       GH-897, GH-900, GH-901 Added dynamic generators for `superstring` module
