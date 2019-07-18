@@ -645,8 +645,6 @@ describe('VariableScope', function () {
                 expect(scope.replaceIn(undefined)).to.equal(undefined);
                 expect(scope.replaceIn(true)).to.equal(true);
                 expect(scope.replaceIn({})).to.eql({});
-                expect(scope.replaceIn('`console.error()`')).to.equal('`console.error()`');
-
             });
 
             it('should work with no variables ', function () {
