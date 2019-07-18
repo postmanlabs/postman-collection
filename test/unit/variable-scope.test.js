@@ -747,32 +747,21 @@ describe('VariableScope', function () {
 
             it('should be able to resolve variables deeply', function () {
                 var scope = new VariableScope({
-                        values: [{
-                            key: 'var1',
-                            value: 'var2'
-                        }, {
-                            key: 'var2',
-                            value: 'var1'
-                        }, {
-                            key: 'var1var2',
-                            value: 'var3'
-                        }]
-                    }),
-                    tests = [
-                        ['{{var1}}', 'var2'],
-                        ['{var1}}', '{var1}}'],
-                        ['{{var1}', '{{var1}'],
-                        ['{{{{var1}}', '{{var2'],
-                        ['{{ {{var1}} }}', '{{ var2 }}'],
-                        ['{}{{var1}}}{{}{}}}{{var2}}}{}', '{}var2}{{}{}}}var1}{}'],
-                        ['{{{{var2}}{{var1}}}}', 'var3']
-                    ],
-                    i,
-                    len = tests.length;
+                    values: [{
+                        key: 'var1',
+                        value: 'var2'
+                    }, {
+                        key: 'var2',
+                        value: 'var3'
+                    }, {
+                        key: 'var3',
+                        value: 'value'
+                    }]
+                });
 
-                for (i = 0; i < len; i++) {
-                    expect(scope.replaceIn(tests[i][0])).to.equal(tests[i][1]);
-                }
+                expect(scope.replaceIn('{{var1}}')).to.equal('var2');
+                expect(scope.replaceIn('{{{{var1}}}}')).to.equal('var3');
+                expect(scope.replaceIn('{{{{{{var1}}}}}}')).to.equal('value');
             });
 
             it('should handle layers priority', function () {
