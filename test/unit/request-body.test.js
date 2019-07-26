@@ -262,7 +262,7 @@ describe('RequestBody', function () {
             });
         });
 
-        it.only('should update the body Options to undefined', function () {
+        it('should update the body Options to undefined', function () {
             var body = new RequestBody({
                 mode: 'raw',
                 raw: 'Hello',
