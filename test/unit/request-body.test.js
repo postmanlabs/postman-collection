@@ -129,7 +129,7 @@ describe('RequestBody', function () {
         expect(new RequestBody(2)).to.be.empty;
     });
 
-    it('should be able to store body options in raw mode', function () {
+    it('should be able to store body options', function () {
         var body = new RequestBody({
             mode: 'raw',
             raw: 'Hello',
@@ -234,7 +234,7 @@ describe('RequestBody', function () {
             expect(body).to.have.property('disabled', true);
         });
 
-        it('should handle change in body Options', function () {
+        it('should handle update in body Options', function () {
             var body = new RequestBody({
                 mode: 'raw',
                 raw: 'Hello',
@@ -260,6 +260,25 @@ describe('RequestBody', function () {
                     contentType: 'application/xml'
                 }
             });
+        });
+
+        it.only('should update the body Options to undefined', function () {
+            var body = new RequestBody({
+                mode: 'raw',
+                raw: 'Hello',
+                options: {
+                    raw: {
+                        contentType: 'application/json'
+                    }
+                }
+            });
+            body.update({
+                mode: 'raw',
+                raw: 'foo'
+            });
+
+            expect(body).to.have.property('options');
+            expect(body.options).to.eql(undefined);
         });
     });
 
