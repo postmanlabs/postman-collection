@@ -3,6 +3,8 @@ master:
     - >-
       GH-914 Added a new method `VariableScope~replaceIn` to resolve variables
       to their values in a given template
+    - >-
+      GH-921 Added support to store `options` in request body
   chores:
     - >-
       GH-897, GH-900, GH-901 Added dynamic generators for `superstring` module
