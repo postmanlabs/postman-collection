@@ -631,6 +631,181 @@ describe('VariableScope', function () {
                 expect(scope.values.count()).to.equal(0);
             });
         });
+
+        describe('replaceIn', function () {
+            it('should handle all inputs', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var1',
+                        value: 'value1'
+                    }]
+                });
+                expect(scope.replaceIn('{{var1}}')).to.equal('value1');
+                expect(scope.replaceIn(null)).to.equal(null);
+                expect(scope.replaceIn(undefined)).to.equal(undefined);
+                expect(scope.replaceIn(true)).to.equal(true);
+                expect(scope.replaceIn({})).to.eql({});
+            });
+
+            it('should work with no variables ', function () {
+                var emptyScope = new VariableScope();
+                expect(emptyScope.replaceIn('{{var1}}')).to.equal('{{var1}}');
+            });
+
+            it('should resolve all variables in object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'name',
+                            value: 'Cooper'
+                        }, {
+                            key: 'job',
+                            value: 'Postman'
+                        }]
+                    }),
+                    obj = { name: '{{name}}', job: '{{job}}' };
+
+                expect(scope.replaceIn(obj)).to.eql({ name: 'Cooper', job: 'Postman' });
+            });
+
+            it('should resolve all variables in string', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'name',
+                        value: 'Cooper'
+                    }, {
+                        key: 'job',
+                        value: 'Postman'
+                    }]
+                });
+
+                expect(scope.replaceIn('I am {{name}} and I work at {{job}}'))
+                    .to.equal('I am Cooper and I work at Postman');
+            });
+
+            it('should resolve all variables in arrays', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'name',
+                        value: 'Cooper'
+                    }, {
+                        key: 'job',
+                        value: 'Postman'
+                    }]
+                });
+
+                expect(scope.replaceIn([])).to.eql([]);
+                expect(scope.replaceIn(['text'])).to.eql(['text']);
+                expect(scope.replaceIn(['{{name}}'])).to.eql(['Cooper']);
+                expect(scope.replaceIn([{ name: '{{name}}' }, { job: '{{job}}' }]))
+                    .to.eql([{ name: 'Cooper' }, { job: 'Postman' }]);
+            });
+
+            it('should resolve variables in a user defined type instance', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var',
+                            value: 'value'
+                        }]
+                    }),
+                    MyVar = function (val) {
+                        this.val = val;
+                    },
+                    myVar = new MyVar('{{var}}');
+
+                expect(scope.replaceIn(myVar)).to.eql({ val: 'value' });
+            });
+
+            it('should not resolve disabled variables', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'name',
+                        value: 'Cooper'
+                    }, {
+                        key: 'job',
+                        value: 'Postman',
+                        disabled: true
+                    }]
+                });
+
+                expect(scope.replaceIn('I am {{name}} and I work at {{job}}'))
+                    .to.equal('I am Cooper and I work at {{job}}');
+            });
+
+            it('should not resolve variable templates with spaces', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'place',
+                        value: 'Bangalore'
+                    }]
+                });
+
+                expect(scope.replaceIn('{{place}} is not {{ place }}'))
+                    .to.equal('Bangalore is not {{ place }}');
+            });
+
+            it('should be able to resolve variables deeply', function () {
+                var scope = new VariableScope({
+                    values: [{
+                        key: 'var1',
+                        value: 'var2'
+                    }, {
+                        key: 'var2',
+                        value: 'var3'
+                    }, {
+                        key: 'var3',
+                        value: 'value'
+                    }]
+                });
+
+                expect(scope.replaceIn('{{var1}}')).to.equal('var2');
+                expect(scope.replaceIn('{{{{var1}}}}')).to.equal('var3');
+                expect(scope.replaceIn('{{{{{{var1}}}}}}')).to.equal('value');
+            });
+
+            it('should handle layers priority', function () {
+                var layer1 = new VariableList({}, [{
+                        key: 'var1',
+                        value: 'value1.1'
+                    }, {
+                        key: 'var2',
+                        value: 'value1.2'
+                    }, {
+                        key: 'var3',
+                        value: 'value1.3',
+                        disabled: true
+                    }, {
+                        key: 'var4',
+                        value: 'value1.4'
+                    }]),
+                    layer2 = new VariableList({}, [{
+                        key: 'var2',
+                        value: 'value2.2'
+                    }, {
+                        key: 'var3',
+                        value: 'value2.3',
+                        disabled: true
+                    }]),
+                    layer3 = new VariableList({}, [{
+                        key: 'var1',
+                        value: 'value3.1'
+                    }, {
+                        key: 'var4',
+                        value: 'value3.4'
+                    }]),
+                    scope1 = new VariableScope({}, [layer1, layer2, layer3]),
+                    scope2 = new VariableScope({}, [layer3, layer1, layer2]);
+
+                expect(scope1.replaceIn('{{var1}}')).to.equal('value1.1');
+                expect(scope1.replaceIn('{{var2}}')).to.equal('value1.2');
+                expect(scope1.replaceIn('{{var3}}')).to.equal('{{var3}}');
+                expect(scope1.replaceIn('{{var4}}')).to.equal('value1.4');
+
+                expect(scope2.replaceIn('{{var1}}')).to.equal('value3.1');
+                expect(scope2.replaceIn('{{var2}}')).to.equal('value1.2');
+                expect(scope2.replaceIn('{{var3}}')).to.equal('{{var3}}');
+                expect(scope2.replaceIn('{{var4}}')).to.equal('value3.4');
+            });
+        });
     });
 
     describe('isVariableScope', function () {

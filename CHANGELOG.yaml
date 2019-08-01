@@ -1,3 +1,21 @@
+3.5.1:
+  date: 2019-08-01
+  new features:
+    - >-
+      GH-914 Added `VariableScope~replaceIn` method to resolve variables to
+      their values in a given template
+    - >-
+      GH-915 Added helper methods (toString, unparse, and, unparseSingle) to the
+      Cookie instance
+  chores:
+    - >-
+      GH-897, GH-900, GH-901 Added dynamic generators for `SuperString` module
+      and removed invalid/unsupported faker generators
+    - >-
+      GH-904 Modify dynamic generators key-value pairs to key-object pairs which
+      can store variable descriptions as well
+    - Updated dependencies
+
 3.5.0:
   date: 2019-06-17
   new features:
