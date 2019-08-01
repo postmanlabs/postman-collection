@@ -73,7 +73,7 @@
     "mustache": "3.0.1",
     "parse-gitignore": "1.0.1",
     "postman-jsdoc-theme": "0.0.3",
-    "postman-request": "2.88.1-postman.12",
+    "postman-request": "2.88.1-postman.13",
     "puppeteer": "1.19.0",
     "require-all": "3.0.0",
     "schema-compiler": "0.0.3",
