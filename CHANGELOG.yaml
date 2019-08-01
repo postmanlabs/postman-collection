@@ -10,6 +10,7 @@ master:
     - >-
       GH-904 Modify dynamic generators key-value pairs to key-object pairs which
       can store variable descriptions as well
+    - Updated dependencies
 
 3.5.0:
   date: 2019-06-17
