@@ -1,3 +1,8 @@
+master:
+  new features:
+    - >-
+      GH-921 Added support to store `options` in request body
+      
 3.5.1:
   date: 2019-08-01
   new features:
