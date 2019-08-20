@@ -26,26 +26,70 @@ describe('Header', function () {
         });
     });
 
-    it('should have a .create to create a new instance', function () {
-        expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date').toJSON()).to.eql({
-            key: 'Date',
-            value: 'Mon, 25 Jul 2016 13:11:41 GMT'
+    describe('create', function () {
+        it('should have a .create to create a new instance', function () {
+            expect(Header.create('Mon, 25 Jul 2016 13:11:41 GMT', 'Date').toJSON()).to.eql({
+                key: 'Date',
+                value: 'Mon, 25 Jul 2016 13:11:41 GMT'
+            });
+            expect(Header.create('value', 'name').toJSON()).to.eql({
+                key: 'name',
+                value: 'value'
+            });
+            expect(Header.create('name:value').toJSON()).to.eql({
+                key: 'name',
+                value: 'value'
+            });
+            expect(Header.create({ key: 'name', value: 'value' }).toJSON()).to.eql({
+                key: 'name',
+                value: 'value'
+            });
+            expect(Header.create('name: my: value:is this').toJSON()).to.eql({
+                key: 'name',
+                value: 'my: value:is this'
+            });
         });
-        expect(Header.create('value', 'name').toJSON()).to.eql({
-            key: 'name',
-            value: 'value'
+
+        it('should have empty string for undefined value', function () {
+            expect(Header.create({ key: 'name', value: undefined }).toJSON()).to.eql({
+                key: 'name',
+                value: ''
+            });
         });
-        expect(Header.create('name:value').toJSON()).to.eql({
-            key: 'name',
-            value: 'value'
+
+        it('should have empty string for null value', function () {
+            expect(Header.create({ key: 'name', value: null }).toJSON()).to.eql({
+                key: 'name',
+                value: ''
+            });
         });
-        expect(Header.create({ key: 'name', value: 'value' }).toJSON()).to.eql({
-            key: 'name',
-            value: 'value'
+
+        it('should not have empty string when value is `0`', function () {
+            expect(Header.create({ key: 'name', value: 0 }).toJSON()).to.eql({
+                key: 'name',
+                value: 0
+            });
         });
-        expect(Header.create('name: my: value:is this').toJSON()).to.eql({
-            key: 'name',
-            value: 'my: value:is this'
+
+        it('should have empty string for undefined key', function () {
+            expect(Header.create({ key: undefined, value: 'value' }).toJSON()).to.eql({
+                key: '',
+                value: 'value'
+            });
+        });
+
+        it('should have empty string for null key', function () {
+            expect(Header.create({ key: null, value: 'value' }).toJSON()).to.eql({
+                key: '',
+                value: 'value'
+            });
+        });
+
+        it('should not have empty string when key is `0`', function () {
+            expect(Header.create({ key: 0, value: 'value' }).toJSON()).to.eql({
+                key: 0,
+                value: 'value'
+            });
         });
     });
 
