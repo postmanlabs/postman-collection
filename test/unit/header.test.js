@@ -57,10 +57,10 @@ describe('Header', function () {
             });
         });
 
-        it('should have empty string for null value', function () {
+        it('should not have empty string for null value', function () {
             expect(Header.create({ key: 'name', value: null }).toJSON()).to.eql({
                 key: 'name',
-                value: ''
+                value: null
             });
         });
 
@@ -68,27 +68,6 @@ describe('Header', function () {
             expect(Header.create({ key: 'name', value: 0 }).toJSON()).to.eql({
                 key: 'name',
                 value: 0
-            });
-        });
-
-        it('should have empty string for undefined key', function () {
-            expect(Header.create({ key: undefined, value: 'value' }).toJSON()).to.eql({
-                key: '',
-                value: 'value'
-            });
-        });
-
-        it('should have empty string for null key', function () {
-            expect(Header.create({ key: null, value: 'value' }).toJSON()).to.eql({
-                key: '',
-                value: 'value'
-            });
-        });
-
-        it('should not have empty string when key is `0`', function () {
-            expect(Header.create({ key: 0, value: 'value' }).toJSON()).to.eql({
-                key: 0,
-                value: 'value'
             });
         });
     });
