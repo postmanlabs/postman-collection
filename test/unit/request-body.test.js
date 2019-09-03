@@ -129,6 +129,24 @@ describe('RequestBody', function () {
         expect(new RequestBody(2)).to.be.empty;
     });
 
+    it('should be able to store body options', function () {
+        var body = new RequestBody({
+            mode: 'raw',
+            raw: 'Hello',
+            options: {
+                raw: {
+                    contentType: 'application/json'
+                }
+            }
+        });
+        expect(body).to.have.property('options');
+        expect(body.options).to.eql({
+            raw: {
+                contentType: 'application/json'
+            }
+        });
+    });
+
     describe('.update', function () {
         it('should use the raw request body by if an invalid mode is specified', function () {
             var reqData = new RequestBody({
@@ -214,6 +232,53 @@ describe('RequestBody', function () {
 
             body.update({ mode: 'raw', raw: 'foo', disabled: true });
             expect(body).to.have.property('disabled', true);
+        });
+
+        it('should handle update in body Options', function () {
+            var body = new RequestBody({
+                mode: 'raw',
+                raw: 'Hello',
+                options: {
+                    raw: {
+                        contentType: 'application/json'
+                    }
+                }
+            });
+            body.update({
+                mode: 'raw',
+                raw: 'foo',
+                options: {
+                    raw: {
+                        contentType: 'application/xml'
+                    }
+                }
+            });
+
+            expect(body).to.have.property('options');
+            expect(body.options).to.eql({
+                raw: {
+                    contentType: 'application/xml'
+                }
+            });
+        });
+
+        it('should update the body Options to undefined', function () {
+            var body = new RequestBody({
+                mode: 'raw',
+                raw: 'Hello',
+                options: {
+                    raw: {
+                        contentType: 'application/json'
+                    }
+                }
+            });
+            body.update({
+                mode: 'raw',
+                raw: 'foo'
+            });
+
+            expect(body).to.have.property('options');
+            expect(body.options).to.eql(undefined);
         });
     });
 

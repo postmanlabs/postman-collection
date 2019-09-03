@@ -1,3 +1,14 @@
+3.5.2:
+  date: 2019-09-04
+  new features:
+    - GH-921 Added support for request body `options`
+  fixed bugs:
+    - >-
+      GH-931 Fixed a bug where header with value `0` was being replaced by empty
+      string
+  chores:
+    - Updated dependencies
+
 3.5.1:
   date: 2019-08-01
   new features:
