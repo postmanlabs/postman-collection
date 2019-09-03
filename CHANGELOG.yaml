@@ -2,9 +2,10 @@ master:
   fixed bugs:
     - GH-931 Fixed a bug where header with value `0` was being replaced by empty string
   new features:
-    - >-
-      GH-921 Added support to store `options` in request body
-      
+    - GH-921 Added support for request body `options`
+  chores:
+    - Updated dependencies
+
 3.5.1:
   date: 2019-08-01
   new features:
