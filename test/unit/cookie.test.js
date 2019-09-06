@@ -36,6 +36,16 @@ describe('Cookie', function () {
             expect(strCookie.expires).to.be.ok;
         });
 
+        it('should handle malformed values', function () {
+            var strCookie = new Cookie('foo=%E0%A4%A');
+
+            expect(strCookie).to.deep.include({
+                name: 'foo',
+                value: '%25E0%25A4%25A'
+            });
+            expect(strCookie.valueOf()).to.equal('%E0%A4%A');
+        });
+
         describe('has property', function () {
             it('domain', function () {
                 expect(cookie).to.have.property('domain', rawCookie.domain);
