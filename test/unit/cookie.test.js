@@ -41,7 +41,7 @@ describe('Cookie', function () {
 
             expect(strCookie).to.deep.include({
                 name: 'foo',
-                value: '%E0%A4%A'
+                value: '%25E0%25A4%25A'
             });
             expect(strCookie.valueOf()).to.equal('%E0%A4%A');
         });
