@@ -1,3 +1,8 @@
+3.5.3:
+  date: 2019-09-06
+  fixed bugs:
+    - GH-938 Fixed a bug where malformed cookie value throws URIError
+
 3.5.2:
   date: 2019-09-04
   new features:

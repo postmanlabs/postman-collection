@@ -43,6 +43,24 @@ describe('SDK Utils', function () {
                 expect(util.lodash.randomString()).to.match(/^[A-z0-9]{6}$/);
             });
         });
+
+        describe('.ensureEncoded', function () {
+            it('should encode correctly', function () {
+                expect(util.lodash.ensureEncoded('hello world')).to.equal('hello%20world');
+            });
+
+            it('should not double encode', function () {
+                expect(util.lodash.ensureEncoded('hello%20world')).to.equal('hello%20world');
+            });
+
+            it('should handle malformed URI sequence on decode', function () {
+                expect(util.lodash.ensureEncoded('%E0%A4%A')).to.equal('%25E0%25A4%25A');
+            });
+
+            it('should handle malformed URI sequence on encode', function () {
+                expect(util.lodash.ensureEncoded('\uD800')).to.equal('\uD800');
+            });
+        });
     });
 
     describe('.btoa', function () {
