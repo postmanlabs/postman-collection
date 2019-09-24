@@ -185,6 +185,28 @@ describe('Proxy Config List', function () {
             expect(list.resolve('foo://www.foo.com/bar')).to.be.undefined;
         });
 
+        it('should not match if URL pattern matches in bypass list', function () {
+            var parent = {},
+                list = new ProxyConfigList(parent,
+                    [
+                        { match: 'http+https://*/*', host: 'proxy.com', bypass: ['*://localhost/*'] }
+                    ]
+                );
+            expect(list.resolve('http://localhost')).to.be.undefined;
+            expect(list.resolve('http://foo.com').host).to.eql('proxy.com');
+        });
+
+        it('should lookup all the config list until one resolves', function () {
+            var parent = {},
+                list = new ProxyConfigList(parent,
+                    [
+                        { match: 'http+https://*/*', host: 'proxy.com', bypass: ['*://localhost/*'] },
+                        { match: 'http+https://*/*', host: 'localhost-proxy.com', bypass: ['*://foo.com/*'] }
+                    ]
+                );
+            expect(list.resolve('http://localhost').host).to.eql('localhost-proxy.com');
+            expect(list.resolve('http://foo.com').host).to.eql('proxy.com');
+        });
     });
 
     describe('resolve', function () {
