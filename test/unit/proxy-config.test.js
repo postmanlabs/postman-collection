@@ -68,6 +68,7 @@ describe('Proxy Config', function () {
                     host: newHost,
                     port: newPort,
                     tunnel: true,
+                    bypass: ['http://localhost/*'],
                     authenticate: true,
                     username: newUsername,
                     password: newPassword
@@ -77,6 +78,7 @@ describe('Proxy Config', function () {
             expect(p1).to.deep.include({
                 host: DEFAULT_HOST,
                 port: DEFAULT_PORT,
+                bypass: undefined,
                 authenticate: false,
                 username: undefined,
                 password: undefined,
@@ -84,6 +86,7 @@ describe('Proxy Config', function () {
             });
 
             expect(p2.match.pattern).to.equal(newMatch);
+            expect(p2.bypass.members[0]).to.deep.include({ pattern: 'http://localhost/*' });
             expect(p2).to.deep.include({
                 host: newHost,
                 port: newPort,
@@ -96,6 +99,7 @@ describe('Proxy Config', function () {
             p1.update(p2);
 
             expect(p1.match.pattern).to.equal(newMatch);
+            expect(p1.bypass.members[0]).to.deep.include({ pattern: 'http://localhost/*' });
             expect(p1).to.deep.include({
                 host: newHost,
                 port: newPort,
@@ -191,6 +195,16 @@ describe('Proxy Config', function () {
             var pc = new ProxyConfig({ host: 'proxy.com', tunnel: true });
             expect(pc.test(new Url('http://www.google.com/'))).to.be.true;
             expect(pc.test(new Url('http://foo.bar.com/'))).to.be.true;
+        });
+
+        it('should not match if URL pattern matches in bypass list', function () {
+            var pc = new ProxyConfig({ host: 'proxy.com', bypass: ['http://localhost/*', '*://*/no-proxy'] });
+            expect(pc.test('http://localhost')).to.be.false;
+            expect(pc.test('http://localhost/proxy')).to.be.false;
+            expect(pc.test('https://localhost')).to.be.true;
+            expect(pc.test('https://localhost/no-proxy')).to.be.false;
+            expect(pc.test('http://www.google.com/')).to.be.true;
+            expect(pc.test('http://www.google.com/no-proxy')).to.be.false;
         });
 
         it('should parse any URL that uses the http protocol', function () {
@@ -292,7 +306,8 @@ describe('Proxy Config', function () {
                     disabled: false,
                     authenticate: true,
                     username: 'user',
-                    password: 'pass'
+                    password: 'pass',
+                    bypass: ['http://127.0.0.1', 'http+https://localhost/*']
                 },
                 proxyConfig = new ProxyConfig(rawConfig),
                 serialisedConfig = proxyConfig.toJSON();
@@ -301,6 +316,10 @@ describe('Proxy Config', function () {
                 match: {
                     pattern: rawConfig.match
                 },
+                bypass: [
+                    { pattern: 'http://127.0.0.1' },
+                    { pattern: 'http+https://localhost/*' }
+                ],
                 tunnel: rawConfig.tunnel,
                 disabled: rawConfig.disabled,
                 authenticate: rawConfig.authenticate,
