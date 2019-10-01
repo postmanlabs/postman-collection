@@ -1,4 +1,5 @@
-master:
+3.5.4:
+  date: 2019-10-01
   new features:
     - GH-942 Updated `ProxyConfig` to support proxy bypass list
 
