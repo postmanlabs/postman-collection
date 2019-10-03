@@ -29,7 +29,9 @@
     "test-browser": "node npm/test-browser.js",
     "test-lint": "node npm/test-lint.js",
     "test-unit": "node npm/test-unit.js",
-    "test-benchmark": "node npm/test-benchmark.js"
+    "test-benchmark": "node npm/test-benchmark.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "escape-html": "1.0.3",
@@ -45,7 +47,8 @@
     "postman-url-encoder": "1.0.2",
     "sanitize-html": "1.20.1",
     "semver": "6.3.0",
-    "uuid": "3.3.3"
+    "uuid": "3.3.3",
+    "snyk": "^1.230.5"
   },
   "devDependencies": {
     "async": "2.6.2",
@@ -89,5 +92,6 @@
       "file-type",
       "eslint-plugin-jsdoc"
     ]
-  }
+  },
+  "snyk": true
 }
