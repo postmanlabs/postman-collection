@@ -345,4 +345,19 @@ describe('Proxy Config', function () {
             expect(ProxyConfig.isProxyConfig()).to.be.false;
         });
     });
+
+    describe('getProxyUrl', function () {
+        it('should escape special characters in auth params', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true,
+                username: '#@?:',
+                password: '#@?:'
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://%23%40%3F%3A:%23%40%3F%3A@proxy.com:9090');
+        });
+    });
 });
