@@ -1,3 +1,9 @@
+master:
+  fixed bugs:
+    - >
+      GH-958 Fixed a bug where special characters in proxy auth credentials
+      caused connection failure to the proxy server
+
 3.5.4:
   date: 2019-10-01
   new features:
