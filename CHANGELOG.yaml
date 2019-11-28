@@ -1,4 +1,6 @@
 master:
+  chores:
+    - GH-960 Accept Response.stream to be a Base64 string
   fixed bugs:
     - >
       GH-958 Fixed a bug where special characters in proxy auth credentials
