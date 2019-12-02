@@ -35,6 +35,20 @@ describe('Response', function () {
             global.Buffer = originalBuffer;
         });
 
+        it('should handle base64 response stream', function () {
+            var buffer = Buffer.from('Postman'),
+                response = new Response({
+                    stream: {
+                        type: 'Base64',
+                        data: buffer.toString('base64')
+                    }
+                });
+
+            expect(response.toJSON()).to.have.property('stream')
+                .that.eql(buffer.toJSON());
+            expect(response.text()).to.equal('Postman');
+        });
+
         it('should handle non atomic bodies correctly', function () {
             var response = new Response({ body: { foo: 'bar' } });
 
