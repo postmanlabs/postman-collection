@@ -1,5 +1,5 @@
 master:
-  chores:
+  new features:
     - GH-960 Accept Response.stream to be a Base64 string
   fixed bugs:
     - >
