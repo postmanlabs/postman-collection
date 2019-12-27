@@ -147,17 +147,17 @@ describe('QueryParam', function () {
     });
 
     it('should not url encode by default', function () {
-        var rawQueryString = 'x=y%z',
+        var rawQueryString = 'x=y#z',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params);
         expect(paramStr).to.eql(rawQueryString);
     });
 
     it('should url encode if explicitly asked to', function () {
-        var rawQueryString = 'x=y%z',
+        var rawQueryString = 'x=y#z',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params, { encode: true });
-        expect(paramStr).to.eql('x=y%25z');
+        expect(paramStr).to.eql('x=y%23z');
     });
 
     it('should be able to unparse when values are given as an object', function () {
@@ -331,6 +331,24 @@ describe('QueryParam', function () {
             })).to.equal('a=c{{b}}&c=d');
         });
 
+        it('a=foo(a)', function () {
+            var parsed = [
+                { key: 'a', value: 'foo(a)' }
+            ];
+            expect(QueryParam.unparse(parsed, {
+                encode: true
+            })).to.equal('a=foo(a)');
+        });
+
+        it('percentage - "charwithPercent=%foo"', function () {
+            var parsed = [
+                { key: 'multibyte', value: '%foo' }
+            ];
+            expect(QueryParam.unparse(parsed, {
+                encode: true
+            })).to.equal('multibyte=%foo');
+        });
+
         it('a=обязательный&c=d', function () {
             var parsed = [
                 { key: 'a', value: 'обязательный' },
@@ -371,30 +389,12 @@ describe('QueryParam', function () {
             expect(QueryParam.unparse(parsed)).to.equal('multibyte=%F0%9D%8C%86');
         });
 
-        it('encoding percentage - "charwithPercent=%foo"', function () {
-            var parsed = [
-                { key: 'multibyte', value: '%foo' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('multibyte=%25foo');
-        });
-
         it('a[0]=foo&a[1]=bar', function () {
             var parsed = [
                 { key: 'a[0]', value: 'foo' },
                 { key: 'a[1]', value: 'bar' }
             ];
             expect(QueryParam.unparse(parsed)).to.equal('a[0]=foo&a[1]=bar');
-        });
-
-        it('encodes ( and )- "a=foo(a)"', function () {
-            var parsed = [
-                { key: 'a', value: 'foo(a)' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=foo%28a%29');
         });
 
         it('Russian - "a=Привет Почтальон"', function () {
