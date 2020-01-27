@@ -1,6 +1,8 @@
 master:
   new features:
     - GH-975 Updated URL parsing algorithm
+  chores:
+    - GH-961 Added `nyc` and `codecov` for code coverage checks
 
 3.5.5:
   date: 2019-12-02
