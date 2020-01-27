@@ -114,6 +114,8 @@ describe('Url', function () {
             // explicitly match object to track addition/deletion of properties.
             expect(subject).to.eql({
                 raw: '',
+                port: undefined,
+                auth: undefined,
                 protocol: undefined,
                 host: undefined,
                 path: undefined,
@@ -470,7 +472,7 @@ describe('Url', function () {
             expect(subject).to.deep.include({
                 protocol: 'file',
                 auth: undefined,
-                host: [''],
+                host: ['', '', ''],
                 path: ['path', 'to', 'file'],
                 port: undefined
             });

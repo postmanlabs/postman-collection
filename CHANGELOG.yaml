@@ -1,6 +1,6 @@
 master:
   new features:
-    - Updated URL parsing algorithm
+    - GH-975 Updated URL parsing algorithm
 
 3.5.5:
   date: 2019-12-02
