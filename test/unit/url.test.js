@@ -577,7 +577,7 @@ describe('Url', function () {
             expect(subject).to.deep.include({
                 raw: 'http://localhost\\foo\\bar',
                 host: ['localhost'],
-                path: ['foo\\bar']
+                path: ['foo', 'bar']
             });
         });
 
@@ -656,6 +656,19 @@ describe('Url', function () {
                 auth: {
                     user: 'user',
                     password: 'p:a:s:s'
+                }
+            });
+        });
+
+        it('should handle multiple @ in auth', function () {
+            var subject = Url.parse('http://us@r:p@ssword@localhost');
+            expect(subject).to.deep.include({
+                raw: 'http://us@r:p@ssword@localhost',
+                protocol: 'http',
+                host: ['localhost'],
+                auth: {
+                    user: 'us@r',
+                    password: 'p@ssword'
                 }
             });
         });
