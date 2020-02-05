@@ -692,6 +692,21 @@ describe('Url', function () {
             });
         });
 
+        it('should handle multiple &&&', function () {
+            var subject = Url.parse('http://localhost?foo=bar&&&bar=baz');
+            expect(subject).to.deep.include({
+                raw: 'http://localhost?foo=bar&&&bar=baz',
+                protocol: 'http',
+                host: ['localhost'],
+                query: [
+                    { key: 'foo', value: 'bar' },
+                    { key: null, value: null },
+                    { key: null, value: null },
+                    { key: 'bar', value: 'baz' }
+                ]
+            });
+        });
+
         it('should handle auth without password', function () {
             var subject = Url.parse('http://root@localhost');
             expect(subject).to.deep.include({
