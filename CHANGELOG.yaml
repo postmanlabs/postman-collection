@@ -1,4 +1,6 @@
 master:
+  new features:
+    - GH-975 Updated URL parsing algorithm
   chores:
     - GH-961 Added `nyc` and `codecov` for code coverage checks
     - Updated dependencies

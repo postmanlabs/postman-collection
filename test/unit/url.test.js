@@ -114,6 +114,8 @@ describe('Url', function () {
             // explicitly match object to track addition/deletion of properties.
             expect(subject).to.eql({
                 raw: '',
+                port: undefined,
+                auth: undefined,
                 protocol: undefined,
                 host: undefined,
                 path: undefined,
@@ -470,7 +472,7 @@ describe('Url', function () {
             expect(subject).to.deep.include({
                 protocol: 'file',
                 auth: undefined,
-                host: [''],
+                host: ['', '', ''],
                 path: ['path', 'to', 'file'],
                 port: undefined
             });
@@ -530,6 +532,192 @@ describe('Url', function () {
             expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
                 { key: '郵差' }, { key: 'foo.json' }
             ]);
+        });
+
+        it('should parse with variables having reserved characters', function () {
+            var subject = Url.parse('{{p://}}://{{@}}:{{###}}@{{host.name}}:{{:p}}/{{f/o/o}}/bar?{{?}}={{&}}#{{[#]}}');
+            expect(subject).to.deep.include({
+                raw: '{{p://}}://{{@}}:{{###}}@{{host.name}}:{{:p}}/{{f/o/o}}/bar?{{?}}={{&}}#{{[#]}}',
+                protocol: '{{p://}}',
+                auth: { user: '{{@}}', password: '{{###}}' },
+                host: ['{{host.name}}'],
+                port: '{{:p}}',
+                path: ['{{f/o/o}}', 'bar'],
+                query: [{ key: '{{?}}', value: '{{&}}' }],
+                hash: '{{[#]}}'
+            });
+        });
+
+        it('should handle newlines in every segment', function () {
+            var subject = Url.parse('http://\n:\r@\r.\n:\n/\n/\n?\n=\r#\n');
+            expect(subject).to.deep.include({
+                raw: 'http://\n:\r@\r.\n:\n/\n/\n?\n=\r#\n',
+                protocol: 'http',
+                auth: { user: '\n', password: '\r' },
+                host: ['\r', '\n'],
+                port: '\n',
+                path: ['\n', '\n'],
+                query: [{ key: '\n', value: '\r' }],
+                hash: '\n'
+            });
+        });
+
+        it('should handle empty port', function () {
+            var subject = Url.parse('localhost:/path');
+            expect(subject).to.deep.include({
+                raw: 'localhost:/path',
+                host: ['localhost'],
+                port: '',
+                path: ['path']
+            });
+        });
+
+        it('should handle \\ in pathname', function () {
+            var subject = Url.parse('http://localhost\\foo\\bar');
+            expect(subject).to.deep.include({
+                raw: 'http://localhost\\foo\\bar',
+                host: ['localhost'],
+                path: ['foo', 'bar']
+            });
+        });
+
+        it('should distinguish between hostname and path', function () {
+            var subject = Url.parse('http://postman.com:80\\@evil.com/#foo\\bar');
+            expect(subject).to.deep.include({
+                raw: 'http://postman.com:80\\@evil.com/#foo\\bar',
+                protocol: 'http',
+                host: ['postman', 'com'],
+                port: '80',
+                path: ['@evil.com', ''],
+                hash: 'foo\\bar'
+            });
+        });
+
+        it('should handle local IPv6 address', function () {
+            var subject = Url.parse('http://[::1]/path');
+            expect(subject).to.deep.include({
+                raw: 'http://[::1]/path',
+                host: ['[::1]'],
+                path: ['path']
+            });
+        });
+
+        it('should handle IPv6 address with port', function () {
+            var subject = Url.parse('http://[::1]:8080');
+            expect(subject).to.deep.include({
+                raw: 'http://[::1]:8080',
+                protocol: 'http',
+                host: ['[::1]'],
+                port: '8080'
+            });
+        });
+
+        it('should handle IPv6 address without port', function () {
+            var subject = Url.parse('http://[1080:0:0:0:8:800:200C:417A]/foo/bar?q=z');
+            expect(subject).to.deep.include({
+                raw: 'http://[1080:0:0:0:8:800:200C:417A]/foo/bar?q=z',
+                protocol: 'http',
+                host: ['[1080:0:0:0:8:800:200C:417A]'],
+                path: ['foo', 'bar'],
+                query: [{ key: 'q', value: 'z' }]
+            });
+        });
+
+        it('should handle IPv6 with auth', function () {
+            var subject = Url.parse('http://user:password@[1080:0:0:0:8:800:200C:417A]:8080');
+            expect(subject).to.deep.include({
+                raw: 'http://user:password@[1080:0:0:0:8:800:200C:417A]:8080',
+                protocol: 'http',
+                host: ['[1080:0:0:0:8:800:200C:417A]'],
+                auth: {
+                    user: 'user',
+                    password: 'password'
+                },
+                port: '8080'
+            });
+        });
+
+        it('should trim whitespace on the left', function () {
+            var subject = Url.parse(' \n\t\rhttp://localhost/path\n/name\n ');
+            expect(subject).to.deep.include({
+                raw: 'http://localhost/path\n/name\n ',
+                protocol: 'http',
+                host: ['localhost'],
+                path: ['path\n', 'name\n ']
+            });
+        });
+
+        it('should handle multiple : in auth', function () {
+            var subject = Url.parse('http://user:p:a:s:s@localhost');
+            expect(subject).to.deep.include({
+                raw: 'http://user:p:a:s:s@localhost',
+                protocol: 'http',
+                host: ['localhost'],
+                auth: {
+                    user: 'user',
+                    password: 'p:a:s:s'
+                }
+            });
+        });
+
+        it('should handle multiple @ in auth', function () {
+            var subject = Url.parse('http://us@r:p@ssword@localhost');
+            expect(subject).to.deep.include({
+                raw: 'http://us@r:p@ssword@localhost',
+                protocol: 'http',
+                host: ['localhost'],
+                auth: {
+                    user: 'us@r',
+                    password: 'p@ssword'
+                }
+            });
+        });
+
+        it('should handle multiple ???', function () {
+            var subject = Url.parse('http://localhost/p/q=foo@bar???&hl=en&src=api&x=2&y=2&z=3&s=');
+            expect(subject).to.deep.include({
+                raw: 'http://localhost/p/q=foo@bar???&hl=en&src=api&x=2&y=2&z=3&s=',
+                protocol: 'http',
+                host: ['localhost'],
+                path: ['p', 'q=foo@bar'],
+                query: [
+                    { key: '??', value: null },
+                    { key: 'hl', value: 'en' },
+                    { key: 'src', value: 'api' },
+                    { key: 'x', value: '2' },
+                    { key: 'y', value: '2' },
+                    { key: 'z', value: '3' },
+                    { key: 's', value: '' }
+                ]
+            });
+        });
+
+        it('should handle multiple &&&', function () {
+            var subject = Url.parse('http://localhost?foo=bar&&&bar=baz');
+            expect(subject).to.deep.include({
+                raw: 'http://localhost?foo=bar&&&bar=baz',
+                protocol: 'http',
+                host: ['localhost'],
+                query: [
+                    { key: 'foo', value: 'bar' },
+                    { key: null, value: null },
+                    { key: null, value: null },
+                    { key: 'bar', value: 'baz' }
+                ]
+            });
+        });
+
+        it('should handle auth without password', function () {
+            var subject = Url.parse('http://root@localhost');
+            expect(subject).to.deep.include({
+                raw: 'http://root@localhost',
+                protocol: 'http',
+                host: ['localhost'],
+                auth: {
+                    user: 'root',
+                    password: undefined
+                }
+            });
         });
     });
 
