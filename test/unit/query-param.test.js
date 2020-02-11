@@ -84,7 +84,7 @@ describe('QueryParam', function () {
                 expect(QueryParam.unparse()).to.equal('');
             });
 
-            it('should set value as empty for null and drop undefined', function () {
+            it('should handle null and undefined values', function () {
                 var queryParams = [{
                     key: 'foo',
                     value: 'foo'
@@ -96,20 +96,17 @@ describe('QueryParam', function () {
                     value: undefined
                 }];
 
-                // if query param value is undefined the param is not appeneded
-                // but the trailing ampersand is not removed
-                // this is the current behaviour
-                expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&');
+                expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&baz');
 
             });
 
-            it('should set value as empty for null and drop undefined when unparsing object format', function () {
+            it('should should handle null and undefined values when unparsing object format', function () {
                 expect(QueryParam.unparse({ foo: 'foo', bar: null, baz: undefined }))
 
                     // if query param value is undefined the param is not appeneded
                     // but the trailing ampersand is not removed
                     // this is the current behaviour
-                    .to.equal('foo=foo&bar&');
+                    .to.equal('foo=foo&bar&baz');
             });
         });
 
@@ -121,12 +118,25 @@ describe('QueryParam', function () {
 
             it('should return an empty string for undefined values', function () {
                 expect(QueryParam.unparseSingle({})).to.equal('');
-                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('');
+                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('foo');
+            });
+
+            it('should handle empty key or empty value', function () {
+                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('foo');
+                expect(QueryParam.unparseSingle({ value: 'foo' })).to.equal('=foo');
+                expect(QueryParam.unparseSingle({ key: '', value: '' })).to.equal('=');
+                expect(QueryParam.unparseSingle({ key: 'foo', value: '' })).to.equal('foo=');
+                expect(QueryParam.unparseSingle({ key: '', value: 'foo' })).to.equal('=foo');
             });
 
             it('should encode keys when value is null and encode is true', function () {
                 expect(QueryParam.unparseSingle({ key: ' ', value: null }, true)).to.equal('%20');
-                expect(QueryParam.unparseSingle({ key: 'foo', value: null }, true)).to.equal('foo');
+                expect(QueryParam.unparseSingle({ key: '"foo"', value: null }, true)).to.equal('%22foo%22');
+            });
+
+            it('should encode values when key is null and encode is true', function () {
+                expect(QueryParam.unparseSingle({ key: null, value: ' ' }, true)).to.equal('=%20');
+                expect(QueryParam.unparseSingle({ value: '("foo")' }, true)).to.equal('=(%22foo%22)');
             });
         });
     });
