@@ -1,6 +1,8 @@
 master:
   new features:
     - GH-975 Updated URL parsing algorithm
+  fixed bugs:
+    - GH-983 Handle query params with empty key or value on unparseSingle
   chores:
     - GH-961 Added `nyc` and `codecov` for code coverage checks
     - Updated dependencies
