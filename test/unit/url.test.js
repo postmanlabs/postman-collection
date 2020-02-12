@@ -1,6 +1,7 @@
 var expect = require('chai').expect,
     _ = require('lodash'),
     Url = require('../../').Url,
+    QueryParam = require('../../').QueryParam,
     PropertyList = require('../../').PropertyList,
     VariableList = require('../../').VariableList,
     rawUrls = require('../fixtures/').rawUrls;
@@ -340,7 +341,7 @@ describe('Url', function () {
             });
         });
 
-        it('must parse url even if dulicate `?` is present in query-param', function () {
+        it('must parse url even if duplicate `?` is present in query-param', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param&err?ng=v_l?e@!');
             expect(subject).to.deep.include({
                 protocol: undefined,
@@ -359,7 +360,7 @@ describe('Url', function () {
             });
         });
 
-        it('must parse url having auth even if dulicate `@` is present in query-param', function () {
+        it('must parse url having auth even if duplicate `@` is present in query-param', function () {
             var subject = Url.parse('username:password@127.0.0.1/hello/world/?query=param&err?ng=v_l?e@!');
             expect(subject).to.deep.include({
                 protocol: undefined,
@@ -994,6 +995,161 @@ describe('Url', function () {
             });
             expect(url.toString()).to.eql('https://postman-echo.com');
         });
+
+        it('should handle bare ipv4 addresses with variables', function () {
+            var url = '127.0.{{subnet}}.1';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle bare ipv4 addresses with protocol and port as variables', function () {
+            var url = '{{my-protocol}}://127.0.0.1:{{my-port}}';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle trailing path backslash in ipv4 address and port', function () {
+            var url = 'http://127.0.0.1:8080/';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle url with file protocol and relative path to files', function () {
+            var url = 'file://../path/to/file';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle path variables', function () {
+            var url = 'http://127.0.0.1/:郵差/:/:foo.json';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should resolve path variables', function () {
+            var url = new Url({
+                host: 'localhost',
+                path: '/:v1/:/:郵差',
+                variable: [
+                    { key: 'v1', value: 'foo' },
+                    { key: '郵差', value: 'bar' }
+                ]
+            });
+
+            expect(url.toString()).to.equal('localhost/foo/:/bar');
+        });
+
+        it('should handle variables having reserved characters', function () {
+            var url = '{{p://}}://{{@}}:{{###}}@{{host.name}}:{{:p}}/{{f/o/o}}/bar?{{?}}={{&}}#{{[#]}}';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle whitespace and newlines', function () {
+            var url = 'http://\n:\r@\r.\n:\n/\n/\n?\n=\r#\n';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should trim whitespace on the left', function () {
+            var url = ' \n\t\rhttp://localhost/path\n/name\n ';
+            expect((new Url(url)).toString()).to.equal(url.trimLeft());
+        });
+
+        it('should replace \\ in pathname with /', function () {
+            var url = 'http://localhost\\foo\\bar';
+            expect((new Url(url)).toString()).to.equal('http://localhost/foo/bar');
+        });
+
+        it('should handle IPv6 with auth', function () {
+            var url = 'http://user:password@[1080:0:0:0:8:800:200C:417A]:8080';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle multiple : and @ in auth', function () {
+            var url = 'http://us@r:p@ssword@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://user:p:a:s:s@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle auth without user', function () {
+            var url = 'http://:password@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle auth without password', function () {
+            var url = 'http://user@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain @ in auth without user and password', function () {
+            var url = 'http://@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain : in auth with empty user and password', function () {
+            var url = 'http://:@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain : in empty port', function () {
+            var url = 'localhost:/path';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain / in empty path', function () {
+            var url = 'localhost/';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain # in empty hash', function () {
+            var url = 'localhost#';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain ? in empty query param', function () {
+            var url = 'http://localhost?';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain & in empty query params', function () {
+            var url = 'http://localhost?&';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://localhost?&&';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://localhost?foo&';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://localhost?&foo';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle disabled query params', function () {
+            expect(new Url({
+                host: 'localhost',
+                query: [
+                    { key: 'foo', value: 'bar', disabled: true },
+                    { key: '', value: null, disabled: true }
+                ]
+            }).toString()).to.equal('localhost');
+
+            expect(new Url({
+                host: 'localhost',
+                query: [
+                    { key: 'foo', value: 'bar', disabled: true },
+                    { key: '', value: null, disabled: false }
+                ]
+            }).toString()).to.equal('localhost?');
+        });
+
+        it('should handle non-string port number', function () {
+            expect(new Url({
+                host: 'localhost',
+                port: 8081
+            }).toString()).to.equal('localhost:8081');
+
+            expect(new Url({
+                host: 'localhost',
+                port: new Number(123) // eslint-disable-line no-new-wrappers
+            }).toString()).to.equal('localhost:123');
+        });
     });
 
     describe('getHost', function () {
@@ -1316,6 +1472,20 @@ describe('Url', function () {
                 expect(url.query.all()[0].value).to.eql('bar1  ');
                 expect(url.query.all()[1].key).to.eql('foo2  ');
                 expect(url.query.all()[1].value).to.eql('bar2  ');
+            });
+
+            it('should handle query parameters with empty key or value', function () {
+                var url = new Url('https://postman-echo.com?get&=bar&=&baz=&&');
+
+                expect(url.query.all()).to.have.deep.members([
+                    new QueryParam({ key: 'get', value: null }),
+                    new QueryParam({ key: '', value: 'bar' }),
+                    new QueryParam({ key: '', value: '' }),
+                    new QueryParam({ key: 'baz', value: '' }),
+                    new QueryParam({ key: null, value: null }),
+                    // why's ☝🏻 different from 👇🏻 (╯°□°)╯︵ ┻━┻
+                    new QueryParam({ key: '', value: null })
+                ]);
             });
         });
     });
