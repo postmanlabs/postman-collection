@@ -2,6 +2,7 @@ master:
   new features:
     - GH-975 Updated URL parsing algorithm
   fixed bugs:
+    - GH-983 Handle query params with empty key or value on unparseSingle
     - GH-984 Fixed a bug where empty port, auth, etc. are dropped on url.toString
   chores:
     - GH-961 Added `nyc` and `codecov` for code coverage checks
