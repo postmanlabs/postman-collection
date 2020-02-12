@@ -1082,6 +1082,11 @@ describe('Url', function () {
             expect((new Url(url)).toString()).to.equal(url);
         });
 
+        it('should retain : in auth with empty user and password', function () {
+            var url = 'http://:@localhost';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
         it('should retain : in empty port', function () {
             var url = 'localhost:/path';
             expect((new Url(url)).toString()).to.equal(url);
@@ -1099,6 +1104,20 @@ describe('Url', function () {
 
         it('should retain ? in empty query param', function () {
             var url = 'http://localhost?';
+            expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should retain & in empty query params', function () {
+            var url = 'http://localhost?&';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://localhost?&&';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://localhost?foo&';
+            expect((new Url(url)).toString()).to.equal(url);
+
+            url = 'http://localhost?&foo';
             expect((new Url(url)).toString()).to.equal(url);
         });
 
@@ -1456,13 +1475,16 @@ describe('Url', function () {
             });
 
             it('should handle query parameters with empty key or value', function () {
-                var url = new Url('https://postman-echo.com?get&=bar&=&baz=');
+                var url = new Url('https://postman-echo.com?get&=bar&=&baz=&&');
 
                 expect(url.query.all()).to.have.deep.members([
                     new QueryParam({ key: 'get', value: null }),
                     new QueryParam({ key: '', value: 'bar' }),
                     new QueryParam({ key: '', value: '' }),
-                    new QueryParam({ key: 'baz', value: '' })
+                    new QueryParam({ key: 'baz', value: '' }),
+                    new QueryParam({ key: null, value: null }),
+                    // why's ☝🏻 different from 👇🏻 (╯°□°)╯︵ ┻━┻
+                    new QueryParam({ key: '', value: null })
                 ]);
             });
         });
