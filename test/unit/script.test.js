@@ -106,6 +106,12 @@ describe('Script', function () {
     });
 
     describe('updates', function () {
+        it('should return undefined if script object is missing', function () {
+            var script = new Script();
+
+            expect(script.update()).to.eql(undefined);
+        });
+
         it('should not create new ids', function () {
             var script1 = new Script('old script'),
                 script2 = new Script({ id: 'ID1' }),

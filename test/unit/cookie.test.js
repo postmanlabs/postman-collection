@@ -194,4 +194,68 @@ describe('Cookie', function () {
             })).valueOf()).to.eql('this is a cookie value');
         });
     });
+
+    describe('.unparseSingle', function () {
+        it('should return empty string for non object arguments', function () {
+            expect(Cookie.unparseSingle()).to.eql('');
+            expect(Cookie.unparseSingle([])).to.eql('');
+        });
+
+        it('should return cookie value', function () {
+            expect(Cookie.unparseSingle({
+                name: '',
+                value: 'this is a cookie value'
+            })).to.eql('this is a cookie value');
+        });
+
+        it('should return unparsed string for the cookie object', function () {
+            expect(Cookie.unparseSingle({
+                name: 'foo',
+                value: 'bar'
+            })).to.eql('foo=bar');
+        });
+    });
+
+    describe('.stringify', function () {
+        var rawCookie = {
+            name: 'postman',
+            value: 'collection',
+            expires: 1502442248,
+            domain: 'postman-echo.com',
+            maxAge: '300',
+            path: '/',
+            httpOnly: true,
+            secure: true
+        };
+
+        it('should return a single Set-Cookie header string', function () {
+            expect(Cookie.stringify(rawCookie))
+                .to.eql('postman=collection; Expires=1502442248; Max-Age=300; ' +
+                'Domain=postman-echo.com; Path=/; Secure; HttpOnly');
+        });
+
+        it('should handle and check for valid date instance', function () {
+            rawCookie.expires = new Date('Mon, 17 Feb 2020 07:29:40 GMT');
+            expect(Cookie.stringify(rawCookie))
+                .to.eql('postman=collection; Expires=Mon, 17 Feb 2020 07:29:40 GMT; ' +
+                'Max-Age=300; Domain=postman-echo.com; Path=/; Secure; HttpOnly');
+        });
+    });
+
+    describe('.unparse', function () {
+        it('should return a string of cookies array or property list', function () {
+            expect(Cookie.unparse([new Cookie({
+                name: 'postman',
+                value: 'collection'
+            }),
+            new Cookie({
+                name: 'postman_2',
+                value: 'collection_2'
+            })])).to.eql('postman=collection; postman_2=collection_2');
+        });
+
+        it('should return empty string if array or property list is not passed', function () {
+            expect(Cookie.unparse([])).to.eql('');
+        });
+    });
 });

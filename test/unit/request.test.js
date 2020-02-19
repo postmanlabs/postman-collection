@@ -523,6 +523,33 @@ describe('Request', function () {
                 value: 'bar'
             }]);
         });
+
+        it('should remove the header from the request', function () {
+            var request = new Request({
+                headers: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader({ key: 'foo', value: 'bar' }, { ignoreCase: true });
+            expect(request.headers.toJSON()).to.eql([]);
+        });
+    });
+
+    describe('.addHeader', function () {
+        it('should add headers to the request', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.addHeader({ key: 'some', value: 'header' });
+            expect(request.headers.toJSON()).to.eql([
+                { key: 'foo', value: 'bar' },
+                { key: 'some', value: 'header' }
+            ]);
+        });
     });
 
     describe('.forEachHeader', function () {
