@@ -720,6 +720,15 @@ describe('Url', function () {
                 }
             });
         });
+
+        it('should handle handle protocol with backslashes', function () {
+            var subject = Url.parse('http:\\\\localhost');
+            expect(subject).to.deep.include({
+                raw: 'http:\\\\localhost',
+                protocol: 'http',
+                host: ['localhost']
+            });
+        });
     });
 
     describe('unparsing', function () {
@@ -1051,6 +1060,11 @@ describe('Url', function () {
 
         it('should replace \\ in pathname with /', function () {
             var url = 'http://localhost\\foo\\bar';
+            expect((new Url(url)).toString()).to.equal('http://localhost/foo/bar');
+        });
+
+        it('should replace \\ in protocol with /', function () {
+            var url = 'http:\\\\localhost/foo\\bar';
             expect((new Url(url)).toString()).to.equal('http://localhost/foo/bar');
         });
 
