@@ -4,6 +4,7 @@ master:
   fixed bugs:
     - GH-983 Handle query params with empty key or value on unparseSingle
     - GH-984 Fixed a bug where empty port, auth, etc. are dropped on url.toString
+    - GH-991 Handle protocol separated using `:\\` while parsing URL
   chores:
     - GH-961 Added `nyc` and `codecov` for code coverage checks
     - Updated dependencies
