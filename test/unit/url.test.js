@@ -1005,6 +1005,17 @@ describe('Url', function () {
             expect(url.toString()).to.eql('https://postman-echo.com');
         });
 
+        it('should encode & and # in query parameters', function () {
+            var url = new Url({
+                host: 'https://postman-echo.com',
+                query: [{
+                    key: '#foo#',
+                    value: 'bar & {{&baz&}}'
+                }]
+            });
+            expect(url.toString()).to.eql('https://postman-echo.com?%23foo%23=bar %26 {{&baz&}}');
+        });
+
         it('should handle bare ipv4 addresses with variables', function () {
             var url = '127.0.{{subnet}}.1';
             expect((new Url(url)).toString()).to.equal(url);
