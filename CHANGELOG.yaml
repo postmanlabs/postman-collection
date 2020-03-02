@@ -1,3 +1,20 @@
+3.6.0:
+  date: 2020-03-02
+  new features:
+    - GH-975 Updated URL parsing algorithm
+  fixed bugs:
+    - GH-983 Handle query params with empty key or value on unparseSingle
+    - >-
+      GH-984 Fixed a bug where empty port, auth, etc. are dropped on
+      url.toString
+    - 'GH-991 Handle protocol separated using `:\\` while parsing URL'
+    - >-
+      GH-994 Handle `&`, `=` and `#` in query params on
+      `QueryParam~unparseSingle`
+  chores:
+    - GH-961 Added `nyc` and `codecov` for code coverage checks
+    - Updated dependencies
+
 3.5.5:
   date: 2019-12-02
   new features:

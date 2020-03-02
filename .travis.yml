@@ -7,6 +7,14 @@ node_js:
 - '6'
 - '8'
 - '10'
+jobs:
+  include:
+    - name: 'Coverage'
+      node_js: stable
+      os: linux
+      script:
+        - npm run test-unit
+        - bash <(curl -s https://codecov.io/bash) -c -Z -f .coverage/coverage-final.json -F unit
 #before_install:
 #- |
 #  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_PULL_REQUEST" == false ]; then

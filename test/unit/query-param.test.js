@@ -84,7 +84,7 @@ describe('QueryParam', function () {
                 expect(QueryParam.unparse()).to.equal('');
             });
 
-            it('should set value as empty for null and drop undefined', function () {
+            it('should handle null and undefined values', function () {
                 var queryParams = [{
                     key: 'foo',
                     value: 'foo'
@@ -96,20 +96,17 @@ describe('QueryParam', function () {
                     value: undefined
                 }];
 
-                // if query param value is undefined the param is not appeneded
-                // but the trailing ampersand is not removed
-                // this is the current behaviour
-                expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&');
+                expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&baz');
 
             });
 
-            it('should set value as empty for null and drop undefined when unparsing object format', function () {
+            it('should should handle null and undefined values when unparsing object format', function () {
                 expect(QueryParam.unparse({ foo: 'foo', bar: null, baz: undefined }))
 
                     // if query param value is undefined the param is not appeneded
                     // but the trailing ampersand is not removed
                     // this is the current behaviour
-                    .to.equal('foo=foo&bar&');
+                    .to.equal('foo=foo&bar&baz');
             });
         });
 
@@ -121,12 +118,48 @@ describe('QueryParam', function () {
 
             it('should return an empty string for undefined values', function () {
                 expect(QueryParam.unparseSingle({})).to.equal('');
-                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('');
+                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('foo');
+            });
+
+            it('should handle empty key or empty value', function () {
+                expect(QueryParam.unparseSingle({ key: 'foo' })).to.equal('foo');
+                expect(QueryParam.unparseSingle({ value: 'foo' })).to.equal('=foo');
+                expect(QueryParam.unparseSingle({ key: '', value: '' })).to.equal('=');
+                expect(QueryParam.unparseSingle({ key: 'foo', value: '' })).to.equal('foo=');
+                expect(QueryParam.unparseSingle({ key: '', value: 'foo' })).to.equal('=foo');
             });
 
             it('should encode keys when value is null and encode is true', function () {
                 expect(QueryParam.unparseSingle({ key: ' ', value: null }, true)).to.equal('%20');
-                expect(QueryParam.unparseSingle({ key: 'foo', value: null }, true)).to.equal('foo');
+                expect(QueryParam.unparseSingle({ key: '"foo"', value: null }, true)).to.equal('%22foo%22');
+            });
+
+            it('should encode values when key is null and encode is true', function () {
+                expect(QueryParam.unparseSingle({ key: null, value: ' ' }, true)).to.equal('=%20');
+                expect(QueryParam.unparseSingle({ value: '("foo")' }, true)).to.equal('=(%22foo%22)');
+            });
+
+            it('should always encode `&` and `#` present in key or value', function () {
+                expect(QueryParam.unparseSingle({ key: null, value: '& #' })).to.equal('=%26 %23');
+                expect(QueryParam.unparseSingle({ key: '"#&#"' })).to.equal('"%23%26%23"');
+            });
+
+            it('should not encode `&` and `#` present in variable names', function () {
+                expect(QueryParam.unparseSingle({ key: '#{{#&#}}#', value: '{{&}}' }))
+                    .to.equal('%23{{#&#}}%23={{&}}');
+
+                expect(QueryParam.unparseSingle({ key: '{{&}} {{#}}', value: ' {{&}} ' }))
+                    .to.equal('{{&}} {{#}}= {{&}} ');
+            });
+
+            it('should always encode `=` present in param key', function () {
+                expect(QueryParam.unparseSingle({ key: '={{=}}=', value: '{{===}}' })).to.equal('%3D{{=}}%3D={{===}}');
+                expect(QueryParam.unparseSingle({ key: '={{&=#}}' })).to.equal('%3D{{&=#}}');
+            });
+
+            it('should not encode `=` present in param value', function () {
+                expect(QueryParam.unparseSingle({ key: '{{===}}', value: '={{=}}=' })).to.equal('{{===}}=={{=}}=');
+                expect(QueryParam.unparseSingle({ value: '={{&=#}}=' })).to.equal('=={{&=#}}=');
             });
         });
     });
@@ -147,17 +180,17 @@ describe('QueryParam', function () {
     });
 
     it('should not url encode by default', function () {
-        var rawQueryString = 'x=y%z',
+        var rawQueryString = 'x=foo bar',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params);
         expect(paramStr).to.eql(rawQueryString);
     });
 
     it('should url encode if explicitly asked to', function () {
-        var rawQueryString = 'x=y%z',
+        var rawQueryString = 'x=foo bar',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params, { encode: true });
-        expect(paramStr).to.eql('x=y%25z');
+        expect(paramStr).to.eql('x=foo%20bar');
     });
 
     it('should be able to unparse when values are given as an object', function () {
@@ -331,6 +364,24 @@ describe('QueryParam', function () {
             })).to.equal('a=c{{b}}&c=d');
         });
 
+        it('a=foo(a)', function () {
+            var parsed = [
+                { key: 'a', value: 'foo(a)' }
+            ];
+            expect(QueryParam.unparse(parsed, {
+                encode: true
+            })).to.equal('a=foo(a)');
+        });
+
+        it('percentage - "charwithPercent=%foo"', function () {
+            var parsed = [
+                { key: 'multibyte', value: '%foo' }
+            ];
+            expect(QueryParam.unparse(parsed, {
+                encode: true
+            })).to.equal('multibyte=%foo');
+        });
+
         it('a=обязательный&c=d', function () {
             var parsed = [
                 { key: 'a', value: 'обязательный' },
@@ -371,30 +422,12 @@ describe('QueryParam', function () {
             expect(QueryParam.unparse(parsed)).to.equal('multibyte=%F0%9D%8C%86');
         });
 
-        it('encoding percentage - "charwithPercent=%foo"', function () {
-            var parsed = [
-                { key: 'multibyte', value: '%foo' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('multibyte=%25foo');
-        });
-
         it('a[0]=foo&a[1]=bar', function () {
             var parsed = [
                 { key: 'a[0]', value: 'foo' },
                 { key: 'a[1]', value: 'bar' }
             ];
             expect(QueryParam.unparse(parsed)).to.equal('a[0]=foo&a[1]=bar');
-        });
-
-        it('encodes ( and )- "a=foo(a)"', function () {
-            var parsed = [
-                { key: 'a', value: 'foo(a)' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=foo%28a%29');
         });
 
         it('Russian - "a=Привет Почтальон"', function () {
