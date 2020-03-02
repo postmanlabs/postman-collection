@@ -138,6 +138,29 @@ describe('QueryParam', function () {
                 expect(QueryParam.unparseSingle({ key: null, value: ' ' }, true)).to.equal('=%20');
                 expect(QueryParam.unparseSingle({ value: '("foo")' }, true)).to.equal('=(%22foo%22)');
             });
+
+            it('should always encode `&` and `#` present in key or value', function () {
+                expect(QueryParam.unparseSingle({ key: null, value: '& #' })).to.equal('=%26 %23');
+                expect(QueryParam.unparseSingle({ key: '"#&#"' })).to.equal('"%23%26%23"');
+            });
+
+            it('should not encode `&` and `#` present in variable names', function () {
+                expect(QueryParam.unparseSingle({ key: '#{{#&#}}#', value: '{{&}}' }))
+                    .to.equal('%23{{#&#}}%23={{&}}');
+
+                expect(QueryParam.unparseSingle({ key: '{{&}} {{#}}', value: ' {{&}} ' }))
+                    .to.equal('{{&}} {{#}}= {{&}} ');
+            });
+
+            it('should always encode `=` present in param key', function () {
+                expect(QueryParam.unparseSingle({ key: '={{=}}=', value: '{{===}}' })).to.equal('%3D{{=}}%3D={{===}}');
+                expect(QueryParam.unparseSingle({ key: '={{&=#}}' })).to.equal('%3D{{&=#}}');
+            });
+
+            it('should not encode `=` present in param value', function () {
+                expect(QueryParam.unparseSingle({ key: '{{===}}', value: '={{=}}=' })).to.equal('{{===}}=={{=}}=');
+                expect(QueryParam.unparseSingle({ value: '={{&=#}}=' })).to.equal('=={{&=#}}=');
+            });
         });
     });
 
@@ -157,17 +180,17 @@ describe('QueryParam', function () {
     });
 
     it('should not url encode by default', function () {
-        var rawQueryString = 'x=y#z',
+        var rawQueryString = 'x=foo bar',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params);
         expect(paramStr).to.eql(rawQueryString);
     });
 
     it('should url encode if explicitly asked to', function () {
-        var rawQueryString = 'x=y#z',
+        var rawQueryString = 'x=foo bar',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params, { encode: true });
-        expect(paramStr).to.eql('x=y%23z');
+        expect(paramStr).to.eql('x=foo%20bar');
     });
 
     it('should be able to unparse when values are given as an object', function () {
