@@ -1005,15 +1005,15 @@ describe('Url', function () {
             expect(url.toString()).to.eql('https://postman-echo.com');
         });
 
-        it('should encode & and # in query parameters', function () {
+        it('should encode &, = and # in query parameters', function () {
             var url = new Url({
                 host: 'https://postman-echo.com',
                 query: [{
-                    key: '#foo#',
-                    value: 'bar & {{&baz&}}'
+                    key: '#foo=',
+                    value: 'bar =&= {{&baz=}}'
                 }]
             });
-            expect(url.toString()).to.eql('https://postman-echo.com?%23foo%23=bar %26 {{&baz&}}');
+            expect(url.toString()).to.eql('https://postman-echo.com?%23foo%3D=bar =%26= {{&baz=}}');
         });
 
         it('should handle bare ipv4 addresses with variables', function () {

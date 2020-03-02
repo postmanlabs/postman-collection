@@ -151,6 +151,16 @@ describe('QueryParam', function () {
                 expect(QueryParam.unparseSingle({ key: '{{&}} {{#}}', value: ' {{&}} ' }))
                     .to.equal('{{&}} {{#}}= {{&}} ');
             });
+
+            it('should always encode `=` present in param key', function () {
+                expect(QueryParam.unparseSingle({ key: '={{=}}=', value: '{{===}}' })).to.equal('%3D{{=}}%3D={{===}}');
+                expect(QueryParam.unparseSingle({ key: '={{&=#}}' })).to.equal('%3D{{&=#}}');
+            });
+
+            it('should not encode `=` present in param value', function () {
+                expect(QueryParam.unparseSingle({ key: '{{===}}', value: '={{=}}=' })).to.equal('{{===}}=={{=}}=');
+                expect(QueryParam.unparseSingle({ value: '={{&=#}}=' })).to.equal('=={{&=#}}=');
+            });
         });
     });
 
