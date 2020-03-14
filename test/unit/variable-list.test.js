@@ -167,6 +167,27 @@ describe('VariableList', function () {
         expect(resolved.xyz).to.equal('z');
     });
 
+    it('should correctly handle upsert function', function () {
+        const old_list = new VariableList(null, [{
+                key: 'k1',
+                value: 'initial',
+                description: 'initial description'
+            }]),
+            new_list = new VariableList(null, [{
+                key: 'k1',
+                value: 'updated',
+                description: 'updated description'
+            }]);
+
+        old_list.upsert({
+            key: 'k1',
+            value: 'updated',
+            description: 'updated description'
+        });
+
+        expect(old_list.toJSON()).to.eql(new_list.toJSON());
+    });
+
     it.skip('should correctly handle variables with single braces in their name', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
