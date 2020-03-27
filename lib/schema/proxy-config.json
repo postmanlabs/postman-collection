@@ -8,12 +8,29 @@
             "description": "The Url match for which the proxy config is defined",
             "type": "string"
         },
-        "server": {
-            "description": "The proxy server url"
+        "host": {
+            "description": "the host address of the proxy server",
+            "type": "string"
+        },
+        "port": {
+            "description": "Port number of the proxy server",
+            "type": "integer"
+        },
+        "authenticate": {
+            "description": "The authentication for proxy server",
+            "type": "boolean"
         },
         "tunnel": {
             "description": "The tunneling details for the proxy config",
             "type": "boolean"
+        },
+        "username": {
+            "description": "The username for proxy authenticatoin",
+            "type": "string"
+        },
+        "password": {
+            "description": "The password for proxy authenticatoin",
+            "type": "string"
         }
     }
 }
