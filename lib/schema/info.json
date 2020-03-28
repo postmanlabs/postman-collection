@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "#/definitions/info",
     "title": "Information",
-    "description": "Detailed description of the info block", // TODO: Add detailed description
+    "description": "Describes the properties. The collection schema outlines the JSON definition of data structure accepted by the constructor of each properties of the Collection SDK. In other words, this SDK provides JavaScript level object manipulation for the JSON structure defined by Postman Collection. Check out the current format at http://schema.getpostman.com/.", 
     "type": "object",
     "properties": {
         "name": {
