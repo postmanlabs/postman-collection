@@ -79,7 +79,7 @@
     "require-all": "3.0.0",
     "schema-compiler": "0.0.3",
     "shelljs": "0.8.3",
-    "strip-json-comments": "3.0.1"
+    "strip-json-comments": "3.1.0"
   },
   "homepage": "https://github.com/postmanlabs/postman-collection#readme",
   "bugs": {
