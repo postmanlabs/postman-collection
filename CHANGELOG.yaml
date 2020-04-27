@@ -1,3 +1,9 @@
+master:
+  fixed bugs:
+    - >-
+      GH-1025 Fixed a bug where `Item.getProtocolProfileBehavior()` mutates
+      the `protocolProfileBehavior` of all its parents
+
 3.6.0:
   date: 2020-03-02
   new features:
