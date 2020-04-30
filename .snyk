@@ -1,0 +1,48 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - async > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - eslint > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - eslint-plugin-jsdoc > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - eslint-plugin-lodash > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - karma > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - karma-browserify > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - schema-compiler > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - eslint > inquirer > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - eslint > table > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - jsdoc > catharsis > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - jsdoc > requizzle > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - karma > combine-lists > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - mocha > yargs-unparser > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - postman-url-encoder > postman-collection > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - jsdoc-to-markdown > jsdoc-api > jsdoc > catharsis > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - jsdoc-to-markdown > jsdoc-api > jsdoc > requizzle > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
+    - nyc > istanbul-lib-instrument > @babel/traverse > @babel/helper-function-name > @babel/helper-get-function-arity > @babel/types > lodash:
+        patched: '2020-04-30T23:17:10.793Z'
