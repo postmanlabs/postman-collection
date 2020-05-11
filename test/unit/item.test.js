@@ -523,5 +523,28 @@ describe('Item', function () {
                 key: 'new-value'
             });
         });
+
+        // Refer: https://github.com/postmanlabs/postman-app-support/issues/8293
+        it('should not mutate the parent scope', function () {
+            var itemGroup = new sdk.ItemGroup({
+                    protocolProfileBehavior: { k0: 'v0' },
+                    item: [{
+                        name: 'I1',
+                        protocolProfileBehavior: { k1: 'v1' }
+                    }, {
+                        name: 'I2',
+                        protocolProfileBehavior: { k2: 'v2' }
+                    }, {
+                        name: 'I3',
+                        protocolProfileBehavior: { k3: 'v3' }
+                    }]
+                }),
+                items = itemGroup.items.members;
+
+            expect(items[0].getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0', k1: 'v1' });
+            expect(items[1].getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0', k2: 'v2' });
+            expect(items[2].getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0', k3: 'v3' });
+            expect(itemGroup.getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0' });
+        });
     });
 });
