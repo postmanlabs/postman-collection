@@ -60,7 +60,7 @@
     "eslint-plugin-lodash": "7.1.0",
     "eslint-plugin-mocha": "6.3.0",
     "eslint-plugin-security": "1.4.0",
-    "js-yaml": "3.13.1",
+    "js-yaml": "3.14.0",
     "jsdoc": "3.6.4",
     "jsdoc-to-markdown": "5.0.3",
     "karma": "3.1.4",
