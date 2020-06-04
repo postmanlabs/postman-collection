@@ -344,8 +344,8 @@ describe('Variable', function () {
             variable = new Variable({ key: 'foo', value: undefined });
             expect(variable.toString()).to.equal('');
 
-            // value null
-            variable = new Variable({ key: 'foo', value: null });
+            // value undefined
+            variable = new Variable({ key: 'foo' });
             expect(variable.toString()).to.equal('');
         });
 
@@ -375,6 +375,13 @@ describe('Variable', function () {
 
             variable = new Variable({ key: 'foo', value: NaN });
             expect(variable.toString()).to.equal('NaN');
+        });
+
+        it('should stringify null as "null"', function () {
+            var variable;
+
+            variable = new Variable({ key: 'foo', value: null });
+            expect(variable.toString()).to.equal('null');
         });
 
         it('should handle the absence of .valueOf correctly', function () {
