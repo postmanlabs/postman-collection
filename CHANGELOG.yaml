@@ -1,6 +1,9 @@
-master:
+3.6.3:
+  date: 2020-07-13
   new features:
     - GH-1060 Added $isoTimestamp to the dynamic variable list
+  chores:
+    - Updated dependencies
 
 3.6.2:
   date: 2020-06-04
