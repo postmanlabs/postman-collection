@@ -37,7 +37,7 @@ module.exports = function (exit) {
     }
 
     exec(`${IS_WINDOWS ? '' : 'node'} ${path.join('node_modules', '.bin', 'jsdoc')}${IS_WINDOWS ? '.cmd' : ''}` +
-        ' -c .jsdoc-config-collection.json -p', function (code) {
+        ' -c .jsdoc-config-type-def.json -p', function (code) {
 
         if (!code) {
             fs.readFile(`${TARGET_DIR}/index.d.ts`, function (err, contents) {
@@ -46,14 +46,21 @@ module.exports = function (exit) {
                     exit(1);
                 }
                 var source = contents.toString();
-                source = source.replace(/Integer/gm, 'number')
+                source = source
+                    // replacing Integer with number as 'Integer' is not a valid data-type in Typescript
+                    .replace(/Integer/gm, 'number')
+                    // replacing String[] with string[] as 'String' is not a valid data-type in Typescript
                     .replace(/String\[]/gm, 'string[]')
+                    // replacing Boolean[] with boolean[] as 'Boolean' is not a valid data-type in Typescript
                     .replace(/Boolean\[]/gm, 'boolean[]')
-                    .replace(/<[^>]*>/gm, '') // remove all html tags
-                    .replace(/\{@link (\w*)[#.]+(\w*)\}/gm, '$1.$2') // remove @link tags
+                    // removing all occurrences html, as the these tags are not supported in Type-definitions
+                    .replace(/<[^>]*>/gm, '')
+                    // replacing @link tags with the object namepath to which it was linked,
+                    // as these link tags are not navigable in type-definitions.
+                    .replace(/\{@link (\w*)[#.]+(\w*)\}/gm, '$1.$2')
                     .replace(/\{@link (\S+)\}/gm, '$1'); // remove @link tags
 
-                source = `${heading} \n ${source}`;
+                source = `${heading}\n${source}`;
 
                 fs.writeFile(`${TARGET_DIR}/index.d.ts`, source, function (err) {
                     if (err) {
