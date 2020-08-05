@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build-docs": "node npm/build-docs.js",
+    "build-types": "node npm/build-types.js",
     "build-schema": "node npm/build-schema.js",
     "build-wiki": "node npm/build-wiki.js",
     "publish-wiki": "node npm/publish-wiki.js",
@@ -79,7 +80,8 @@
     "require-all": "3.0.0",
     "schema-compiler": "0.0.3",
     "shelljs": "0.8.4",
-    "strip-json-comments": "3.1.1"
+    "strip-json-comments": "3.1.1",
+    "tsd-jsdoc": "2.5.0"
   },
   "homepage": "https://github.com/postmanlabs/postman-collection#readme",
   "bugs": {
