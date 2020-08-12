@@ -47,6 +47,8 @@ module.exports = function (exit) {
                 }
                 var source = contents.toString();
                 source = source
+                    // replace all declare keyword with export, as the whole typedef will be wrapped around a module
+                    .replace(/^declare /gm, 'export ')
                     // replacing Integer with number as 'Integer' is not a valid data-type in Typescript
                     .replace(/Integer/gm, 'number')
                     // replacing String[] with string[] as 'String' is not a valid data-type in Typescript
@@ -60,7 +62,7 @@ module.exports = function (exit) {
                     .replace(/\{@link (\w*)[#.]+(\w*)\}/gm, '$1.$2')
                     .replace(/\{@link (\S+)\}/gm, '$1'); // remove @link tags
 
-                source = `${heading}\n${source}`;
+                source = `${heading}\ndeclare module "postman-collection" {\n${source}\n}\n`;
 
                 fs.writeFile(`${TARGET_DIR}/index.d.ts`, source, function (err) {
                     if (err) {

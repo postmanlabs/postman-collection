@@ -92,5 +92,6 @@
       "file-type",
       "eslint-plugin-jsdoc"
     ]
-  }
+  },
+  "types": "types/index.d.ts"
 }
