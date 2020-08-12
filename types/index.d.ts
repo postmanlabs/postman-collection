@@ -5,6 +5,7 @@
 // TypeScript Version: 2.4
 /// <reference types="node" />
 
+declare module "postman-collection" {
 /**
  * @example
  * Create a new CertificateList
@@ -25,7 +26,7 @@
  * ]);
  * @param list - The list of certificate representations
  */
-declare class CertificateList extends PropertyList {
+export class CertificateList extends PropertyList {
     constructor(parent: any, list: any[]);
     /**
      * Matches the given url against the member certificates' allowed matches
@@ -40,7 +41,7 @@ declare class CertificateList extends PropertyList {
     static isCertificateList(obj: any): boolean;
 }
 
-declare namespace Certificate {
+export namespace Certificate {
     /**
      * The following is the object representation accepted as param for the Certificate constructor.
      * Also the type of the object returned when Property.toJSON or Property.toObjectResolved is called on a
@@ -87,7 +88,7 @@ declare namespace Certificate {
  * });
  * @param [options] - Object with matches, key, cert and passphrase
  */
-declare class Certificate extends Property {
+export class Certificate extends Property {
     constructor(options?: Certificate.definition);
     /**
      * Updates the certificate with the given properties.
@@ -140,7 +141,7 @@ declare class Certificate extends Property {
     static isCertificate(obj: any): boolean;
 }
 
-declare namespace Collection {
+export namespace Collection {
     /**
      * The following is the object structure accepted as constructor parameter while calling `new Collection(...)`. It is
      * also the structure exported when Property.toJSON or Property.toObjectResolved is called on a
@@ -241,7 +242,7 @@ declare namespace Collection {
  * App to use them with different collections. Refer to Postman
  * [documentation on environment variables](https://www.getpostman.com/docs/environments).
  */
-declare class Collection extends ItemGroup {
+export class Collection extends ItemGroup {
     constructor(definition?: Collection.definition, environments?: object[]);
     /**
      * The `variables` property holds a list of variables that are associated with a Collection. These variables
@@ -326,7 +327,7 @@ declare class Collection extends ItemGroup {
 /**
  * Contains a list of header elements
  */
-declare class CookieList extends PropertyList {
+export class CookieList extends PropertyList {
     constructor(parent: any, cookies: object[]);
     /**
      * Checks if the given object is a CookieList
@@ -334,7 +335,7 @@ declare class CookieList extends PropertyList {
     static isCookieList(obj: any): boolean;
 }
 
-declare namespace Cookie {
+export namespace Cookie {
     /**
      * The following is the object structure accepted as constructor parameter while calling `new Cookie(...)`. It is
      * also the structure exported when Property.toJSON or Property.toObjectResolved is called on a
@@ -428,7 +429,7 @@ declare namespace Cookie {
  * console.log(myCookie.toJSON());
  * @param [options] - Pass the initial definition of the Cookie.
  */
-declare class Cookie extends PropertyBase {
+export class Cookie extends PropertyBase {
     constructor(options?: Cookie.definition);
     /**
      * The name of the cookie.
@@ -504,7 +505,7 @@ declare class Cookie extends PropertyBase {
     static stringify(cookie: Cookie): string;
 }
 
-declare namespace Description {
+export namespace Description {
     type definition = {
         content: string;
         type: string;
@@ -554,7 +555,7 @@ declare namespace Description {
  * is in `text/plain` format or otherwise be sent as part of an object adhering to the Description.definition
  * structure having `content` and `type`.
  */
-declare class Description {
+export class Description {
     constructor(definition?: Description.definition | string);
     /**
      * Updates the content of this description property.
@@ -586,7 +587,7 @@ declare class Description {
  * A type of PropertyList, EventList handles resolving events from parents. If an ItemGroup contains
  * a set of events, each Item in that group will inherit those events from its parent, and so on.
  */
-declare class EventList extends PropertyList {
+export class EventList extends PropertyList {
     constructor(parent: any, populate: object[]);
     /**
      * Returns an array of listeners filtered by the listener name
@@ -603,7 +604,7 @@ declare class EventList extends PropertyList {
     static isEventList(obj: any): boolean;
 }
 
-declare namespace Event {
+export namespace Event {
     /**
      * @example
      * Constructing an event
@@ -629,7 +630,7 @@ declare namespace Event {
  * executed.
  * @param definition - Pass the initial definition of the event as the options parameter.
  */
-declare class Event extends Property {
+export class Event extends Property {
     constructor(definition: Event.definition);
     /**
      * Update an event.
@@ -645,7 +646,7 @@ declare class Event extends Property {
     script: Script;
 }
 
-declare namespace FormParam {
+export namespace FormParam {
     /**
      * @property key - The name ("key") of the form data parameter.
      * @property value - The value of the parameter.
@@ -660,7 +661,7 @@ declare namespace FormParam {
  * Represents a Form Data parameter, which can exist in request body.
  * @param options - Pass the initial definition of the form data parameter.
  */
-declare class FormParam {
+export class FormParam {
     constructor(options: FormParam.definition);
     /**
      * Converts the FormParameter to a single param string.
@@ -687,7 +688,7 @@ declare class FormParam {
 /**
  * Contains a list of header elements
  */
-declare class HeaderList extends PropertyList {
+export class HeaderList extends PropertyList {
     constructor(parent: any, headers: Header[]);
     /**
      * Gets size of a list of headers excluding standard header prefix.
@@ -699,7 +700,7 @@ declare class HeaderList extends PropertyList {
     static isHeaderList(obj: any): boolean;
 }
 
-declare namespace Header {
+export namespace Header {
     /**
      * @example
      * Create a header
@@ -753,7 +754,7 @@ declare namespace Header {
  * @param [name] - optional override the header name or use when the first parameter is the header value as
  * string.
  */
-declare class Header extends Property {
+export class Header extends Property {
     constructor(options: Header.definition | string, name?: string);
     /**
      * Converts the header to a single header string.
@@ -814,7 +815,7 @@ declare class Header extends Property {
     disabled: boolean;
 }
 
-declare namespace ItemGroup {
+export namespace ItemGroup {
     /**
      * The following defines the object (or JSON) structure that one can pass to the ItemGroup while creating a new
      * ItemGroup instance. This is also the object structure returned when `.toJSON()` is called on an ItemGroup instance.
@@ -873,7 +874,7 @@ declare namespace ItemGroup {
  * initial configuration of the item group with the requests it contains, the authentication applied to all
  * requests, events that the requests responds to, etc.
  */
-declare class ItemGroup extends Property {
+export class ItemGroup extends Property {
     constructor(definition?: ItemGroup.definition);
     /**
      * This is a PropertyList that holds the list of Items or ItemGroups belonging to a
@@ -944,7 +945,7 @@ declare class ItemGroup extends Property {
     static isItemGroup(obj: any): boolean;
 }
 
-declare namespace Item {
+export namespace Item {
     /**
      * The following defines the object (or JSON) structure that one can pass to the Item while creating a new Item
      * instance. This is also the object structure returned when `.toJSON()` is called on an Item instance.
@@ -1003,7 +1004,7 @@ declare namespace Item {
  * @param [definition] - While creating a new instance of Item, one can provide the initial
  * configuration of the item with the the request it sends, the expected sample responses, tests, etc
  */
-declare class Item extends Property {
+export class Item extends Property {
     constructor(definition?: Item.definition);
     /**
      * The instance of the Request object inside an Item defines the HTTP request that is supposed to be
@@ -1084,7 +1085,7 @@ declare class Item extends Property {
     static isItem(obj: any): boolean;
 }
 
-declare namespace MutationTracker {
+export namespace MutationTracker {
     /**
      * A JSON representation of a mutation on an object. Here objects mean instances of postman-collection classes.
      * This captures the instruction and the parameters of the instruction so that it can be replayed on a different object.
@@ -1120,7 +1121,7 @@ declare namespace MutationTracker {
  * transported for reporting or to replay on similar objects.
  * @param definition - serialized mutation tracker
  */
-declare class MutationTracker extends PropertyBase {
+export class MutationTracker extends PropertyBase {
     constructor(definition: MutationTracker.definition);
     /**
      * Track a mutation.
@@ -1146,7 +1147,7 @@ declare class MutationTracker extends PropertyBase {
     static isMutationTracker(obj: any): boolean;
 }
 
-declare namespace PropertyBase {
+export namespace PropertyBase {
     type definition = {
         description?: string | Description;
     };
@@ -1156,7 +1157,7 @@ declare namespace PropertyBase {
  * Base of all properties in Postman Collection. It defines the root for all standalone properties for postman
  * collection.
  */
-declare class PropertyBase {
+export class PropertyBase {
     constructor(definition: PropertyBase.definition);
     /**
      * Invokes the given iterator for every parent in the parent chain of the given element.
@@ -1201,14 +1202,14 @@ declare class PropertyBase {
     static toJSON(obj: any): any;
 }
 
-declare namespace PropertyList {
+export namespace PropertyList {
     /**
      * An item constructed of PropertyList.Type.
      */
     type Type = any;
 }
 
-declare class PropertyList {
+export class PropertyList {
     constructor(type: (...params: any[]) => any, parent: any, populate: any[]);
     /**
      * Insert an element at the end of this list. When a reference member specified via second parameter is found, the
@@ -1336,7 +1337,7 @@ declare class PropertyList {
     static isPropertyList(obj: any): boolean;
 }
 
-declare namespace Property {
+export namespace Property {
     /**
      * @property [id] - A unique string that identifies the property.
      * @property [name] - A distinctive and human-readable name of the property.
@@ -1370,7 +1371,7 @@ declare namespace Property {
  * super constructor function. This implies that construction parameters of every inherited member is propagated
  * to be sent up to this point.
  */
-declare class Property extends PropertyBase {
+export class Property extends PropertyBase {
     constructor(definition?: Property.definition);
     /**
      * The `id` of the property is a unique string that identifies this property and can be used to refer to
@@ -1432,7 +1433,7 @@ declare class Property extends PropertyBase {
  *          ]);
  * @param populate - The list of proxy objects
  */
-declare class ProxyConfigList extends PropertyList {
+export class ProxyConfigList extends PropertyList {
     constructor(parent: any, populate: any[]);
     /**
      * Matches and gets the proxy config for the particular url.
@@ -1446,7 +1447,7 @@ declare class ProxyConfigList extends PropertyList {
     static isProxyConfigList(obj: any): boolean;
 }
 
-declare namespace ProxyConfig {
+export namespace ProxyConfig {
     /**
      * The following is the object structure accepted as constructor parameter while calling `new ProxyConfig(...)`. It is
      * also the structure exported when Property.toJSON or Property.toObjectResolved is called on a
@@ -1503,7 +1504,7 @@ declare namespace ProxyConfig {
  *     });
  * @param [options] - Specifies object with props matches, server and tunnel.
  */
-declare class ProxyConfig extends Property {
+export class ProxyConfig extends Property {
     constructor(options?: ProxyConfig.definition);
     /**
      * The proxy server host or ip
@@ -1567,7 +1568,7 @@ declare class ProxyConfig extends Property {
     static isProxyConfig(obj: any): boolean;
 }
 
-declare namespace QueryParam {
+export namespace QueryParam {
     /**
      * @property key - The name ("key") of the query parameter.
      * @property value - The value of the parameter.
@@ -1583,7 +1584,7 @@ declare namespace QueryParam {
  * @param options - Pass the initial definition of the query parameter. In case of
  * string, the query parameter is parsed using QueryParam.parseSingle.
  */
-declare class QueryParam extends Property {
+export class QueryParam extends Property {
     constructor(options: FormParam.definition | string);
     /**
      * Converts the QueryParameter to a single param string.
@@ -1629,7 +1630,7 @@ declare class QueryParam extends Property {
     static unparseSingle(obj: any, encode: boolean): string;
 }
 
-declare namespace RequestAuth {
+export namespace RequestAuth {
     /**
      * This defines the definition of the authentication method to be used.
      * @example
@@ -1670,7 +1671,7 @@ declare namespace RequestAuth {
  * @param options - Pass the initial definition of the Auth.
  * @param [parent] - optionally pass the parent of this auth. aides variable resolution.
  */
-declare class RequestAuth extends Property {
+export class RequestAuth extends Property {
     constructor(options: RequestAuth.definition, parent?: Property | PropertyList);
     /**
      * Update the parameters of a specific authentication type. If none is provided then it uses the one marked as to be
@@ -1701,7 +1702,7 @@ declare class RequestAuth extends Property {
     static isValidType(type: string): boolean;
 }
 
-declare namespace RequestBody {
+export namespace RequestBody {
     type definition = {
         mode: string;
         raw: string;
@@ -1726,7 +1727,7 @@ declare namespace RequestBody {
  * RequestBody holds data related to the request body. By default, it provides a nice wrapper for url-encoded,
  * form-data, and raw types of request bodies.
  */
-declare class RequestBody extends PropertyBase {
+export class RequestBody extends PropertyBase {
     constructor(options: any);
     /**
      * Set the content of this request data
@@ -1775,7 +1776,7 @@ declare class RequestBody extends PropertyBase {
     isEmpty(): boolean;
 }
 
-declare namespace Request {
+export namespace Request {
     /**
      * @property url - The URL of the request. This can be a Url.definition or a string.
      * @property method - The request method, e.g: "GET" or "POST".
@@ -1799,7 +1800,7 @@ declare namespace Request {
 /**
  * A Postman HTTP request object.
  */
-declare class Request extends Property {
+export class Request extends Property {
     constructor(options: Request.definition);
     url: Url;
     headers: HeaderList;
@@ -1882,7 +1883,7 @@ declare class Request extends Property {
     static isRequest(obj: any): boolean;
 }
 
-declare namespace Response {
+export namespace Response {
     /**
      * @property code - define the response code
      * @property [reason] - optionally, if the response has a non-standard response code reason, provide it here
@@ -1956,7 +1957,7 @@ declare namespace Response {
  * Response holds data related to the request body. By default, it provides a nice wrapper for url-encoded,
  * form-data, and raw types of request bodies.
  */
-declare class Response extends Property {
+export class Response extends Property {
     constructor(options: Response.definition);
     originalRequest: Request;
     status: string;
@@ -2032,7 +2033,7 @@ declare class Response extends Property {
 /**
  * Postman scripts that are executed upon events on a collection  / request such as test and pre request.
  */
-declare class Script extends Property {
+export class Script extends Property {
     constructor(options: any);
     /**
      * Converts the script lines array to a single source string.
@@ -2061,7 +2062,7 @@ declare class Script extends Property {
 /**
  * Defines a URL.
  */
-declare class Url extends PropertyBase {
+export class Url extends PropertyBase {
     constructor(options: any | string);
     /**
      * Set a URL.
@@ -2131,7 +2132,7 @@ declare class Url extends PropertyBase {
     static isUrl(obj: any): boolean;
 }
 
-declare class VariableList extends PropertyList {
+export class VariableList extends PropertyList {
     constructor(parent: Property, populate: any | any[]);
     /**
      * Replaces the variable tokens inside a string with its actual values.
@@ -2158,7 +2159,7 @@ declare class VariableList extends PropertyList {
     static isVariableList(obj: any): boolean;
 }
 
-declare namespace VariableScope {
+export namespace VariableScope {
     /**
      * Environment and Globals of postman is exported and imported in a specified data structure. This data structure can be
      * passed on to the constructor parameter of VariableScope or VariableList to instantiate an instance of
@@ -2210,7 +2211,7 @@ declare namespace VariableScope {
  * the scope
  * @param [layers] - Additional parent scopes to search for and resolve variables
  */
-declare class VariableScope extends Property {
+export class VariableScope extends Property {
     constructor(definition: VariableScope.definition, layers?: VariableList[]);
     /**
      * @example
@@ -2297,7 +2298,7 @@ declare class VariableScope extends Property {
     static isVariableScope(obj: any): boolean;
 }
 
-declare namespace Variable {
+export namespace Variable {
     /**
      * The object representation of a Variable consists the variable value and type. It also optionally includes the `id`
      * and a friendly `name` of the variable. The `id` and the `name` of a variable is usually managed and used when a
@@ -2367,7 +2368,7 @@ declare namespace Variable {
  * procure an object representation of the property with all variable references replaced by corresponding values.
  * @param [definition] - Specify the initial value and type of the variable.
  */
-declare class Variable extends Property {
+export class Variable extends Property {
     constructor(definition?: Variable.definition);
     type: Variable.types;
     value: any;
@@ -2414,14 +2415,14 @@ declare class Variable extends Property {
     disabled: boolean;
 }
 
-declare namespace Version {
+export namespace Version {
     type definition = any | string;
 }
 
 /**
  * Defines a Version.
  */
-declare class Version extends PropertyBase {
+export class Version extends PropertyBase {
     constructor(definition: Version.definition);
     /**
      * Set the version value as string or object with separate components of version
@@ -2447,7 +2448,7 @@ declare class Version extends PropertyBase {
  * An example UrlMatchPatternList
  * var matchPatternList = new UrlMatchPatternList(['https://*.google.com/*']);
  */
-declare class UrlMatchPatternList extends PropertyList {
+export class UrlMatchPatternList extends PropertyList {
     constructor(parent: any, list: string[]);
     /**
      * Tests the url string with the match pattern list provided to see if it matches any of it.
@@ -2457,7 +2458,7 @@ declare class UrlMatchPatternList extends PropertyList {
     test(urlStr?: string): boolean;
 }
 
-declare namespace UrlMatchPattern {
+export namespace UrlMatchPattern {
     /**
      * @property pattern - The url match pattern string
      */
@@ -2473,7 +2474,7 @@ declare namespace UrlMatchPattern {
  * An example UrlMatchPattern
  * var matchPattern = new UrlMatchPattern('https://*.google.com/*');
  */
-declare class UrlMatchPattern extends Property {
+export class UrlMatchPattern extends Property {
     constructor(options: UrlMatchPattern.definition);
     /**
      * The url match pattern string
@@ -2533,3 +2534,5 @@ declare class UrlMatchPattern extends Property {
     static readonly MATCH_ALL_URLS: string;
 }
 
+
+}
