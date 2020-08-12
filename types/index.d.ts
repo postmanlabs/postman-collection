@@ -1077,7 +1077,7 @@ declare class Item extends Property {
     /**
      * Sets authentication method for the request within this item
      */
-    authorizeRequestUsing(type: string | RequestAuth.definition, options?: VariableList.definition): void;
+    authorizeRequestUsing(type: string | RequestAuth.definition, options?: VariableList): void;
     /**
      * Check whether an object is an instance of PostmanItem.
      */
@@ -1160,11 +1160,11 @@ declare class PropertyBase {
     constructor(definition: PropertyBase.definition);
     /**
      * Invokes the given iterator for every parent in the parent chain of the given element.
-     * @param [options = {}] - A set of options for the parent chain traversal.
+     * @param options - A set of options for the parent chain traversal.
      * @param [options.withRoot = false] - Set to true to include the collection object as well.
      * @param iterator - The function to call for every parent in the ancestry chain.
      */
-    forEachParent(options?: {
+    forEachParent(options: {
         withRoot?: boolean;
     }, iterator: (...params: any[]) => any): void;
     /**
@@ -1201,8 +1201,15 @@ declare class PropertyBase {
     static toJSON(obj: any): any;
 }
 
+declare namespace PropertyList {
+    /**
+     * An item constructed of PropertyList.Type.
+     */
+    type Type = any;
+}
+
 declare class PropertyList {
-    constructor(type: string, parent: any, populate: any[]);
+    constructor(type: (...params: any[]) => any, parent: any, populate: any[]);
     /**
      * Insert an element at the end of this list. When a reference member specified via second parameter is found, the
      * member is inserted at an index before the reference member.
@@ -1233,7 +1240,7 @@ declare class PropertyList {
      * Removes all elements from the PropertyList for which the predicate returns truthy.
      * @param context - Optional context to bind the predicate to.
      */
-    remove(predicate: ((...params: any[]) => any) | string | Type, context: any): void;
+    remove(predicate: ((...params: any[]) => any) | string | PropertyList.Type, context: any): void;
     /**
      * Removes all items in the list
      */
@@ -1675,7 +1682,7 @@ declare class RequestAuth extends Property {
      * @param options - note that options set here would replace all existing
      * options for the particular auth
      */
-    use(type: string, options: VariableList | VariableList.definition): void;
+    use(type: string, options: VariableList | any[] | any): void;
     /**
      * Fetches the currently selected AuthType.
      */
@@ -1692,6 +1699,27 @@ declare class RequestAuth extends Property {
      * Determines whether an authentication type name is valid or not
      */
     static isValidType(type: string): boolean;
+}
+
+declare namespace RequestBody {
+    type definition = {
+        mode: string;
+        raw: string;
+        file: string;
+        graphql: any;
+        formdata: object[];
+        urlencoded: object[] | string;
+    };
+    /**
+     * MODES
+     */
+    enum MODES {
+        file = "file",
+        formdata = "formdata",
+        graphql = "graphql",
+        raw = "raw",
+        urlencoded = "urlencoded"
+    }
 }
 
 /**
@@ -1747,19 +1775,6 @@ declare class RequestBody extends PropertyBase {
     isEmpty(): boolean;
 }
 
-declare namespace RequestBody {
-    /**
-     * MODES
-     */
-    enum MODES {
-        file = "file",
-        formdata = "formdata",
-        graphql = "graphql",
-        raw = "raw",
-        urlencoded = "urlencoded"
-    }
-}
-
 declare namespace Request {
     /**
      * @property url - The URL of the request. This can be a Url.definition or a string.
@@ -1800,7 +1815,7 @@ declare class Request extends Property {
     /**
      * Sets authentication method for the request
      */
-    authorizeUsing(type: string | RequestAuth.definition, options?: VariableList.definition): void;
+    authorizeUsing(type: string | RequestAuth.definition, options?: VariableList): void;
     /**
      * Returns an object where the key is a header name and value is the header value.
      * @param options.ignoreCase - When set to "true", will ensure that all the header keys are lower case.
@@ -1878,7 +1893,7 @@ declare namespace Response {
         header?: Header.definition[];
         cookie?: Cookie.definition[];
         body?: string;
-        stream?: Buffer | ByteArray;
+        stream?: Buffer | ArrayBuffer;
         responseTime: number;
     };
     /**
@@ -2399,11 +2414,15 @@ declare class Variable extends Property {
     disabled: boolean;
 }
 
+declare namespace Version {
+    type definition = any | string;
+}
+
 /**
  * Defines a Version.
  */
 declare class Version extends PropertyBase {
-    constructor(options: any | string);
+    constructor(definition: Version.definition);
     /**
      * Set the version value as string or object with separate components of version
      */
@@ -2419,5 +2438,98 @@ declare class Version extends PropertyBase {
     prerelease: string;
     build: string;
     string: string;
+}
+
+/**
+ * UrlMatchPattern is a list of UrlMatchPatterns.
+ * This allows you to test for any url over a list of match patterns.
+ * @example
+ * An example UrlMatchPatternList
+ * var matchPatternList = new UrlMatchPatternList(['https://*.google.com/*']);
+ */
+declare class UrlMatchPatternList extends PropertyList {
+    constructor(parent: any, list: string[]);
+    /**
+     * Tests the url string with the match pattern list provided to see if it matches any of it.
+     * Follows the https://developer.chrome.com/extensions/match_patterns pattern for pattern validation and matching
+     * @param [urlStr] - The url string for which the proxy match needs to be done.
+     */
+    test(urlStr?: string): boolean;
+}
+
+declare namespace UrlMatchPattern {
+    /**
+     * @property pattern - The url match pattern string
+     */
+    type definition = {
+        pattern: string;
+    };
+}
+
+/**
+ * UrlMatchPattern allows to create rules to define Urls to match for.
+ * It is based on Google's Match Pattern - https://developer.chrome.com/extensions/match_patterns
+ * @example
+ * An example UrlMatchPattern
+ * var matchPattern = new UrlMatchPattern('https://*.google.com/*');
+ */
+declare class UrlMatchPattern extends Property {
+    constructor(options: UrlMatchPattern.definition);
+    /**
+     * The url match pattern string
+     */
+    static pattern: string;
+    /**
+     * Assigns the given properties to the UrlMatchPattern.
+     */
+    update(options: any): void;
+    /**
+     * Tests if the given protocol string, is allowed by the pattern.
+     * @param [protocol] - The protocol to be checked if the pattern allows.
+     */
+    testProtocol(protocol?: string): boolean;
+    /**
+     * Returns the protocols supported
+     */
+    getProtocols(): string[];
+    /**
+     * Tests if the given host string, is allowed by the pattern.
+     * @param [host] - The host to be checked if the pattern allows.
+     */
+    testHost(host?: string): boolean;
+    /**
+     * Tests if the current pattern allows the given port.
+     * @param port - The port to be checked if the pattern allows.
+     * @param protocol - Protocol to refer default port.
+     */
+    testPort(port: string, protocol: string): boolean;
+    /**
+     * Tests if the current pattern allows the given path.
+     * @param [path] - The path to be checked if the pattern allows.
+     */
+    testPath(path?: string): boolean;
+    /**
+     * Tests the url string with the match pattern provided.
+     * Follows the https://developer.chrome.com/extensions/match_patterns pattern for pattern validation and matching
+     * @param [urlStr] - The url string for which the proxy match needs to be done.
+     */
+    test(urlStr?: string): boolean;
+    /**
+     * Returns a string representation of the match pattern
+     * @returns pattern
+     */
+    toString(): string;
+    /**
+     * Returns the JSON representation.
+     */
+    toJSON(): any;
+    /**
+     * Multiple protocols in the match pattern should be separated by this string
+     */
+    static readonly PROTOCOL_DELIMITER: string;
+    /**
+     * String representation for matching all urls - 
+     */
+    static readonly MATCH_ALL_URLS: string;
 }
 
