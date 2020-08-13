@@ -60,9 +60,10 @@ module.exports = function (exit) {
                     // replacing @link tags with the object namepath to which it was linked,
                     // as these link tags are not navigable in type-definitions.
                     .replace(/\{@link (\w*)[#.]+(\w*)\}/gm, '$1.$2')
-                    .replace(/\{@link (\S+)\}/gm, '$1'); // remove @link tags
+                    .replace(/\{@link (\S+)\}/gm, '$1') // remove @link tags
+                    .replace(/^(.+)/gm, '    $1');
 
-                source = `${heading}\ndeclare module "postman-collection" {\n${source}\n}\n`;
+                source = `${heading}\ndeclare module "postman-collection" {\n\n${source}}\n`;
 
                 fs.writeFile(`${TARGET_DIR}/index.d.ts`, source, function (err) {
                     if (err) {
