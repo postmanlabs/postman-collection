@@ -1,4 +1,5 @@
-master:
+3.6.5:
+  date: 2020-08-13
   chores:
     - GH-1076 Added TypeScript Type Declaration
     - Updated dependencies
