@@ -1,0 +1,31 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": [
+      "jsdoc",
+      "closure"
+    ]
+  },
+  "source": {
+    "include": [
+      "lib"
+    ],
+    "includePattern": ".+\\.js(doc)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": [
+    "tsd-jsdoc/dist/plugin"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "default": {
+      "outputSourceFiles": false
+    }
+  },
+  "opts": {
+    "destination": "./types",
+    "template": "tsd-jsdoc/dist",
+    "outFile": "index.d.ts",
+    "recurse": true
+  }
+}

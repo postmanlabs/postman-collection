@@ -2,7 +2,7 @@
   "name": "postman-collection",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Labs <help@getpostman.com>",
-  "version": "3.6.4",
+  "version": "3.6.5",
   "keywords": [
     "postman"
   ],
@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build-docs": "node npm/build-docs.js",
+    "build-types": "node npm/build-types.js",
     "build-schema": "node npm/build-schema.js",
     "build-wiki": "node npm/build-wiki.js",
     "publish-wiki": "node npm/publish-wiki.js",
@@ -39,10 +40,10 @@
     "iconv-lite": "0.6.2",
     "liquid-json": "0.3.1",
     "lodash": "4.17.19",
-    "marked": "1.1.0",
+    "marked": "1.1.1",
     "mime-format": "2.0.0",
     "mime-types": "2.1.27",
-    "postman-url-encoder": "2.1.2",
+    "postman-url-encoder": "2.1.3",
     "sanitize-html": "1.20.1",
     "semver": "7.3.2",
     "uuid": "3.4.0"
@@ -50,7 +51,7 @@
   "devDependencies": {
     "async": "3.2.0",
     "bipbip": "0.4.1",
-    "browserify": "16.5.1",
+    "browserify": "16.5.2",
     "btoa": "1.2.1",
     "chai": "4.2.0",
     "chalk": "2.4.2",
@@ -61,7 +62,7 @@
     "eslint-plugin-mocha": "6.3.0",
     "eslint-plugin-security": "1.4.0",
     "js-yaml": "3.14.0",
-    "jsdoc": "3.6.4",
+    "jsdoc": "3.6.5",
     "jsdoc-to-markdown": "6.0.1",
     "karma": "3.1.4",
     "karma-browserify": "6.1.0",
@@ -73,13 +74,14 @@
     "nyc": "14.1.1",
     "parse-gitignore": "1.0.1",
     "postman-jsdoc-theme": "0.0.3",
-    "postman-request": "2.88.1-postman.23",
+    "postman-request": "2.88.1-postman.24",
     "puppeteer": "1.20.0",
     "recursive-readdir": "2.2.2",
     "require-all": "3.0.0",
     "schema-compiler": "0.0.3",
     "shelljs": "0.8.4",
-    "strip-json-comments": "3.1.1"
+    "strip-json-comments": "3.1.1",
+    "tsd-jsdoc": "2.5.0"
   },
   "homepage": "https://github.com/postmanlabs/postman-collection#readme",
   "bugs": {
@@ -90,5 +92,6 @@
       "file-type",
       "eslint-plugin-jsdoc"
     ]
-  }
+  },
+  "types": "types/index.d.ts"
 }
