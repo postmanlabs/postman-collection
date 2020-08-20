@@ -1327,6 +1327,7 @@ describe('Url', function () {
             ]);
         });
 
+        // Refer: https://github.com/postmanlabs/postman-app-support/issues/8924
         it('should correctly add hasOwnProperty query key to an existing Url instance', function () {
             var url = new Url();
             url.addQueryParams('hasOwnProperty=0&foo=bar');
