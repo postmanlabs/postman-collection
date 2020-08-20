@@ -876,7 +876,7 @@ describe('PropertyList', function () {
 
         // Refer: https://github.com/postmanlabs/postman-app-support/issues/8924
         it('should be able to insert hasOwnProperty as a key', function () {
-            var pList = new PropertyList(FakeType, {}, { key: 'hasOwnProperty', value: 'false' });
+            var pList = new PropertyList(FakeType, {}, { key: 'hasOwnProperty', value: '0' });
             pList.insert({ key: 'foo', value: 'bar' });
 
             expect(pList.members).to.eql([
