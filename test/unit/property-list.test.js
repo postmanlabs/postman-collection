@@ -860,12 +860,31 @@ describe('PropertyList', function () {
     });
 
     describe('.insert', function () {
+        var FakeType = function (options) {
+            this.key = options.key;
+            this.value = options.value;
+        };
+        FakeType._postman_propertyIndexKey = 'key';
+        FakeType._postman_propertyAllowsMultipleValues = true;
+
         it('should bail out for non-object arguments', function () {
             var pList = new PropertyList();
 
             pList.insert();
             expect(pList.members).to.eql([]);
         });
+
+        // Refer: https://github.com/postmanlabs/postman-app-support/issues/8924
+        it('should be able to insert hasOwnProperty as a key', function () {
+            var pList = new PropertyList(FakeType, {}, { key: 'hasOwnProperty', value: 'false' });
+            pList.insert({ key: 'foo', value: 'bar' });
+
+            expect(pList.members).to.eql([
+                { key: 'hasOwnProperty', value: '0' },
+                { key: 'foo', value: 'bar' }
+            ]);
+        });
+
     });
 
     describe('.add', function () {
