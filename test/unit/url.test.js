@@ -1327,6 +1327,17 @@ describe('Url', function () {
             ]);
         });
 
+        // Refer: https://github.com/postmanlabs/postman-app-support/issues/8924
+        it('should correctly add hasOwnProperty query key to an existing Url instance', function () {
+            var url = new Url();
+            url.addQueryParams('hasOwnProperty=0&foo=bar');
+
+            expect(url.toJSON().query).to.eql([
+                { key: 'hasOwnProperty', value: '0' },
+                { key: 'foo', value: 'bar' }
+            ]);
+        });
+
         it('should correctly remove a list of query params from an existing Url instance', function () {
             var url = new Url('https://postman-echo.com/get?alpha=foo&beta=bar&gamma=baz');
 
