@@ -174,6 +174,28 @@ describe('contentInfo module', function () {
             });
     });
 
+    it('Should return with default file name if invalid charset type specified', function () {
+        var response = new Response({ header: [
+            {
+                key: 'Content-Disposition',
+                value: 'attachment;filename*=invalid-charset\'\'%E5%93%8D%E5%BA%94.json'
+            },
+            {
+                key: 'Content-Type',
+                value: 'application/json'
+            }
+        ], stream: Buffer.from('a test json').toJSON()
+        });
+        expect(contentInfo.contentInfo(response)).to
+            .eql({
+                charset: 'utf8',
+                fileExtension: 'json',
+                mimeFormat: 'json',
+                mimeType: 'text',
+                fileName: 'response.json'
+            });
+    });
+
     it('Should return file name from content-disposition header with encoded type utf-8', function () {
         var response = new Response({ header: [
             {
