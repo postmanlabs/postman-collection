@@ -194,4 +194,161 @@ describe('Cookie', function () {
             })).valueOf()).to.eql('this is a cookie value');
         });
     });
+
+    describe('valueOf', function () {
+        it('should handle malformed URI sequence', function () {
+            expect((new Cookie({
+                name: 'blah',
+                value: '%E0%A4%A'
+            })).valueOf()).to.eql('%E0%A4%A');
+        });
+    });
+
+    describe('unparseSingle', function () {
+        var rawCookie = 'GAPS=lol;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH';
+        it('should be unparsed properly in case of no cookie name', function () {
+            var unparsedSingle = Cookie.unparseSingle(rawCookie);
+            expect(unparsedSingle).equals('');
+        });
+
+        it('should be unparsed properly in case of valid cookie name', function () {
+            var rawCookie = {
+                    name: 'testCookie',
+                    expires: 1502442248,
+                    hostOnly: false,
+                    httpOnly: false,
+                    key: '_ga',
+                    path: '/',
+                    secure: false,
+                    session: false,
+                    value: 'GA1.2.113558537.1435817423'
+                },
+                unparsedSingle = Cookie.unparseSingle(rawCookie);
+            expect(unparsedSingle).equals(rawCookie.name + '=' + rawCookie.value);
+        });
+    });
+
+    describe('unparse', function () {
+        it('should return empty string if not array of cookies', function () {
+            expect(Cookie.unparse('')).to.equal('');
+        });
+
+        it('should return empty string if array of cookies', function () {
+            var rawCookie = {
+                    domain: '.httpbin.org',
+                    expires: 1502442248,
+                    hostOnly: false,
+                    httpOnly: false,
+                    key: '_ga',
+                    path: '/',
+                    secure: false,
+                    session: false,
+                    value: 'GA1.2.113558537.1435817423'
+                },
+                cookieArray = [];
+            cookieArray.push(rawCookie);
+            // eslint-disable-next-line one-var
+            var unparse = Cookie.unparse(cookieArray);
+            expect(unparse).equals(cookieArray.map(Cookie.unparseSingle).join('; '));
+        });
+    });
+
+    describe('stringify', function () {
+        var rawCookie = {
+            domain: '.httpbin.org',
+            expires: 1502442248,
+            hostOnly: false,
+            httpOnly: false,
+            key: '_ga',
+            path: '/',
+            secure: false,
+            session: false,
+            value: 'GA1.2.113558537.1435817423'
+        };
+
+        it('should return single Set-Cookie header string', function () {
+            var cookie = new Cookie(rawCookie);
+            expect(Cookie.stringify(cookie))
+                .equals('_ga=GA1.2.113558537.1435817423; Expires=1502442248; Domain=.httpbin.org; Path=/');
+        });
+    });
+
+    describe('toString', function () {
+        it('should return single Set-Cookie header string with key value', function () {
+            var rawCookie = {
+                    key: '_ga',
+                    value: 'GA1.2.113558537.1435817423'
+                },
+                cookie = new Cookie(rawCookie);
+            expect(cookie.toString())
+                .equals('_ga=GA1.2.113558537.1435817423');
+        });
+
+        it('should return single Set-Cookie header string with expires', function () {
+            var rawCookie = {
+                    key: '_ga',
+                    value: 'GA1.2.113558537.1435817423',
+                    expires: '14 Jun 2017 00:00:00 PDT'
+                },
+                cookie = new Cookie(rawCookie);
+            expect(cookie.toString())
+                .equals('_ga=GA1.2.113558537.1435817423; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
+        });
+
+        it('should return single Set-Cookie header string with secure and httpOnly set to true', function () {
+            var rawCookie = {
+                    key: '_ga',
+                    value: 'GA1.2.113558537.1435817423',
+                    httpOnly: true,
+                    secure: true
+                },
+                cookie = new Cookie(rawCookie);
+            expect(cookie.toString())
+                .equals('_ga=GA1.2.113558537.1435817423; Secure; HttpOnly');
+        });
+
+        it('should return single Set-Cookie header string with maxAge value', function () {
+            var rawCookie = {
+                    key: '_ga',
+                    value: 'GA1.2.113558537.1435817423',
+                    maxAge: 1502442248
+                },
+                cookie = new Cookie(rawCookie);
+            expect(cookie.toString())
+                .equals('_ga=GA1.2.113558537.1435817423; Max-Age=1502442248');
+        });
+
+        it('should return single Set-Cookie header string with extensions', function () {
+            var rawCookie = {
+                    key: '_ga',
+                    value: 'GA1.2.113558537.1435817423',
+                    maxAge: 1502442248,
+                    extensions: [{
+                        key: 'Priority',
+                        value: 'HIGH'
+                    }]
+                },
+                cookie = new Cookie(rawCookie);
+            expect(cookie.toString())
+                .equals('_ga=GA1.2.113558537.1435817423; Max-Age=1502442248; {"key":"Priority","value":"HIGH"}');
+        });
+
+        it('should return single Set-Cookie header string without extensions if json value not valid', function () {
+            var rawCookie,
+                extensions,
+                cookie;
+
+            extensions = {};
+            extensions.prop = extensions;
+            rawCookie = {
+                key: '_ga',
+                value: 'GA1.2.113558537.1435817423',
+                maxAge: 1502442248,
+                extensions: [extensions]
+            };
+            cookie = new Cookie(rawCookie);
+            expect(cookie.toString())
+                .equals('_ga=GA1.2.113558537.1435817423; Max-Age=1502442248');
+        });
+    });
 });

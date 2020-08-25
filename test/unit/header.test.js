@@ -70,6 +70,15 @@ describe('Header', function () {
                 value: 0
             });
         });
+
+        it('should create the header with system options', function () {
+            var header = Header.create({ key: 'name', value: 'value', system: true });
+            expect(header.toJSON()).to.eql({
+                key: 'name',
+                value: 'value',
+                system: true
+            });
+        });
     });
 
     describe('parseSingle', function () {
@@ -227,6 +236,16 @@ describe('Header', function () {
 
         it('should return false when called without arguments', function () {
             expect(Header.isHeader()).to.be.false;
+        });
+    });
+
+    describe('toString', function () {
+        // eslint-disable-next-line max-len
+        var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="';
+
+        it('should convert the header to a single header string', function () {
+            var newHeader = new Header(rawHeader);
+            expect(newHeader.toString()).equals(rawHeader);
         });
     });
 });
