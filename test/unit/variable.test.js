@@ -166,6 +166,18 @@ describe('Variable', function () {
         expect(v1.value).to.equal('{"foo":"bar"}');
     });
 
+    it('should set value to null when value provided as cyclic object value (json)', function () {
+        var obj = {};
+        obj.prop = obj;
+        // eslint-disable-next-line one-var
+        var v = new Variable({
+            value: obj,
+            type: 'json'
+        });
+
+        expect(v.value).to.equal('null');
+    });
+
     it('should typecast value during construction when type is provided (array)', function () {
         var v = new Variable({
                 value: null,
@@ -180,6 +192,20 @@ describe('Variable', function () {
         expect(v1.value).to.equal('[1,2,"3"]');
     });
 
+    it('should set value to null if provided as cyclic object value (array)', function () {
+        var objArray = [],
+            obj = {};
+        obj.prop = obj;
+        objArray[0] = obj;
+        // eslint-disable-next-line one-var
+        var v = new Variable({
+            value: objArray,
+            type: 'array'
+        });
+
+        expect(v.value).to.equal('null');
+    });
+
     it('should typecast value during construction when type is provided (object)', function () {
         var v = new Variable({
                 value: null,
@@ -192,6 +218,18 @@ describe('Variable', function () {
 
         expect(v.value).to.equal('null');
         expect(v1.value).to.equal('{"foo":"bar"}');
+    });
+
+    it('should set value to null if provided invalid json string (object)', function () {
+        var obj = {};
+        obj.prop = obj;
+        // eslint-disable-next-line one-var
+        var v = new Variable({
+            value: obj,
+            type: 'object'
+        });
+
+        expect(v.value).to.equal('null');
     });
 
     it('should support any data type if type is set to `any`', function () {

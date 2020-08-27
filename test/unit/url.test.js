@@ -57,6 +57,14 @@ describe('Url', function () {
                 expect(url.update).to.be.ok;
                 expect(url.update).to.be.a('function');
             });
+
+            it('should handle query parameters as string', function () {
+                var url = new Url({
+                    host: 'https://postman-echo.com',
+                    query: 'foo=bar'
+                });
+                expect(url.toString()).to.eql('https://postman-echo.com?foo=bar');
+            });
         });
 
         describe('hosts in query params', function () {
@@ -1351,6 +1359,18 @@ describe('Url', function () {
             var url = new Url('https://postman-echo.com/getbaz');
 
             expect(url.getQueryString()).to.equal('');
+        });
+
+        it('should return the stringified query string for given URL', function () {
+            var url = new Url('https://postman-echo.com/getbaz?foo=bar');
+
+            expect(url.getQueryString()).to.equal('foo=bar');
+        });
+
+        it('should return the complete path, including the query string for given URL', function () {
+            var url = new Url('https://postman-echo.com/getbaz?foo=bar');
+
+            expect(url.getPathWithQuery()).to.equal('/getbaz?foo=bar');
         });
 
         it('must be able to convert query params to object', function () {

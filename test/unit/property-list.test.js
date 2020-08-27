@@ -911,6 +911,9 @@ describe('PropertyList', function () {
         FakeType.prototype.update = function (opts) {
             _.assign(this, opts);
         };
+        FakeType.prototype.create = function (opts) {
+            _.assign(this, opts);
+        };
 
         it('should be able to add a key that is not existing', function () {
             var list = new PropertyList(FakeType, null, [{
@@ -959,6 +962,24 @@ describe('PropertyList', function () {
                 key: 'key2',
                 val: 'value2'
             }]);
+        });
+
+        it('should throw error when unable to upsert into a list Type that does not support .update()', function () {
+            FakeType.prototype.update = null;
+            var list = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }, {
+                key: 'key2',
+                val: 'value2'
+            }]);
+
+            expect(function () {
+                list.upsert({
+                    key: 'key1',
+                    val: 'value1-updated'
+                });
+            }).to.throw('collection: unable to upsert into a list of Type that does not support .update()');
         });
     });
 
@@ -1031,6 +1052,25 @@ describe('PropertyList', function () {
             expect(list1.toJSON()).to.eql([{
                 key: 'key2',
                 val: 'value2'
+            }]);
+        });
+
+        it('should return in case of list members not array', function () {
+            // @todo Not working as expected not covering line 340
+            var list1 = new PropertyList(FakeType, null, [{
+                    key: 'key1',
+                    val: 'value1'
+                }]),
+                list2 = {
+                    key: 'key2',
+                    val: 'value2'
+                };
+
+            list1.assimilate(list2, false);
+
+            expect(list1.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
             }]);
         });
     });
@@ -1199,6 +1239,26 @@ describe('PropertyList', function () {
             }]);
 
             expect(list.has('key1', 'val1')).to.be.true;
+        });
+    });
+
+    describe('.toString', function () {
+        var FakeType = function (opts) {
+            _.assign(this, opts);
+        };
+        FakeType._postman_propertyIndexKey = 'key';
+        FakeType.prototype.update = function (opts) {
+            _.assign(this, opts);
+        };
+
+        it('should handle when unparse method not defined in Type', function () {
+            var list1 = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            list1.constructor = null;
+            expect(list1.toString()).to.eql('');
         });
     });
 });

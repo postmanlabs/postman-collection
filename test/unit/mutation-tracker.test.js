@@ -157,6 +157,13 @@ describe('MutationTracker', function () {
 
             expect(tracker.count()).to.eql(0);
         });
+
+        it('should not track invalid track call with no instruction', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track();
+            expect(tracker.count()).to.eql(0);
+        });
     });
 
     describe('apply', function () {

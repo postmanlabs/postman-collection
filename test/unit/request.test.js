@@ -523,6 +523,17 @@ describe('Request', function () {
                 value: 'bar'
             }]);
         });
+
+        it('should remove a header from the request', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader('foo');
+            expect(request.headers.toJSON()).to.eql([]);
+        });
     });
 
     describe('.forEachHeader', function () {
@@ -580,6 +591,56 @@ describe('Request', function () {
                     { type: 'any', value: 'bar', key: 'password' }
                 ]
             });
+        });
+
+        it('should delete auth request when type is null', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    header: [
+                        {
+                            key: 'some',
+                            value: 'header'
+                        },
+                        {
+                            key: 'other',
+                            value: 'otherheader',
+                            disabled: true
+                        }
+                    ],
+                    auth: null
+                },
+                request = new Request(rawRequest);
+
+            request.authorizeUsing(null);
+
+            expect(request.auth).be.undefined;
+        });
+
+        it('should return if not valid auth type', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    header: [
+                        {
+                            key: 'some',
+                            value: 'header'
+                        },
+                        {
+                            key: 'other',
+                            value: 'otherheader',
+                            disabled: true
+                        }
+                    ],
+                    auth: {
+                        type: 'type'
+                    }
+                },
+                request = new Request(rawRequest);
+
+            request.authorizeUsing('type');
+
+            expect(request.auth.toJSON()).to.be.eql({});
         });
     });
 
@@ -685,6 +746,41 @@ describe('Request', function () {
 
             expect(request).to.have.property('method', 'POSTMAN');
             expect(request.toJSON()).to.have.property('method', 'POSTMAN');
+        });
+    });
+
+    describe('addHeader', function () {
+        it('should add a header to the PropertyList of headers', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                newHeader = { key: 'testKey', value: 'testValue' };
+
+            request.addHeader(newHeader);
+            expect(request.headers.toJSON()).to.eql([
+                {
+                    key: 'foo',
+                    value: 'bar'
+                },
+                {
+                    key: 'testKey',
+                    value: 'testValue'
+                }
+            ]);
+        });
+    });
+
+    describe('authorize', function () {
+        it('should throw error as function deprecated', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                newHeader = { key: 'testKey', value: 'testValue' };
+
+            request.addHeader(newHeader);
+            expect(function () {
+                request.authorize();
+            }).to.throw('collection request.authorize() has been discontinued');
         });
     });
 });
