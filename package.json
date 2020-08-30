@@ -57,7 +57,7 @@
     "chalk": "2.4.2",
     "dependency-check": "4.1.0",
     "eslint": "5.16.0",
-    "eslint-plugin-jsdoc": "8.1.0",
+    "eslint-plugin-jsdoc": "21.0.0",
     "eslint-plugin-lodash": "7.1.0",
     "eslint-plugin-mocha": "6.3.0",
     "eslint-plugin-security": "1.4.0",
