@@ -1,3 +1,12 @@
+3.6.6:
+  date: 2020-08-31
+  fixed bugs:
+    - >-
+      GH-1081 Fixed a bug where multi-valued PropertyList throws on insert if a
+      key named `hasOwnProperty` is added
+  chores:
+    - Updated dependencies
+
 3.6.5:
   date: 2020-08-13
   chores:
