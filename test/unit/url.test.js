@@ -57,14 +57,6 @@ describe('Url', function () {
                 expect(url.update).to.be.ok;
                 expect(url.update).to.be.a('function');
             });
-
-            it('should handle query parameters as string', function () {
-                var url = new Url({
-                    host: 'https://postman-echo.com',
-                    query: 'foo=bar'
-                });
-                expect(url.toString()).to.eql('https://postman-echo.com?foo=bar');
-            });
         });
 
         describe('hosts in query params', function () {
@@ -1183,6 +1175,14 @@ describe('Url', function () {
                 port: new Number(123) // eslint-disable-line no-new-wrappers
             }).toString()).to.equal('localhost:123');
         });
+
+        it('should handle query parameters as string', function () {
+            var url = new Url({
+                host: 'https://postman-echo.com',
+                query: 'foo=bar'
+            });
+            expect(url.toString()).to.eql('https://postman-echo.com?foo=bar');
+        });
     });
 
     describe('getHost', function () {
@@ -1361,7 +1361,7 @@ describe('Url', function () {
             expect(url.getQueryString()).to.equal('');
         });
 
-        it('should return the stringified query string for given URL', function () {
+        it('should return the stringified query string when the query parameters are set', function () {
             var url = new Url('https://postman-echo.com/getbaz?foo=bar');
 
             expect(url.getQueryString()).to.equal('foo=bar');

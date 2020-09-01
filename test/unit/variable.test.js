@@ -166,16 +166,18 @@ describe('Variable', function () {
         expect(v1.value).to.equal('{"foo":"bar"}');
     });
 
-    it('should set value to null when value provided as cyclic object value (json)', function () {
-        var obj = {};
-        obj.prop = obj;
-        // eslint-disable-next-line one-var
-        var v = new Variable({
-            value: obj,
+    it('should set cyclic object value to null when type is provided (json)', function () {
+        var cyclicObject,
+            testVariable;
+
+        cyclicObject = {};
+        cyclicObject.prop = cyclicObject;
+        testVariable = new Variable({
+            value: cyclicObject,
             type: 'json'
         });
 
-        expect(v.value).to.equal('null');
+        expect(testVariable.value).to.equal('null');
     });
 
     it('should typecast value during construction when type is provided (array)', function () {

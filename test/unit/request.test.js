@@ -608,12 +608,20 @@ describe('Request', function () {
                             disabled: true
                         }
                     ],
-                    auth: null
+                    auth: {
+                        type: 'basic',
+                        username: 'foo',
+                        password: 'bar'
+                    }
                 },
                 request = new Request(rawRequest);
 
+            expect(request).to.have.property('auth');
+            expect(request.toJSON()).to.have.property('auth');
             request.authorizeUsing(null);
 
+            expect(request).to.not.have.property('auth');
+            expect(request.toJSON()).to.not.have.property('auth');
             expect(request.auth).be.undefined;
         });
 
@@ -633,14 +641,50 @@ describe('Request', function () {
                         }
                     ],
                     auth: {
-                        type: 'type'
+                        type: 'basic',
+                        basic: [{
+                            key: 'username',
+                            type: 'string',
+                            value: 'postman'
+                        },
+                        {
+                            key: 'password',
+                            type: 'string',
+                            value: 'password'
+                        }]
                     }
                 },
                 request = new Request(rawRequest);
 
+            expect(request).to.have.property('auth');
+            expect(request.toJSON()).to.have.property('auth');
+            expect(request.auth.toJSON()).to.be.eql({
+                'basic': [{
+                    'key': 'username',
+                    'type': 'string',
+                    'value': 'postman'
+                }, {
+                    'key': 'password',
+                    'type': 'string',
+                    'value': 'password'
+                }],
+                'type': 'basic'
+            });
             request.authorizeUsing('type');
 
-            expect(request.auth.toJSON()).to.be.eql({});
+            // if setting to invalid type, the method should return with no change
+            expect(request.auth.toJSON()).to.be.eql({
+                'basic': [{
+                    'key': 'username',
+                    'type': 'string',
+                    'value': 'postman'
+                }, {
+                    'key': 'password',
+                    'type': 'string',
+                    'value': 'password'
+                }],
+                'type': 'basic'
+            });
         });
     });
 
@@ -750,7 +794,7 @@ describe('Request', function () {
     });
 
     describe('addHeader', function () {
-        it('should add a header to the PropertyList of headers', function () {
+        it('should add a header to the request', function () {
             var request = new Request({
                     header: [{ key: 'foo', value: 'bar' }]
                 }),

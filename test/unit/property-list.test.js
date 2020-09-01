@@ -911,9 +911,6 @@ describe('PropertyList', function () {
         FakeType.prototype.update = function (opts) {
             _.assign(this, opts);
         };
-        FakeType.prototype.create = function (opts) {
-            _.assign(this, opts);
-        };
 
         it('should be able to add a key that is not existing', function () {
             var list = new PropertyList(FakeType, null, [{
@@ -965,8 +962,14 @@ describe('PropertyList', function () {
         });
 
         it('should throw error when unable to upsert into a list Type that does not support .update()', function () {
+            var FakeType,
+                list;
+            FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
             FakeType.prototype.update = null;
-            var list = new PropertyList(FakeType, null, [{
+            list = new PropertyList(FakeType, null, [{
                 key: 'key1',
                 val: 'value1'
             }, {
@@ -1056,7 +1059,6 @@ describe('PropertyList', function () {
         });
 
         it('should return in case of list members not array', function () {
-            // @todo Not working as expected not covering line 340
             var list1 = new PropertyList(FakeType, null, [{
                     key: 'key1',
                     val: 'value1'
@@ -1243,15 +1245,15 @@ describe('PropertyList', function () {
     });
 
     describe('.toString', function () {
-        var FakeType = function (opts) {
-            _.assign(this, opts);
-        };
-        FakeType._postman_propertyIndexKey = 'key';
-        FakeType.prototype.update = function (opts) {
-            _.assign(this, opts);
-        };
-
-        it('should handle when unparse method not defined in Type', function () {
+        it('should handle when unparse method not defined in Type and constructor set to null', function () {
+            var FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
+            FakeType.prototype.update = function (opts) {
+                _.assign(this, opts);
+            };
+            // eslint-disable-next-line one-var
             var list1 = new PropertyList(FakeType, null, [{
                 key: 'key1',
                 val: 'value1'
