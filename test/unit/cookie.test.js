@@ -205,7 +205,7 @@ describe('Cookie', function () {
     });
 
     describe('unparseSingle', function () {
-        it('should return just the value in case of no cookie name', function () {
+        it('should return only the value in case of no cookie name specified', function () {
             var rawCookie = {
                     expires: 1502442248,
                     hostOnly: false,
