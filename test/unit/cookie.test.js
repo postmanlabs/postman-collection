@@ -194,4 +194,26 @@ describe('Cookie', function () {
             })).valueOf()).to.eql('this is a cookie value');
         });
     });
+
+    describe('unparse', function () {
+        it('should return empty string if not array of cookies', function () {
+            expect(Cookie.unparse('')).to.equal('');
+        });
+    });
+
+    describe('toString', function () {
+        it('should return single Set-Cookie header string with extensions', function () {
+            var rawCookie = {
+                    key: 'testCookie',
+                    value: 'testCookieVal',
+                    maxAge: 1502442248,
+                    extensions: [{
+                        key: 'Priority',
+                        value: 'HIGH'
+                    }]
+                },
+                cookie = new Cookie(rawCookie);
+            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248; Priority=HIGH');
+        });
+    });
 });

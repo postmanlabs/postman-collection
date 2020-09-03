@@ -123,4 +123,29 @@ describe('RequestAuth', function () {
             fakeParent: true
         });
     });
+
+    describe('parameters', function () {
+        it('should return with already set auth params if type set to invalid auth type', function () {
+            var auth = new RequestAuth({
+                    noauth: {
+                        foo: 'bar'
+                    },
+                    type: 'noauth'
+                }),
+                options = {
+                    basic: {
+                        username: 'u', password: 'p'
+                    },
+                    type: 'noauth'
+                };
+
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+            auth.update(options, 'type');
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+        });
+    });
 });
