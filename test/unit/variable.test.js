@@ -166,6 +166,19 @@ describe('Variable', function () {
         expect(v1.value).to.equal('{"foo":"bar"}');
     });
 
+    it('should set cyclic object value to null when type is provided (json)', function () {
+        var cyclicObject = {},
+            testVariable;
+
+        cyclicObject.prop = cyclicObject;
+        testVariable = new Variable({
+            value: cyclicObject,
+            type: 'json'
+        });
+
+        expect(testVariable.value).to.equal('null');
+    });
+
     it('should typecast value during construction when type is provided (array)', function () {
         var v = new Variable({
                 value: null,
@@ -180,6 +193,21 @@ describe('Variable', function () {
         expect(v1.value).to.equal('[1,2,"3"]');
     });
 
+    it('should set value to null if provided as cyclic object value (array)', function () {
+        var objArray = [],
+            cyclicObject = {},
+            testVariable;
+
+        cyclicObject.prop = cyclicObject;
+        objArray[0] = cyclicObject;
+        testVariable = new Variable({
+            value: objArray,
+            type: 'array'
+        });
+
+        expect(testVariable.value).to.equal('null');
+    });
+
     it('should typecast value during construction when type is provided (object)', function () {
         var v = new Variable({
                 value: null,
@@ -192,6 +220,19 @@ describe('Variable', function () {
 
         expect(v.value).to.equal('null');
         expect(v1.value).to.equal('{"foo":"bar"}');
+    });
+
+    it('should set value to null if provided invalid json string (object)', function () {
+        var cyclicObject = {},
+            testVariable;
+
+        cyclicObject.prop = cyclicObject;
+        testVariable = new Variable({
+            value: cyclicObject,
+            type: 'object'
+        });
+
+        expect(testVariable.value).to.equal('null');
     });
 
     it('should support any data type if type is set to `any`', function () {
