@@ -1,4 +1,11 @@
 3.6.6:
+  date: 2020-09-04
+  fixed bugs:
+    - >-
+      Fixed a issue where in case of an invalid auth type update() was setting 
+      auth to default from the existing type.
+
+3.6.6:
   date: 2020-08-31
   fixed bugs:
     - >-
