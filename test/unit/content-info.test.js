@@ -174,7 +174,7 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should return with default file name if invalid charset type specified', function () {
+    it('Should return default file name if charset specified in content-disposition header is invalid', function () {
         var response = new Response({ header: [
             {
                 key: 'Content-Disposition',

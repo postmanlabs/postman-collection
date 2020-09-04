@@ -79,6 +79,31 @@ describe('Header', function () {
                 system: true
             });
         });
+
+        it('should set header with given system value', function () {
+            var header = Header.create({ key: 'name', value: 'value', system: 'system' });
+            expect(header.toJSON()).to.eql({
+                key: 'name',
+                value: 'value',
+                system: 'system'
+            });
+        });
+
+        it('should set to empty key value in case of invalid key', function () {
+            var header = Header.create({ key: null, value: 'value' });
+            expect(header.toJSON()).to.eql({
+                key: '',
+                value: 'value'
+            });
+        });
+
+        it('should not have empty string in case of value as null', function () {
+            var header = Header.create({ key: 'name', value: null });
+            expect(header.toJSON()).to.eql({
+                key: 'name',
+                value: null
+            });
+        });
     });
 
     describe('parseSingle', function () {
@@ -245,6 +270,14 @@ describe('Header', function () {
             var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="',
                 newHeader = new Header(rawHeader);
             expect(newHeader.toString()).equals(rawHeader);
+        });
+
+        it('should convert the header object to a single header string', function () {
+            var newHeader = new Header({
+                key: 'Content-Type',
+                value: 'application/xml'
+            });
+            expect(newHeader.toString()).equals('Content-Type: application/xml');
         });
     });
 });

@@ -76,7 +76,7 @@ describe('RequestAuth', function () {
             });
         });
 
-        it('should be able to return the parameters of the selected auth type', function () {
+        it('should be able to update the parameters to the passed auth type in options', function () {
             var auth = new RequestAuth({
                 noauth: {
                     foo: 'bar'
@@ -117,7 +117,7 @@ describe('RequestAuth', function () {
             });
         });
 
-        it('should bail out when non-object options are passed to update', function () {
+        it('should bail out when options passed as null to update', function () {
             var auth = new RequestAuth({
                 noauth: {
                     foo: 'bar'
@@ -126,7 +126,48 @@ describe('RequestAuth', function () {
             });
 
             auth.update(null);
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+        });
+
+        it('should bail out when options passed as empty json object to update', function () {
+            var auth = new RequestAuth({
+                noauth: {
+                    foo: 'bar'
+                },
+                type: 'noauth'
+            });
+
             auth.update({});
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+        });
+
+        it('should bail out when options passed as string to update', function () {
+            var auth = new RequestAuth({
+                noauth: {
+                    foo: 'bar'
+                },
+                type: 'noauth'
+            });
+
+            auth.update('options');
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+        });
+
+        it('should bail out when options passed as boolean to update', function () {
+            var auth = new RequestAuth({
+                noauth: {
+                    foo: 'bar'
+                },
+                type: 'noauth'
+            });
+
+            auth.update(true);
             expect(auth.parameters().toObject()).to.eql({
                 foo: 'bar'
             });

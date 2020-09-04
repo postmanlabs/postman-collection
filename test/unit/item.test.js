@@ -469,11 +469,14 @@ describe('Item', function () {
 
         it('should not unset protocolProfileBehavior from an Item incase key is not of type string', function () {
             var item = new Item({
-                protocolProfileBehavior: { keyName: null }
+                protocolProfileBehavior: { keyName: 'value' }
             });
 
             item.unsetProtocolProfileBehavior(null);
             expect(item.toJSON()).to.have.property('protocolProfileBehavior').that.is.not.empty;
+            expect(item.getProtocolProfileBehaviorResolved()).to.eql({
+                keyName: 'value'
+            });
         });
 
         it('should not unset protocolProfileBehavior from an Item incase key name is not valid', function () {
