@@ -534,6 +534,31 @@ describe('Request', function () {
             request.removeHeader('foo');
             expect(request.headers.toJSON()).to.eql([]);
         });
+
+        it('should remove multiple headers from the request', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' },
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader('foo');
+            expect(request.headers.toJSON()).to.eql([]);
+        });
+
+        it('should remove a header from the request when ignoreCase options set to true', function () {
+            var request = new Request({
+                    header: [
+                        { key: 'foo', value: 'bar' }
+                    ]
+                }),
+                options = {};
+
+            options.ignoreCase = true;
+            request.removeHeader('FOO', options);
+            expect(request.headers.toJSON()).to.eql([]);
+        });
     });
 
     describe('.forEachHeader', function () {
@@ -625,7 +650,7 @@ describe('Request', function () {
             expect(request.auth).be.undefined;
         });
 
-        it('should return if not valid auth type', function () {
+        it('should not update auth if given type is invalid', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
                     method: 'GET',
@@ -809,6 +834,21 @@ describe('Request', function () {
                 {
                     key: 'testKey',
                     value: 'testValue'
+                }
+            ]);
+        });
+
+        it('should not add a header to the request when newHeader is null', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                newHeader = null;
+
+            request.addHeader(newHeader);
+            expect(request.headers.toJSON()).to.eql([
+                {
+                    key: 'foo',
+                    value: 'bar'
                 }
             ]);
         });

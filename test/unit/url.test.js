@@ -1181,7 +1181,23 @@ describe('Url', function () {
                 host: 'https://postman-echo.com',
                 query: 'foo=bar'
             });
-            expect(url.toString()).to.eql('https://postman-echo.com?foo=bar');
+            expect(url.toString()).to.equal('https://postman-echo.com?foo=bar');
+        });
+
+        it('should not add query parameters if set to null', function () {
+            var url = new Url({
+                host: 'https://postman-echo.com',
+                query: null
+            });
+            expect(url.toString()).to.equal('https://postman-echo.com');
+        });
+
+        it('should not add query parameters if set to empty string', function () {
+            var url = new Url({
+                host: 'https://postman-echo.com',
+                query: ''
+            });
+            expect(url.toString()).to.equal('https://postman-echo.com');
         });
     });
 
