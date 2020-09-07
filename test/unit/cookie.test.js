@@ -196,7 +196,7 @@ describe('Cookie', function () {
     });
 
     describe('unparse', function () {
-        it('should return empty string if not array of cookies', function () {
+        it('should return empty string if called with invalid cookies array', function () {
             expect(Cookie.unparse('')).to.equal('');
         });
     });

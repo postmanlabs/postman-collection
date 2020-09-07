@@ -1,3 +1,9 @@
+master:
+  fixed bugs:
+    - >-
+      Fixed an issue in cookie where, PropertyList should've been
+      added as required module for cookie.js file.
+
 3.6.6:
   date: 2020-08-31
   fixed bugs:
