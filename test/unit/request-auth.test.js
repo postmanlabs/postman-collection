@@ -84,18 +84,10 @@ describe('RequestAuth', function () {
                 type: 'noauth'
             });
 
-            auth.use('noauth', {
-                noauth: {
-                    foo1: 'bar1'
-                },
-                type: 'noauth'
-            });
+            auth.use('noauth', { foo1: 'bar1' });
             expect(auth.parameters().toObject()).to.eql({
                 foo: 'bar',
-                noauth: {
-                    'foo1': 'bar1'
-                },
-                type: 'noauth'
+                foo1: 'bar1'
             });
         });
     });
