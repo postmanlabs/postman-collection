@@ -1,8 +1,8 @@
 master:
   fixed bugs:
     - >-
-      Fixed an issue in RequestAuth where type was
-      set to previous auth type when update() called with invalid type.
+      Fixed an issue in RequestAuth where type was set to previous auth type
+      when update() called with invalid type.
 
 3.6.6:
   date: 2020-08-31
