@@ -963,7 +963,7 @@ describe('PropertyList', function () {
     });
 
     describe('.update not defined property list', function () {
-        it('should throw error when unable to upsert into a list Type that does not support .update()', function () {
+        it('should throw error when .upsert called on propertyList that does not support .update()', function () {
             var FakeType,
                 list;
 
@@ -985,7 +985,7 @@ describe('PropertyList', function () {
             }).to.throw('collection: unable to upsert into a list of Type that does not support .update()');
         });
 
-        it('should throw error when assimilate called on propertyList that does not support .update()', function () {
+        it('should throw error when .assimilate called on propertyList that does not support .update()', function () {
             var FakeType,
                 list1, sourceListArray;
 
