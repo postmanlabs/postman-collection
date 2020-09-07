@@ -1,3 +1,9 @@
+master:
+  fixed bugs:
+    - >-
+      Added unit tests for mutation-tracker.js, property-list.js, request.js, url.js
+      and variable.js.
+
 3.6.6:
   date: 2020-08-31
   fixed bugs:

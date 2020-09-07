@@ -960,7 +960,9 @@ describe('PropertyList', function () {
                 val: 'value2'
             }]);
         });
+    });
 
+    describe('.update not defined property list', function () {
         it('should throw error when unable to upsert into a list Type that does not support .update()', function () {
             var FakeType,
                 list;
@@ -973,9 +975,6 @@ describe('PropertyList', function () {
             list = new PropertyList(FakeType, null, [{
                 key: 'key1',
                 val: 'value1'
-            }, {
-                key: 'key2',
-                val: 'value2'
             }]);
 
             expect(function () {
@@ -983,6 +982,29 @@ describe('PropertyList', function () {
                     key: 'key1',
                     val: 'value1-updated'
                 });
+            }).to.throw('collection: unable to upsert into a list of Type that does not support .update()');
+        });
+
+        it('should throw error when assimilate called on propertyList that does not support .update()', function () {
+            var FakeType,
+                list1, sourceListArray;
+
+            FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
+            FakeType.prototype.update = null;
+            list1 = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+            sourceListArray = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1-updated'
+            }]);
+
+            expect(function () {
+                list1.assimilate(sourceListArray);
             }).to.throw('collection: unable to upsert into a list of Type that does not support .update()');
         });
     });
@@ -1001,12 +1023,12 @@ describe('PropertyList', function () {
                     key: 'key1',
                     val: 'value1'
                 }]),
-                list2 = new PropertyList(FakeType, null, [{
+                sourceListArray = new PropertyList(FakeType, null, [{
                     key: 'key2',
                     val: 'value2'
                 }]);
 
-            list1.assimilate(list2);
+            list1.assimilate(sourceListArray);
 
             expect(list1.toJSON()).to.eql([{
                 key: 'key1',
@@ -1064,12 +1086,12 @@ describe('PropertyList', function () {
                     key: 'key1',
                     val: 'value1'
                 }]),
-                sourceObject = [{
+                sourceObjectArray = [{
                     key: 'key2',
                     val: 'value2'
                 }];
 
-            list1.assimilate(sourceObject);
+            list1.assimilate(sourceObjectArray);
 
             expect(list1.toJSON()).to.eql([{
                 key: 'key1',

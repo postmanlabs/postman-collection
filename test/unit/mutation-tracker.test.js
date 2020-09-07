@@ -192,6 +192,13 @@ describe('MutationTracker', function () {
             tracker.track(1, 2, 3, 4);
             expect(tracker.count()).to.eql(0);
         });
+
+        it('should not track mutation with invalid payload', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track('set', 5, 6, 7, 8);
+            expect(tracker.count()).to.eql(0);
+        });
     });
 
     describe('apply', function () {
