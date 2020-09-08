@@ -148,7 +148,7 @@ describe('RequestAuth', function () {
             });
         });
 
-        it('should not update auth params if type param is set to empty', function () {
+        it('should update auth params to default if type param is set to empty', function () {
             var auth = new RequestAuth({
                     noauth: {
                         foo: 'bar'
@@ -176,7 +176,7 @@ describe('RequestAuth', function () {
             });
         });
 
-        it('should not update auth params if type param is set to null', function () {
+        it('should update auth params to default if type param is set to null', function () {
             var auth = new RequestAuth({
                     noauth: {
                         foo: 'bar'
