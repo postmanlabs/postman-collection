@@ -1,7 +1,7 @@
 master:
   fixed bugs:
     - >-
-      Fixed an issue in RequestAuth where type was set to previous auth type
+      GH-1101 Fixed an issue in RequestAuth where type was set to previous auth type
       when update() called with invalid type.
 
 3.6.6:
