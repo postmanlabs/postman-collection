@@ -1,7 +1,7 @@
 master:
   fixed bugs:
     - >-
-      Added unit tests for mutation-tracker.js, property-list.js, request.js, url.js
+      GH-1099 Added unit tests for mutation-tracker.js, property-list.js, request.js, url.js
       and variable.js.
 
 3.6.6:

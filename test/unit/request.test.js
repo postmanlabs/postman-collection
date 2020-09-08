@@ -549,14 +549,12 @@ describe('Request', function () {
 
         it('should remove a header from the request when ignoreCase options set to true', function () {
             var request = new Request({
-                    header: [
-                        { key: 'foo', value: 'bar' }
-                    ]
-                }),
-                options = {};
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
 
-            options.ignoreCase = true;
-            request.removeHeader('FOO', options);
+            request.removeHeader('FOO', { ignoreCase: true });
             expect(request.headers.toJSON()).to.eql([]);
         });
     });
@@ -622,17 +620,6 @@ describe('Request', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
                     method: 'GET',
-                    header: [
-                        {
-                            key: 'some',
-                            value: 'header'
-                        },
-                        {
-                            key: 'other',
-                            value: 'otherheader',
-                            disabled: true
-                        }
-                    ],
                     auth: {
                         type: 'basic',
                         username: 'foo',
@@ -654,17 +641,6 @@ describe('Request', function () {
             var rawRequest = {
                     url: 'postman-echo.com',
                     method: 'GET',
-                    header: [
-                        {
-                            key: 'some',
-                            value: 'header'
-                        },
-                        {
-                            key: 'other',
-                            value: 'otherheader',
-                            disabled: true
-                        }
-                    ],
                     auth: {
                         type: 'basic',
                         basic: [{
