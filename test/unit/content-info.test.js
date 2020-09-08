@@ -24,16 +24,16 @@ describe('contentInfo module', function () {
     });
 
     it('Should return file name from content-disposition header with type attachment and file name', function () {
-        var response = new Response({ header: [
-            {
+        var response = new Response({
+            header: [{
                 key: 'content-disposition',
                 value: 'attachment; filename=testResponse.json'
             },
             {
                 key: 'content-type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('random').toJSON()
+            }],
+            stream: Buffer.from('random').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
@@ -45,12 +45,12 @@ describe('contentInfo module', function () {
     });
 
     it('Should return default file name and extension from mime if disposition header is not present ', function () {
-        var response = new Response({ header: [
-            {
+        var response = new Response({
+            header: [{
                 key: 'content-type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('random').toJSON()
+            }],
+            stream: Buffer.from('random').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
@@ -63,16 +63,16 @@ describe('contentInfo module', function () {
 
     // eslint-disable-next-line max-len
     it('Should return filename from content-disposition header with type attachment and file name without ext', function () {
-        var response = new Response({ header: [
-            {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment; filename=testResponse'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -86,16 +86,16 @@ describe('contentInfo module', function () {
 
     // eslint-disable-next-line max-len
     it('Should return file name from content-disposition header with type attachment and file name with dots', function () {
-        var response = new Response({ header: [
-            {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename=test.Response.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -108,16 +108,16 @@ describe('contentInfo module', function () {
     });
 
     it('Should return file name from content-disposition header with type attachment and dot files', function () {
-        var response = new Response({ header: [
-            {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename=.response'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -130,17 +130,17 @@ describe('contentInfo module', function () {
     });
 
     // eslint-disable-next-line max-len
-    it('Should return file name from content-disposition header with type attachment and file name with quotes', function () {
-        var response = new Response({ header: [
-            {
+    it('should return file name from content-disposition header with type attachment and file name with quotes', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename="test Response.json"'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -152,17 +152,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should return file name from content-disposition header with type inline and file name', function () {
-        var response = new Response({ header: [
-            {
+    it('should return file name from content-disposition header with type inline and file name', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename=test.Response.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -174,17 +174,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should return default file name if charset specified in content-disposition header is invalid', function () {
-        var response = new Response({ header: [
-            {
+    it('should return default file name if charset specified in content-disposition header is invalid', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename*=invalid-charset\'\'%E5%93%8D%E5%BA%94.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -196,17 +196,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should return file name from content-disposition header with encoded type utf-8', function () {
-        var response = new Response({ header: [
-            {
+    it('should return file name from content-disposition header with encoded type utf-8', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename*=utf-8\'\'%E5%93%8D%E5%BA%94.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -218,17 +218,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should return file name from content-disposition header with encoded type iso-8859-1', function () {
-        var response = new Response({ header: [
-            {
+    it('should return file name from content-disposition header with encoded type iso-8859-1', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename*=iso-8859-1\'\'myResponse.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -241,16 +241,16 @@ describe('contentInfo module', function () {
     });
 
     it('filename* parameter is preferred than filename in content-disposition header', function () {
-        var response = new Response({ header: [
-            {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment;filename*=utf-8\'\'%E5%93%8D%E5%BA%94.json; filename = response.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -262,17 +262,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should return file name from content-disposition header with type form-data and file name', function () {
-        var response = new Response({ header: [
-            {
+    it('should return file name from content-disposition header with type form-data and file name', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'form-data; filename="testResponse.json"'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -284,17 +284,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should take default filename if content-disposition header value is empty', function () {
-        var response = new Response({ header: [
-            {
+    it('should take default filename if content-disposition header value is empty', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: ''
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -307,7 +307,7 @@ describe('contentInfo module', function () {
     });
 
     // eslint-disable-next-line max-len
-    it('Should take default filename and sniffed content type, if content-disposition and content-type header value are empty', function () {
+    it('should take default filename and sniffed content type, if content-disposition and content-type header value are empty', function () {
         // data url of png image
         var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
                 'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +
@@ -315,16 +315,16 @@ describe('contentInfo module', function () {
             // replacing the mime type and encoded format
             data = img.replace(/^data:image\/\w+;base64,/, ''),
             // creating the buffer of the image file
-            response = new Response({ header: [
-                {
+            response = new Response({
+                header: [{
                     key: 'Content-Disposition',
                     value: ''
                 },
                 {
                     key: 'Content-Type',
                     value: ''
-                }
-            ], stream: Buffer.from(data, 'base64')
+                }],
+                stream: Buffer.from(data, 'base64')
             });
 
         expect(contentInfo.contentInfo(response)).to
@@ -337,17 +337,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should take default filename if there is no separator in content-disposition header value', function () {
-        var response = new Response({ header: [
-            {
+    it('should take default filename if there is no separator in content-disposition header value', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'form-data filename="testResponse.json"'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -359,17 +359,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should take default filename if separator placed wrongly in content-disposition header value', function () {
-        var response = new Response({ header: [
-            {
+    it('should take default filename if separator placed wrongly in content-disposition header value', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'form-data; filename;="testResponse.json"'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -381,17 +381,17 @@ describe('contentInfo module', function () {
             });
     });
     // eslint-disable-next-line max-len
-    it('If spaces present in the filename without quotes, text from and beyond space should be ignored', function () {
-        var response = new Response({ header: [
-            {
+    it('if spaces present in the filename without quotes, text from and beyond space should be ignored', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'form-data; filename = test  Response.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -403,17 +403,17 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should take default filename if order of the content-disposition header value is wrong', function () {
-        var response = new Response({ header: [
-            {
+    it('should take default filename if order of the content-disposition header value is wrong', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'filename = test  Response.json; form-data'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -426,17 +426,17 @@ describe('contentInfo module', function () {
     });
 
     // eslint-disable-next-line max-len
-    it('Should take default filename if unsupported characters are present in content-disposition header', function () {
-        var response = new Response({ header: [
-            {
+    it('should take default filename if unsupported characters are present in content-disposition header', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: '你你你你你你 = test  Response.json; form-data'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -449,17 +449,17 @@ describe('contentInfo module', function () {
     });
 
     // eslint-disable-next-line max-len
-    it('Should take first token value if multiple filename tokens are present in the content-disposition header value', function () {
-        var response = new Response({ header: [
-            {
+    it('should take first token value if multiple filename tokens are present in the content-disposition header value', function () {
+        var response = new Response({
+            header: [{
                 key: 'Content-Disposition',
                 value: 'attachment; filename = testResponse.json; filename = test.json'
             },
             {
                 key: 'Content-Type',
                 value: 'application/json'
-            }
-        ], stream: Buffer.from('a test json').toJSON()
+            }],
+            stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
             .eql({
@@ -471,7 +471,7 @@ describe('contentInfo module', function () {
             });
     });
 
-    it('Should take sniffed mime-type if content-type header value is empty', function () {
+    it('should take sniffed mime-type if content-type header value is empty', function () {
         // data url of png image
         var img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0' +
                   'NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO' +

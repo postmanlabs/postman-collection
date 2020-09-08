@@ -71,7 +71,7 @@ describe('Cookie', function () {
                 }),
                 unparsedSingle = Cookie.unparseSingle(testCookie);
 
-            expect(unparsedSingle).to.equal(testCookie.name + '=' + testCookie.value);
+            expect(unparsedSingle).to.equal('testCookie=fooTest');
         });
 
         describe('has property', function () {
@@ -243,7 +243,7 @@ describe('Cookie', function () {
                     value: 'fooTest'
                 },
                 unparsedSingle = Cookie.unparseSingle(new Cookie(rawCookie));
-            expect(unparsedSingle).to.equal(rawCookie.name + '=' + rawCookie.value);
+            expect(unparsedSingle).to.equal('testCookie=fooTest');
         });
 
         it('should return only the value in case of no cookie name specified', function () {
@@ -277,10 +277,8 @@ describe('Cookie', function () {
                     path: '/',
                     value: 'fooTest2'
                 },
-                cookieArray = [],
+                cookieArray = [new Cookie(rawCookie1), new Cookie(rawCookie2)],
                 unparse;
-            cookieArray.push(new Cookie(rawCookie1));
-            cookieArray.push(new Cookie(rawCookie2));
 
             unparse = Cookie.unparse(cookieArray);
             expect(unparse).to.equal('testCookie1=fooTest1; testCookie2=fooTest2');
@@ -294,8 +292,7 @@ describe('Cookie', function () {
                 value: 'fooTest'
             });
 
-            expect(Cookie.stringify(cookie))
-                .equals('foo=fooTest');
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest');
         });
 
         it('should return single Set-Cookie header string with expires', function () {
@@ -305,8 +302,7 @@ describe('Cookie', function () {
                 expires: '14 Jun 2017 00:00:00 PDT'
             });
 
-            expect(Cookie.stringify(cookie))
-                .equals('foo=fooTest; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
         });
 
         it('should return single Set-Cookie header string with secure and httpOnly set to true', function () {
@@ -317,8 +313,7 @@ describe('Cookie', function () {
                 secure: true
             });
 
-            expect(Cookie.stringify(cookie))
-                .equals('foo=fooTest; Secure; HttpOnly');
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest; Secure; HttpOnly');
         });
 
         it('should return single Set-Cookie header string with maxAge value', function () {
@@ -328,8 +323,7 @@ describe('Cookie', function () {
                 maxAge: 1502442248
             });
 
-            expect(Cookie.stringify(cookie))
-                .equals('foo=fooTest; Max-Age=1502442248');
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest; Max-Age=1502442248');
         });
 
         it('should return single Set-Cookie header string', function () {
@@ -346,7 +340,7 @@ describe('Cookie', function () {
             });
 
             expect(Cookie.stringify(cookie))
-                .equals('foo=fooTest; Expires=1502442248; Domain=.httpbin.org; Path=/');
+                .to.equals('foo=fooTest; Expires=1502442248; Domain=.httpbin.org; Path=/');
         });
     });
 
@@ -357,8 +351,7 @@ describe('Cookie', function () {
                 value: 'fooTest'
             });
 
-            expect(cookie.toString())
-                .equals('foo=fooTest');
+            expect(cookie.toString()).to.equals('foo=fooTest');
         });
 
         it('should return single Set-Cookie header string with expires', function () {
@@ -368,8 +361,7 @@ describe('Cookie', function () {
                 expires: '14 Jun 2017 00:00:00 PDT'
             });
 
-            expect(cookie.toString())
-                .equals('foo=fooTest; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
+            expect(cookie.toString()).to.equals('foo=fooTest; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
         });
 
         it('should return single Set-Cookie header string with secure and httpOnly set to true', function () {
@@ -380,8 +372,7 @@ describe('Cookie', function () {
                 secure: true
             });
 
-            expect(cookie.toString())
-                .equals('foo=fooTest; Secure; HttpOnly');
+            expect(cookie.toString()).to.equals('foo=fooTest; Secure; HttpOnly');
         });
 
         it('should return single Set-Cookie header string with maxAge value', function () {
@@ -391,8 +382,7 @@ describe('Cookie', function () {
                 maxAge: 1502442248
             });
 
-            expect(cookie.toString())
-                .equals('foo=fooTest; Max-Age=1502442248');
+            expect(cookie.toString()).to.equals('foo=fooTest; Max-Age=1502442248');
         });
     });
 });
