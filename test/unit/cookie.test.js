@@ -46,6 +46,34 @@ describe('Cookie', function () {
             expect(strCookie.valueOf()).to.equal('%E0%A4%A');
         });
 
+        it('should not set name value that are not of string type', function () {
+            var strCookie = new Cookie({
+                name: 1,
+                value: 'bar'
+            });
+
+            expect(strCookie).to.deep.include({
+                value: 'bar'
+            });
+            expect(strCookie.valueOf()).to.equal('bar');
+        });
+
+        it('should use key value as name in case of cookie name not specified', function () {
+            var testCookie = new Cookie({
+                    key: 'testCookie',
+                    expires: 1502442248,
+                    hostOnly: false,
+                    httpOnly: false,
+                    path: '/',
+                    secure: false,
+                    session: false,
+                    value: 'fooTest'
+                }),
+                unparsedSingle = Cookie.unparseSingle(testCookie);
+
+            expect(unparsedSingle).to.equal('testCookie=fooTest');
+        });
+
         describe('has property', function () {
             it('domain', function () {
                 expect(cookie).to.have.property('domain', rawCookie.domain);
@@ -192,6 +220,169 @@ describe('Cookie', function () {
                 name: 'blah',
                 value: 'this is a cookie value'
             })).valueOf()).to.eql('this is a cookie value');
+        });
+
+        it('should return the value incase of malformed URI sequence', function () {
+            expect((new Cookie({
+                name: 'blah',
+                value: '%E0%A4%A'
+            })).valueOf()).equal('%E0%A4%A');
+        });
+    });
+
+    describe('unparseSingle', function () {
+        it('should unparse single Cookie in case of valid cookie name', function () {
+            var rawCookie = {
+                    name: 'testCookie',
+                    expires: 1502442248,
+                    hostOnly: false,
+                    httpOnly: false,
+                    path: '/',
+                    secure: false,
+                    session: false,
+                    value: 'fooTest'
+                },
+                unparsedSingle = Cookie.unparseSingle(new Cookie(rawCookie));
+            expect(unparsedSingle).to.equal('testCookie=fooTest');
+        });
+
+        it('should return only the value in case of no cookie name specified', function () {
+            var rawCookie = {
+                    expires: 1502442248,
+                    hostOnly: false,
+                    httpOnly: false,
+                    path: '/',
+                    secure: false,
+                    session: false,
+                    value: 'bar'
+                },
+                unparsedSingle = Cookie.unparseSingle(new Cookie(rawCookie));
+            expect(unparsedSingle).to.equal('bar');
+        });
+    });
+
+    describe('unparse', function () {
+        it('should merge multiple cookies into a single string', function () {
+            var rawCookie1 = {
+                    name: 'testCookie1',
+                    domain: '.httpbin.org',
+                    expires: 1502442248,
+                    path: '/',
+                    value: 'fooTest1'
+                },
+                rawCookie2 = {
+                    name: 'testCookie2',
+                    domain: '.httpbin.org',
+                    expires: 1502442248,
+                    path: '/',
+                    value: 'fooTest2'
+                },
+                cookieArray = [new Cookie(rawCookie1), new Cookie(rawCookie2)],
+                unparse;
+
+            unparse = Cookie.unparse(cookieArray);
+            expect(unparse).to.equal('testCookie1=fooTest1; testCookie2=fooTest2');
+        });
+    });
+
+    describe('stringify', function () {
+        it('should return single Set-Cookie header string with key value', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest'
+            });
+
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest');
+        });
+
+        it('should return single Set-Cookie header string with expires', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest',
+                expires: '14 Jun 2017 00:00:00 PDT'
+            });
+
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
+        });
+
+        it('should return single Set-Cookie header string with secure and httpOnly set to true', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest',
+                httpOnly: true,
+                secure: true
+            });
+
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest; Secure; HttpOnly');
+        });
+
+        it('should return single Set-Cookie header string with maxAge value', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest',
+                maxAge: 1502442248
+            });
+
+            expect(Cookie.stringify(cookie)).to.equals('foo=fooTest; Max-Age=1502442248');
+        });
+
+        it('should return single Set-Cookie header string', function () {
+            var cookie = new Cookie({
+                domain: '.httpbin.org',
+                expires: 1502442248,
+                hostOnly: false,
+                httpOnly: false,
+                name: 'foo',
+                path: '/',
+                secure: false,
+                session: false,
+                value: 'fooTest'
+            });
+
+            expect(Cookie.stringify(cookie))
+                .to.equals('foo=fooTest; Expires=1502442248; Domain=.httpbin.org; Path=/');
+        });
+    });
+
+    describe('toString', function () {
+        it('should return single Set-Cookie header string with key value', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest'
+            });
+
+            expect(cookie.toString()).to.equals('foo=fooTest');
+        });
+
+        it('should return single Set-Cookie header string with expires', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest',
+                expires: '14 Jun 2017 00:00:00 PDT'
+            });
+
+            expect(cookie.toString()).to.equals('foo=fooTest; Expires=Wed, 14 Jun 2017 07:00:00 GMT');
+        });
+
+        it('should return single Set-Cookie header string with secure and httpOnly set to true', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest',
+                httpOnly: true,
+                secure: true
+            });
+
+            expect(cookie.toString()).to.equals('foo=fooTest; Secure; HttpOnly');
+        });
+
+        it('should return single Set-Cookie header string with maxAge value', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'fooTest',
+                maxAge: 1502442248
+            });
+
+            expect(cookie.toString()).to.equals('foo=fooTest; Max-Age=1502442248');
         });
     });
 

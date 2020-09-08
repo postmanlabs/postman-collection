@@ -11,7 +11,7 @@
         "matches": {
             "description": "A list of Url match pattern strings, to identify Urls this certificate can be used for.",
             "type": "array",
-            "item": {
+            "items": {
               "type": "string",
               "description": "An Url match pattern string"
             }
