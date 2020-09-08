@@ -283,6 +283,23 @@ describe('Cookie', function () {
             unparse = Cookie.unparse(cookieArray);
             expect(unparse).to.equal('testCookie1=fooTest1; testCookie2=fooTest2');
         });
+
+        it('should return empty string on invalid input types', function () {
+            var cookie = new Cookie({
+                expires: 1502442248,
+                hostOnly: false,
+                httpOnly: false,
+                name: 'foo',
+                value: 'fooTest'
+            });
+
+            expect(Cookie.unparse('')).to.equal('');
+            expect(Cookie.unparse({})).to.equal('');
+            expect(Cookie.unparse(null)).to.equal('');
+            expect(Cookie.unparse([])).to.equal('');
+            // invalid type, since .unparse expects array of cookies
+            expect(Cookie.unparse(cookie)).to.equal('');
+        });
     });
 
     describe('stringify', function () {
@@ -383,25 +400,6 @@ describe('Cookie', function () {
             });
 
             expect(cookie.toString()).to.equals('foo=fooTest; Max-Age=1502442248');
-        });
-    });
-
-    describe('unparse', function () {
-        it('should return empty string on invalid input types', function () {
-            var cookie = new Cookie({
-                expires: 1502442248,
-                hostOnly: false,
-                httpOnly: false,
-                name: 'foo',
-                value: 'fooTest'
-            });
-
-            expect(Cookie.unparse('')).to.equal('');
-            expect(Cookie.unparse({})).to.equal('');
-            expect(Cookie.unparse(null)).to.equal('');
-            expect(Cookie.unparse([])).to.equal('');
-            // invalid type, since .unparse expects array of cookies
-            expect(Cookie.unparse(cookie)).to.equal('');
         });
     });
 });

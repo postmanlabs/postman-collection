@@ -3,8 +3,6 @@ master:
     - >-
       GH-1097 Fixed an issue in cookie where, PropertyList should've been
       added as required module for cookie.js file.
-
-master:
   chores:
     - GH-1098 Added unit tests for cookie.js, header.js, request-auth.js, item.js, content-info.js.
 
