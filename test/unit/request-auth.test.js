@@ -125,7 +125,7 @@ describe('RequestAuth', function () {
     });
 
     describe('.update', function () {
-        it('should not update auth params if type is invalid', function () {
+        it('should not update auth params if type param is invalid', function () {
             var auth = new RequestAuth({
                     noauth: {
                         foo: 'bar'
@@ -148,7 +148,7 @@ describe('RequestAuth', function () {
             });
         });
 
-        it('should not update auth params if type param is invalid', function () {
+        it('should not update auth params if type param is set to empty', function () {
             var auth = new RequestAuth({
                     noauth: {
                         foo: 'bar'
@@ -166,6 +166,34 @@ describe('RequestAuth', function () {
                 foo: 'bar'
             });
             auth.update(options, '');
+            expect(auth.parameters().toObject()).to.eql({
+                basic: {
+                    password: 'p',
+                    username: 'u'
+                },
+                foo: 'bar',
+                type: 'noauth'
+            });
+        });
+
+        it('should not update auth params if type param is set to null', function () {
+            var auth = new RequestAuth({
+                    noauth: {
+                        foo: 'bar'
+                    },
+                    type: 'noauth'
+                }),
+                options = {
+                    basic: {
+                        username: 'u', password: 'p'
+                    },
+                    type: 'noauth'
+                };
+
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+            auth.update(options, null);
             expect(auth.parameters().toObject()).to.eql({
                 basic: {
                     password: 'p',
