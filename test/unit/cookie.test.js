@@ -384,5 +384,45 @@ describe('Cookie', function () {
 
             expect(cookie.toString()).to.equals('foo=fooTest; Max-Age=1502442248');
         });
+
+        it('should return single Set-Cookie header string with extensions', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                maxAge: 1502442248,
+                extensions: [{
+                    key: 'Priority',
+                    value: 'HIGH'
+                }]
+            });
+
+            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248; Priority=HIGH');
+        });
+
+        it('should return single Set-Cookie header string with invalid key extensions', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                maxAge: 1502442248,
+                extensions: [{
+                    value: 'HIGH'
+                }]
+            });
+
+            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248');
+        });
+
+        it('should return single Set-Cookie header string with invalid value extensions', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                maxAge: 1502442248,
+                extensions: [{
+                    key: 'Priority'
+                }]
+            });
+
+            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248');
+        });
     });
 });
