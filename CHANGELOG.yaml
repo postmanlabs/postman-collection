@@ -1,3 +1,7 @@
+master:
+  chores:
+    - GH-1098 Added unit tests for cookie.js, header.js, request-auth.js, item.js, content-info.js.
+
 3.6.6:
   date: 2020-08-31
   fixed bugs:
