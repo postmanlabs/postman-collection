@@ -1,5 +1,6 @@
 master:
   chores:
+    - GH-1104 Fixed cookie extensions not getting stringified properly. Fixed check for path and domain.
     - GH-1098 Added unit tests for cookie.js, header.js, request-auth.js, item.js, content-info.js.
 
 3.6.6:
