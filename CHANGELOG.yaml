@@ -1,7 +1,7 @@
 master:
   fixed bugs:
     - >-
-      Fixed an issue in cookie where, PropertyList should've been
+      GH-1097 Fixed an issue in cookie where, PropertyList should've been
       added as required module for cookie.js file.
 
 3.6.6:

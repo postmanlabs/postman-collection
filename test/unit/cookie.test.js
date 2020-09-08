@@ -196,24 +196,21 @@ describe('Cookie', function () {
     });
 
     describe('unparse', function () {
-        it('should return empty string if called with invalid cookies array', function () {
-            expect(Cookie.unparse('')).to.equal('');
-        });
-    });
+        it('should return empty string on invalid input types', function () {
+            var cookie = new Cookie({
+                expires: 1502442248,
+                hostOnly: false,
+                httpOnly: false,
+                name: 'foo',
+                value: 'fooTest'
+            });
 
-    describe('toString', function () {
-        it('should return single Set-Cookie header string with extensions', function () {
-            var rawCookie = {
-                    key: 'testCookie',
-                    value: 'testCookieVal',
-                    maxAge: 1502442248,
-                    extensions: [{
-                        key: 'Priority',
-                        value: 'HIGH'
-                    }]
-                },
-                cookie = new Cookie(rawCookie);
-            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248; Priority=HIGH');
+            expect(Cookie.unparse('')).to.equal('');
+            expect(Cookie.unparse({})).to.equal('');
+            expect(Cookie.unparse(null)).to.equal('');
+            expect(Cookie.unparse([])).to.equal('');
+            // invalid type, since .unparse expects array of cookies
+            expect(Cookie.unparse(cookie)).to.equal('');
         });
     });
 });
