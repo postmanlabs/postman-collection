@@ -90,9 +90,7 @@ describe('RequestAuth', function () {
                 foo1: 'bar1'
             });
         });
-    });
 
-    describe('.update', function () {
         it('should set the authentication type to be used by this item when options array is empty', function () {
             var auth = new RequestAuth({
                 noauth: {
@@ -103,7 +101,95 @@ describe('RequestAuth', function () {
 
             auth.use('noauth', []);
             expect(auth.type).to.equal('noauth');
-            auth.update(null);
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+        });
+
+    });
+
+    describe('.update', function () {
+        it('should update the parameters of a specific authentication type', function () {
+            var auth = new RequestAuth({
+                    noauth: {
+                        foo: 'bar'
+                    },
+                    type: 'noauth'
+                }),
+                options = {
+                    foo1: 'bar1'
+                };
+
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+            auth.update(options, 'noauth');
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar',
+                foo1: 'bar1'
+            });
+        });
+
+        it('should update the parameters of the existing type if not specified explicitly', function () {
+            var auth = new RequestAuth({
+                    noauth: {
+                        foo: 'bar'
+                    },
+                    type: 'noauth'
+                }),
+                options = {
+                    foo1: 'bar1'
+                };
+
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+            auth.update(options);
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar',
+                foo1: 'bar1'
+            });
+        });
+
+        it('should update the parameters of the existing type param if set to null', function () {
+            var auth = new RequestAuth({
+                    noauth: {
+                        foo: 'bar'
+                    },
+                    type: 'noauth'
+                }),
+                options = {
+                    foo1: 'bar1'
+                };
+
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+            auth.update(options, null);
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar',
+                foo1: 'bar1'
+            });
+        });
+
+        it('should bail out if invalid auth type is provided', function () {
+            var auth = new RequestAuth({
+                    noauth: {
+                        foo: 'bar'
+                    },
+                    type: 'noauth'
+                }),
+                options = {
+                    basic: {
+                        username: 'u', password: 'p'
+                    },
+                    type: 'noauth'
+                };
+
+            expect(auth.parameters().toObject()).to.eql({
+                foo: 'bar'
+            });
+            auth.update(options, 'type');
             expect(auth.parameters().toObject()).to.eql({
                 foo: 'bar'
             });
@@ -215,94 +301,6 @@ describe('RequestAuth', function () {
 
             expect(auth.parent()).to.eql({
                 fakeParent: true
-            });
-        });
-    });
-
-    describe('.update', function () {
-        it('should update the parameters of a specific authentication type', function () {
-            var auth = new RequestAuth({
-                    noauth: {
-                        foo: 'bar'
-                    },
-                    type: 'noauth'
-                }),
-                options = {
-                    foo1: 'bar1'
-                };
-
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar'
-            });
-            auth.update(options, 'noauth');
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar',
-                foo1: 'bar1'
-            });
-        });
-
-        it('should update the parameters of the existing type if not specified explicitly', function () {
-            var auth = new RequestAuth({
-                    noauth: {
-                        foo: 'bar'
-                    },
-                    type: 'noauth'
-                }),
-                options = {
-                    foo1: 'bar1'
-                };
-
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar'
-            });
-            auth.update(options);
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar',
-                foo1: 'bar1'
-            });
-        });
-
-        it('should update the parameters of the existing type param if set to null', function () {
-            var auth = new RequestAuth({
-                    noauth: {
-                        foo: 'bar'
-                    },
-                    type: 'noauth'
-                }),
-                options = {
-                    foo1: 'bar1'
-                };
-
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar'
-            });
-            auth.update(options, null);
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar',
-                foo1: 'bar1'
-            });
-        });
-
-        it('should bail out if invalid auth type is provided', function () {
-            var auth = new RequestAuth({
-                    noauth: {
-                        foo: 'bar'
-                    },
-                    type: 'noauth'
-                }),
-                options = {
-                    basic: {
-                        username: 'u', password: 'p'
-                    },
-                    type: 'noauth'
-                };
-
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar'
-            });
-            auth.update(options, 'type');
-            expect(auth.parameters().toObject()).to.eql({
-                foo: 'bar'
             });
         });
     });
