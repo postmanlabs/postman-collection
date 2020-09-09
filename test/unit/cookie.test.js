@@ -74,6 +74,140 @@ describe('Cookie', function () {
             expect(unparsedSingle).to.equal('testCookie=fooTest');
         });
 
+        it('should set path when path values set as empty string', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                path: ''
+            });
+
+            expect(cookie.path).to.equal('');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add path when path values set as json object', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                path: {}
+            });
+
+            expect(cookie.path).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add path when path values set as null', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                path: null
+            });
+
+            expect(cookie.path).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add path when path values set as array', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                path: []
+            });
+
+            expect(cookie.path).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add path when path values set as number', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                path: 123
+            });
+
+            expect(cookie.path).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add path when path values set as function', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                // eslint-disable-next-line no-empty-function
+                path: function () {}
+            });
+
+            expect(cookie.path).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should set domain when domain values set as empty string', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                domain: ''
+            });
+
+            expect(cookie.domain).to.equal('');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add domain when domain values set as json object', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                domain: {}
+            });
+
+            expect(cookie.domain).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add domain when domain values set as null', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                domain: null
+            });
+
+            expect(cookie.domain).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add domain when domain values set as array', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                domain: []
+            });
+
+            expect(cookie.domain).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add domain when domain values set as number', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                domain: 123
+            });
+
+            expect(cookie.domain).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
+        it('should not add domain when domain values set as function', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                // eslint-disable-next-line no-empty-function
+                domain: function () {}
+            });
+
+            expect(cookie.domain).to.be.undefined;
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+        });
+
         describe('has property', function () {
             it('domain', function () {
                 expect(cookie).to.have.property('domain', rawCookie.domain);
@@ -396,10 +530,24 @@ describe('Cookie', function () {
                 }]
             });
 
-            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248; Priority=HIGH');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Max-Age=1502442248; Priority=HIGH');
         });
 
-        it('should return single Set-Cookie header string with invalid key extensions', function () {
+        it('should not add extension when extensions is not an array', function () {
+            var cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                maxAge: 1502442248,
+                extensions: {
+                    key: 'Priority',
+                    value: 'HIGH'
+                }
+            });
+
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Max-Age=1502442248');
+        });
+
+        it('should not add extension when extension key is not specified', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
@@ -409,10 +557,10 @@ describe('Cookie', function () {
                 }]
             });
 
-            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Max-Age=1502442248');
         });
 
-        it('should return single Set-Cookie header string with invalid value extensions', function () {
+        it('should not add extension when extension value is not specified', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
@@ -422,7 +570,7 @@ describe('Cookie', function () {
                 }]
             });
 
-            expect(cookie.toString()).equals('testCookie=testCookieVal; Max-Age=1502442248');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Max-Age=1502442248');
         });
     });
 });
