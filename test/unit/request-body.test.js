@@ -441,4 +441,73 @@ describe('RequestBody', function () {
             expect(body.isEmpty()).to.be.false;
         });
     });
+
+    describe('.toJSON', function () {
+        it('should correctly handle raw body', function () {
+            var definition = {
+                    mode: 'raw',
+                    raw: 'Arbitrary raw request body'
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON()).to.eql(definition);
+        });
+
+        it('should correctly handle urlencoded body', function () {
+            var definition = {
+                    mode: 'urlencoded',
+                    urlencoded: [{ key: 'foo', value: 'bar' }]
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON()).to.eql(definition);
+        });
+
+        it('should correctly handle formdata body', function () {
+            var definition = {
+                    mode: 'formdata',
+                    formdata: [
+                        { key: 'foo', value: 'bar' },
+                        { key: 'foo', src: 'bar', type: 'file' }
+                    ]
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON()).to.eql(definition);
+        });
+
+        it('should correctly handle graphql body', function () {
+            var definition = {
+                    mode: 'graphql',
+                    graphql: {
+                        query: 'query Test { hello }',
+                        operationName: 'Test',
+                        variables: '{"foo":"bar"}'
+                    }
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON()).to.eql(definition);
+        });
+
+        it('should correctly handle file body', function () {
+            var definition = {
+                    mode: 'file',
+                    file: { src: 'fileSrc' }
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON()).to.eql(definition);
+        });
+
+        it('should not have content in file body', function () {
+            var definition = {
+                    mode: 'file',
+                    file: { src: 'fileSrc', content: 'this should be removed' }
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON().file).to.not.have.property('content');
+        });
+    });
 });
