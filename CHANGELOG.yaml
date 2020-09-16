@@ -3,6 +3,11 @@ master:
     - >-
       GH-1101 Fixed an issue in RequestAuth where type was set to previous auth type
       when update() called with invalid type.
+      GH-1097 Fixed an issue in cookie where, PropertyList should've been
+      added as required module for cookie.js file.
+    - >-
+      GH-1105 Fixed a bug where `toJSON()` on RequestBody returns non-serializable
+      object having streams for bodies containing file
   chores:
     - GH-1098 Added unit tests for cookie.js, header.js, request-auth.js, item.js, content-info.js.
 
