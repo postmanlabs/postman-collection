@@ -85,17 +85,6 @@ describe('Cookie', function () {
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
         });
 
-        it('should not add path when path values set as json object', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                path: {}
-            });
-
-            expect(cookie.path).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
         it('should not add path when path values set as null', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
@@ -103,42 +92,18 @@ describe('Cookie', function () {
                 path: null
             });
 
-            expect(cookie.path).to.be.undefined;
+            expect(cookie.path).to.be.null;
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
         });
 
-        it('should not add path when path values set as array', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                path: []
-            });
-
-            expect(cookie.path).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
-        it('should not add path when path values set as number', function () {
+        it('should add path when path values set as number', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
                 path: 123
             });
 
-            expect(cookie.path).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
-        it('should not add path when path values set as function', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                // eslint-disable-next-line no-empty-function
-                path: function () {}
-            });
-
-            expect(cookie.path).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Path=123');
         });
 
         it('should set domain when domain values set as empty string', function () {
@@ -152,17 +117,6 @@ describe('Cookie', function () {
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
         });
 
-        it('should not add domain when domain values set as json object', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                domain: {}
-            });
-
-            expect(cookie.domain).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
         it('should not add domain when domain values set as null', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
@@ -170,42 +124,18 @@ describe('Cookie', function () {
                 domain: null
             });
 
-            expect(cookie.domain).to.be.undefined;
+            expect(cookie.domain).to.be.null;
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
         });
 
-        it('should not add domain when domain values set as array', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                domain: []
-            });
-
-            expect(cookie.domain).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
-        it('should not add domain when domain values set as number', function () {
+        it('should add domain when domain values set as number', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
                 domain: 123
             });
 
-            expect(cookie.domain).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
-        it('should not add domain when domain values set as function', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                // eslint-disable-next-line no-empty-function
-                domain: function () {}
-            });
-
-            expect(cookie.domain).to.be.undefined;
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Domain=123');
         });
 
         describe('has property', function () {
