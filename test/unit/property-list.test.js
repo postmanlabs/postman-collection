@@ -962,6 +962,53 @@ describe('PropertyList', function () {
         });
     });
 
+    describe('.update not defined property list', function () {
+        it('should throw error when .upsert called on propertyList that does not support .update()', function () {
+            var FakeType,
+                list;
+
+            FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
+            FakeType.prototype.update = null;
+            list = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            expect(function () {
+                list.upsert({
+                    key: 'key1',
+                    val: 'value1-updated'
+                });
+            }).to.throw('collection: unable to upsert into a list of Type that does not support .update()');
+        });
+
+        it('should throw error when .assimilate called on propertyList that does not support .update()', function () {
+            var FakeType,
+                list1, sourceListArray;
+
+            FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
+            FakeType.prototype.update = null;
+            list1 = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+            sourceListArray = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1-updated'
+            }]);
+
+            expect(function () {
+                list1.assimilate(sourceListArray);
+            }).to.throw('collection: unable to upsert into a list of Type that does not support .update()');
+        });
+    });
+
     describe('assimilate method', function () {
         var FakeType = function (opts) {
             _.assign(this, opts);
@@ -976,12 +1023,12 @@ describe('PropertyList', function () {
                     key: 'key1',
                     val: 'value1'
                 }]),
-                list2 = new PropertyList(FakeType, null, [{
+                sourceListArray = new PropertyList(FakeType, null, [{
                     key: 'key2',
                     val: 'value2'
                 }]);
 
-            list1.assimilate(list2);
+            list1.assimilate(sourceListArray);
 
             expect(list1.toJSON()).to.eql([{
                 key: 'key1',
@@ -1031,6 +1078,46 @@ describe('PropertyList', function () {
             expect(list1.toJSON()).to.eql([{
                 key: 'key2',
                 val: 'value2'
+            }]);
+        });
+
+        it('should add items if source is array with valid object', function () {
+            var list1 = new PropertyList(FakeType, null, [{
+                    key: 'key1',
+                    val: 'value1'
+                }]),
+                sourceObjectArray = [{
+                    key: 'key2',
+                    val: 'value2'
+                }];
+
+            list1.assimilate(sourceObjectArray);
+
+            expect(list1.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
+            },
+            {
+                key: 'key2',
+                val: 'value2'
+            }]);
+        });
+
+        it('should not add items if source is invalid', function () {
+            var list1 = new PropertyList(FakeType, null, [{
+                    key: 'key1',
+                    val: 'value1'
+                }]),
+                sourceObject = {
+                    key: 'key2',
+                    val: 'value2'
+                };
+
+            list1.assimilate(sourceObject);
+
+            expect(list1.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
             }]);
         });
     });
@@ -1199,6 +1286,25 @@ describe('PropertyList', function () {
             }]);
 
             expect(list.has('key1', 'val1')).to.be.true;
+        });
+    });
+
+    describe('.toString', function () {
+        it('should handle when unparse method not defined in Type and constructor set to null', function () {
+            var FakeType,
+                list1;
+
+            FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
+            list1 = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            list1.constructor = null;
+            expect(list1.toString()).to.eql('');
         });
     });
 });
