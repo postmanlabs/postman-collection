@@ -523,6 +523,40 @@ describe('Request', function () {
                 value: 'bar'
             }]);
         });
+
+        it('should remove a header from the request', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader('foo');
+            expect(request.headers.toJSON()).to.eql([]);
+        });
+
+        it('should remove multiple headers from the request', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' },
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader('foo');
+            expect(request.headers.toJSON()).to.eql([]);
+        });
+
+        it('should remove a header from the request when ignoreCase options set to true', function () {
+            var request = new Request({
+                header: [
+                    { key: 'foo', value: 'bar' }
+                ]
+            });
+
+            request.removeHeader('FOO', { ignoreCase: true });
+            expect(request.headers.toJSON()).to.eql([]);
+        });
     });
 
     describe('.forEachHeader', function () {
@@ -579,6 +613,78 @@ describe('Request', function () {
                     { type: 'any', value: 'foo', key: 'username' },
                     { type: 'any', value: 'bar', key: 'password' }
                 ]
+            });
+        });
+
+        it('should delete auth request when type is null', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    auth: {
+                        type: 'basic',
+                        username: 'foo',
+                        password: 'bar'
+                    }
+                },
+                request = new Request(rawRequest);
+
+            expect(request).to.have.property('auth');
+            expect(request.toJSON()).to.have.property('auth');
+            request.authorizeUsing(null);
+
+            expect(request).to.not.have.property('auth');
+            expect(request.toJSON()).to.not.have.property('auth');
+            expect(request.auth).be.undefined;
+        });
+
+        it('should not update auth if given type is invalid', function () {
+            var rawRequest = {
+                    url: 'postman-echo.com',
+                    method: 'GET',
+                    auth: {
+                        type: 'basic',
+                        basic: [{
+                            key: 'username',
+                            type: 'string',
+                            value: 'postman'
+                        },
+                        {
+                            key: 'password',
+                            type: 'string',
+                            value: 'password'
+                        }]
+                    }
+                },
+                request = new Request(rawRequest);
+
+            expect(request).to.have.property('auth');
+            expect(request.toJSON()).to.have.property('auth');
+            expect(request.auth.toJSON()).to.be.eql({
+                'basic': [{
+                    'key': 'username',
+                    'type': 'string',
+                    'value': 'postman'
+                }, {
+                    'key': 'password',
+                    'type': 'string',
+                    'value': 'password'
+                }],
+                'type': 'basic'
+            });
+            request.authorizeUsing('type');
+
+            // after setting to invalid type, the method should return with no change
+            expect(request.auth.toJSON()).to.be.eql({
+                'basic': [{
+                    'key': 'username',
+                    'type': 'string',
+                    'value': 'postman'
+                }, {
+                    'key': 'password',
+                    'type': 'string',
+                    'value': 'password'
+                }],
+                'type': 'basic'
             });
         });
     });
@@ -685,6 +791,56 @@ describe('Request', function () {
 
             expect(request).to.have.property('method', 'POSTMAN');
             expect(request.toJSON()).to.have.property('method', 'POSTMAN');
+        });
+    });
+
+    describe('addHeader', function () {
+        it('should add a header to the request', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                newHeader = { key: 'testKey', value: 'testValue' };
+
+            request.addHeader(newHeader);
+            expect(request.headers.toJSON()).to.eql([
+                {
+                    key: 'foo',
+                    value: 'bar'
+                },
+                {
+                    key: 'testKey',
+                    value: 'testValue'
+                }
+            ]);
+        });
+
+        it('should not add a header to the request when newHeader is null', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                newHeader = null;
+
+            request.addHeader(newHeader);
+            expect(request.headers.toJSON()).to.eql([
+                {
+                    key: 'foo',
+                    value: 'bar'
+                }
+            ]);
+        });
+    });
+
+    describe('authorize', function () {
+        it('should throw error as function deprecated', function () {
+            var request = new Request({
+                    header: [{ key: 'foo', value: 'bar' }]
+                }),
+                newHeader = { key: 'testKey', value: 'testValue' };
+
+            request.addHeader(newHeader);
+            expect(function () {
+                request.authorize();
+            }).to.throw('collection request.authorize() has been discontinued');
         });
     });
 });

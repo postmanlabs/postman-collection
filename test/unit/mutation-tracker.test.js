@@ -157,6 +157,48 @@ describe('MutationTracker', function () {
 
             expect(tracker.count()).to.eql(0);
         });
+
+        it('should not track mutation with no instruction', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track();
+            expect(tracker.count()).to.eql(0);
+        });
+
+        it('should not track mutation with invalid instruction as null', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track(null);
+            expect(tracker.count()).to.eql(0);
+        });
+
+        it('should not track mutation with invalid instruction as empty payload', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track({});
+            expect(tracker.count()).to.eql(0);
+        });
+
+        it('should not track mutation with invalid instruction as empty array', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track([]);
+            expect(tracker.count()).to.eql(0);
+        });
+
+        it('should not track mutation with invalid instruction data type', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track(1, 2, 3, 4);
+            expect(tracker.count()).to.eql(0);
+        });
+
+        it('should not track mutation with invalid payload', function () {
+            var tracker = new MutationTracker();
+
+            tracker.track('set', 5, 6, 7, 8);
+            expect(tracker.count()).to.eql(0);
+        });
     });
 
     describe('apply', function () {

@@ -1,3 +1,18 @@
+3.6.7:
+  date: 2020-09-16
+  fixed bugs:
+    - >-
+      GH-1101 Fixed an issue in RequestAuth where the type was set to previous
+      auth type when update() called with invalid type
+    - >-
+      GH-1097 Fixed an issue in cookie where, PropertyList should've been added
+      as required module for cookie.js file
+    - >-
+      GH-1105 Fixed a bug where `toJSON()` on RequestBody returns
+      non-serializable object having streams for bodies containing file
+  chores:
+    - 'GH-1098, GH-1099 Added unit tests'
+
 3.6.6:
   date: 2020-08-31
   fixed bugs:
