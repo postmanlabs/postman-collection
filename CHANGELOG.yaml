@@ -3,6 +3,7 @@ master:
     - >-
       GH-1099 Added unit tests for mutation-tracker.js, property-list.js, request.js, url.js
       and variable.js.
+    - >-
       GH-1097 Fixed an issue in cookie where, PropertyList should've been
       added as required module for cookie.js file.
     - >-
