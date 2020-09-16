@@ -3,13 +3,14 @@ master:
     - >-
       GH-1099 Added unit tests for mutation-tracker.js, property-list.js, request.js, url.js
       and variable.js.
+    - GH-1098 Added unit tests for cookie.js, header.js, request-auth.js, item.js, content-info.js.
+  fixed bugs:
     - >-
       GH-1097 Fixed an issue in cookie where, PropertyList should've been
       added as required module for cookie.js file.
     - >-
       GH-1105 Fixed a bug where `toJSON()` on RequestBody returns non-serializable
       object having streams for bodies containing file
-    - GH-1098 Added unit tests for cookie.js, header.js, request-auth.js, item.js, content-info.js.
 
 3.6.6:
   date: 2020-08-31
