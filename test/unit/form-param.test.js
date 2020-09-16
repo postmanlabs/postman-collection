@@ -54,4 +54,42 @@ describe('FormParam', function () {
             expect(fp).to.have.property('contentType', undefined);
         });
     });
+
+    describe('.toJSON', function () {
+        it('should correctly handle param with type `text`', function () {
+            var definition = {
+                    key: 'foo',
+                    value: 'bar',
+                    type: 'text',
+                    contentType: 'application/json'
+                },
+                fp = new FormParam(definition);
+
+            expect(fp.toJSON()).to.eql(definition);
+        });
+
+        it('should correctly handle param with type `file`', function () {
+            var definition = {
+                    key: 'foo',
+                    src: 'fileSrc',
+                    type: 'file',
+                    contentType: 'application/json'
+                },
+                fp = new FormParam(definition);
+
+            expect(fp.toJSON()).to.eql(definition);
+        });
+
+        it('should not have value for param with type `file`', function () {
+            var fp = new FormParam({
+                key: 'foo',
+                value: 'this will be removed for file param',
+                type: 'file',
+                contentType: 'application/json',
+                src: 'fileSrc'
+            });
+
+            expect(fp.toJSON()).to.not.have.property('value');
+        });
+    });
 });
