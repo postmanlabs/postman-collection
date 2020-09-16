@@ -1,6 +1,8 @@
 master:
   fixed bugs:
     - >-
+      GH-1101 Fixed an issue in RequestAuth where type was set to previous auth type
+      when update() called with invalid type.
       GH-1097 Fixed an issue in cookie where, PropertyList should've been
       added as required module for cookie.js file.
     - >-
