@@ -74,7 +74,7 @@ describe('Cookie', function () {
             expect(unparsedSingle).to.equal('testCookie=fooTest');
         });
 
-        it('should set path when path values set as empty string', function () {
+        it('should validate for set of invalid values for path param', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
@@ -83,10 +83,8 @@ describe('Cookie', function () {
 
             expect(cookie.path).to.equal('');
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
 
-        it('should not add path when path values set as null', function () {
-            var cookie = new Cookie({
+            cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
                 path: null
@@ -94,10 +92,8 @@ describe('Cookie', function () {
 
             expect(cookie.path).to.be.null;
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
 
-        it('should add path when path values set as number', function () {
-            var cookie = new Cookie({
+            cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
                 path: 123
@@ -106,18 +102,7 @@ describe('Cookie', function () {
             expect(cookie.toString()).to.equal('testCookie=testCookieVal; Path=123');
         });
 
-        it('should set domain when domain values set as empty string', function () {
-            var cookie = new Cookie({
-                key: 'testCookie',
-                value: 'testCookieVal',
-                domain: ''
-            });
-
-            expect(cookie.domain).to.equal('');
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
-
-        it('should not add domain when domain values set as null', function () {
+        it('should validate for set of invalid values for domain param', function () {
             var cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
@@ -126,10 +111,17 @@ describe('Cookie', function () {
 
             expect(cookie.domain).to.be.null;
             expect(cookie.toString()).to.equal('testCookie=testCookieVal');
-        });
 
-        it('should add domain when domain values set as number', function () {
-            var cookie = new Cookie({
+            cookie = new Cookie({
+                key: 'testCookie',
+                value: 'testCookieVal',
+                domain: ''
+            });
+
+            expect(cookie.domain).to.equal('');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal');
+
+            cookie = new Cookie({
                 key: 'testCookie',
                 value: 'testCookieVal',
                 domain: 123
@@ -500,7 +492,7 @@ describe('Cookie', function () {
                 }]
             });
 
-            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Max-Age=1502442248');
+            expect(cookie.toString()).to.equal('testCookie=testCookieVal; Max-Age=1502442248; Priority=true');
         });
     });
 });
