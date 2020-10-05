@@ -1,18 +1,18 @@
-# Postman Collection SDK [![Build Status](https://travis-ci.org/postmanlabs/postman-collection.svg?branch=develop)](https://travis-ci.com/github/postmanlabs/postman-collection) [![codecov](https://codecov.io/gh/postmanlabs/postman-collection/branch/develop/graph/badge.svg)](https://codecov.io/gh/postmanlabs/postman-collection)
+# Postman Collection SDK [![Build Status](https://travis-ci.com/postmanlabs/postman-collection.svg?branch=develop)](https://travis-ci.com/postmanlabs/postman-collection) [![codecov](https://codecov.io/gh/postmanlabs/postman-collection/branch/develop/graph/badge.svg)](https://codecov.io/gh/postmanlabs/postman-collection)
 
 Postman Collection SDK is a NodeJS module that allows a developer to work with Postman Collections. Using this module a
 developer can create collections, manipulate them and then export them in a format that the Postman Apps and Postman CLI
 Runtimes (such as [Newman](https://github.com/postmanlabs/newman)) can consume.
 
-A collection lets you group individual requests together. These requests can be further organized into folders to 
-accurately mirror your API. Requests can also store sample responses when saved in a collection. You can add metadata 
+A collection lets you group individual requests together. These requests can be further organized into folders to
+accurately mirror your API. Requests can also store sample responses when saved in a collection. You can add metadata
 like name and description too so that all the information that a developer needs to use your API is available easily.
 
-To know more about Postman Collections, visit the 
+To know more about Postman Collections, visit the
 [collection documentation section on Postman Website](https://www.getpostman.com/collection).
 
-> The new [Collection Format v2](http://blog.getpostman.com/2015/06/05/travelogue-of-postman-collection-format-v2/) 
-> builds a stronger foundation for improving your productivity while working with APIs. We want your feedback and iron 
+> The new [Collection Format v2](http://blog.getpostman.com/2015/06/05/travelogue-of-postman-collection-format-v2/)
+> builds a stronger foundation for improving your productivity while working with APIs. We want your feedback and iron
 > out issues before this goes into the Postman Apps.
 
 ## Installing the SDK
