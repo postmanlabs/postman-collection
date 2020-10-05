@@ -1,3 +1,7 @@
+master:
+  chores:
+    - GH-1113 Updated dependencies
+
 3.6.7:
   date: 2020-09-16
   fixed bugs:
