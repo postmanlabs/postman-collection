@@ -5,6 +5,8 @@ master:
       GH-1114 Updated .npmignore to prevent the addition of tests and config
       files in the published package
     - GH-1114 Added system test for published package content
+    - GH-1115 Automated gh-pages docs deployment
+    - GH-1115 Automated releases and publish process
 
 3.6.7:
   date: 2020-09-16

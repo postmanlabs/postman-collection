@@ -24,7 +24,7 @@
     "build-schema": "node npm/build-schema.js",
     "build-wiki": "node npm/build-wiki.js",
     "publish-wiki": "node npm/publish-wiki.js",
-    "publish-docs": "node npm/publish-docs.js",
+    "release": "node npm/create-release.js",
     "test": "npm run test-lint && npm run test-system && npm run test-unit && npm run test-browser",
     "test-system": "node npm/test-system.js",
     "test-browser": "node npm/test-browser.js",
@@ -49,6 +49,7 @@
     "uuid": "3.4.0"
   },
   "devDependencies": {
+    "@postman/shipit": "0.2.0",
     "async": "3.2.0",
     "bipbip": "0.4.1",
     "browserify": "16.5.2",
