@@ -68,6 +68,22 @@ jobs:
           tags: true
           all_branches: true
 
+    # update gh-pages docs on master
+    - stage: Publish Docs
+      if: branch = master
+      script: npm run build-docs
+      before_deploy: openssl aes-256-cbc -K $encrypted_05f822b6caa8_key -iv $encrypted_05f822b6caa8_iv
+        -in .github/travis-deploy-key.enc -out /tmp/travis-deploy-key -d
+      deploy:
+        edge: true # opt in to dpl v2
+        provider: pages:git
+        local_dir: out/docs
+        keep_history: false
+        deploy_key: /tmp/travis-deploy-key
+        commit_message: Deploy to %{target_branch}
+        on:
+          branch: master
+
 notifications:
   slack:
     secure: PuYBCkRXgUKxoFMyTZdYcxplpgW+T/hxq54gsFOcAxN079i7PTD/GmGIgKM1RviCocvroUst5bW3ULk3haYUb8gQSCyAeHzRl00DaoOXshTRjFzJyU6m5wbT/R45dh6ZO2BT6uwlVU95KznieCC+yjlbppPOis8bwxra08ODnsA1L7OeI7fVlKjyh+lPA4qnmuYpNtMfTO5mmHroHBS5nWoB1WctWuZQGSfDYLUr/XrhKkJOBbv7FI7setTroIRF4Rs9nIFEF3mzTuUK5VV6lQAZRzNHKmgD9DmGVeaB5Y4fWEznocV1d6cInsjMr4EyMYziyOFnnPZAk8GZapMDwD0/5E9L5+Q8uXhFhVHYurpZnP+wylqZmnfb4UaFcP96BBaavhfF/ai+LWlLbHiL5b1HX4dlauNfHdq1W1YCILI2Atfr+36rqu3102S6HHkOssoTw09ftLfQHuF6CNYnVE5cS40pupwFZj3o0h9yQnCFDPxlq2ls+hon+PKL9wCHL5MlG+jQZDDL8eZC8F9CoZUyVIxNhoh0fnZ+t4bIlGW5eB8f8oMCxcnjocxZpichfAsmuaPh/e2KfdoF/B7ce6+Tb3/YXqo5QVTsJ1Vzi4I7c3jx1Q0DAyZODsBKyE0y7NfmeVNap0WIgajiJBoKji8Fjw+tDfa3hSb4yyPSG6w=
