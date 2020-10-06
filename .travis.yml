@@ -71,6 +71,8 @@ jobs:
     # update gh-pages docs on master
     - stage: Publish Docs
       if: branch = master
+      os: linux
+      node_js: 12
       script: npm run build-docs
       before_deploy: openssl aes-256-cbc -K $encrypted_05f822b6caa8_key -iv $encrypted_05f822b6caa8_iv
         -in .github/travis-deploy-key.enc -out /tmp/travis-deploy-key -d
