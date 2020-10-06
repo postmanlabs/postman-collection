@@ -1,6 +1,10 @@
 master:
   chores:
     - GH-1113 Updated dependencies
+    - >-
+      GH-1114 Updated .npmignore to prevent the addition of tests and config
+      files in the published package
+    - GH-1114 Added system test for published package content
 
 3.6.7:
   date: 2020-09-16
