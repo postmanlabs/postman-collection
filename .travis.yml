@@ -1,37 +1,73 @@
-dist: 'trusty'
 language: node_js
+
+# 2*2 matrix for tests
 os:
-- linux
-- windows
+  - linux
+  - windows
 node_js:
-- '6'
-- '8'
-- '10'
+  - 6
+  - 8
+  - 10
+
 jobs:
   include:
+    # run tests in Node.js stable and publish code coverage
     - name: 'Coverage'
-      node_js: stable
       os: linux
+      node_js: stable
       script:
         - npm run test-unit
         - bash <(curl -s https://codecov.io/bash) -c -Z -f .coverage/coverage-final.json -F unit
-#before_install:
-#- |
-#  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_PULL_REQUEST" == false ]; then
-#    openssl aes-256-cbc -K $encrypted_9a2810c1eadf_key -iv $encrypted_9a2810c1eadf_iv -in ./.ci/deploy-key.enc -out ./.ci/deploy-key -d
-#  fi;
-#
-#after_success:
-#- |
-#  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_PULL_REQUEST" == false ]; then
-#    eval "$(ssh-agent)"
-#    echo "Publishing Docs";
-#    chmod 600 ./.ci/deploy-key;
-#    ssh-add ./.ci/deploy-key;
-#    openssl aes-256-cbc -K $encrypted_9a2810c1eadf_key -iv $encrypted_9a2810c1eadf_iv -in ./.ci/deploy-key.enc -out ./.ci/deploy-key -d;
-#    npm run publish-docs;
-#    ssh-agent -k
-#  fi;
+
+    # create a new release if $CREATE_RELEASE is set
+    - stage: Create Release
+      if: env(CREATE_RELEASE) = true AND type = api AND tag IS blank
+      os: osx
+      node_js: 12
+      git:
+        depth: false # disable --depth
+      script:
+        # fail-fast using set -e
+        - set -e
+        # decrypt and ssh-add the deploy-key
+        - openssl aes-256-cbc -K $encrypted_05f822b6caa8_key -iv $encrypted_05f822b6caa8_iv
+          -in .github/travis-deploy-key.enc -out /tmp/travis-deploy-key -d
+        - chmod 600 /tmp/travis-deploy-key
+        - eval "$(ssh-agent -s)"
+        - ssh-add /tmp/travis-deploy-key
+        - rm /tmp/travis-deploy-key
+        # convert remote URL from HTTPS to SSH
+        - git remote set-url origin $(git config --get remote.origin.url | sed -E 's#(http.*://)([^/]+)/(.+)$#git@\2:\3#g')
+        - ssh-keyscan github.com >> ~/.ssh/known_hosts
+        # create release
+        - npm run release $PUSH_TO_ORIGIN $PRERELEASE_SUFFIX
+        - set +e
+
+    # publish npm package on tagged builds
+    - stage: Publish Package
+      if: tag IS present
+      os: osx
+      node_js: 12
+      git:
+        depth: false # disable --depth
+      script:
+        # fail-fast using set -e
+        - set -e
+        # get prerelease suffix from version tag
+        - TAG=$(echo $TRAVIS_TAG | sed 's/^.*-\([a-z]*\).*$/\1/')
+        # set to `latest` in case of no suffix
+        - TAG=$([ "${TAG}" = "$TRAVIS_TAG" ] && echo "latest" || echo $TAG)
+        # make sure `latest` tag is create from master branch
+        - '[ "$TAG" = "latest" ] && [ $(git rev-parse HEAD) != $(git rev-parse origin/master) ] && return 1 || return 0'
+        - set +e
+      deploy:
+        edge: true # opt in to dpl v2
+        provider: npm
+        tag: $TAG
+        on:
+          tags: true
+          all_branches: true
+
 notifications:
   slack:
     secure: PuYBCkRXgUKxoFMyTZdYcxplpgW+T/hxq54gsFOcAxN079i7PTD/GmGIgKM1RviCocvroUst5bW3ULk3haYUb8gQSCyAeHzRl00DaoOXshTRjFzJyU6m5wbT/R45dh6ZO2BT6uwlVU95KznieCC+yjlbppPOis8bwxra08ODnsA1L7OeI7fVlKjyh+lPA4qnmuYpNtMfTO5mmHroHBS5nWoB1WctWuZQGSfDYLUr/XrhKkJOBbv7FI7setTroIRF4Rs9nIFEF3mzTuUK5VV6lQAZRzNHKmgD9DmGVeaB5Y4fWEznocV1d6cInsjMr4EyMYziyOFnnPZAk8GZapMDwD0/5E9L5+Q8uXhFhVHYurpZnP+wylqZmnfb4UaFcP96BBaavhfF/ai+LWlLbHiL5b1HX4dlauNfHdq1W1YCILI2Atfr+36rqu3102S6HHkOssoTw09ftLfQHuF6CNYnVE5cS40pupwFZj3o0h9yQnCFDPxlq2ls+hon+PKL9wCHL5MlG+jQZDDL8eZC8F9CoZUyVIxNhoh0fnZ+t4bIlGW5eB8f8oMCxcnjocxZpichfAsmuaPh/e2KfdoF/B7ce6+Tb3/YXqo5QVTsJ1Vzi4I7c3jx1Q0DAyZODsBKyE0y7NfmeVNap0WIgajiJBoKji8Fjw+tDfa3hSb4yyPSG6w=
