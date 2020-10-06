@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 // ---------------------------------------------------------------------------------------------------------------------
-// This script is intended to generate documentation for this module
+// This script is intended to generate documentation for this module.
 // ---------------------------------------------------------------------------------------------------------------------
 
-/* eslint-env node, es6 */
 require('shelljs/global');
 
-var path = require('path'),
+const path = require('path'),
 
     chalk = require('chalk'),
     pkg = require('../package.json'),
@@ -15,7 +14,7 @@ var path = require('path'),
     TARGET_DIR = path.join('out', 'docs');
 
 module.exports = function (exit) {
-    console.log(chalk.yellow.bold('Generating documentation...'));
+    console.info(chalk.yellow.bold('Generating documentation...'));
 
     try {
         // clean directory
@@ -23,13 +22,14 @@ module.exports = function (exit) {
     }
     catch (e) {
         console.error(e.stack || e);
+
         return exit(e ? 1 : 0);
     }
 
     exec(`${IS_WINDOWS ? '' : 'node'} ${path.join('node_modules', '.bin', 'jsdoc')}${IS_WINDOWS ? '.cmd' : ''}` +
         ` -c .jsdoc-config.json -u docs lib --query 'pkgVersion=${pkg.version}'`, function (code) {
         // output status
-        console.log(code ?
+        console.info(code ?
             chalk.red.bold('unable to genereate documentation') :
             ` - documentation created at "${TARGET_DIR}"`);
         exit(code);
@@ -37,4 +37,4 @@ module.exports = function (exit) {
 };
 
 // ensure we run this script exports if this is a direct stdin.tty run
-!module.parent && module.exports(exit);
+!module.parent && module.exports(process.exit);
