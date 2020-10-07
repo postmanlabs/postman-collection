@@ -4,6 +4,7 @@ This is a gentle introduction to the sort of functionality that the SDK provides
 
 ## Collection Hierarchy
 At a very high level, Collections are organized in the following way:
+```
 
                                               +------------+
                    +--------------------------+ Collection +------------------------+
@@ -17,7 +18,7 @@ At a very high level, Collections are organized in the following way:
     +--------v--+    +---v--+     +----v----+    +----v------+    +---v----+
     | ItemGroup |    | Item |     | Request |    | Responses |    | Events |
     +-----------+    +------+     +---------+    +-----------+    +--------+
-
+```
 
 ### Collection
 
