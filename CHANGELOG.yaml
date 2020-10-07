@@ -1,4 +1,5 @@
-master:
+3.6.8:
+  date: 2020-10-07
   chores:
     - GH-1113 Updated dependencies
     - >-
@@ -452,7 +453,7 @@ master:
   date: 2017-09-26
   breaking changes:
     - Updated to using collection format schema v2.1 (auth structure change)
-    - 'Modified functioning of `Item#getAuth` to return `RequestAuth` directly'
+    - Modified functioning of `Item#getAuth` to return `RequestAuth` directly
     - Added sugar to RequestAuth to handle any auth type (refer docs)
     - >-
       Removed any auth type specific code from SDK. All individual
@@ -501,7 +502,7 @@ master:
     - >-
       GH-417 Updated `ProxyConfig#getProxyURL` to always return proxy URL with
       HTTP protocol
-    - 'GH-411 Prevented `_details` from showing up in `Response#toJSON` results'
+    - GH-411 Prevented `_details` from showing up in `Response#toJSON` results
     - >-
       GH-404 The `Script` constructor now accepts script arrays and strings as
       well
@@ -717,14 +718,14 @@ master:
     - Removed Response details `fromServer` flag
     - Added Response details `standardName` property
     - 'Added `set`, `get`, `unset` and `clear `helpers to `VariableScope`'
-    - 'Added `Response#details` helper to retain custom server HTTP reasons'
+    - Added `Response#details` helper to retain custom server HTTP reasons
     - Added `Response.isResponse` and `Script.isScript` helpers
     - Added `Request.isRequest` helper
   fixed bugs:
     - >-
       Fixed a bug in `PropertyList#clear` which caused only the first property
       of a list to be removed
-    - 'Fixed a script resolution bug in `Event#update`'
+    - Fixed a script resolution bug in `Event#update`
 
 1.0.2:
   date: 2017-03-21
@@ -1219,7 +1220,7 @@ master:
       Added a hash map for accurate text type detection from mime in Response
       property
     - Fix arrayBufferToString
-    - 'Fixes postmanlabs/postman-collection#44'
+    - Fixes postmanlabs/postman-collection#44
 
 0.2.0:
   date: 2016-06-6
@@ -1460,7 +1461,7 @@ master:
   date: 2016-03-21
   new features:
     - Added a new function to check whether an object is a collection
-    - 'Added draft and private `Property#toObjectResolved` to procure an Obj…'
+    - Added draft and private `Property#toObjectResolved` to procure an Obj…
     - Added a new function to check whether an object is a collection
   chores:
     - Removed unnecessary import
@@ -1531,7 +1532,7 @@ master:
     - Jsdoc documentation fixes
     - Updated README to point to the SDK documentation
   chores:
-    - 'Added todo for future improvement of `VariableList#env`'
+    - Added todo for future improvement of `VariableList#env`
 
 0.0.8:
   date: 2016-03-14
