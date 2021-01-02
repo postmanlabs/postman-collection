@@ -654,7 +654,7 @@ declare module "postman-collection" {
          */
         type definition = {
             key: string;
-            value: string;
+            value?: string;
         };
     }
 
@@ -1705,12 +1705,12 @@ declare module "postman-collection" {
 
     export namespace RequestBody {
         type definition = {
-            mode: string;
-            raw: string;
-            file: string;
-            graphql: any;
-            formdata: object[];
-            urlencoded: object[] | string;
+            mode?: string;
+            raw?: string;
+            file?: string;
+            graphql?: any;
+            formdata?: object[];
+            urlencoded?: object[] | string;
         };
         /**
          * MODES
@@ -1788,13 +1788,13 @@ declare module "postman-collection" {
          * @property certificate - The certificate information for this request.
          */
         type definition = {
-            url: string | Url;
-            method: string;
-            header: Header.definition[];
-            body: RequestBody.definition;
-            auth: RequestAuth.definition;
-            proxy: ProxyConfig.definition;
-            certificate: Certificate.definition;
+            url?: string | Url;
+            method?: string;
+            header?: Header.definition[];
+            body?: RequestBody.definition;
+            auth?: RequestAuth.definition;
+            proxy?: ProxyConfig.definition;
+            certificate?: Certificate.definition;
         };
     }
 
@@ -2530,7 +2530,7 @@ declare module "postman-collection" {
          */
         static readonly PROTOCOL_DELIMITER: string;
         /**
-         * String representation for matching all urls - 
+         * String representation for matching all urls -
          */
         static readonly MATCH_ALL_URLS: string;
     }
