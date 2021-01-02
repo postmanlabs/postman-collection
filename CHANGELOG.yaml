@@ -1,4 +1,5 @@
-master:
+3.6.9:
+  date: 2021-01-02
   chores:
     - Removed `types` property from package.json
     - Updated dependencies
