@@ -87,12 +87,5 @@
   "homepage": "https://github.com/postmanlabs/postman-collection#readme",
   "bugs": {
     "url": "https://github.com/postmanlabs/postman-collection/issues"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "file-type",
-      "eslint-plugin-jsdoc"
-    ]
-  },
-  "types": "types/index.d.ts"
+  }
 }

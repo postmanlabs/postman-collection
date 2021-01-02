@@ -1,5 +1,6 @@
 master:
   chores:
+    - Removed `types` property from package.json
     - Updated dependencies
 
 3.6.8:
