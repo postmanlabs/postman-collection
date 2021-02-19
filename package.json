@@ -42,7 +42,7 @@
     "lodash": "4.17.20",
     "marked": "1.2.7",
     "mime-format": "2.0.0",
-    "mime-types": "2.1.28",
+    "mime-types": "2.1.29",
     "postman-url-encoder": "3.0.1",
     "sanitize-html": "1.20.1",
     "semver": "7.3.4",
