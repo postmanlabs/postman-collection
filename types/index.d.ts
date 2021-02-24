@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 3.6.4
+// Type definitions for postman-collection 3.6.9
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -654,7 +654,7 @@ declare module "postman-collection" {
          */
         type definition = {
             key: string;
-            value?: string;
+            value: string;
         };
     }
 
@@ -672,6 +672,10 @@ declare module "postman-collection" {
          * Returns the value of the form parameter (if any).
          */
         valueOf(): any | string;
+        /**
+         * Convert the form-param to JSON compatible plain object.
+         */
+        toJSON(): any;
         /**
          * Declare the list index key, so that property lists of form parameters work correctly
          */
@@ -1705,12 +1709,12 @@ declare module "postman-collection" {
 
     export namespace RequestBody {
         type definition = {
-            mode?: string;
-            raw?: string;
-            file?: string;
-            graphql?: any;
-            formdata?: object[];
-            urlencoded?: object[] | string;
+            mode: string;
+            raw: string;
+            file: string;
+            graphql: any;
+            formdata: object[];
+            urlencoded: object[] | string;
         };
         /**
          * MODES
@@ -1730,10 +1734,6 @@ declare module "postman-collection" {
      */
     export class RequestBody extends PropertyBase {
         constructor(options: any);
-        /**
-         * Set the content of this request data
-         */
-        update(options: any): void;
         /**
          * Indicates the type of request data to use.
          */
@@ -1775,6 +1775,10 @@ declare module "postman-collection" {
          * If the request body is set to a mode, but does not contain data, then we should not be sending it.
          */
         isEmpty(): boolean;
+        /**
+         * Convert the request body to JSON compatible plain object
+         */
+        toJSON(): any;
     }
 
     export namespace Request {
@@ -1788,13 +1792,13 @@ declare module "postman-collection" {
          * @property certificate - The certificate information for this request.
          */
         type definition = {
-            url?: string | Url;
-            method?: string;
-            header?: Header.definition[];
-            body?: RequestBody.definition;
-            auth?: RequestAuth.definition;
-            proxy?: ProxyConfig.definition;
-            certificate?: Certificate.definition;
+            url: string | Url;
+            method: string;
+            header: Header.definition[];
+            body: RequestBody.definition;
+            auth: RequestAuth.definition;
+            proxy: ProxyConfig.definition;
+            certificate: Certificate.definition;
         };
     }
 
@@ -2530,7 +2534,7 @@ declare module "postman-collection" {
          */
         static readonly PROTOCOL_DELIMITER: string;
         /**
-         * String representation for matching all urls -
+         * String representation for matching all urls - 
          */
         static readonly MATCH_ALL_URLS: string;
     }
