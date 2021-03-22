@@ -52,7 +52,7 @@
     "@postman/shipit": "0.2.0",
     "async": "3.2.0",
     "bipbip": "0.4.2",
-    "browserify": "16.5.2",
+    "browserify": "17.0.0",
     "btoa": "1.2.1",
     "chai": "4.3.4",
     "chalk": "2.4.2",
