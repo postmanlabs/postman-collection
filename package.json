@@ -72,7 +72,7 @@
     "karma-mocha-reporter": "2.2.5",
     "mocha": "7.2.0",
     "mustache": "4.1.0",
-    "nyc": "14.1.1",
+    "nyc": "15.0.0",
     "parse-gitignore": "1.0.1",
     "postman-jsdoc-theme": "0.0.3",
     "postman-request": "2.88.1-postman.28",
