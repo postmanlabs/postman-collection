@@ -61,6 +61,29 @@ describe('VariableList', function () {
         expect(resolved.xyz).to.equal('foo-bar');
     });
 
+    it('should handle nested interpolation in JSON documents', function () {
+        var template = {
+            xyz: JSON.stringify({
+                value: '{{alpha}}'
+            })
+        }
+
+        var variables = new VariableList(null, [
+            {
+                key: 'alpha',
+                value: JSON.stringify({
+                    foo: 'bar'
+                })
+            }
+        ])
+
+        var result = variables.substitute(template)
+        var json = JSON.parse(result.xyz)
+        expect(json).to.deep.equal({
+            value: '{"foo":"bar"}'
+        })
+    });
+
     it('should correctly resolve variables with a forward slash in their name', function () {
         var unresolved = {
                 xyz: '{{alp/ha}}'
