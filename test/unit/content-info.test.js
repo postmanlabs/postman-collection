@@ -1,6 +1,7 @@
 var expect = require('chai').expect,
     contentInfo = require('../../lib/content-info'),
-    Response = require('../../lib').Response;
+    Response = require('../../lib').Response,
+    fs = require('fs');
 
 describe('contentInfo module', function () {
     // eslint-disable-next-line max-len
@@ -20,6 +21,21 @@ describe('contentInfo module', function () {
             fileName: 'response.png',
             mimeFormat: 'image',
             mimeType: 'image'
+        });
+    });
+
+    // eslint-disable-next-line max-len
+    (typeof window === 'undefined' ? it : it.skip)('Should detect mp3 response stream if content-type is not present', function () {
+        // data url of mp3 file
+        var data = fs.readFileSync('test/fixtures/audio.mp3'),
+            response = new Response({ stream: data });
+
+        expect(contentInfo.contentInfo(response)).to.eql({
+            charset: 'utf8',
+            fileExtension: 'mp3',
+            fileName: 'response.mp3',
+            mimeFormat: 'audio',
+            mimeType: 'audio'
         });
     });
 
