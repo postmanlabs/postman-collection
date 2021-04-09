@@ -25,10 +25,8 @@ describe('contentInfo module', function () {
     });
 
     // eslint-disable-next-line max-len
-    // eslint-disable-next-line max-len
     (typeof window === 'undefined' ? it : it.skip)('Should detect mp3 response stream if content-type is not present', function () {
         // data url of mp3 file
-        // eslint-disable-next-line max-len
         var data = fs.readFileSync('test/fixtures/audio.mp3'),
             // creating the buffer of the file
             response = new Response({ stream: Buffer.from(data, 'base64') });
