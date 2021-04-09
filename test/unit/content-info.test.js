@@ -29,7 +29,7 @@ describe('contentInfo module', function () {
         // data url of mp3 file
         var data = fs.readFileSync('test/fixtures/audio.mp3'),
             // creating the buffer of the file
-            response = new Response({ stream: Buffer.from(data, 'base64') });
+            response = new Response({ stream: data });
 
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
