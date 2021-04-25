@@ -49,7 +49,7 @@
     "uuid": "3.4.0"
   },
   "devDependencies": {
-    "@postman/shipit": "0.2.0",
+    "@postman/shipit": "0.3.0",
     "async": "3.2.0",
     "bipbip": "0.4.2",
     "browserify": "17.0.0",
