@@ -23,6 +23,7 @@
     "build-types": "node npm/build-types.js",
     "build-schema": "node npm/build-schema.js",
     "build-wiki": "node npm/build-wiki.js",
+    "codecov": "node npm/publish-coverage.js",
     "publish-wiki": "node npm/publish-wiki.js",
     "release": "node npm/create-release.js",
     "test": "npm run test-lint && npm run test-system && npm run test-unit && npm run test-browser",
