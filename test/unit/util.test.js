@@ -69,14 +69,18 @@ describe('SDK Utils', function () {
         });
 
         (typeof window === 'undefined' ? describe : describe.skip)('special cases', function () {
-            var util;
+            var util,
+                cleanup = false;
 
             before(function () {
-                global.btoa = btoa;
+                if (!global.btoa) {
+                    global.btoa = btoa;
+                    cleanup = true;
+                }
                 delete require.cache[path.resolve('lib/util.js')];
                 util = require('../../lib/util');
             });
-            after(function () { delete global.btoa; });
+            after(function () { cleanup && delete global.btoa; });
 
             it('should use the provided btoa implementation when applicable', function () {
                 expect(util.btoa('randomString')).to.equal('cmFuZG9tU3RyaW5n');
