@@ -22,7 +22,7 @@ jobs:
     # create a new release if $CREATE_RELEASE is set
     - stage: Create Release
       if: env(CREATE_RELEASE) = true AND type = api AND tag IS blank
-      os: osx
+      os: linux
       node_js: 12
       git:
         depth: false # disable --depth
@@ -46,7 +46,7 @@ jobs:
     # publish npm package on tagged builds
     - stage: Publish Package
       if: tag IS present
-      os: osx
+      os: linux
       node_js: 12
       git:
         depth: false # disable --depth
