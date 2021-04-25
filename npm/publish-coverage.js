@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable require-jsdoc */
 // ---------------------------------------------------------------------------------------------------------------------
 // This script is intended to publish coverage reports to Codecov.
 //
