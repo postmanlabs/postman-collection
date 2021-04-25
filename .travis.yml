@@ -57,8 +57,8 @@ jobs:
         - TAG=$(echo $TRAVIS_TAG | sed 's/^.*-\([a-z]*\).*$/\1/')
         # set to `latest` in case of no suffix
         - TAG=$([ "${TAG}" = "$TRAVIS_TAG" ] && echo "latest" || echo $TAG)
-        # make sure `latest` tag is create from master branch
-        - '[ "$TAG" = "latest" ] && [ $(git rev-parse HEAD) != $(git rev-parse origin/master) ] && return 1 || return 0'
+        # make sure `latest` tag is create from main branch
+        - '[ "$TAG" = "latest" ] && [ $(git rev-parse HEAD) != $(git rev-parse origin/main) ] && return 1 || return 0'
         - set +e
       deploy:
         edge: true # opt in to dpl v2
@@ -68,9 +68,9 @@ jobs:
           tags: true
           all_branches: true
 
-    # update gh-pages docs on master
+    # update gh-pages docs on main
     - stage: Publish Docs
-      if: branch = master
+      if: branch = main
       os: linux
       node_js: 12
       script: npm run build-docs
@@ -84,7 +84,7 @@ jobs:
         deploy_key: /tmp/travis-deploy-key
         commit_message: Deploy to %{target_branch}
         on:
-          branch: master
+          branch: main
 
 notifications:
   slack:
