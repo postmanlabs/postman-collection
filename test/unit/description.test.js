@@ -65,7 +65,7 @@ describe('Description', function () {
                 type: 'text/markdown'
             });
 
-            expect(description.toString()).to.equal('Description\n');
+            expect(description.toString()).to.equal('<h1>Description</h1>\n');
         });
 
         it('should correctly handle HTML', function () {
