@@ -5,9 +5,11 @@ os:
   - linux
   - windows
 node_js:
-  - 6
   - 8
   - 10
+  - 12
+  - 14
+  - 15
 
 jobs:
   include:
