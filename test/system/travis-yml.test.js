@@ -23,7 +23,7 @@ describe('travis.yml', function () {
     describe('strucure', function () {
         it('should have the language set to node', function () {
             expect(travisYAML).to.have.property('language').that.equal('node_js');
-            expect(travisYAML).to.have.property('node_js').that.eql([6, 8, 10]);
+            expect(travisYAML).to.have.property('node_js').that.eql([8, 10, 12, 14, 15]);
         });
     });
 });
