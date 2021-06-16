@@ -59,31 +59,13 @@ describe('Description', function () {
     });
 
     describe('.toString', function () {
-        it('should correctly handle markdown', function () {
+        it('should return stringified description content', function () {
             var description = new Description({
-                content: '# Description',
-                type: 'text/markdown'
+                content: '<%= Description %>',
+                type: 'text/plain'
             });
 
-            expect(description.toString()).to.equal('Description\n');
-        });
-
-        it('should correctly handle HTML', function () {
-            var description = new Description({
-                content: '<h1>Description</h1><form><input /></form>',
-                type: 'text/html'
-            });
-
-            expect(description.toString()).to.equal('<h1>Description</h1>');
-        });
-
-        it('should escape HTML for arbitrary formats', function () {
-            var description = new Description({
-                content: '<%= template %>',
-                type: 'text/random'
-            });
-
-            expect(description.toString()).to.equal('&lt;%= template %&gt;');
+            expect(description.toString()).to.equal('<%= Description %>');
         });
 
         it('should return an empty string for falsy input', function () {

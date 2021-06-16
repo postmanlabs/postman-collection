@@ -1,4 +1,8 @@
 unreleased:
+  breaking changes:
+    - >-
+      GH-1197 Dropped support for description type-based formatting on
+      `Description#toString`
   chores:
     - Added secure codecov publish script
     - Updated deprecated faker methods
