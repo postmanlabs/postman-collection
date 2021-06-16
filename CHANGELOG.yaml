@@ -1,6 +1,7 @@
 unreleased:
   chores:
     - Added secure codecov publish script
+    - Updated deprecated faker methods
     - Updated dependencies
 
 3.6.11:
