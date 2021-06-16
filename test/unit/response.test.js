@@ -24,7 +24,7 @@ describe('Response', function () {
         it('should handle the absence of Buffer gracefully', function () {
             var response,
                 originalBuffer = Buffer,
-                stream = new Buffer('random').toJSON();
+                stream = Buffer.from('random').toJSON();
 
             delete global.Buffer;
             expect(function () {
@@ -133,7 +133,7 @@ describe('Response', function () {
         it('must retain Buffer nature on stream property after new Response(response.toJSON())', function () {
             var rawResponse = {
                     body: 'response body',
-                    stream: new Buffer([114, 101, 115, 112, 111, 110, 115, 101, 32, 98, 111, 100, 121])
+                    stream: Buffer.from([114, 101, 115, 112, 111, 110, 115, 101, 32, 98, 111, 100, 121])
                 },
                 response = new Response(rawResponse),
                 jsonified = response.toJSON(),
@@ -190,7 +190,7 @@ describe('Response', function () {
 
         it('should fallback to the response body if no content-encoding value is available', function () {
             var response = new Response({
-                body: new Buffer([31, 139, 8]) // the specifics matter here
+                body: Buffer.from([31, 139, 8]) // the specifics matter here
             });
 
             expect(response.encoding()).to.eql({
@@ -346,7 +346,7 @@ describe('Response', function () {
         });
 
         it('should handle response streams correctly', function () {
-            var response = new Response({ stream: new Buffer('random') });
+            var response = new Response({ stream: Buffer.from('random') });
 
             expect(response.dataURI()).to.equal('data:text/plain;base64, cmFuZG9t');
         });
@@ -414,7 +414,7 @@ describe('Response', function () {
     describe('body', function () {
         it('should parse response stream as text', function () {
             expect((new Response({
-                stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
+                stream: Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
             })).text()).to.equal('buffer');
         });
 
@@ -532,7 +532,7 @@ describe('Response', function () {
             var rawResponse = {
                     code: 200,
                     header: 'Transfer-Encoding: chunked',
-                    stream: new Buffer('something nice')
+                    stream: Buffer.from('something nice')
                 },
                 response = new Response(rawResponse);
             expect(response.size().body).to.equal(14);
@@ -614,7 +614,7 @@ describe('Response', function () {
             isCookie = Cookie.isCookie.bind(Cookie),
 
             getBuffer = function (array) {
-                return isNode4 ? new Buffer(array) : Buffer.from(new Uint32Array(array));
+                return isNode4 ? Buffer.from(array) : Buffer.from(new Uint32Array(array));
             },
 
             validateResponse = function (response) {
@@ -679,7 +679,7 @@ describe('Response', function () {
                         key: 'content-type',
                         value: 'text/html; charset=ISO-8859-1'
                     }],
-                    stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
+                    stream: Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
                 })).text()).to.equal('buffer');
             });
         });

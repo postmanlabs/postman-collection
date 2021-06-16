@@ -182,7 +182,7 @@ describe('response mime', function () {
                 }],
 
                 // todo load real file content here (maybe 1x1 px bmp)
-                stream: isNode4 ? new Buffer(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
+                stream: isNode4 ? Buffer.from(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
             });
 
         expect(response.mime()).to.eql({

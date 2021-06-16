@@ -90,7 +90,7 @@ describe('SDK Utils', function () {
 
     describe('.arrayBufferToString', function () {
         it('should correctly convert array buffers to strings', function () {
-            expect(util.arrayBufferToString(new Buffer('random'))).to.equal('random');
+            expect(util.arrayBufferToString(Buffer.from('random'))).to.equal('random');
         });
     });
 
@@ -104,15 +104,15 @@ describe('SDK Utils', function () {
         });
 
         it('should correctly convert array buffers to strings', function () {
-            expect(util.bufferOrArrayBufferToString(new Buffer('random'))).to.equal('random');
+            expect(util.bufferOrArrayBufferToString(Buffer.from('random'))).to.equal('random');
         });
 
         it('should handle default charsets correctly', function () {
-            expect(util.bufferOrArrayBufferToString(new Buffer('random'))).to.equal('random');
+            expect(util.bufferOrArrayBufferToString(Buffer.from('random'))).to.equal('random');
         });
 
         it('should handle charset overrides correctly', function () {
-            expect(util.bufferOrArrayBufferToString(new Buffer('random'), 'base64')).to.equal('cmFuZG9t');
+            expect(util.bufferOrArrayBufferToString(Buffer.from('random'), 'base64')).to.equal('cmFuZG9t');
         });
 
         it('should handle non buffer arguments correctly', function () {
@@ -130,7 +130,7 @@ describe('SDK Utils', function () {
         });
 
         it('should handle buffers correctly', function () {
-            expect(util.bufferOrArrayBufferToBase64(new Buffer('random'))).to.equal('cmFuZG9t');
+            expect(util.bufferOrArrayBufferToBase64(Buffer.from('random'))).to.equal('cmFuZG9t');
         });
 
         nodeIt('should handle ArrayBuffers correctly', function () {
