@@ -736,7 +736,7 @@ describe('Url', function () {
             _.isString(rawUrl) && describe(rawUrl, function () {
                 var url = new Url(rawUrl);
                 it('should be unparsed properly', function () {
-                    expect(url.getRaw()).to.eql(rawUrl);
+                    expect(url.toString()).to.eql(rawUrl);
                 });
             });
         });
@@ -1337,6 +1337,16 @@ describe('Url', function () {
 
             url.protocol = 'https://';
             expect(url.getOAuth1BaseUrl()).to.equal('https://postman-echo.com/auth/oauth1');
+        });
+    });
+
+    describe('.getRaw', function () {
+        it('should throw error as function is discontinued', function () {
+            var url = new Url('http://example.com');
+
+            expect(function () {
+                url.getRaw();
+            }).to.throw('`Url#getRaw` has been discontinued, use `Url#toString` instead.');
         });
     });
 
