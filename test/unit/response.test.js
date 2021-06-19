@@ -210,78 +210,12 @@ describe('Response', function () {
     });
 
     describe('.mime', function () {
-        it('should correctly handle the absence of content-type', function () {
-            var response = new Response({
-                header: [
-                    {
-                        key: 'Content-Type',
-                        value: 'application/json'
-                    }
-                ]
-            });
+        it('should throw error as function is discontinued', function () {
+            expect(function () {
+                var response = new Response({ body: 'random' });
 
-            expect(response.mime()).to.eql({
-                type: 'text',
-                format: 'json',
-                name: 'response',
-                ext: 'json',
-                charset: 'utf8',
-                _originalContentType: 'application/json',
-                _sanitisedContentType: 'application/json',
-                _accuratelyDetected: true,
-                filename: 'response.json',
-                source: 'header',
-                detected: null
-            });
-        });
-
-        (typeof window === 'undefined' ? it : it.skip)('should correctly detect the mime type from the stream',
-            function () {
-                var response = new Response({
-                    body: fs.readFileSync('test/fixtures/icon.png')
-                });
-
-                expect(response.mime()).to.eql({
-                    type: 'image',
-                    format: 'image',
-                    name: 'response',
-                    ext: 'png',
-                    charset: 'utf8',
-                    _originalContentType: 'image/png',
-                    _sanitisedContentType: 'image/png',
-                    _accuratelyDetected: true,
-                    filename: 'response.png',
-                    source: 'body',
-                    detected: {
-                        type: 'image',
-                        format: 'image',
-                        name: 'response',
-                        ext: 'png',
-                        charset: 'utf8',
-                        _originalContentType: 'image/png',
-                        _sanitisedContentType: 'image/png',
-                        _accuratelyDetected: true,
-                        filename: 'response.png'
-                    }
-                });
-            });
-
-        it('should handle content-type overrides correctly', function () {
-            var response = new Response({ body: 'random' });
-
-            expect(response.mime('text/html')).to.eql({
-                type: 'text',
-                format: 'html',
-                name: 'response',
-                ext: 'html',
-                charset: 'utf8',
-                _originalContentType: 'text/html',
-                _sanitisedContentType: 'text/html',
-                _accuratelyDetected: true,
-                filename: 'response.html',
-                source: 'forced',
-                detected: null
-            });
+                response.mime('text/html');
+            }).to.throw('`Response#mime` has been discontinued, use `Response#contentInfo` instead.');
         });
     });
 
@@ -291,7 +225,7 @@ describe('Response', function () {
                 header: [
                     {
                         key: 'Content-Type',
-                        value: 'application/json'
+                        value: 'application/JSON'
                     },
                     {
                         key: 'content-disposition',
@@ -302,6 +236,7 @@ describe('Response', function () {
 
             expect(response.contentInfo()).to.eql({
                 charset: 'utf8',
+                contentType: 'application/json',
                 fileExtension: 'json',
                 mimeFormat: 'json',
                 mimeType: 'text',
@@ -321,6 +256,7 @@ describe('Response', function () {
 
             expect(response.contentInfo(response)).to.eql({
                 charset: 'utf8',
+                contentType: 'image/png',
                 fileExtension: 'png',
                 fileName: 'response.png',
                 mimeFormat: 'image',
@@ -355,6 +291,15 @@ describe('Response', function () {
             var response = new Response({ body: 'random' });
 
             expect(response.dataURI()).to.equal('data:text/plain;base64, cmFuZG9t');
+        });
+
+        it('should respect the content-type header', function () {
+            var response = new Response({
+                body: '{"foo":"bar"}',
+                header: [{ key: 'content-type', value: 'application/json' }]
+            });
+
+            expect(response.dataURI()).to.equal('data:application/json;base64, eyJmb28iOiJiYXIifQ==');
         });
     });
 
@@ -838,12 +783,9 @@ describe('Response', function () {
         describe('miscellaneous requests', function () {
             var checkMime = function (mime) {
                 expect(mime).to.deep.include({
-                    type: 'text',
-                    name: 'response',
-                    _accuratelyDetected: true,
-                    source: 'header',
-                    detected: null,
-                    filename: 'response.' + mime.format
+                    mimeType: 'text',
+                    charset: 'utf8',
+                    fileName: 'response.' + mime.mimeFormat
                 });
             };
 
@@ -860,13 +802,8 @@ describe('Response', function () {
                     var response = Response.createFromNode(res),
                         json = response.toJSON(),
                         body = JSON.parse(json.body),
-                        mime = response.mime(),
+                        mime = response.contentInfo(),
                         headers = new HeaderList(null, json.header);
-
-                    expect(mime).to.deep.include({
-                        _originalContentType: 'application/json; charset=utf-8',
-                        _sanitisedContentType: 'application/json'
-                    });
 
                     expect(body.gzipped).to.be.true;
                     expect(headers.get('content-encoding')).to.equal('gzip');
@@ -908,12 +845,7 @@ describe('Response', function () {
 
                     var response = Response.createFromNode(res),
                         json = response.toJSON(),
-                        mime = response.mime();
-
-                    expect(mime).to.deep.include({
-                        _originalContentType: 'text/html; charset=utf-8',
-                        _sanitisedContentType: 'text/html'
-                    });
+                        mime = response.contentInfo();
 
                     expect((new HeaderList(null, json.header)).get('content-type')).to.match(/^text\/html/);
                     expect(json.body).to.match(/<html>.*/);
@@ -928,23 +860,10 @@ describe('Response', function () {
 
     describe('static methods', function () {
         describe('.mimeInfo', function () {
-            it('should handle incoming Header instances correctly', function () {
-                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'random' }),
-                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=response' }))).to.eql({
-                    type: 'unknown',
-                    format: 'raw',
-                    name: 'response',
-                    ext: '',
-                    charset: 'utf8',
-                    _originalContentType: 'random',
-                    _sanitisedContentType: 'random',
-                    _accuratelyDetected: false,
-                    filename: 'response'
-                });
-            });
-
-            it('should bail out for non string content-type specifications', function () {
-                expect(Response.mimeInfo(1)).to.be.undefined;
+            it('should throw error as function is discontinued', function () {
+                expect(function () {
+                    Response.mimeInfo();
+                }).to.throw('`Response.mimeInfo` has been discontinued, use `Response#contentInfo` instead.');
             });
         });
     });
