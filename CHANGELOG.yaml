@@ -14,6 +14,9 @@ unreleased:
         -> `Url#getQueryString`
         -> `Url#getPathWithQuery`
         -> `Url#getRemote`
+    - >-
+      GH-1199 Dropped support for deprecated `Response#mime`  and
+      `Response#mimeInfo` methods, use `Response#contentInfo` instead
   chores:
     - Added secure codecov publish script
     - Updated deprecated faker methods

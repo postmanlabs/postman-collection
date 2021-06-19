@@ -17,6 +17,7 @@ describe('contentInfo module', function () {
 
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
+            contentType: 'image/png',
             fileExtension: 'png',
             fileName: 'response.png',
             mimeFormat: 'image',
@@ -30,7 +31,7 @@ describe('contentInfo module', function () {
         var data = fs.readFileSync('test/fixtures/audio.mp3'),
             response = new Response({ stream: data });
 
-        expect(contentInfo.contentInfo(response)).to.eql({
+        expect(contentInfo.contentInfo(response)).to.include({
             charset: 'utf8',
             fileExtension: 'mp3',
             fileName: 'response.mp3',
@@ -53,6 +54,7 @@ describe('contentInfo module', function () {
         });
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
+            contentType: 'application/json',
             fileExtension: 'json',
             mimeFormat: 'json',
             mimeType: 'text',
@@ -68,7 +70,7 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('random').toJSON()
         });
-        expect(contentInfo.contentInfo(response)).to.eql({
+        expect(contentInfo.contentInfo(response)).to.include({
             charset: 'utf8',
             fileExtension: 'json',
             mimeFormat: 'json',
@@ -91,7 +93,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -114,7 +116,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -136,7 +138,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -159,7 +161,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -181,7 +183,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -203,7 +205,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -225,7 +227,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -247,7 +249,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -269,7 +271,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -291,7 +293,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -313,7 +315,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -346,6 +348,7 @@ describe('contentInfo module', function () {
         expect(contentInfo.contentInfo(response)).to
             .eql({
                 charset: 'utf8',
+                contentType: 'image/png',
                 fileExtension: 'png',
                 mimeFormat: 'image',
                 mimeType: 'image',
@@ -366,7 +369,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -388,7 +391,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -410,7 +413,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -432,7 +435,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -455,7 +458,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -478,7 +481,7 @@ describe('contentInfo module', function () {
             stream: Buffer.from('a test json').toJSON()
         });
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -506,7 +509,7 @@ describe('contentInfo module', function () {
                 }],
                 stream: Buffer.from(data, 'base64') });
 
-        expect(contentInfo.contentInfo(response)).to.eql({
+        expect(contentInfo.contentInfo(response)).to.include({
             charset: 'utf8',
             fileExtension: 'png',
             fileName: 'testResponse.xml',
