@@ -86,19 +86,6 @@ describe('Variable', function () {
         });
     });
 
-    it('should prepopulate value and type when passed to the constructor (json)', function () {
-        var vValue = { foo: 'bar' },
-            v = new Variable({
-                value: vValue,
-                type: 'json'
-            });
-
-        expect(v).to.deep.include({
-            value: JSON.stringify(vValue),
-            type: 'json'
-        });
-    });
-
     it('should prepopulate value and type when passed to the constructor (array)', function () {
         var vValue = [1, '2', true],
             v = new Variable({
@@ -150,33 +137,6 @@ describe('Variable', function () {
         });
 
         expect(v.value).to.be.true;
-    });
-
-    it('should typecast value during construction when type is provided (json)', function () {
-        var v = new Variable({
-                value: null,
-                type: 'json'
-            }),
-            v1 = new Variable({
-                value: '{"foo":"bar"}',
-                type: 'json'
-            });
-
-        expect(v.value).to.equal('null');
-        expect(v1.value).to.equal('{"foo":"bar"}');
-    });
-
-    it('should set cyclic object value to null when type is provided (json)', function () {
-        var cyclicObject = {},
-            testVariable;
-
-        cyclicObject.prop = cyclicObject;
-        testVariable = new Variable({
-            value: cyclicObject,
-            type: 'json'
-        });
-
-        expect(testVariable.value).to.equal('null');
     });
 
     it('should typecast value during construction when type is provided (array)', function () {
@@ -274,18 +234,6 @@ describe('Variable', function () {
 
         v.valueType('number');
         expect(v.get()).to.equal(3.142);
-    });
-
-    it('should recast values when type is changed (json)', function () {
-        var v = new Variable({
-            type: 'string'
-        });
-
-        v.set({ foo: 'bar' });
-        expect(v.get()).to.equal('[object Object]');
-
-        v.valueType('json');
-        expect(v.get()).to.be.null;
     });
 
     it('should recast values when type is changed (array)', function () {

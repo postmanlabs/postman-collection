@@ -20,6 +20,8 @@ unreleased:
     - >-
       GH-1200 Dropped support for deprecated `RequestAuth#current` method, use
       `RequestAuth#parameters` instead
+    - >-
+      GH-1200 Dropped support for deprecated "json" `Variable#type`
   chores:
     - GH-1200 Removed discontinued `Request#authorize` method
     - Added secure codecov publish script
