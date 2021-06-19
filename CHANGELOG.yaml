@@ -3,6 +3,17 @@ unreleased:
     - >-
       GH-1197 Dropped support for description type-based formatting on
       `Description#toString`
+    - >-
+      GH-1198 Dropped support for deprecated `Url#getRaw` method, use
+      `Url#toString` instead
+    - |
+      GH-1198 Dropped support for deprecated object argument variant of:
+        -> `QueryParam.unparse`
+        -> `QueryParam.unparseSingle`
+        -> `Url#getPath`
+        -> `Url#getQueryString`
+        -> `Url#getPathWithQuery`
+        -> `Url#getRemote`
   chores:
     - Added secure codecov publish script
     - Updated deprecated faker methods

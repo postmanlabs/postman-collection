@@ -88,7 +88,7 @@ describe('Response', function () {
 
             it('originalRequest', function () {
                 expect(response).to.have.property('originalRequest');
-                expect(response.originalRequest.url.getRaw()).to.eql(rawResponse.originalRequest);
+                expect(response.originalRequest.url.toString()).to.eql(rawResponse.originalRequest);
             });
 
             it('status', function () {
