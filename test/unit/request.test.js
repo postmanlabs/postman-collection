@@ -829,18 +829,4 @@ describe('Request', function () {
             ]);
         });
     });
-
-    describe('authorize', function () {
-        it('should throw error as function deprecated', function () {
-            var request = new Request({
-                    header: [{ key: 'foo', value: 'bar' }]
-                }),
-                newHeader = { key: 'testKey', value: 'testValue' };
-
-            request.addHeader(newHeader);
-            expect(function () {
-                request.authorize();
-            }).to.throw('collection request.authorize() has been discontinued');
-        });
-    });
 });
