@@ -21,7 +21,6 @@
   "scripts": {
     "build-docs": "node npm/build-docs.js",
     "build-types": "node npm/build-types.js",
-    "build-wiki": "node npm/build-wiki.js",
     "codecov": "node npm/publish-coverage.js",
     "publish-wiki": "node npm/publish-wiki.js",
     "release": "node npm/create-release.js",
@@ -61,7 +60,6 @@
     "eslint-plugin-security": "1.4.0",
     "js-yaml": "4.1.0",
     "jsdoc": "3.6.7",
-    "jsdoc-to-markdown": "7.0.1",
     "karma": "3.1.4",
     "karma-browserify": "6.1.0",
     "karma-chrome-launcher": "3.1.0",
