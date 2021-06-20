@@ -853,9 +853,7 @@ describe('PropertyList', function () {
 
             expect(pList.find(function (property) {
                 return property.key === this.key;
-            }, { key: 'alpha' })).to.eql(
-                { key: 'alpha', value: 'bar' }
-            );
+            }, { key: 'alpha' })).to.eql({ key: 'alpha', value: 'bar' });
         });
     });
 
@@ -907,6 +905,7 @@ describe('PropertyList', function () {
         var FakeType = function (opts) {
             _.assign(this, opts);
         };
+
         FakeType._postman_propertyIndexKey = 'key';
         FakeType.prototype.update = function (opts) {
             _.assign(this, opts);
@@ -1013,6 +1012,7 @@ describe('PropertyList', function () {
         var FakeType = function (opts) {
             _.assign(this, opts);
         };
+
         FakeType._postman_propertyIndexKey = 'key';
         FakeType.prototype.update = function (opts) {
             _.assign(this, opts);

@@ -196,6 +196,7 @@ describe('Script', function () {
     describe('json representation', function () {
         it('must match what the script was initialized with', function () {
             var jsonified = script.toJSON();
+
             expect(jsonified).to.deep.include({
                 type: rawScript.type,
                 exec: rawScript.exec.split('\n')

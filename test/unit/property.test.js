@@ -10,6 +10,7 @@ describe('Property', function () {
         });
         it('allows a description to be set', function () {
             var prop = new Property();
+
             expect(prop.describe).to.be.a('function');
             expect(function () {
                 prop.describe.bind(prop)('Hello Postman');
@@ -311,7 +312,7 @@ describe('Property', function () {
          * getPolyChainedVariable(2)
          * '{{1{{0}}}}'
          *
-         * @param {Integer} n
+         * @param {Integer} n -
          * @returns {String}
          */
         function getPolyChainedVariable (n) {
@@ -407,6 +408,7 @@ describe('Property', function () {
                         headerName: 'Content-Type'
                     }
                 ]);
+
             expect(resolved).to.eql(expectedResolution);
         });
 
@@ -472,6 +474,7 @@ describe('Property', function () {
                         zeta: 'test'
                     }
                 ]);
+
             expect(resolved).to.eql(expectedResolution);
         });
     });

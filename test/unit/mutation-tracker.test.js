@@ -209,6 +209,7 @@ describe('MutationTracker', function () {
                     applyMutation: function (instruction, key, value) {
                         if (instruction === 'set') {
                             this[key] = value;
+
                             return;
                         }
 
@@ -232,6 +233,7 @@ describe('MutationTracker', function () {
                     applyMutation: function (instruction, key, value) {
                         if (instruction === 'set') {
                             this[key] = value;
+
                             return;
                         }
 

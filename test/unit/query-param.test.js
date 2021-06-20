@@ -98,7 +98,6 @@ describe('QueryParam', function () {
                 }];
 
                 expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&baz');
-
             });
 
             it('should should handle null and undefined values when unparsing object format', function () {
@@ -159,12 +158,14 @@ describe('QueryParam', function () {
         describe(rawQueryString, function () {
             it('should be parsed properly', function () {
                 var params = QueryParam.parse(rawQueryString);
+
                 expect(params.length).to.equal(4);
             });
 
             it('should be unparsed properly', function () {
                 var params = QueryParam.parse(rawQueryString),
                     paramStr = QueryParam.unparse(params);
+
                 expect(paramStr).to.eql(rawQueryString);
             });
         });
@@ -174,6 +175,7 @@ describe('QueryParam', function () {
         var rawQueryString = 'x=foo bar',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params);
+
         expect(paramStr).to.eql(rawQueryString);
     });
 

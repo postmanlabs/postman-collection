@@ -28,7 +28,7 @@ describe('Response', function () {
 
             delete global.Buffer;
             expect(function () {
-                response = new Response({ stream: stream });
+                response = new Response({ stream });
             }).to.not.throw();
 
             expect(response).to.be.ok;
@@ -120,6 +120,7 @@ describe('Response', function () {
             var rawResponse = fixtures.collectionV2.item[0].response[0],
                 response = new Response(rawResponse),
                 jsonified = response.toJSON();
+
             expect(jsonified).to.deep.include({
                 status: rawResponse.status,
                 code: rawResponse.code,
@@ -151,6 +152,7 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse),
                 jsonified = response.toJSON();
+
             expect(jsonified.status.toLowerCase()).to.eql('gone');
             expect(jsonified).to.deep.include({
                 code: rawResponse.code,
@@ -268,6 +270,7 @@ describe('Response', function () {
     describe('.size', function () {
         it('should handle blank responses correctly', function () {
             var response = new Response();
+
             expect(response.size()).to.eql({
                 body: 0, header: 32, total: 32
             });
@@ -401,11 +404,9 @@ describe('Response', function () {
 
             expect(json).to.be.undefined;
             expect(error).to.be.an('error');
-            expect(error.toString()).to.equal(
-                'JSONError: Unexpected token \'w\' at 1:12\n' +
+            expect(error.toString()).to.equal('JSONError: Unexpected token \'w\' at 1:12\n' +
                 '{ "hello: "world" }\n' +
-                '           ^'
-            );
+                '           ^');
         });
 
         it('should parse response as JSONP', function () {
@@ -449,6 +450,7 @@ describe('Response', function () {
                 response2 = new Response(rawResponse2),
                 size1 = response1.size(),
                 size2 = response2.size();
+
             expect(size1.body + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
             expect(size2.body + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
         });
@@ -460,6 +462,7 @@ describe('Response', function () {
                     header: 'Content-Encoding: gzip\nContent-Length: 10'
                 },
                 response = new Response(rawResponse);
+
             expect(response.size().body).to.equal(10);
         });
 
@@ -470,6 +473,7 @@ describe('Response', function () {
                     header: 'Content-Encoding: deflate\nContent-Length: 20'
                 },
                 response = new Response(rawResponse);
+
             expect(response.size().body).to.equal(20);
         });
 
@@ -480,6 +484,7 @@ describe('Response', function () {
                     stream: Buffer.from('something nice')
                 },
                 response = new Response(rawResponse);
+
             expect(response.size().body).to.equal(14);
         });
     });
@@ -494,6 +499,7 @@ describe('Response', function () {
                 }),
                 responseJson = response.toJSON();
 
+            // eslint-disable-next-line security/detect-unsafe-regex
             expect(responseJson.id).to.match(/^[a-z0-9]{8}(-[a-z0-9]{4}){4}[a-z0-9]{8}$/);
             expect(_.omit(responseJson, 'id')).to.eql({
                 name: 'a sample response',
@@ -592,6 +598,7 @@ describe('Response', function () {
                 }
 
                 var response = Response.createFromNode(res);
+
                 validateResponse(response);
                 done();
             });
@@ -706,6 +713,7 @@ describe('Response', function () {
         });
 
         // @todo: Supply cookie information to the createFromNode method to make these tests meaningful
+        // eslint-disable-next-line mocha/no-skipped-tests
         describe.skip('cookies', function () {
             var cookieUrl = baseUrl + '/cookies',
                 stringify = function (cookies) {

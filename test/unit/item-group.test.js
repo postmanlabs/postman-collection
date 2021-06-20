@@ -355,12 +355,14 @@ describe('ItemGroup', function () {
             describe('in the root', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R1');
+
                     expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R1-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R1-name');
+
                     expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R1');
                 });
@@ -369,12 +371,14 @@ describe('ItemGroup', function () {
             describe('in an immediate sub-group', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R2');
+
                     expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R2-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R2-name');
+
                     expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R2');
                 });
@@ -383,12 +387,14 @@ describe('ItemGroup', function () {
             describe('in a nested subgroup', function () {
                 it('by id', function () {
                     var r = itemGroup.oneDeep('R4');
+
                     expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('name', 'R4-name');
                 });
 
                 it('by name', function () {
                     var r = itemGroup.oneDeep('R4-name');
+
                     expect(Item.isItem(r)).to.be.true;
                     expect(r).to.have.property('id', 'R4');
                 });
@@ -553,6 +559,7 @@ describe('ItemGroup', function () {
     describe('.setProtocolProfileBehavior', function () {
         it('should set protocolProfileBehavior on an ItemGroup', function () {
             var itemGroup = new ItemGroup();
+
             itemGroup.setProtocolProfileBehavior('key1', 'value')
                 .setProtocolProfileBehavior('key2', true)
                 .setProtocolProfileBehavior('key3', 123);

@@ -2,7 +2,7 @@ const expect = require('chai').expect,
     // eslint-disable-next-line security/detect-child-process
     exec = require('child_process').execSync,
 
-    nodeVersion = parseInt(process.versions.node);
+    nodeVersion = parseInt(process.versions.node, 10);
 
 describe('npm publish', function () {
     // @todo remove when drop support for Node < 10

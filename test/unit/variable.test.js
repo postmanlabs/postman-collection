@@ -13,6 +13,7 @@ describe('Variable', function () {
 
     it('should initialize variable with correct system value', function () {
         var v = new Variable();
+
         expect(v.system).to.be.undefined;
 
         v = new Variable({
@@ -28,6 +29,7 @@ describe('Variable', function () {
 
     it('should update the sytem property of a variable', function () {
         var v = new Variable();
+
         v.update({ system: true });
         expect(v.system).to.be.true;
 
@@ -40,6 +42,7 @@ describe('Variable', function () {
 
     it('should update the disabled property of a variable', function () {
         var v = new Variable();
+
         v.update({ disabled: true });
         expect(v.disabled).to.be.true;
 
@@ -241,7 +244,7 @@ describe('Variable', function () {
             type: 'string'
         });
 
-        v.set([1, 2, { '3': true }]);
+        v.set([1, 2, { 3: true }]);
         expect(v.get()).to.equal('1,2,[object Object]');
 
         v.valueType('array');
@@ -398,6 +401,7 @@ describe('Variable', function () {
 
         it('should use the default type if no type is provided, and no type exists', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: 'bar' });
+
             delete variable.type;
 
             expect(variable.valueType()).to.equal('any');
@@ -411,6 +415,7 @@ describe('Variable', function () {
 
         it('should handle invalid types correctly', function () {
             var variable = new Variable({ type: 'string', key: 'foo', value: '123' });
+
             delete variable.type;
 
             expect(variable.valueType('random')).to.equal('any');
@@ -424,6 +429,7 @@ describe('Variable', function () {
 
         it('should create a new instance', function () {
             var v = new Variable();
+
             expect(v).to.be.an.instanceof(Variable);
         });
 

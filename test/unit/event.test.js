@@ -81,7 +81,7 @@ describe('Event', function () {
         it('must work with script strings', function () {
             var event = new Event(rawEvent);
 
-            event.update({ script: script });
+            event.update({ script });
             expect(event.toJSON().script.exec).to.eql([script]);
         });
 

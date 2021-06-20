@@ -91,6 +91,7 @@ describe('Cookie', function () {
                 expect(cookie).to.have.property('httpOnly', rawCookie.httpOnly);
             });
 
+            // eslint-disable-next-line mocha/no-skipped-tests
             it.skip('maxAge', function () { // @todo: possibly delete test. seems like based on old expectations
                 expect(cookie).to.have.property('maxAge', undefined);
             });
@@ -128,6 +129,7 @@ describe('Cookie', function () {
             var rawCookie = fixtures.collectionV2.item[0].response[0].cookie[0],
                 cookie = new Cookie(rawCookie),
                 jsonified = cookie.toJSON();
+
             expect(jsonified).to.deep.include({
                 domain: rawCookie.domain,
                 httpOnly: rawCookie.httpOnly,
@@ -144,9 +146,11 @@ describe('Cookie', function () {
 
     describe('parsing', function () {
         var rawCookie = fixtures.rawCookie;
+
         it('should be parsed properly', function () {
             var parsed = Cookie.parse(rawCookie),
                 ext;
+
             expect(parsed).to.deep.include({
                 key: 'GAPS',
                 value: 'lol',
@@ -243,6 +247,7 @@ describe('Cookie', function () {
                     value: 'fooTest'
                 },
                 unparsedSingle = Cookie.unparseSingle(new Cookie(rawCookie));
+
             expect(unparsedSingle).to.equal('testCookie=fooTest');
         });
 
@@ -257,6 +262,7 @@ describe('Cookie', function () {
                     value: 'bar'
                 },
                 unparsedSingle = Cookie.unparseSingle(new Cookie(rawCookie));
+
             expect(unparsedSingle).to.equal('bar');
         });
     });

@@ -25,9 +25,9 @@ describe('Item', function () {
                         method: 'GET',
                         url: {
                             host: ['postman-echo', 'com'],
-                            'protocol': 'http',
-                            'query': [],
-                            'variable': []
+                            protocol: 'http',
+                            query: [],
+                            variable: []
                         },
                         auth: {
                             type: 'basic',
@@ -128,6 +128,7 @@ describe('Item', function () {
                         random: true
                     }
                 });
+
                 expect(item).to.have.property('protocolProfileBehavior').that.eql({
                     disableBodyPruning: true,
                     random: true
@@ -417,6 +418,7 @@ describe('Item', function () {
     describe('.setProtocolProfileBehavior', function () {
         it('should set protocolProfileBehavior on an Item', function () {
             var item = new Item();
+
             item.setProtocolProfileBehavior('key1', 'value')
                 .setProtocolProfileBehavior('key2', true)
                 .setProtocolProfileBehavior('key3', 123);

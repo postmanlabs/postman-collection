@@ -19,6 +19,7 @@ describe('UrlMatchPatternList', function () {
 
         it('should match for any', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['https://example.com/*']);
+
             expect(matchPatternList.test('https://example.com')).to.be.true;
             expect(matchPatternList.test('https://example.com/')).to.be.true;
             expect(matchPatternList.test('https://example.com:443')).to.be.true;
@@ -30,6 +31,7 @@ describe('UrlMatchPatternList', function () {
         });
         it('should match any url for <all_urls>', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['<all_urls>']);
+
             expect(matchPatternList.test('https://google.com')).to.be.true;
             expect(matchPatternList.test('https://www.google.com')).to.be.true;
             expect(matchPatternList.test('https://example.com')).to.be.true;
@@ -37,6 +39,7 @@ describe('UrlMatchPatternList', function () {
         });
         it('should match url is pattern list', function () {
             var matchPatternList = new UrlMatchPatternList({}, ['https://google.com/*', 'https://example.com/*']);
+
             expect(matchPatternList.test('https://google.com')).to.be.true;
             expect(matchPatternList.test('https://example.com')).to.be.true;
             expect(matchPatternList.test('https://foo.com')).to.be.false;
@@ -46,6 +49,7 @@ describe('UrlMatchPatternList', function () {
     describe('toJSON', function () {
         it('should return [] when called on an empty UrlMatchPatternList', function () {
             var patternList = new UrlMatchPatternList();
+
             expect(patternList.toJSON()).to.eql([]);
         });
     });
