@@ -147,11 +147,11 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
-            expect(Header.unparse(list)).to.equal('name1: value1\nname2: value2');
+            expect(Header.unparse(list)).to.equal('name1: value1\r\nname2: value2\r\n');
         });
 
-        it('should honor the given separator "\\r\\n"', function () {
-            var raw = 'name1: value1\r\nname2: value2',
+        it('should honor the given separator "\\n"', function () {
+            var raw = 'name1: value1\nname2: value2\n',
                 list = new PropertyList(Header, {}, raw);
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
@@ -160,7 +160,7 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
-            expect(Header.unparse(list, '\r\n')).to.equal(raw);
+            expect(Header.unparse(list, '\n')).to.equal(raw);
         });
     });
 
