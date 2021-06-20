@@ -23,6 +23,8 @@ unreleased:
     - GH-1200 Dropped support for deprecated `VariableScope#variables` method
     - >-
       GH-1200 Dropped support for deprecated "json" `Variable#type`
+    - GH-1201 Updated `Header.unparse` default separator from "\n" to "\r\n"
+    - GH-1201 `Header.unparse` excludes disabled header by default
   chores:
     - GH-1200 Removed discontinued `Request#authorize` method
     - Added secure codecov publish script

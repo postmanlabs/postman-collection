@@ -15,7 +15,7 @@ describe('HeaderList', function () {
 
     it('should be able to export headers to string', function () {
         var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
-        expect(hl.toString()).to.equal('Accept: *\nContent-Type: text/html');
+        expect(hl.toString()).to.equal('Accept: *\r\nContent-Type: text/html\r\n');
     });
 
     describe('.contentSize', function () {
