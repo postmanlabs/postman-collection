@@ -2,8 +2,9 @@
  * @fileOverview This test specs runs tests on the package.json file of repository. It has a set of strict tests on the
  * content of the file as well. Any change to package.json must be accompanied by valid test case in this spec-sheet.
  */
-var _ = require('lodash'),
+const _ = require('lodash'),
     yml = require('js-yaml'),
+    expect = require('chai').expect,
     parseIgnore = require('parse-gitignore');
 
 describe('project repository', function () {
@@ -170,7 +171,7 @@ describe('project repository', function () {
         });
 
         it('should have appropriate plugins specified', function () {
-            expect(json.plugins).to.eql(['jsdoc', 'security', 'lodash']);
+            expect(json.plugins).to.eql(['jsdoc', 'lodash', 'security']);
         });
 
         it('should have appropriate environments specified', function () {

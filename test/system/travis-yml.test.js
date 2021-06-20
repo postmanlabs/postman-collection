@@ -1,5 +1,6 @@
-var fs = require('fs'),
-    yaml = require('js-yaml');
+const fs = require('fs'),
+    yaml = require('js-yaml'),
+    expect = require('chai').expect;
 
 describe('travis.yml', function () {
     var travisYAML,
