@@ -21,7 +21,6 @@
   "scripts": {
     "build-docs": "node npm/build-docs.js",
     "build-types": "node npm/build-types.js",
-    "build-schema": "node npm/build-schema.js",
     "build-wiki": "node npm/build-wiki.js",
     "codecov": "node npm/publish-coverage.js",
     "publish-wiki": "node npm/publish-wiki.js",
@@ -77,7 +76,6 @@
     "puppeteer": "1.20.0",
     "recursive-readdir": "2.2.2",
     "require-all": "3.0.0",
-    "schema-compiler": "0.0.3",
     "shelljs": "0.8.4",
     "strip-json-comments": "3.1.1",
     "tsd-jsdoc": "2.5.0"
