@@ -130,7 +130,7 @@ describe('Request', function () {
                 expect(req).to.have.property('method', '[OBJECT OBJECT]');
 
                 req.update({ method () { return 0; } });
-                expect(req).to.have.property('method', 'FUNCTION () { RETURN 0; }');
+                expect(req).to.have.property('method', 'METHOD () { RETURN 0; }');
 
                 req.update({ method: [1, 2, 3] });
                 expect(req).to.have.property('method', '1,2,3');

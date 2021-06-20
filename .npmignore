@@ -49,6 +49,7 @@ docs/
 examples/
 benchmark/
 .eslintrc
+.nycrc.js
 codecov.yml
 .travis.yml
 .editorconfig
