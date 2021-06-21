@@ -1,5 +1,6 @@
 unreleased:
   breaking changes:
+    - GH-610 Dropped support for Node.js < v10
     - >-
       GH-1197 Dropped support for description type-based formatting on
       `Description#toString`
@@ -25,11 +26,19 @@ unreleased:
       GH-1200 Dropped support for deprecated "json" `Variable#type`
     - GH-1201 Updated `Header.unparse` default separator from "\n" to "\r\n"
     - GH-1201 `Header.unparse` excludes disabled header by default
+    - GH-1202 Removed collection schema, refer 'postmanlabs/schemas' repository
+  fixed bugs:
+    - GH-1202 Fixed serialization of cookie extensions on .toString()
   chores:
-    - GH-1200 Removed discontinued `Request#authorize` method
     - Added secure codecov publish script
     - Updated deprecated faker methods
-    - Updated dependencies
+    - GH-1200 Removed discontinued `Request#authorize` method
+    - GH-1202 Removed puppeteer dependency for browser tests
+    - GH-1202 Added unit tests for 100% code coverage
+    - GH-1202 Updated TypeScript Type Declaration
+    - GH-1202 Updated nyc configuration
+    - GH-1202 Updated ESLint rules
+    - GH-1202 Updated dependencies
 
 3.6.11:
   date: 2021-04-11
