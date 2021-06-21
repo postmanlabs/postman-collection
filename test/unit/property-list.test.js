@@ -959,6 +959,23 @@ describe('PropertyList', function () {
                 val: 'value2'
             }]);
         });
+
+        it('should not add null, undefined, and undefined items', function () {
+            var list = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            list.upsert();
+            list.upsert(NaN);
+            list.upsert(null);
+            list.upsert(undefined);
+
+            expect(list.toJSON()).to.eql([{
+                key: 'key1',
+                val: 'value1'
+            }]);
+        });
     });
 
     describe('.update not defined property list', function () {
@@ -1305,6 +1322,23 @@ describe('PropertyList', function () {
 
             list1.constructor = null;
             expect(list1.toString()).to.eql('');
+        });
+
+        it('should handle use constructor toString if defined', function () {
+            var FakeType,
+                list1;
+
+            FakeType = function (opts) {
+                _.assign(this, opts);
+            };
+            FakeType._postman_propertyIndexKey = 'key';
+            list1 = new PropertyList(FakeType, null, [{
+                key: 'key1',
+                val: 'value1'
+            }]);
+
+            list1.constructor = Object;
+            expect(list1.toString()).to.eql('[object Object]');
         });
     });
 });

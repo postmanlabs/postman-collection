@@ -123,6 +123,11 @@ describe('UrlMatchPattern', function () {
 
             expect(matchPattern.toString()).to.eql('<all_urls>');
         });
+        it('should set match pattern to <all_urls> when called with invalid argument', function () {
+            var matchPattern = new UrlMatchPattern(['http://*/*']);
+
+            expect(matchPattern.toString()).to.eql('<all_urls>');
+        });
         it('should accept match pattern as string', function () {
             var pattern = 'http://example.com/*',
                 matchPattern = new UrlMatchPattern(pattern);
@@ -320,6 +325,20 @@ describe('UrlMatchPattern', function () {
 
             expect(matchPattern.testProtocol('http')).to.be.false;
             expect(matchPattern.testProtocol('https')).to.be.true;
+        });
+    });
+
+    describe('getProtocols', function () {
+        it('should return the supported protocols', function () {
+            var matchPattern = new UrlMatchPattern('http+https://*/*');
+
+            expect(matchPattern.getProtocols()).to.eql(['http', 'https']);
+        });
+
+        it('should handle missing protocol', function () {
+            var matchPattern = new UrlMatchPattern('://*/*');
+
+            expect(matchPattern.getProtocols()).to.eql([]);
         });
     });
 

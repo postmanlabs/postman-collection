@@ -552,6 +552,33 @@ describe('Response', function () {
             expect(Response.timingPhases(timings)).to.eql(timingPhases);
         });
 
+        it('should calculate timing phases without secureConnect', function () {
+            var timings = {
+                    start: 1550571957689,
+                    offset: {
+                        request: 42,
+                        socket: 60.32290899999998,
+                        lookup: 886.8630629999998,
+                        connect: 1124.8914719999998,
+                        response: 1840.1438239999998,
+                        end: 1845.5300419999999,
+                        done: 1864
+                    }
+                },
+                timingPhases = {
+                    prepare: 42,
+                    wait: 18.32290899999998,
+                    dns: 826.5401539999998,
+                    tcp: 238.028409,
+                    firstByte: 715.252352,
+                    download: 5.386218000000099,
+                    process: 18.469958000000133,
+                    total: 1864
+                };
+
+            expect(Response.timingPhases(timings)).to.eql(timingPhases);
+        });
+
         it('should return if timings are not provided', function () {
             expect(Response.timingPhases()).to.be.undefined;
         });
@@ -559,13 +586,12 @@ describe('Response', function () {
 
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
-        var isNode4 = (/^v4\./).test(process.version),
-            baseUrl = 'https://postman-echo.com',
+        var baseUrl = 'https://postman-echo.com',
             isHeader = Header.isHeader.bind(Header),
             isCookie = Cookie.isCookie.bind(Cookie),
 
             getBuffer = function (array) {
-                return isNode4 ? Buffer.from(array) : Buffer.from(new Uint32Array(array));
+                return Buffer.from(new Uint32Array(array));
             },
 
             validateResponse = function (response) {
@@ -709,82 +735,6 @@ describe('Response', function () {
 
                 validateResponse(response);
                 done();
-            });
-        });
-
-        // @todo: Supply cookie information to the createFromNode method to make these tests meaningful
-        // eslint-disable-next-line mocha/no-skipped-tests
-        describe.skip('cookies', function () {
-            var cookieUrl = baseUrl + '/cookies',
-                stringify = function (cookies) {
-                    return _.reduce(cookies, function (result, value, key) {
-                        return result + key + '=' + value + ';';
-                    }, '');
-                };
-
-            it('should correctly provide all cookies', function (done) {
-                request.get({
-                    url: cookieUrl,
-                    jar: true,
-                    encoding: null
-                }, function (err, res, body) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var cookieObject = JSON.parse(body).cookies,
-                        stringifiedCookies = stringify(cookieObject),
-                        response = Response.createFromNode(res, stringifiedCookies).toJSON();
-
-                    expect(response.cookie).to.eql([]);
-                    validateResponse(response);
-                    done();
-                });
-            });
-
-            it('should correctly set a cookie', function (done) {
-                request.get({
-                    url: cookieUrl + '/set?foo=bar',
-                    jar: true,
-                    encoding: null
-                }, function (err, res, body) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var cookieObject = JSON.parse(body).cookies,
-                        stringifiedCookies = stringify(cookieObject),
-                        response = Response.createFromNode(res, stringifiedCookies).toJSON();
-
-                    expect(response.cookie).to.eql([{
-                        key: 'foo',
-                        hostOnly: true,
-                        value: 'bar',
-                        extensions: [{ key: '', value: true }]
-                    }]);
-                    validateResponse(response);
-                    done();
-                });
-            });
-
-            it('should correctly delete a previously set cookie', function (done) {
-                request.get({
-                    url: cookieUrl + '/delete?foo',
-                    jar: true,
-                    encoding: null
-                }, function (err, res, body) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var cookieObject = JSON.parse(body).cookies,
-                        stringifiedCookies = stringify(cookieObject),
-                        response = Response.createFromNode(res, stringifiedCookies).toJSON();
-
-                    expect(response.cookie).to.eql([]);
-                    validateResponse(response);
-                    done();
-                });
             });
         });
 

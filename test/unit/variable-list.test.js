@@ -175,21 +175,21 @@ describe('VariableList', function () {
         expect(resolved.xyz).to.equal('z');
     });
 
-    // eslint-disable-next-line mocha/no-skipped-tests
-    it.skip('should correctly handle variables with single braces in their name', function () {
+    // @note this is a know limitation, check `Substitutor.REGEX_EXTRACT_VARS`
+    it('should not support single braces in their name', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            polyChainList = new VariableList(null, [], [
-                {
-                    alpha: '{{be{t}a}}',
-                    'be{t}a': 'gamma',
-                    gamma: 'delta'
-                }
-            ]),
+            polyChainList = new VariableList(null, [{
+                key: 'alpha',
+                value: '{{be{t}a}}'
+            }, {
+                key: 'be{t}a',
+                value: 'gamma'
+            }]),
             resolved = polyChainList.substitute(unresolved);
 
-        expect(resolved.xyz).to.equal('delta');
+        expect(resolved.xyz).to.equal('{{be{t}a}}');
     });
 
     describe('sanity', function () {

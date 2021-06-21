@@ -376,5 +376,40 @@ describe('Proxy Config', function () {
 
             expect(proxyConfig.getProxyUrl()).to.eql('http://%23%40%3F%3A:%23%40%3F%3A@proxy.com:9090');
         });
+
+        it('should handle empty username', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true,
+                password: 'password'
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://:password@proxy.com:9090');
+        });
+
+        it('should handle empty password', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true,
+                username: 'user'
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://user@proxy.com:9090');
+        });
+
+        it('should handle empty username and password with authenticate=true', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://proxy.com:9090');
+        });
     });
 });

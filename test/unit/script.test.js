@@ -139,7 +139,9 @@ describe('Script', function () {
                 var script = new Script();
 
                 script.update({ exec: 123 });
+                expect(script).to.have.property('exec', undefined);
 
+                script.update(null);
                 expect(script).to.have.property('exec', undefined);
             });
 

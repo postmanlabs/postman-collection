@@ -154,6 +154,7 @@ describe('Variable', function () {
 
         expect(v.value).to.equal('null');
         expect(v1.value).to.equal('[1,2,"3"]');
+        expect(v1.get()).to.eql([1, 2, '3']);
     });
 
     it('should set value to null if provided as cyclic object value (array)', function () {
@@ -183,6 +184,7 @@ describe('Variable', function () {
 
         expect(v.value).to.equal('null');
         expect(v1.value).to.equal('{"foo":"bar"}');
+        expect(v1.get()).to.eql({ foo: 'bar' });
     });
 
     it('should set value to null if provided invalid json string (object)', function () {
@@ -389,6 +391,9 @@ describe('Variable', function () {
 
             delete variable.type;
             expect(variable.cast(123)).to.be.a('number');
+
+            variable.set('random');
+            expect(variable.get()).to.equal('random');
         });
     });
 

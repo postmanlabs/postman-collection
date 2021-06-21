@@ -1033,16 +1033,6 @@ describe('Url', function () {
 
             expect(url.toString()).to.eql('https://postman-echo.com/get?w=x%y');
         });
-
-        // eslint-disable-next-line mocha/no-skipped-tests
-        it.skip('should be enabled if explicitly specified', function () {
-            var rawUrl = 'https://postman-echo.com/get?w=x%y',
-                url = new Url(rawUrl);
-
-            expect(url.toString({
-                encode: true
-            })).to.eql('https://postman-echo.com/get?w=x%25y');
-        });
     });
 
     describe('toString', function () {
@@ -1050,6 +1040,24 @@ describe('Url', function () {
             var url = new Url();
 
             expect(url.toString()).to.eql('');
+        });
+
+        it('should handle null auth.user', function () {
+            var url = new Url({ host: 'localhost', auth: { user: null, password: 'password' } });
+
+            expect(url.toString()).to.eql(':password@localhost');
+        });
+
+        it('should handle null auth.password', function () {
+            var url = new Url({ host: 'localhost', auth: { user: 'user', password: null } });
+
+            expect(url.toString()).to.eql('user@localhost');
+        });
+
+        it('should handle empty auth', function () {
+            var url = new Url({ host: 'localhost', auth: {} });
+
+            expect(url.toString()).to.eql('localhost');
         });
 
         it('should handle empty path properly', function () {
@@ -1183,6 +1191,13 @@ describe('Url', function () {
             expect((new Url(url)).toString()).to.equal(url);
         });
 
+        it('should handle empty path', function () {
+            const url = new Url({ host: 'localhost', path: '' });
+
+            expect(url.path).to.be.undefined;
+            expect(url.toString()).to.equal('localhost');
+        });
+
         it('should retain @ in auth without user and password', function () {
             var url = 'http://@localhost';
 
@@ -1205,6 +1220,7 @@ describe('Url', function () {
             var url = 'localhost/';
 
             expect((new Url(url)).toString()).to.equal(url);
+            expect((new Url({ host: 'localhost', path: '/' })).toString()).to.equal(url);
         });
 
         it('should retain # in empty hash', function () {
@@ -1471,9 +1487,10 @@ describe('Url', function () {
             var url = new Url('https://postman-echo.com/get?alpha=foo&beta=bar&gamma=baz');
 
             url.removeQueryParams([{ key: 'alpha' }, { key: 'gamma' }]);
-            expect(url.toJSON().query).to.eql([
-                { key: 'beta', value: 'bar' }
-            ]);
+            expect(url.toJSON().query).to.eql([{ key: 'beta', value: 'bar' }]);
+
+            url.removeQueryParams(['beta']);
+            expect(url.toJSON().query).to.eql([]);
         });
 
         it('should return an empty string if there are no query parameters', function () {
