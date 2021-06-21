@@ -1,35 +1,35 @@
 {
   "name": "postman-collection",
-  "description": "Enables developers to use a unified Postman Collection format Object across projects",
-  "author": "Postman Labs <help@getpostman.com>",
   "version": "3.6.11",
-  "keywords": [
-    "postman"
-  ],
+  "description": "Enables developers to use a unified Postman Collection format Object across projects",
+  "author": "Postman Inc.",
   "license": "Apache-2.0",
   "main": "index.js",
+  "homepage": "https://github.com/postmanlabs/postman-collection#readme",
+  "bugs": {
+    "url": "https://github.com/postmanlabs/postman-collection/issues",
+    "email": "help@postman.com"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/postmanlabs/postman-collection.git"
   },
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "lib": "lib",
-    "test": "test"
-  },
+  "keywords": [
+    "postman",
+    "collection",
+    "sdk"
+  ],
   "scripts": {
     "build-docs": "node npm/build-docs.js",
     "build-types": "node npm/build-types.js",
     "codecov": "node npm/publish-coverage.js",
-    "publish-wiki": "node npm/publish-wiki.js",
     "release": "node npm/create-release.js",
     "test": "npm run test-lint && npm run test-system && npm run test-unit && npm run test-browser",
-    "test-system": "node npm/test-system.js",
+    "test-benchmark": "node npm/test-benchmark.js",
     "test-browser": "node npm/test-browser.js",
     "test-lint": "node npm/test-lint.js",
-    "test-unit": "nyc --nycrc-path=.nycrc.js node npm/test-unit.js",
-    "test-benchmark": "node npm/test-benchmark.js"
+    "test-system": "node npm/test-system.js",
+    "test-unit": "nyc --nycrc-path=.nycrc.js node npm/test-unit.js"
   },
   "dependencies": {
     "faker": "5.5.3",
@@ -76,8 +76,7 @@
     "strip-json-comments": "^3.1.1",
     "tsd-jsdoc": "^2.5.0"
   },
-  "homepage": "https://github.com/postmanlabs/postman-collection#readme",
-  "bugs": {
-    "url": "https://github.com/postmanlabs/postman-collection/issues"
+  "engines": {
+    "node": ">=10"
   }
 }
