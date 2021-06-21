@@ -91,11 +91,6 @@ describe('Cookie', function () {
                 expect(cookie).to.have.property('httpOnly', rawCookie.httpOnly);
             });
 
-            // eslint-disable-next-line mocha/no-skipped-tests
-            it.skip('maxAge', function () { // @todo: possibly delete test. seems like based on old expectations
-                expect(cookie).to.have.property('maxAge', undefined);
-            });
-
             it('path', function () {
                 expect(cookie).to.have.property('path', rawCookie.path);
             });
@@ -265,6 +260,13 @@ describe('Cookie', function () {
 
             expect(unparsedSingle).to.equal('bar');
         });
+
+        it('should return empty string on non-object input', function () {
+            expect(Cookie.unparseSingle([])).to.equal('');
+            expect(Cookie.unparseSingle(0)).to.equal('');
+            expect(Cookie.unparseSingle(null)).to.equal('');
+            expect(Cookie.unparseSingle('foo=bar')).to.equal('');
+        });
     });
 
     describe('unparse', function () {
@@ -406,6 +408,22 @@ describe('Cookie', function () {
             });
 
             expect(cookie.toString()).to.equals('foo=fooTest; Max-Age=1502442248');
+        });
+
+        it('should return extensions if set', function () {
+            var cookie = new Cookie('foo=bar; Secure; =1; e2=2; e3=; e4; e5');
+
+            expect(cookie.toString()).to.equals('foo=bar; Secure; =1; e2=2; e3=; e4; e5');
+        });
+
+        it('should ignore invalid expiry date', function () {
+            var cookie = new Cookie({
+                name: 'foo',
+                value: 'bar',
+                expires: new Date(NaN)
+            });
+
+            expect(cookie.toString()).to.equals('foo=bar');
         });
     });
 });
