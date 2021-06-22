@@ -25,6 +25,7 @@ describe('QueryParam', function () {
             var qp = new QueryParam('foo=bar');
 
             expect(qp).to.be.ok;
+            expect(qp.valueOf()).to.equal('bar');
             expect(qp).to.deep.include({
                 key: 'foo',
                 value: 'bar'
@@ -97,7 +98,6 @@ describe('QueryParam', function () {
                 }];
 
                 expect(QueryParam.unparse(queryParams)).to.equal('foo=foo&bar&baz');
-
             });
 
             it('should should handle null and undefined values when unparsing object format', function () {
@@ -129,16 +129,6 @@ describe('QueryParam', function () {
                 expect(QueryParam.unparseSingle({ key: '', value: 'foo' })).to.equal('=foo');
             });
 
-            it('should encode keys when value is null and encode is true', function () {
-                expect(QueryParam.unparseSingle({ key: ' ', value: null }, true)).to.equal('%20');
-                expect(QueryParam.unparseSingle({ key: '"foo"', value: null }, true)).to.equal('%22foo%22');
-            });
-
-            it('should encode values when key is null and encode is true', function () {
-                expect(QueryParam.unparseSingle({ key: null, value: ' ' }, true)).to.equal('=%20');
-                expect(QueryParam.unparseSingle({ value: '("foo")' }, true)).to.equal('=(%22foo%22)');
-            });
-
             it('should always encode `&` and `#` present in key or value', function () {
                 expect(QueryParam.unparseSingle({ key: null, value: '& #' })).to.equal('=%26 %23');
                 expect(QueryParam.unparseSingle({ key: '"#&#"' })).to.equal('"%23%26%23"');
@@ -168,29 +158,25 @@ describe('QueryParam', function () {
         describe(rawQueryString, function () {
             it('should be parsed properly', function () {
                 var params = QueryParam.parse(rawQueryString);
+
                 expect(params.length).to.equal(4);
             });
 
             it('should be unparsed properly', function () {
                 var params = QueryParam.parse(rawQueryString),
                     paramStr = QueryParam.unparse(params);
+
                 expect(paramStr).to.eql(rawQueryString);
             });
         });
     });
 
-    it('should not url encode by default', function () {
+    it('should not url encode', function () {
         var rawQueryString = 'x=foo bar',
             params = QueryParam.parse(rawQueryString),
             paramStr = QueryParam.unparse(params);
-        expect(paramStr).to.eql(rawQueryString);
-    });
 
-    it('should url encode if explicitly asked to', function () {
-        var rawQueryString = 'x=foo bar',
-            params = QueryParam.parse(rawQueryString),
-            paramStr = QueryParam.unparse(params, { encode: true });
-        expect(paramStr).to.eql('x=foo%20bar');
+        expect(paramStr).to.eql(rawQueryString);
     });
 
     it('should be able to unparse when values are given as an object', function () {
@@ -269,10 +255,7 @@ describe('QueryParam', function () {
         // key is what the string representation should be, value is the parsed representation.
         var testCases = [
             {
-                ignore: {
-                    true: 'a=b&e=f',
-                    false: 'a=b&c=d&e=f'
-                },
+                result: 'a=b&e=f',
                 list: [
                     { key: 'a', value: 'b' },
                     { key: 'c', value: 'd', disabled: true },
@@ -280,10 +263,7 @@ describe('QueryParam', function () {
                 ]
             },
             {
-                ignore: {
-                    true: 'c=d&e=f',
-                    false: 'a=b&c=d&e=f'
-                },
+                result: 'c=d&e=f',
                 list: [
                     { key: 'a', value: 'b', disabled: true },
                     { key: 'c', value: 'd', disabled: 1 },
@@ -291,10 +271,7 @@ describe('QueryParam', function () {
                 ]
             },
             {
-                ignore: {
-                    true: 'a=b&d=e&e=f',
-                    false: 'a=b&c=d&d=e&e=f'
-                },
+                result: 'a=b&d=e&e=f',
                 list: [
                     { key: 'a', value: 'b' },
                     { key: 'c', value: 'd', disabled: true },
@@ -303,10 +280,7 @@ describe('QueryParam', function () {
                 ]
             },
             {
-                ignore: {
-                    true: 'c=d&g=h',
-                    false: 'a=b&c=d&e=f&g=h'
-                },
+                result: 'c=d&g=h',
                 list: [
                     { key: 'a', value: 'b', disabled: true },
                     { key: 'c', value: 'd' },
@@ -315,10 +289,7 @@ describe('QueryParam', function () {
                 ]
             },
             {
-                ignore: {
-                    true: 'u=v&a=b',
-                    false: 'u=v&w=x&y=z&a=b'
-                },
+                result: 'u=v&a=b',
                 list: [
                     { key: 'u', value: 'v' },
                     { key: 'w', value: 'x', disabled: true },
@@ -327,10 +298,7 @@ describe('QueryParam', function () {
                 ]
             },
             {
-                ignore: {
-                    true: 'g=h',
-                    false: 'a=b&c=d&e=f&g=h'
-                },
+                result: 'g=h',
                 list: [
                     { key: 'a', value: 'b', disabled: true },
                     { key: 'c', value: 'd', disabled: true },
@@ -341,140 +309,9 @@ describe('QueryParam', function () {
         ];
 
         _.forEach(testCases, function (fixture) {
-            it(`should handle ${fixture.ignore.true || 'empty string'}, ignoreDisabled: true`, function () {
-                expect(QueryParam.unparse(fixture.list, {
-                    ignoreDisabled: true
-                })).to.eql(fixture.ignore.true);
+            it(`should handle ${fixture.result || 'empty string'}`, function () {
+                expect(QueryParam.unparse(fixture.list)).to.eql(fixture.result);
             });
-
-            it(`should handle ${fixture.ignore.false || 'empty string'}, ignoreDisabled: false`, function () {
-                expect(QueryParam.unparse(fixture.list)).to.eql(fixture.ignore.false);
-            });
-        });
-    });
-
-    describe('encoding', function () {
-        it('a=b{{c}}', function () {
-            var parsed = [
-                { key: 'a', value: 'c{{b}}' },
-                { key: 'c', value: 'd' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=c{{b}}&c=d');
-        });
-
-        it('a=foo(a)', function () {
-            var parsed = [
-                { key: 'a', value: 'foo(a)' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=foo(a)');
-        });
-
-        it('percentage - "charwithPercent=%foo"', function () {
-            var parsed = [
-                { key: 'multibyte', value: '%foo' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('multibyte=%foo');
-        });
-
-        it('a=обязательный&c=d', function () {
-            var parsed = [
-                { key: 'a', value: 'обязательный' },
-                { key: 'c', value: 'd' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9&c=d');
-        });
-
-        it('email=foo+bar-xyz@gmail.com', function () {
-            var parsed = [
-                { key: 'email', value: 'foo+bar-xyz@gmail.com' }
-            ];
-            expect(QueryParam.unparse(parsed)).to.equal('email=foo+bar-xyz@gmail.com');
-        });
-
-        it('pre encoded text( must avoid double encoding) - "email=foo%2Bbar%40domain.com"', function () {
-            var parsed = [
-                { key: 'email', value: 'foo%2Bbar%40domain.com' }
-            ];
-            expect(QueryParam.unparse(parsed)).to.equal('email=foo%2Bbar%40domain.com');
-        });
-
-        it('multibyte character - "multibyte=𝌆"', function () {
-            var parsed = [
-                { key: 'multibyte', value: '𝌆' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('multibyte=%F0%9D%8C%86');
-        });
-
-        it('pre-encoded multibyte character - "multibyte=%F0%9D%8C%86"', function () {
-            var parsed = [
-                { key: 'multibyte', value: '%F0%9D%8C%86' }
-            ];
-            expect(QueryParam.unparse(parsed)).to.equal('multibyte=%F0%9D%8C%86');
-        });
-
-        it('a[0]=foo&a[1]=bar', function () {
-            var parsed = [
-                { key: 'a[0]', value: 'foo' },
-                { key: 'a[1]', value: 'bar' }
-            ];
-            expect(QueryParam.unparse(parsed)).to.equal('a[0]=foo&a[1]=bar');
-        });
-
-        it('Russian - "a=Привет Почтальон"', function () {
-            var parsed = [
-                { key: 'a', value: 'Привет Почтальон' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal(
-                'a=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD'
-            );
-        });
-
-        it('Chinese- "a=你好"', function () {
-            var parsed = [
-                { key: 'a', value: '你好' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=%E4%BD%A0%E5%A5%BD');
-        });
-
-        it('Japanese- "a=ハローポストマン"', function () {
-            var parsed = [
-                { key: 'a', value: 'ハローポストマン' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=%E3%83%8F%E3%83%AD%E3%83%BC%E3%83%9D%E3%82%B9%E3%83%88%E3%83%9E%E3%83%B3');
-        });
-
-        it('Partial Russian - "a=Hello Почтальон"', function () {
-            var parsed = [
-                { key: 'a', value: 'Hello Почтальон' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD');
-        });
-
-        it('pre encoded russian text - a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD', function () {
-            var parsed = [
-                { key: 'a', value: 'Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD' }
-            ];
-            expect(QueryParam.unparse(parsed, {
-                encode: true
-            })).to.equal('a=Hello%20%D0%9F%D0%BE%D1%87%D1%82%D0%B0%D0%BB%D1%8C%D0%BE%D0%BD');
         });
     });
 });

@@ -3,11 +3,11 @@
 // This script is intended to generate documentation for this module.
 // ---------------------------------------------------------------------------------------------------------------------
 
-require('shelljs/global');
-
 const path = require('path'),
 
     chalk = require('chalk'),
+    { exec, rm, test } = require('shelljs'),
+
     pkg = require('../package.json'),
 
     IS_WINDOWS = (/^win/).test(process.platform),

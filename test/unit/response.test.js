@@ -24,11 +24,11 @@ describe('Response', function () {
         it('should handle the absence of Buffer gracefully', function () {
             var response,
                 originalBuffer = Buffer,
-                stream = new Buffer('random').toJSON();
+                stream = Buffer.from('random').toJSON();
 
             delete global.Buffer;
             expect(function () {
-                response = new Response({ stream: stream });
+                response = new Response({ stream });
             }).to.not.throw();
 
             expect(response).to.be.ok;
@@ -88,7 +88,7 @@ describe('Response', function () {
 
             it('originalRequest', function () {
                 expect(response).to.have.property('originalRequest');
-                expect(response.originalRequest.url.getRaw()).to.eql(rawResponse.originalRequest);
+                expect(response.originalRequest.url.toString()).to.eql(rawResponse.originalRequest);
             });
 
             it('status', function () {
@@ -120,6 +120,7 @@ describe('Response', function () {
             var rawResponse = fixtures.collectionV2.item[0].response[0],
                 response = new Response(rawResponse),
                 jsonified = response.toJSON();
+
             expect(jsonified).to.deep.include({
                 status: rawResponse.status,
                 code: rawResponse.code,
@@ -133,7 +134,7 @@ describe('Response', function () {
         it('must retain Buffer nature on stream property after new Response(response.toJSON())', function () {
             var rawResponse = {
                     body: 'response body',
-                    stream: new Buffer([114, 101, 115, 112, 111, 110, 115, 101, 32, 98, 111, 100, 121])
+                    stream: Buffer.from([114, 101, 115, 112, 111, 110, 115, 101, 32, 98, 111, 100, 121])
                 },
                 response = new Response(rawResponse),
                 jsonified = response.toJSON(),
@@ -151,6 +152,7 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse),
                 jsonified = response.toJSON();
+
             expect(jsonified.status.toLowerCase()).to.eql('gone');
             expect(jsonified).to.deep.include({
                 code: rawResponse.code,
@@ -190,7 +192,7 @@ describe('Response', function () {
 
         it('should fallback to the response body if no content-encoding value is available', function () {
             var response = new Response({
-                body: new Buffer([31, 139, 8]) // the specifics matter here
+                body: Buffer.from([31, 139, 8]) // the specifics matter here
             });
 
             expect(response.encoding()).to.eql({
@@ -210,78 +212,12 @@ describe('Response', function () {
     });
 
     describe('.mime', function () {
-        it('should correctly handle the absence of content-type', function () {
-            var response = new Response({
-                header: [
-                    {
-                        key: 'Content-Type',
-                        value: 'application/json'
-                    }
-                ]
-            });
+        it('should throw error as function is discontinued', function () {
+            expect(function () {
+                var response = new Response({ body: 'random' });
 
-            expect(response.mime()).to.eql({
-                type: 'text',
-                format: 'json',
-                name: 'response',
-                ext: 'json',
-                charset: 'utf8',
-                _originalContentType: 'application/json',
-                _sanitisedContentType: 'application/json',
-                _accuratelyDetected: true,
-                filename: 'response.json',
-                source: 'header',
-                detected: null
-            });
-        });
-
-        (typeof window === 'undefined' ? it : it.skip)('should correctly detect the mime type from the stream',
-            function () {
-                var response = new Response({
-                    body: fs.readFileSync('test/fixtures/icon.png')
-                });
-
-                expect(response.mime()).to.eql({
-                    type: 'image',
-                    format: 'image',
-                    name: 'response',
-                    ext: 'png',
-                    charset: 'utf8',
-                    _originalContentType: 'image/png',
-                    _sanitisedContentType: 'image/png',
-                    _accuratelyDetected: true,
-                    filename: 'response.png',
-                    source: 'body',
-                    detected: {
-                        type: 'image',
-                        format: 'image',
-                        name: 'response',
-                        ext: 'png',
-                        charset: 'utf8',
-                        _originalContentType: 'image/png',
-                        _sanitisedContentType: 'image/png',
-                        _accuratelyDetected: true,
-                        filename: 'response.png'
-                    }
-                });
-            });
-
-        it('should handle content-type overrides correctly', function () {
-            var response = new Response({ body: 'random' });
-
-            expect(response.mime('text/html')).to.eql({
-                type: 'text',
-                format: 'html',
-                name: 'response',
-                ext: 'html',
-                charset: 'utf8',
-                _originalContentType: 'text/html',
-                _sanitisedContentType: 'text/html',
-                _accuratelyDetected: true,
-                filename: 'response.html',
-                source: 'forced',
-                detected: null
-            });
+                response.mime('text/html');
+            }).to.throw('`Response#mime` has been discontinued, use `Response#contentInfo` instead.');
         });
     });
 
@@ -291,7 +227,7 @@ describe('Response', function () {
                 header: [
                     {
                         key: 'Content-Type',
-                        value: 'application/json'
+                        value: 'application/JSON'
                     },
                     {
                         key: 'content-disposition',
@@ -302,6 +238,7 @@ describe('Response', function () {
 
             expect(response.contentInfo()).to.eql({
                 charset: 'utf8',
+                contentType: 'application/json',
                 fileExtension: 'json',
                 mimeFormat: 'json',
                 mimeType: 'text',
@@ -321,6 +258,7 @@ describe('Response', function () {
 
             expect(response.contentInfo(response)).to.eql({
                 charset: 'utf8',
+                contentType: 'image/png',
                 fileExtension: 'png',
                 fileName: 'response.png',
                 mimeFormat: 'image',
@@ -332,6 +270,7 @@ describe('Response', function () {
     describe('.size', function () {
         it('should handle blank responses correctly', function () {
             var response = new Response();
+
             expect(response.size()).to.eql({
                 body: 0, header: 32, total: 32
             });
@@ -346,7 +285,7 @@ describe('Response', function () {
         });
 
         it('should handle response streams correctly', function () {
-            var response = new Response({ stream: new Buffer('random') });
+            var response = new Response({ stream: Buffer.from('random') });
 
             expect(response.dataURI()).to.equal('data:text/plain;base64, cmFuZG9t');
         });
@@ -355,6 +294,15 @@ describe('Response', function () {
             var response = new Response({ body: 'random' });
 
             expect(response.dataURI()).to.equal('data:text/plain;base64, cmFuZG9t');
+        });
+
+        it('should respect the content-type header', function () {
+            var response = new Response({
+                body: '{"foo":"bar"}',
+                header: [{ key: 'content-type', value: 'application/json' }]
+            });
+
+            expect(response.dataURI()).to.equal('data:application/json;base64, eyJmb28iOiJiYXIifQ==');
         });
     });
 
@@ -414,7 +362,7 @@ describe('Response', function () {
     describe('body', function () {
         it('should parse response stream as text', function () {
             expect((new Response({
-                stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
+                stream: Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
             })).text()).to.equal('buffer');
         });
 
@@ -456,11 +404,9 @@ describe('Response', function () {
 
             expect(json).to.be.undefined;
             expect(error).to.be.an('error');
-            expect(error.toString()).to.equal(
-                'JSONError: Unexpected token \'w\' at 1:12\n' +
+            expect(error.toString()).to.equal('JSONError: Unexpected token \'w\' at 1:12\n' +
                 '{ "hello: "world" }\n' +
-                '           ^'
-            );
+                '           ^');
         });
 
         it('should parse response as JSONP', function () {
@@ -504,6 +450,7 @@ describe('Response', function () {
                 response2 = new Response(rawResponse2),
                 size1 = response1.size(),
                 size2 = response2.size();
+
             expect(size1.body + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
             expect(size2.body + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
         });
@@ -515,6 +462,7 @@ describe('Response', function () {
                     header: 'Content-Encoding: gzip\nContent-Length: 10'
                 },
                 response = new Response(rawResponse);
+
             expect(response.size().body).to.equal(10);
         });
 
@@ -525,6 +473,7 @@ describe('Response', function () {
                     header: 'Content-Encoding: deflate\nContent-Length: 20'
                 },
                 response = new Response(rawResponse);
+
             expect(response.size().body).to.equal(20);
         });
 
@@ -532,9 +481,10 @@ describe('Response', function () {
             var rawResponse = {
                     code: 200,
                     header: 'Transfer-Encoding: chunked',
-                    stream: new Buffer('something nice')
+                    stream: Buffer.from('something nice')
                 },
                 response = new Response(rawResponse);
+
             expect(response.size().body).to.equal(14);
         });
     });
@@ -549,6 +499,7 @@ describe('Response', function () {
                 }),
                 responseJson = response.toJSON();
 
+            // eslint-disable-next-line security/detect-unsafe-regex
             expect(responseJson.id).to.match(/^[a-z0-9]{8}(-[a-z0-9]{4}){4}[a-z0-9]{8}$/);
             expect(_.omit(responseJson, 'id')).to.eql({
                 name: 'a sample response',
@@ -601,6 +552,33 @@ describe('Response', function () {
             expect(Response.timingPhases(timings)).to.eql(timingPhases);
         });
 
+        it('should calculate timing phases without secureConnect', function () {
+            var timings = {
+                    start: 1550571957689,
+                    offset: {
+                        request: 42,
+                        socket: 60.32290899999998,
+                        lookup: 886.8630629999998,
+                        connect: 1124.8914719999998,
+                        response: 1840.1438239999998,
+                        end: 1845.5300419999999,
+                        done: 1864
+                    }
+                },
+                timingPhases = {
+                    prepare: 42,
+                    wait: 18.32290899999998,
+                    dns: 826.5401539999998,
+                    tcp: 238.028409,
+                    firstByte: 715.252352,
+                    download: 5.386218000000099,
+                    process: 18.469958000000133,
+                    total: 1864
+                };
+
+            expect(Response.timingPhases(timings)).to.eql(timingPhases);
+        });
+
         it('should return if timings are not provided', function () {
             expect(Response.timingPhases()).to.be.undefined;
         });
@@ -608,13 +586,12 @@ describe('Response', function () {
 
     // skip this test sub-suite in the browser
     ((typeof window === 'undefined') ? describe : describe.skip)('createFromNode', function () {
-        var isNode4 = (/^v4\./).test(process.version),
-            baseUrl = 'https://postman-echo.com',
+        var baseUrl = 'https://postman-echo.com',
             isHeader = Header.isHeader.bind(Header),
             isCookie = Cookie.isCookie.bind(Cookie),
 
             getBuffer = function (array) {
-                return isNode4 ? new Buffer(array) : Buffer.from(new Uint32Array(array));
+                return Buffer.from(new Uint32Array(array));
             },
 
             validateResponse = function (response) {
@@ -647,6 +624,7 @@ describe('Response', function () {
                 }
 
                 var response = Response.createFromNode(res);
+
                 validateResponse(response);
                 done();
             });
@@ -679,7 +657,7 @@ describe('Response', function () {
                         key: 'content-type',
                         value: 'text/html; charset=ISO-8859-1'
                     }],
-                    stream: new Buffer([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
+                    stream: Buffer.from([0x62, 0x75, 0x66, 0x66, 0x65, 0x72])
                 })).text()).to.equal('buffer');
             });
         });
@@ -760,90 +738,12 @@ describe('Response', function () {
             });
         });
 
-        // @todo: Supply cookie information to the createFromNode method to make these tests meaningful
-        describe.skip('cookies', function () {
-            var cookieUrl = baseUrl + '/cookies',
-                stringify = function (cookies) {
-                    return _.reduce(cookies, function (result, value, key) {
-                        return result + key + '=' + value + ';';
-                    }, '');
-                };
-
-            it('should correctly provide all cookies', function (done) {
-                request.get({
-                    url: cookieUrl,
-                    jar: true,
-                    encoding: null
-                }, function (err, res, body) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var cookieObject = JSON.parse(body).cookies,
-                        stringifiedCookies = stringify(cookieObject),
-                        response = Response.createFromNode(res, stringifiedCookies).toJSON();
-
-                    expect(response.cookie).to.eql([]);
-                    validateResponse(response);
-                    done();
-                });
-            });
-
-            it('should correctly set a cookie', function (done) {
-                request.get({
-                    url: cookieUrl + '/set?foo=bar',
-                    jar: true,
-                    encoding: null
-                }, function (err, res, body) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var cookieObject = JSON.parse(body).cookies,
-                        stringifiedCookies = stringify(cookieObject),
-                        response = Response.createFromNode(res, stringifiedCookies).toJSON();
-
-                    expect(response.cookie).to.eql([{
-                        key: 'foo',
-                        hostOnly: true,
-                        value: 'bar',
-                        extensions: [{ key: '', value: true }]
-                    }]);
-                    validateResponse(response);
-                    done();
-                });
-            });
-
-            it('should correctly delete a previously set cookie', function (done) {
-                request.get({
-                    url: cookieUrl + '/delete?foo',
-                    jar: true,
-                    encoding: null
-                }, function (err, res, body) {
-                    if (err) {
-                        return done(err);
-                    }
-
-                    var cookieObject = JSON.parse(body).cookies,
-                        stringifiedCookies = stringify(cookieObject),
-                        response = Response.createFromNode(res, stringifiedCookies).toJSON();
-
-                    expect(response.cookie).to.eql([]);
-                    validateResponse(response);
-                    done();
-                });
-            });
-        });
-
         describe('miscellaneous requests', function () {
             var checkMime = function (mime) {
                 expect(mime).to.deep.include({
-                    type: 'text',
-                    name: 'response',
-                    _accuratelyDetected: true,
-                    source: 'header',
-                    detected: null,
-                    filename: 'response.' + mime.format
+                    mimeType: 'text',
+                    charset: 'utf8',
+                    fileName: 'response.' + mime.mimeFormat
                 });
             };
 
@@ -860,13 +760,8 @@ describe('Response', function () {
                     var response = Response.createFromNode(res),
                         json = response.toJSON(),
                         body = JSON.parse(json.body),
-                        mime = response.mime(),
+                        mime = response.contentInfo(),
                         headers = new HeaderList(null, json.header);
-
-                    expect(mime).to.deep.include({
-                        _originalContentType: 'application/json; charset=utf-8',
-                        _sanitisedContentType: 'application/json'
-                    });
 
                     expect(body.gzipped).to.be.true;
                     expect(headers.get('content-encoding')).to.equal('gzip');
@@ -908,12 +803,7 @@ describe('Response', function () {
 
                     var response = Response.createFromNode(res),
                         json = response.toJSON(),
-                        mime = response.mime();
-
-                    expect(mime).to.deep.include({
-                        _originalContentType: 'text/html; charset=utf-8',
-                        _sanitisedContentType: 'text/html'
-                    });
+                        mime = response.contentInfo();
 
                     expect((new HeaderList(null, json.header)).get('content-type')).to.match(/^text\/html/);
                     expect(json.body).to.match(/<html>.*/);
@@ -928,23 +818,10 @@ describe('Response', function () {
 
     describe('static methods', function () {
         describe('.mimeInfo', function () {
-            it('should handle incoming Header instances correctly', function () {
-                expect(Response.mimeInfo(new Header({ key: 'Content-Type', value: 'random' }),
-                    new Header({ key: 'Content-Disposition', value: 'attachment; filename=response' }))).to.eql({
-                    type: 'unknown',
-                    format: 'raw',
-                    name: 'response',
-                    ext: '',
-                    charset: 'utf8',
-                    _originalContentType: 'random',
-                    _sanitisedContentType: 'random',
-                    _accuratelyDetected: false,
-                    filename: 'response'
-                });
-            });
-
-            it('should bail out for non string content-type specifications', function () {
-                expect(Response.mimeInfo(1)).to.be.undefined;
+            it('should throw error as function is discontinued', function () {
+                expect(function () {
+                    Response.mimeInfo();
+                }).to.throw('`Response.mimeInfo` has been discontinued, use `Response#contentInfo` instead.');
             });
         });
     });

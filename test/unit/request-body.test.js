@@ -8,6 +8,7 @@ describe('RequestBody', function () {
     it('should be jsonified properly', function () {
         var reqData = new RequestBody(rawRequestBody),
             jsonified = reqData.toJSON();
+
         expect(jsonified).to.eql(rawRequestBody);
     });
 
@@ -45,6 +46,7 @@ describe('RequestBody', function () {
                 }
             },
             reqData = new RequestBody(rawBody);
+
         expect(reqData.file).to.have.property('src', rawBody.file.src);
     });
 
@@ -54,6 +56,7 @@ describe('RequestBody', function () {
                 file: '/omg/where/is/this/file'
             },
             reqData = new RequestBody(rawBody);
+
         expect(reqData.file).to.have.property('src', rawBody.file);
     });
 
@@ -72,6 +75,7 @@ describe('RequestBody', function () {
                 ]
             },
             reqData = new RequestBody(rawBody);
+
         expect(reqData.formdata.toObject()).to.eql({
             hiya: 'heyo',
             alpha: 'beta'
@@ -80,6 +84,7 @@ describe('RequestBody', function () {
 
     it('should work with string bodies correctly', function () {
         var body = new RequestBody('foo');
+
         expect(body).to.deep.include({
             mode: 'raw',
             raw: 'foo'
@@ -96,6 +101,7 @@ describe('RequestBody', function () {
                 }
             },
             reqData = new RequestBody(graphql);
+
         expect(reqData.graphql).to.eql({
             query: 'query Test { hello }',
             operationName: 'Test',
@@ -139,6 +145,7 @@ describe('RequestBody', function () {
                 }
             }
         });
+
         expect(body).to.have.property('options');
         expect(body.options).to.eql({
             raw: {
@@ -153,6 +160,7 @@ describe('RequestBody', function () {
                 mode: 'random',
                 raw: 'This is supposed to be a raw body. Do not cook it.'
             });
+
             expect(reqData).to.deep.include({
                 mode: 'raw',
                 raw: 'This is supposed to be a raw body. Do not cook it.'
@@ -228,6 +236,7 @@ describe('RequestBody', function () {
 
         it('should handle disabled property (false -> true) correctly', function () {
             var body = new RequestBody({ mode: 'raw', raw: 'foo', disabled: false });
+
             expect(body).to.have.property('disabled', false);
 
             body.update({ mode: 'raw', raw: 'foo', disabled: true });
@@ -244,6 +253,7 @@ describe('RequestBody', function () {
                     }
                 }
             });
+
             body.update({
                 mode: 'raw',
                 raw: 'foo',
@@ -272,6 +282,7 @@ describe('RequestBody', function () {
                     }
                 }
             });
+
             body.update({
                 mode: 'raw',
                 raw: 'foo'
@@ -285,6 +296,7 @@ describe('RequestBody', function () {
     describe('.toString', function () {
         it('should return an empty string for formdata or files', function () {
             var rBody = new RequestBody({ mode: 'formdata' });
+
             expect(rBody.toString()).to.equal('');
 
             rBody.update({ mode: 'file' });
@@ -329,6 +341,7 @@ describe('RequestBody', function () {
     describe('sanity', function () {
         it('should be parsed properly', function () {
             var reqData = new RequestBody(rawRequestBody);
+
             expect(reqData).to.be.ok;
             expect(reqData).to.deep.include({
                 mode: rawRequestBody.mode,
@@ -351,52 +364,62 @@ describe('RequestBody', function () {
     describe('isEmpty', function () {
         it('should return true if no request body is set', function () {
             var body = new RequestBody();
+
             expect(body.isEmpty()).to.be.true;
         });
 
         it('should return true if mode is set to raw and no data is present', function () {
             var body = new RequestBody({ mode: 'raw', raw: '' });
+
             expect(body.isEmpty()).to.be.true;
         });
 
         it('should return true if mode is formdata and no data is present', function () {
             var body = new RequestBody({ mode: 'formdata', formdata: [], raw: 'something' });
+
             expect(body.isEmpty()).to.be.true;
         });
 
         it('should return true if mode is urlencoded and no data is present', function () {
             var body = new RequestBody({ mode: 'urlencoded', formdata: [] });
+
             expect(body.isEmpty()).to.be.true;
         });
 
         it('should return false if mode is raw and data is available', function () {
             var body = new RequestBody({ mode: 'raw', raw: 'yo' });
+
             expect(body.isEmpty()).to.be.false;
         });
 
         it('should return false if mode is file and file src is available', function () {
             var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt' } });
+
             expect(body.isEmpty()).to.be.false;
         });
 
         it('should return true if mode is file and file src is not available', function () {
             var body = new RequestBody({ mode: 'file' });
+
             expect(body.isEmpty()).to.be.true;
         });
 
         it('should return true if mode is file and nothing is available', function () {
             var body = new RequestBody({ mode: 'file', file: {} });
+
             expect(body.isEmpty()).to.be.true;
         });
 
         it('should return false if mode is file and file src as well as content are available', function () {
             var body = new RequestBody({ mode: 'file', file: { src: '/somewhere/file.txt',
-                content: new Buffer('omgomg') } });
+                content: Buffer.from('omgomg') } });
+
             expect(body.isEmpty()).to.be.false;
         });
 
         it('should return false if mode is file and file content is available', function () {
             var body = new RequestBody({ mode: 'file', file: { content: 'asjdhkashd' } });
+
             expect(body.isEmpty()).to.be.false;
         });
 
@@ -408,6 +431,7 @@ describe('RequestBody', function () {
                     value: 'somevalue'
                 }]
             });
+
             expect(body.isEmpty()).to.be.false;
         });
 
@@ -419,6 +443,7 @@ describe('RequestBody', function () {
                     value: { some: 'random', javascript: 'object' } // this functionality is used in the app
                 }]
             });
+
             expect(body.isEmpty()).to.be.false;
         });
 

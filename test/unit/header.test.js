@@ -73,6 +73,7 @@ describe('Header', function () {
 
         it('should create the header with system options', function () {
             var header = Header.create({ key: 'name', value: 'value', system: true });
+
             expect(header.toJSON()).to.eql({
                 key: 'name',
                 value: 'value',
@@ -82,6 +83,7 @@ describe('Header', function () {
 
         it('should set header with given system value', function () {
             var header = Header.create({ key: 'name', value: 'value', system: 'system' });
+
             expect(header.toJSON()).to.eql({
                 key: 'name',
                 value: 'value',
@@ -91,6 +93,7 @@ describe('Header', function () {
 
         it('should set to empty key value in case of invalid key', function () {
             var header = Header.create({ key: null, value: 'value' });
+
             expect(header.toJSON()).to.eql({
                 key: '',
                 value: 'value'
@@ -99,6 +102,7 @@ describe('Header', function () {
 
         it('should not have empty string in case of value as null', function () {
             var header = Header.create({ key: 'name', value: null });
+
             expect(header.toJSON()).to.eql({
                 key: 'name',
                 value: null
@@ -140,6 +144,7 @@ describe('Header', function () {
         it('should unparse headers to a string', function () {
             var raw = 'name1: value1\r\nname2: value2',
                 list = new PropertyList(Header, {}, raw);
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -147,12 +152,13 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
-            expect(Header.unparse(list)).to.equal('name1: value1\nname2: value2');
+            expect(Header.unparse(list)).to.equal('name1: value1\r\nname2: value2\r\n');
         });
 
-        it('should honor the given separator "\\r\\n"', function () {
-            var raw = 'name1: value1\r\nname2: value2',
+        it('should honor the given separator "\\n"', function () {
+            var raw = 'name1: value1\nname2: value2\n',
                 list = new PropertyList(Header, {}, raw);
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -160,13 +166,14 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
-            expect(Header.unparse(list, '\r\n')).to.equal(raw);
+            expect(Header.unparse(list, '\n')).to.equal(raw);
         });
     });
 
     describe('inside PropertyList', function () {
         it('should load a header string', function () {
             var list = new PropertyList(Header, {}, 'name1:value1\r\nname2:value2');
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -177,6 +184,7 @@ describe('Header', function () {
         });
         it('should load an array of strings', function () {
             var list = new PropertyList(Header, {}, ['name1:value1', 'name2:value2']);
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -193,6 +201,7 @@ describe('Header', function () {
                 key: 'name2',
                 value: 'value2'
             }]);
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -206,6 +215,7 @@ describe('Header', function () {
                 name1: 'value1',
                 name2: 'value2'
             });
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -216,11 +226,13 @@ describe('Header', function () {
         });
 
         // @todo - this is not supported yet, unskip this test when this method of header construction is supported
+        // eslint-disable-next-line mocha/no-skipped-tests
         it.skip('should load a plain header key:value object, with values being an array', function () {
             var list = new PropertyList(Header, {}, {
                 name1: ['value1', 'value2'],
                 name2: 'value3'
             });
+
             expect(list.all()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -237,6 +249,7 @@ describe('Header', function () {
                 name1: 'value1',
                 name2: ''
             });
+
             expect(list.toJSON()).to.eql([{
                 key: 'name1',
                 value: 'value1'
@@ -269,6 +282,7 @@ describe('Header', function () {
             // eslint-disable-next-line max-len
             var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="',
                 newHeader = new Header(rawHeader);
+
             expect(newHeader.toString()).equals(rawHeader);
         });
 
@@ -277,6 +291,7 @@ describe('Header', function () {
                 key: 'Content-Type',
                 value: 'application/xml'
             });
+
             expect(newHeader.toString()).equals('Content-Type: application/xml');
         });
     });

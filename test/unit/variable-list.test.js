@@ -38,6 +38,7 @@ describe('VariableList', function () {
                 /asdasd/,
                 /in 3rd layer/
             ];
+
         expectations.forEach(function (regex, index) {
             expect(regex.test(values[index])).to.be.true;
         });
@@ -58,6 +59,7 @@ describe('VariableList', function () {
                 value: 'foo'
             }]),
             resolved = mylist.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('foo-bar');
     });
 
@@ -70,6 +72,7 @@ describe('VariableList', function () {
                 value: 'beta'
             }]),
             resolved = mylist.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('beta');
     });
 
@@ -83,6 +86,7 @@ describe('VariableList', function () {
                 value: 'beta'
             }]),
             resolved = mylist.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('beta');
     });
 
@@ -104,6 +108,7 @@ describe('VariableList', function () {
                 value: '{{beta}}'
             }]),
             resolved = cyclicList.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('{{beta}}');
     });
 
@@ -122,6 +127,7 @@ describe('VariableList', function () {
                 value: 'epsilon'
             }]),
             resolved = polyChainList.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('epsilon');
     });
 
@@ -140,6 +146,7 @@ describe('VariableList', function () {
                 value: '{{gamma}}'
             }]),
             resolved = polyChainList.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('delta');
     });
 
@@ -164,22 +171,25 @@ describe('VariableList', function () {
                 value: 'z'
             }]),
             resolved = polyChainList.substitute(unresolved);
+
         expect(resolved.xyz).to.equal('z');
     });
 
-    it.skip('should correctly handle variables with single braces in their name', function () {
+    // @note this is a know limitation, check `Substitutor.REGEX_EXTRACT_VARS`
+    it('should not support single braces in their name', function () {
         var unresolved = {
                 xyz: '{{alpha}}'
             },
-            polyChainList = new VariableList(null, [], [
-                {
-                    alpha: '{{be{t}a}}',
-                    'be{t}a': 'gamma',
-                    gamma: 'delta'
-                }
-            ]),
+            polyChainList = new VariableList(null, [{
+                key: 'alpha',
+                value: '{{be{t}a}}'
+            }, {
+                key: 'be{t}a',
+                value: 'gamma'
+            }]),
             resolved = polyChainList.substitute(unresolved);
-        expect(resolved.xyz).to.equal('delta');
+
+        expect(resolved.xyz).to.equal('{{be{t}a}}');
     });
 
     describe('sanity', function () {
@@ -199,6 +209,7 @@ describe('VariableList', function () {
                     key: 'third',
                     value: 'in 3rd layer'
                 }]);
+
             expect(v).to.be.an.instanceof(VariableList);
         });
 
@@ -214,6 +225,7 @@ describe('VariableList', function () {
                     key: 'third',
                     value: 'in 3rd layer'
                 }]);
+
             expect(v.reference).to.be.an('object');
         });
     });

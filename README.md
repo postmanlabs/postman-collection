@@ -49,7 +49,7 @@ more about these functions, head over to
 
 The collection schema outlines the JSON definition of data structure accepted by the constructor of each properties of
 this SDK. In other words, this SDK provides JavaScript level object manipulation for the JSON structure defined by
-Postman Collection Format in [http://schema.getpostman.com/](http://schema.getpostman.com/).
+Postman Collection Format in [http://schema.postman.com/](http://schema.postman.com/).
 
 | Schema Version | Compatible SDK Versions |
 |----------------|-------------------------|

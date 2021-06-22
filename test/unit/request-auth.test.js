@@ -5,37 +5,15 @@ var expect = require('chai').expect,
 
 describe('RequestAuth', function () {
     describe('.current', function () {
-        it('should be properly initialised from Request', function () {
-            var request = new Request({
-                url: 'https://postman-echo.com/get',
-                auth: {}
-            });
-            expect(request.auth.current()).to.be.undefined;
-        });
+        it('should throw error as function is discontinued', function () {
+            expect(function () {
+                var request = new Request({
+                    url: 'https://postman-echo.com/get',
+                    auth: {}
+                });
 
-        it('should be properly initialised when set from Request constructor', function () {
-            var request = new Request({
-                auth: {
-                    noauth: [{
-                        key: 'foo',
-                        value: 'bar'
-                    }],
-                    type: 'noauth'
-                }
-            });
-
-            expect(request.auth.current()).to.eql({ foo: 'bar' });
-        });
-
-        it('should be properly initialised when set from Request constructor in legacy format', function () {
-            var request = new Request({
-                auth: {
-                    noauth: { foo: 'bar' },
-                    type: 'noauth'
-                }
-            });
-
-            expect(request.auth.current()).to.eql({ foo: 'bar' });
+                request.auth.current();
+            }).to.throw('`Request#current` has been discontinued, use `Request#parameters` instead.');
         });
     });
 
@@ -46,12 +24,12 @@ describe('RequestAuth', function () {
                 type: 'noauth'
             });
 
-            expect(auth.current()).to.eql({ foo: 'bar' });
+            expect(auth.parameters().get('foo')).to.equal('bar');
 
             auth.use('basic');
             expect(auth.type).to.equal('basic');
             expect(auth.basic.toJSON()).to.eql([]);
-            expect(auth.current()).to.eql({});
+            expect(auth.parameters().count()).to.equal(0);
         });
 
         it('should be able to construct with multiple auths', function () {
@@ -65,15 +43,12 @@ describe('RequestAuth', function () {
                 type: 'noauth'
             });
 
-            expect(auth.current()).to.eql({
-                foo: 'bar'
-            });
+            expect(auth.parameters().get('foo')).to.equal('bar');
 
             auth.use('basic');
             expect(auth.type).to.equal('basic');
-            expect(auth.current()).to.eql({
-                username: 'u', password: 'p'
-            });
+            expect(auth.parameters().get('username')).to.equal('u');
+            expect(auth.parameters().get('password')).to.equal('p');
         });
 
         it('should be able to update the parameters to the passed auth type in options', function () {
@@ -105,7 +80,6 @@ describe('RequestAuth', function () {
                 foo: 'bar'
             });
         });
-
     });
 
     describe('.update', function () {
@@ -264,12 +238,10 @@ describe('RequestAuth', function () {
                 type: 'noauth'
             });
 
-            expect(auth.current()).to.eql({
-                foo: 'bar'
-            });
+            expect(auth.parameters().get('foo')).to.equal('bar');
 
             auth.clear('noauth');
-            expect(auth.current()).to.eql({});
+            expect(auth.parameters().count()).to.equal(0);
         });
 
         it('should be able to clear an auth that is defined but not selected', function () {

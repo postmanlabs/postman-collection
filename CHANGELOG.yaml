@@ -1,3 +1,45 @@
+4.0.0:
+  date: 2021-06-22
+  breaking changes:
+    - GH-610 Dropped support for Node.js < v10
+    - >-
+      GH-1197 Dropped support for description type-based formatting on
+      `Description#toString`
+    - >-
+      GH-1198 Dropped support for deprecated `Url#getRaw` method, use
+      `Url#toString` instead
+    - |
+      GH-1198 Dropped support for deprecated object argument variant of:
+        -> `QueryParam.unparse`
+        -> `QueryParam.unparseSingle`
+        -> `Url#getPath`
+        -> `Url#getQueryString`
+        -> `Url#getPathWithQuery`
+        -> `Url#getRemote`
+    - >-
+      GH-1199 Dropped support for deprecated `Response#mime`  and
+      `Response#mimeInfo` methods, use `Response#contentInfo` instead
+    - >-
+      GH-1200 Dropped support for deprecated `RequestAuth#current` method, use
+      `RequestAuth#parameters` instead
+    - GH-1200 Dropped support for deprecated `VariableScope#variables` method
+    - GH-1200 Dropped support for deprecated "json" `Variable#type`
+    - GH-1201 Updated `Header.unparse` default separator from "\n" to "\r\n"
+    - GH-1201 `Header.unparse` excludes disabled header by default
+    - GH-1202 Removed collection schema, refer 'postmanlabs/schemas' repository
+  fixed bugs:
+    - GH-1202 Fixed serialization of cookie extensions on .toString()
+  chores:
+    - Added secure codecov publish script
+    - Updated deprecated faker methods
+    - GH-1200 Removed discontinued `Request#authorize` method
+    - GH-1202 Removed puppeteer dependency for browser tests
+    - GH-1202 Added unit tests for 100% code coverage
+    - GH-1202 Updated TypeScript Type Declaration
+    - GH-1202 Updated nyc configuration
+    - GH-1202 Updated ESLint rules
+    - GH-1202 Updated dependencies
+
 3.6.11:
   date: 2021-04-11
   fixed bugs:
@@ -40,7 +82,7 @@
       GH-1105 Fixed a bug where `toJSON()` on RequestBody returns
       non-serializable object having streams for bodies containing file
   chores:
-    - 'GH-1098, GH-1099 Added unit tests'
+    - GH-1098, GH-1099 Added unit tests
 
 3.6.6:
   date: 2020-08-31
@@ -96,7 +138,7 @@
     - >-
       GH-984 Fixed a bug where empty port, auth, etc. are dropped on
       url.toString
-    - 'GH-991 Handle protocol separated using `:\\` while parsing URL'
+    - GH-991 Handle protocol separated using `:\\` while parsing URL
     - >-
       GH-994 Handle `&`, `=` and `#` in query params on
       `QueryParam~unparseSingle`
@@ -512,7 +554,7 @@
   fixed bugs:
     - GH-438 Fixed a bug that caused incorrect AWS Auth signatures
   chores:
-    - 'Updated dependencies, added edge case unit tests.'
+    - Updated dependencies, added edge case unit tests.
 
 2.1.0:
   date: 2017-07-18
@@ -654,7 +696,7 @@
   date: 2017-05-11
   new features:
     - Added support for multi-layered variable resolution
-    - 'Added convenience method, `VariableScope.toObject()`'
+    - Added convenience method, `VariableScope.toObject()`
     - '`VariableScope.variables()` is now deprecated in favor of above'
 
 1.2.4:
@@ -676,12 +718,12 @@
   date: 2017-04-26
   new features:
     - Updated signing logic to support inherited auth parameters
-    - 'Added a new helper function, `setParent` to `PropertyBase`'
+    - Added a new helper function, `setParent` to `PropertyBase`
 
 1.2.1:
   date: 2017-04-25
   new features:
-    - 'Added a new property, `CookieList`'
+    - Added a new property, `CookieList`
   fixed bugs:
     - >-
       Fixed a bug in the `RequestAuth` implementation which caused authorization
@@ -735,7 +777,7 @@
     - Enhanced the `PropertyList` to allow keys with multiple values
     - Removed Response details `fromServer` flag
     - Added Response details `standardName` property
-    - 'Added `set`, `get`, `unset` and `clear `helpers to `VariableScope`'
+    - Added `set`, `get`, `unset` and `clear `helpers to `VariableScope`
     - Added `Response#details` helper to retain custom server HTTP reasons
     - Added `Response.isResponse` and `Script.isScript` helpers
     - Added `Request.isRequest` helper
@@ -748,18 +790,18 @@
 1.0.2:
   date: 2017-03-21
   fixed bugs:
-    - 'Downgraded `file-type` to v3.9.0, which is browserify compatible'
+    - Downgraded `file-type` to v3.9.0, which is browserify compatible
 
 1.0.1:
   date: 2017-03-14
   new features:
-    - 'Added a helper function, `isProxyConfig`'
+    - Added a helper function, `isProxyConfig`
 
 1.0.0:
   date: 2017-03-06
   breaking changes:
     - Added proxy and certificate properties to request model
-    - 'Added UrlMatchPattern, UrlMatchPatternList classes'
+    - Added UrlMatchPattern, UrlMatchPatternList classes
     - Added Certificate and CertificateList classes for certificate information
   chores:
     - >-
@@ -789,7 +831,7 @@
     - >-
       Improved response documentation structure and added encoding helper
       function
-    - 'Reduced one more toString call :)'
+    - Reduced one more toString call :)
     - Added the Buffer check instead of checking for ArrayBuffer
     - Bail out early if it is a arraybuffer
     - Moved the charset handling to mime-format
@@ -837,14 +879,14 @@
   new features:
     - Added the ability to provide the disabled prop to the the form-param
     - Added response module contructor helper
-    - 'Improved validation, added isCookie method + tests'
+    - Improved validation, added isCookie method + tests
     - Added response module contructor helper
   fixed bugs:
     - Fixed inheritance of formparam
     - Set the disabled prop only if it is provided
   chores:
     - Skipped cookie tests
-    - 'Improved naming, added more tests'
+    - Improved naming, added more tests
 
 0.5.6:
   date: 2016-11-2
@@ -883,7 +925,7 @@
   date: 2016-10-5
   fixed bugs:
     - Handle empty session token in aws auth
-    - 'If the app sends us an empty session token, do not give it to the library'
+    - If the app sends us an empty session token, do not give it to the library
     - Corrected `_.merge` discrepancy
   chores:
     - Replaced deprecated fs.existsSync calls in system tests
@@ -978,7 +1020,7 @@
     - This allows the syncing functionality to be usable as collection variable
     - Added unit tests for VariableScope
     - Added `id` property to response schema
-    - 'Added VariableScope to better manage environments, globals, etc'
+    - Added VariableScope to better manage environments, globals, etc
     - >-
       Added function isVariableList - will be needed during working with
       VariableScope definition
@@ -1091,7 +1133,7 @@
 0.4.6:
   date: 2016-07-29
   new features:
-    - 'GH-70 Added poly chain variable resolution capability, associated tests'
+    - GH-70 Added poly chain variable resolution capability, associated tests
   fixed bugs:
     - Ensure that we do not throw on url stringification
 
@@ -1160,7 +1202,7 @@
 0.4.0:
   date: 2016-06-28
   new features:
-    - 'Ensure that btoa is called directly, otherwise Chrome throws an illeg…'
+    - Ensure that btoa is called directly, otherwise Chrome throws an illeg…
     - Response body conversion sugar function
     - >-
       Ensure that btoa is called directly, otherwise Chrome throws an illegal
@@ -1222,7 +1264,7 @@
   date: 2016-06-9
   fixed bugs:
     - Fixed hawk auth nonce generation
-    - 'Fix iteration, move string constructors to constants'
+    - Fix iteration, move string constructors to constants
 
 0.2.1:
   date: 2016-06-8
@@ -1244,7 +1286,7 @@
   date: 2016-06-6
   new features:
     - Mime type detection in Response object
-    - 'Added ability to return data URI from string, buffer or array buffer'
+    - Added ability to return data URI from string, buffer or array buffer
     - Added mime and dataURI functions to Response property
     - Added `_postman_propertyIndexKey` key in Properties
     - Added ability to populate from an object
@@ -1339,7 +1381,7 @@
 0.0.18:
   date: 2016-05-18
   new features:
-    - 'Added ability to substitute function variables, and tests'
+    - Added ability to substitute function variables, and tests
     - >-
       Removed unnecessary addition of function to allowed types, use Date.now()
       instead of getTime()
@@ -1449,7 +1491,7 @@
     - '`ItemGroup` construction definition documentation added'
     - Added variable constructor definition typeDef in documentation
     - Added collection constructor definition typeDef in documentation
-    - 'Adds definition, examples and other documentation to Item property'
+    - Adds definition, examples and other documentation to Item property
     - >-
       Somewhat elaborated the documentation of `PropertyBase` (at least the
       items that gets inherited)
@@ -1567,7 +1609,7 @@
     - Added a root `toJSON` for `PropertyList` as well
     - Reformatted file for easy comparison
     - Added a generic `toJSON` function
-    - 'Removing all `toJSON` methods, to consolidate them into a single one'
+    - Removing all `toJSON` methods, to consolidate them into a single one
     - Inherit FormParam and QueryParam from Property
     - >-
       Added unit tests that checks the description related functionalities of a

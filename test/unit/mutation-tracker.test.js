@@ -104,6 +104,17 @@ describe('MutationTracker', function () {
             expect(tracker.count()).to.equal(3);
             expect(tracker.compacted).to.include.keys(['foo', 'bar', 'baz']);
         });
+
+        it('should handle nested key path', function () {
+            var tracker = new MutationTracker({
+                stream: [[['foo', 'bar'], '1'], [['foo', 'bar'], '2']]
+            });
+
+            tracker.compact();
+
+            expect(tracker.count()).to.equal(1);
+            expect(tracker.compacted).to.include.keys(['foo.bar']);
+        });
     });
 
     describe('auto compaction', function () {
@@ -209,6 +220,7 @@ describe('MutationTracker', function () {
                     applyMutation: function (instruction, key, value) {
                         if (instruction === 'set') {
                             this[key] = value;
+
                             return;
                         }
 
@@ -232,6 +244,7 @@ describe('MutationTracker', function () {
                     applyMutation: function (instruction, key, value) {
                         if (instruction === 'set') {
                             this[key] = value;
+
                             return;
                         }
 

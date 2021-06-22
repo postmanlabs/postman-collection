@@ -15,6 +15,7 @@ if (preReleaseSuffix && preReleaseSuffix !== 'beta') {
 
 // 🚢 Just Ship It!
 shipit({
+    mainBranch: 'main',
     // don't push to origin unless explicitly set
     pushToOrigin: pushToOrigin === 'true',
     // prerelease suffix, if any

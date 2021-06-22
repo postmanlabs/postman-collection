@@ -1,9 +1,0 @@
-{
-    "id": "#/definitions/header-list",
-    "title": "Header List",
-    "description": "A representation for a list of headers",
-    "type": "array",
-    "items": {
-        "$ref": "#/definitions/header"
-    }
-}

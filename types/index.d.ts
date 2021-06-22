@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 3.6.4
+// Type definitions for postman-collection 4.0.0
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -25,6 +25,7 @@ declare module "postman-collection" {
      *            cert: { src: '/path/to/key/file' }
      *        }
      * ]);
+     * @param parent - -
      * @param list - The list of certificate representations
      */
     export class CertificateList extends PropertyList {
@@ -38,6 +39,7 @@ declare module "postman-collection" {
         resolveOne(url: string): Certificate.definition;
         /**
          * Checks if the given object is a CertificateList
+         * @param obj - -
          */
         static isCertificateList(obj: any): boolean;
     }
@@ -138,6 +140,7 @@ declare module "postman-collection" {
         toJSON(): void;
         /**
          * Checks if the given object is a Certificate
+         * @param obj - -
          */
         static isCertificate(obj: any): boolean;
     }
@@ -287,10 +290,13 @@ declare module "postman-collection" {
         version: Version;
         /**
          * Using this function, one can sync the values of collection variables from a reference object.
+         * @param obj - -
+         * @param [track] - -
          */
         syncVariablesFrom(obj: any, track?: boolean): any;
         /**
          * Transfer the variables in this scope to an object
+         * @param [obj] - -
          */
         syncVariablesTo(obj?: any): any;
         /**
@@ -299,6 +305,7 @@ declare module "postman-collection" {
         toJSON(): any;
         /**
          * Check whether an object is an instance of ItemGroup.
+         * @param obj - -
          */
         static isCollection(obj: any): boolean;
         /**
@@ -327,11 +334,14 @@ declare module "postman-collection" {
 
     /**
      * Contains a list of header elements
+     * @param parent - -
+     * @param cookies - -
      */
     export class CookieList extends PropertyList {
         constructor(parent: any, cookies: object[]);
         /**
          * Checks if the given object is a CookieList
+         * @param obj - -
          */
         static isCookieList(obj: any): boolean;
     }
@@ -482,6 +492,7 @@ declare module "postman-collection" {
         toString(): string;
         /**
          * Check whether an object is an instance of PostmanCookie.
+         * @param obj - -
          */
         static isCookie(obj: any): boolean;
         /**
@@ -496,6 +507,7 @@ declare module "postman-collection" {
         static unparseSingle(cookie: Cookie): string;
         /**
          * Cookie header parser
+         * @param str - -
          * @returns A plain cookie options object, use it to create a new Cookie
          */
         static parse(str: string): any;
@@ -511,23 +523,6 @@ declare module "postman-collection" {
             content: string;
             type: string;
         };
-        /**
-         * The default and supported description format handlers.
-         */
-        enum format {
-            /**
-             * Escapes HTML characters in the description content, and returns the result.
-             */
-            "text/plain",
-            /**
-             * Returns HTML string generated after rendering raw markdown.
-             */
-            "text/markdown",
-            /**
-             * Removes blacklisted HTML tags from the Description.
-             */
-            "text/html"
-        }
     }
 
     /**
@@ -560,6 +555,8 @@ declare module "postman-collection" {
         constructor(definition?: Description.definition | string);
         /**
          * Updates the content of this description property.
+         * @param content - -
+         * @param [type] - -
          */
         update(content: string | Description.definition, type?: string): void;
         /**
@@ -571,7 +568,7 @@ declare module "postman-collection" {
          */
         type: string;
         /**
-         * Processes the Description with the appropriate formatter as defined by Description.type
+         * Returns stringified Description.
          */
         toString(): string;
         /**
@@ -580,6 +577,7 @@ declare module "postman-collection" {
         toJSON(): any;
         /**
          * Checks whether a property is an instance of Description object.
+         * @param obj - -
          */
         static isDescription(obj: any): boolean;
     }
@@ -587,20 +585,25 @@ declare module "postman-collection" {
     /**
      * A type of PropertyList, EventList handles resolving events from parents. If an ItemGroup contains
      * a set of events, each Item in that group will inherit those events from its parent, and so on.
+     * @param parent - -
+     * @param populate - -
      */
     export class EventList extends PropertyList {
         constructor(parent: any, populate: object[]);
         /**
          * Returns an array of listeners filtered by the listener name
+         * @param name - -
          */
         listeners(name: string): Event[];
         /**
          * Returns all events with specific listeners only within this list. Refer to EventList.listeners for
          * procuring all inherited events
+         * @param name - -
          */
         listenersOwn(name: string): Event[];
         /**
          * Checks if the given object is an EventList.
+         * @param obj - -
          */
         static isEventList(obj: any): boolean;
     }
@@ -635,6 +638,7 @@ declare module "postman-collection" {
         constructor(definition: Event.definition);
         /**
          * Update an event.
+         * @param definition - -
          */
         update(definition: Event.definition): void;
         /**
@@ -654,7 +658,7 @@ declare module "postman-collection" {
          */
         type definition = {
             key: string;
-            value?: string;
+            value: string;
         };
     }
 
@@ -673,6 +677,10 @@ declare module "postman-collection" {
          */
         valueOf(): any | string;
         /**
+         * Convert the form-param to JSON compatible plain object.
+         */
+        toJSON(): any;
+        /**
          * Declare the list index key, so that property lists of form parameters work correctly
          */
         static _postman_propertyIndexKey: string;
@@ -688,6 +696,8 @@ declare module "postman-collection" {
 
     /**
      * Contains a list of header elements
+     * @param parent - -
+     * @param headers - -
      */
     export class HeaderList extends PropertyList {
         constructor(parent: any, headers: Header[]);
@@ -697,6 +707,7 @@ declare module "postman-collection" {
         contentSize(): number;
         /**
          * Checks if the given object is a HeaderList
+         * @param obj - -
          */
         static isHeaderList(obj: any): boolean;
     }
@@ -767,6 +778,7 @@ declare module "postman-collection" {
         valueOf(): string;
         /**
          * Assigns the given properties to the Header
+         * @param options - -
          */
         update(options: any): void;
         /**
@@ -779,24 +791,28 @@ declare module "postman-collection" {
         value: string;
         /**
          * Parses a multi line header string into an array of Header.definition.
+         * @param headerString - -
          */
         static parse(headerString: string): any[];
         /**
          * Parses a single Header.
+         * @param header - -
          */
         static parseSingle(header: string): any;
         /**
          * Stringifies an Array or PropertyList of Headers into a single string.
-         * @param [separator] - Specify a string for separating each header, by default, '\n', but sometimes,
-         * it might be more useful to use a carriage return ('\r\n')
+         * @param headers - -
+         * @param [separator = '\r\n'] - Specify a string for separating each header
          */
         static unparse(headers: any[] | PropertyList, separator?: string): string;
         /**
          * Unparses a single Header.
+         * @param header - -
          */
         static unparseSingle(header: string): string;
         /**
          * Check whether an object is an instance of PostmanHeader.
+         * @param obj - -
          */
         static isHeader(obj: any): boolean;
         /**
@@ -934,6 +950,7 @@ declare module "postman-collection" {
         };
         /**
          * Finds the first item with the given name or id in the current ItemGroup.
+         * @param idOrName - -
          */
         oneDeep(idOrName: string): void;
         /**
@@ -942,6 +959,7 @@ declare module "postman-collection" {
         authorizeRequestsUsing: any;
         /**
          * Check whether an object is an instance of ItemGroup.
+         * @param obj - -
          */
         static isItemGroup(obj: any): boolean;
     }
@@ -1078,10 +1096,13 @@ declare module "postman-collection" {
         getEvents(name: string): Event[];
         /**
          * Sets authentication method for the request within this item
+         * @param type - -
+         * @param [options] - -
          */
         authorizeRequestUsing(type: string | RequestAuth.definition, options?: VariableList): void;
         /**
          * Check whether an object is an instance of PostmanItem.
+         * @param obj - -
          */
         static isItem(obj: any): boolean;
     }
@@ -1127,8 +1148,9 @@ declare module "postman-collection" {
         /**
          * Track a mutation.
          * @param instruction - the type of mutation
+         * @param payload - mutation parameters
          */
-        track(instruction: string): void;
+        track(instruction: string, ...payload: any[]): void;
         /**
          * Compacts the recorded mutations removing duplicate mutations that apply on the same key path.
          */
@@ -1144,6 +1166,7 @@ declare module "postman-collection" {
         applyOn(target: any): void;
         /**
          * Check whether an object is an instance of MutationTracker.
+         * @param obj - -
          */
         static isMutationTracker(obj: any): boolean;
     }
@@ -1157,6 +1180,7 @@ declare module "postman-collection" {
     /**
      * Base of all properties in Postman Collection. It defines the root for all standalone properties for postman
      * collection.
+     * @param definition - -
      */
     export class PropertyBase {
         constructor(definition: PropertyBase.definition);
@@ -1173,6 +1197,8 @@ declare module "postman-collection" {
          * Tries to find the given property locally, and then proceeds to lookup in each parent,
          * going up the chain as necessary. Lookup will continue until `customizer` returns a truthy value. If used
          * without a customizer, the lookup will stop at the first parent that contains the property.
+         * @param property - -
+         * @param [customizer] - -
          */
         findInParents(property: string, customizer?: (...params: any[]) => any): any | undefined;
         /**
@@ -1191,14 +1217,19 @@ declare module "postman-collection" {
         /**
          * Filter function to check whether a key starts with underscore or not. These usually are the meta properties. It
          * returns `true` if the criteria is matched.
+         * @param value - -
+         * @param key - -
          */
         static propertyIsMeta(value: any, key: string): boolean;
         /**
          * Map function that removes the underscore prefix from an object key.
+         * @param value - -
+         * @param key - -
          */
         static propertyUnprefixMeta(value: any, key: string): string;
         /**
          * Static function which allows calling toJSON() on any object.
+         * @param obj - -
          */
         static toJSON(obj: any): any;
     }
@@ -1210,36 +1241,50 @@ declare module "postman-collection" {
         type Type = any;
     }
 
+    /**
+     * @param type - -
+     * @param parent - -
+     * @param populate - -
+     */
     export class PropertyList {
         constructor(type: (...params: any[]) => any, parent: any, populate: any[]);
         /**
          * Insert an element at the end of this list. When a reference member specified via second parameter is found, the
          * member is inserted at an index before the reference member.
+         * @param item - -
+         * @param [before] - -
          */
         insert(item: PropertyList.Type, before?: PropertyList.Type | string): void;
         /**
          * Insert an element at the end of this list. When a reference member specified via second parameter is found, the
          * member is inserted at an index after the reference member.
+         * @param item - -
+         * @param [after] - -
          */
         insertAfter(item: PropertyList.Type, after?: PropertyList.Type | string): void;
         /**
          * Adds or moves an item to the end of this list.
+         * @param item - -
          */
         append(item: PropertyList.Type): void;
         /**
          * Adds or moves an item to the beginning of this list.
+         * @param item - -
          */
         prepend(item: PropertyList.Type): void;
         /**
          * Add an item or item definition to this list.
+         * @param item - -
          */
         add(item: any | PropertyList.Type): void;
         /**
          * Add an item or update an existing item
+         * @param item - -
          */
         upsert(item: PropertyList.Type): boolean;
         /**
          * Removes all elements from the PropertyList for which the predicate returns truthy.
+         * @param predicate - -
          * @param context - Optional context to bind the predicate to.
          */
         remove(predicate: ((...params: any[]) => any) | string | PropertyList.Type, context: any): void;
@@ -1249,14 +1294,17 @@ declare module "postman-collection" {
         clear(): void;
         /**
          * Load one or more items
+         * @param items - -
          */
         populate(items: any | any[]): void;
         /**
          * Clears the list and adds new items.
+         * @param items - -
          */
         repopulate(items: any | any[]): void;
         /**
          * Add or update values from a source list.
+         * @param source - -
          * @param [prune = false] - Setting this to `true` will cause the extra items from the list to be deleted
          */
         assimilate(source: PropertyList | any[], prune?: boolean): void;
@@ -1266,20 +1314,30 @@ declare module "postman-collection" {
         all(): any;
         /**
          * Get Item in this list by `ID` reference. If multiple values are allowed, the last value is returned.
+         * @param id - -
          */
         one(id: string): PropertyList.Type;
         /**
          * Get the value of an item in this list. This is similar to PropertyList.one barring the fact that it
          * returns the value of the underlying type of the list content instead of the item itself.
+         * @param key - -
          */
         get(key: string | ((...params: any[]) => any)): PropertyList.Type | any;
         /**
          * Iterate on each item of this list.
+         * @param iterator - -
+         * @param context - -
          */
         each(iterator: (...params: any[]) => any, context: any): void;
+        /**
+         * @param rule - -
+         * @param context - -
+         */
         filter(rule: (...params: any[]) => any, context: any): void;
         /**
          * Find an item within the item group
+         * @param rule - -
+         * @param [context] - -
          */
         find(rule: (...params: any[]) => any, context?: any): Item | ItemGroup;
         /**
@@ -1301,18 +1359,24 @@ declare module "postman-collection" {
         count(): number;
         /**
          * Get a member of this list by it's index
+         * @param index - -
          */
         idx(index: number): PropertyList.Type;
         /**
          * Find the index of an item in this list
+         * @param item - -
          */
         indexOf(item: string | any): number;
         /**
          * Check whether an item exists in this list
+         * @param item - -
+         * @param [value] - -
          */
         has(item: string | PropertyList.Type, value?: any): boolean;
         /**
          * Iterates over all parents of the property list
+         * @param iterator - -
+         * @param [context] - -
          */
         eachParent(iterator: (...params: any[]) => any, context?: any): void;
         /**
@@ -1334,6 +1398,7 @@ declare module "postman-collection" {
         toString(): string;
         /**
          * Checks whether an object is a PropertyList
+         * @param obj - -
          */
         static isPropertyList(obj: any): boolean;
     }
@@ -1408,20 +1473,23 @@ declare module "postman-collection" {
          * @param content - The content of the description can be provided here as a string. Note that it is expected
          * that if the content is formatted in any other way than simple text, it should be specified in the subsequent
          * `type` parameter.
-         * @param [type = "text/plain"] - The type of the content can be one of the values mentioned in
-         * Description.format enumeration - namely `text/plain`, `text/markdown` or `text/html`.
+         * @param [type = "text/plain"] - The type of the content.
          */
         describe(content: string, type?: string): void;
         /**
          * This function accepts a string followed by a number of variable sources as arguments. One or more variable
          * sources can be provided and it will use the one that has the value in left-to-right order.
+         * @param str - -
+         * @param variables - -
          */
         static replaceSubstitutions(str: string, variables: VariableList | any | (VariableList | object)[]): string;
         /**
          * This function accepts an object followed by a number of variable sources as arguments. One or more variable
          * sources can be provided and it will use the one that has the value in left-to-right order.
+         * @param obj - -
+         * @param variables - -
          */
-        static replaceSubstitutionsIn(obj: any, variables: (VariableList | object)[], mutate?: boolean): any;
+        static replaceSubstitutionsIn(obj: any, variables: (VariableList | object)[]): any;
     }
 
     /**
@@ -1432,6 +1500,7 @@ declare module "postman-collection" {
      *              {match: 'https://example.com/*', host: 'proxy.com', port: 8080, tunnel: true},
      *              {match: 'http+https://example2.com/*', host: 'proxy2.com'},
      *          ]);
+     * @param parent - -
      * @param populate - The list of proxy objects
      */
     export class ProxyConfigList extends PropertyList {
@@ -1444,6 +1513,7 @@ declare module "postman-collection" {
         resolve(url?: URL): ProxyConfig.definition;
         /**
          * Checks whether an object is a ProxyConfigList
+         * @param obj - -
          */
         static isProxyConfigList(obj: any): boolean;
     }
@@ -1565,6 +1635,7 @@ declare module "postman-collection" {
         getProtocols(): string[];
         /**
          * Check whether an object is an instance of PostmanItem.
+         * @param obj - -
          */
         static isProxyConfig(obj: any): boolean;
     }
@@ -1593,6 +1664,9 @@ declare module "postman-collection" {
         toString(): string;
         /**
          * Updates the key and value of the query parameter
+         * @param param - -
+         * @param param.key - -
+         * @param [param.value] - -
          */
         update(param: {
             key: string;
@@ -1608,27 +1682,26 @@ declare module "postman-collection" {
         static _postman_propertyAllowsMultipleValues: boolean;
         /**
          * Parse a query string into an array of objects, where each object contains a key and a value.
+         * @param query - -
          */
         static parse(query: string): any[];
         /**
          * Parses a single query parameter.
+         * @param param - -
+         * @param idx - -
          * @param all - array of all params, in case this is being called while parsing multiple params.
          */
         static parseSingle(param: string, idx: number, all: string[]): any;
         /**
-         * Create a query string from array of parameters (or object of key-values). This function ensures that
-         * the double braces "{{" and "}}" are not URL-encoded on unparsing, which allows for variable-substitution.
-         * @param [options.encode = false] - Enables URL encoding of the parameters
-         * @param [options.ignoreDisabled = false] - Removes disabled query parameters when set to true.
+         * Create a query string from array of parameters (or object of key-values).
+         * @param params - -
          */
-        static unparse(params: any[] | any, options?: {
-            encode?: boolean;
-            ignoreDisabled?: boolean;
-        }): string;
+        static unparse(params: any[] | any): string;
         /**
          * Takes a query param and converts to string
+         * @param obj - -
          */
-        static unparseSingle(obj: any, encode: boolean): string;
+        static unparseSingle(obj: any): string;
     }
 
     export namespace RequestAuth {
@@ -1677,40 +1750,41 @@ declare module "postman-collection" {
         /**
          * Update the parameters of a specific authentication type. If none is provided then it uses the one marked as to be
          * used.
+         * @param options - -
+         * @param [type = this.type] - -
          */
         update(options: VariableList | any[] | any, type?: string): void;
         /**
          * Sets the authentication type to be used by this item.
+         * @param type - -
          * @param options - note that options set here would replace all existing
          * options for the particular auth
          */
         use(type: string, options: VariableList | any[] | any): void;
-        /**
-         * Fetches the currently selected AuthType.
-         */
-        current(): any | undefined;
         /**
          * Returns the parameters of the selected auth type
          */
         parameters(): VariableList;
         /**
          * Clears the definition of an auth type.
+         * @param type - -
          */
         clear(type: string): void;
         /**
          * Determines whether an authentication type name is valid or not
+         * @param type - -
          */
         static isValidType(type: string): boolean;
     }
 
     export namespace RequestBody {
         type definition = {
-            mode?: string;
-            raw?: string;
-            file?: string;
-            graphql?: any;
-            formdata?: object[];
-            urlencoded?: object[] | string;
+            mode: string;
+            raw: string;
+            file: string;
+            graphql: any;
+            formdata: object[];
+            urlencoded: object[] | string;
         };
         /**
          * MODES
@@ -1727,11 +1801,13 @@ declare module "postman-collection" {
     /**
      * RequestBody holds data related to the request body. By default, it provides a nice wrapper for url-encoded,
      * form-data, and raw types of request bodies.
+     * @param options - -
      */
     export class RequestBody extends PropertyBase {
         constructor(options: any);
         /**
          * Set the content of this request data
+         * @param options - -
          */
         update(options: any): void;
         /**
@@ -1775,6 +1851,10 @@ declare module "postman-collection" {
          * If the request body is set to a mode, but does not contain data, then we should not be sending it.
          */
         isEmpty(): boolean;
+        /**
+         * Convert the request body to JSON compatible plain object
+         */
+        toJSON(): any;
     }
 
     export namespace Request {
@@ -1788,18 +1868,19 @@ declare module "postman-collection" {
          * @property certificate - The certificate information for this request.
          */
         type definition = {
-            url?: string | Url;
-            method?: string;
-            header?: Header.definition[];
-            body?: RequestBody.definition;
-            auth?: RequestAuth.definition;
-            proxy?: ProxyConfig.definition;
-            certificate?: Certificate.definition;
+            url: string | Url;
+            method: string;
+            header: Header.definition[];
+            body: RequestBody.definition;
+            auth: RequestAuth.definition;
+            proxy: ProxyConfig.definition;
+            certificate: Certificate.definition;
         };
     }
 
     /**
      * A Postman HTTP request object.
+     * @param options - -
      */
     export class Request extends Property {
         constructor(options: Request.definition);
@@ -1808,6 +1889,7 @@ declare module "postman-collection" {
         method: string;
         /**
          * Updates the different properties of the request.
+         * @param options - -
          */
         update(options: Request.definition): void;
         body: RequestBody | undefined;
@@ -1816,10 +1898,13 @@ declare module "postman-collection" {
         certificate: Certificate | undefined;
         /**
          * Sets authentication method for the request
+         * @param type - -
+         * @param [options] - -
          */
         authorizeUsing(type: string | RequestAuth.definition, options?: VariableList): void;
         /**
          * Returns an object where the key is a header name and value is the header value.
+         * @param [options] - -
          * @param options.ignoreCase - When set to "true", will ensure that all the header keys are lower case.
          * @param options.enabled - Only get the enabled headers
          * @param options.multiValue - When set to "true", duplicate header values will be stored in an array
@@ -1833,6 +1918,7 @@ declare module "postman-collection" {
         }): any;
         /**
          * Calls the given callback on each Header object contained within the request.
+         * @param callback - -
          */
         forEachHeader(callback: (...params: any[]) => any): void;
         /**
@@ -1843,6 +1929,7 @@ declare module "postman-collection" {
         /**
          * Removes a header from the request.
          * @param toRemove - A header object to remove, or a string containing the header key.
+         * @param options - -
          * @param options.ignoreCase - If set to true, ignores case while removing the header.
          */
         removeHeader(toRemove: string | Header, options: {
@@ -1850,14 +1937,17 @@ declare module "postman-collection" {
         }): void;
         /**
          * Updates or inserts the given header.
+         * @param header - -
          */
         upsertHeader(header: any): void;
         /**
          * Add query parameters to the request.
+         * @param params - -
          */
         addQueryParams(params: QueryParam[] | string): void;
         /**
          * Removes parameters passed in params.
+         * @param params - -
          */
         removeQueryParams(params: string | any[]): void;
         /**
@@ -1875,11 +1965,8 @@ declare module "postman-collection" {
          */
         clone(): Request;
         /**
-         * Creates a copy of this request, with the appropriate auth headers or parameters added.
-         */
-        authorize(): Request;
-        /**
          * Check whether an object is an instance of ItemGroup.
+         * @param obj - -
          */
         static isRequest(obj: any): boolean;
     }
@@ -1924,6 +2011,7 @@ declare module "postman-collection" {
          * @property offset.response - timestamp when the first bytes are received from the server
          * @property offset.end - timestamp when the last bytes of the response are received
          * @property offset.done - timestamp when the response is received at the client
+         * @param timings - -
          */
         type timings = {
             start: number;
@@ -1944,6 +2032,7 @@ declare module "postman-collection" {
          * @property charset - the normalized character set
          * @property fileExtension - extension identified from the mime type
          * @property fileName - file name extracted from disposition header
+         * @property contentType - sanitized content-type extracted from header
          */
         type ResponseContentInfo = {
             mimeType: string;
@@ -1951,12 +2040,14 @@ declare module "postman-collection" {
             charset: string;
             fileExtension: string;
             fileName: string;
+            contentType: string;
         };
     }
 
     /**
      * Response holds data related to the request body. By default, it provides a nice wrapper for url-encoded,
      * form-data, and raw types of request bodies.
+     * @param options - -
      */
     export class Response extends Property {
         constructor(options: Response.definition);
@@ -1996,11 +2087,13 @@ declare module "postman-collection" {
          * }
          * // log the root-level keys in the response JSON.
          * console.log('All keys in json response: ' + Object.keys(json));
+         * @param [reviver] - -
          * @param [strict = false] - Specify whether JSON parsing will be strict. This will fail on comments and BOM
          */
         json(reviver?: (...params: any[]) => any, strict?: boolean): any;
         /**
          * Get the JSON from response body that reuturns JSONP response.
+         * @param [reviver] - -
          * @param [strict = false] - Specify whether JSON parsing will be strict. This will fail on comments and BOM
          */
         jsonp(reviver?: (...params: any[]) => any, strict?: boolean): void;
@@ -2021,11 +2114,13 @@ declare module "postman-collection" {
         size(): number;
         /**
          * Check whether an object is an instance of ItemGroup.
+         * @param obj - -
          */
         static isResponse(obj: any): boolean;
         /**
          * Converts the response object from the request module to the postman responseBody format
          * @param response - The response object, as received from the request module
+         * @param cookies - -
          * @returns The transformed responseBody
          */
         static createFromNode(response: any, cookies: any): any;
@@ -2033,6 +2128,7 @@ declare module "postman-collection" {
 
     /**
      * Postman scripts that are executed upon events on a collection  / request such as test and pre request.
+     * @param options - -
      */
     export class Script extends Property {
         constructor(options: any);
@@ -2042,6 +2138,7 @@ declare module "postman-collection" {
         toSource(): string;
         /**
          * Updates the properties of a Script.
+         * @param [options] - -
          * @param [options.type] - Script type
          * @param [options.src] - Script source url
          * @param [options.exec] - Script to execute
@@ -2056,20 +2153,23 @@ declare module "postman-collection" {
         exec: string[];
         /**
          * Check whether an object is an instance of ItemGroup.
+         * @param obj - -
          */
         static isScript(obj: any): boolean;
     }
 
     /**
      * Defines a URL.
+     * @param options - -
      */
     export class Url extends PropertyBase {
         constructor(options: any | string);
         /**
          * Set a URL.
+         * @param url - -
          */
         update(url: string | any): void;
-        auth: string;
+        auth: any;
         protocol: string;
         port: string;
         path: string[];
@@ -2090,29 +2190,24 @@ declare module "postman-collection" {
         removeQueryParams(params: QueryParam[] | string[] | string): void;
         /**
          * Unparses a {PostmanUrl} into a string.
-         */
-        getRaw(): string;
-        /**
-         * Unparses a {PostmanUrl} into a string.
          * @param [forceProtocol] - Forces the URL to have a protocol
          */
         toString(forceProtocol?: boolean): string;
         /**
          * Returns the request path, with a leading '/'.
+         * @param [unresolved = false] - -
          */
         getPath(unresolved?: boolean): string;
         /**
          * Returns the stringified query string for this URL.
-         * @param [encode = false] - Enables URL encoding when processing the query string
          */
-        getQueryString(encode?: boolean): string;
+        getQueryString(): string;
         /**
          * Returns the complete path, including the query string.
          * @example
          * /something/postman?hi=notbye
-         * @param [encodeQuery = false] - when set to `true` the query string part will be URL encoded
          */
-        getPathWithQuery(encodeQuery?: boolean): any | string;
+        getPathWithQuery(): any | string;
         /**
          * Returns the host part of the URL
          */
@@ -2125,37 +2220,51 @@ declare module "postman-collection" {
         /**
          * Parses a string to a PostmanUrl, decomposing the URL into it's constituent parts,
          * such as path, host, port, etc.
+         * @param url - -
          */
         static parse(url: string): any;
         /**
          * Checks whether an object is a Url
+         * @param obj - -
          */
         static isUrl(obj: any): boolean;
     }
 
+    /**
+     * @param parent - -
+     * @param populate - -
+     */
     export class VariableList extends PropertyList {
         constructor(parent: Property, populate: any | any[]);
         /**
          * Replaces the variable tokens inside a string with its actual values.
+         * @param str - -
          * @param [overrides] - additional objects to lookup for variable values
          */
         replace(str: string, overrides?: any): string;
         /**
          * Recursively replace strings in an object with instances of variables. Note that it clones the original object. If
          * the `mutate` param is set to true, then it replaces the same object instead of creating a new one.
+         * @param obj - -
          * @param [overrides] - additional objects to lookup for variable values
+         * @param [mutate = false] - -
          */
         substitute(obj: any[] | any, overrides?: object[], mutate?: boolean): any[] | any;
         /**
          * Using this function, one can sync the values of this variable list from a reference object.
+         * @param obj - -
+         * @param [track] - -
+         * @param [prune = true] - -
          */
         syncFromObject(obj: any, track?: boolean, prune?: boolean): any;
         /**
          * Transfer all variables from this list to an object
+         * @param [obj] - -
          */
         syncToObject(obj?: any): any;
         /**
          * Checks whether an object is a VariableList
+         * @param obj - -
          */
         static isVariableList(obj: any): boolean;
     }
@@ -2215,34 +2324,10 @@ declare module "postman-collection" {
     export class VariableScope extends Property {
         constructor(definition: VariableScope.definition, layers?: VariableList[]);
         /**
-         * @example
-         * Iterate on all variables
-         * var VariableScope = require('postman-collection').VariableScope,
-         *     env = new VariableScope([{
-         *         key: 'var1',
-         *         value: 'one'
-         *     }, {
-         *         key: 'var2',
-         *         value: 2,
-         *         type: 'number'
-         *     }, {
-         *         key: 'var3',
-         *         value: true,
-         *         type: 'boolean'
-         *     }]),
-         *     obj;
-         *
-         * // get all variables consolidated as an object
-         * obj = env.variables();
-         *
-         * Object.keys(obj).forEach(function(varname) {
-         *     console.log(obj[varname]); // log all variables
-         * });
-         */
-        variables(): any;
-        /**
          * Converts a list of Variables into an object where key is `_postman_propertyIndexKey` and value is determined
          * by the `valueOf` function
+         * @param excludeDisabled - -
+         * @param caseSensitive - -
          */
         toObject(excludeDisabled: boolean, caseSensitive: boolean): any;
         /**
@@ -2267,6 +2352,7 @@ declare module "postman-collection" {
         set(key: string, value: any, type?: Variable.types): void;
         /**
          * Removes the variable with the specified name.
+         * @param key - -
          */
         unset(key: string): void;
         /**
@@ -2295,6 +2381,7 @@ declare module "postman-collection" {
         toJSON(): any;
         /**
          * Check whether an object is an instance of VariableScope.
+         * @param obj - -
          */
         static isVariableScope(obj: any): boolean;
     }
@@ -2342,10 +2429,6 @@ declare module "postman-collection" {
              */
             number = "Number",
             /**
-             * A "json" type value stores JSON data format
-             */
-            json = "{\"in\":\"\",\"out\":\"\"}",
-            /**
              * A "array" type value stores Array data format
              */
             array = "{\"in\":\"\",\"out\":\"\"}",
@@ -2383,10 +2466,12 @@ declare module "postman-collection" {
         get(): Variable.types;
         /**
          * Sets the value of the variable.
+         * @param value - -
          */
         set(value: any): void;
         /**
          * An alias of this.get and this.set.
+         * @param [value] - -
          */
         valueOf(value?: any): any;
         /**
@@ -2396,17 +2481,24 @@ declare module "postman-collection" {
         /**
          * Typecasts a value to the Variable.types of this Variable. Returns the value of the variable
          * converted to the type specified in Variable.type.
+         * @param value - -
          */
         cast(value: any): any;
         /**
          * Sets or gets the type of the value.
+         * @param typeName - -
+         * @param _noCast - -
          * @returns - returns the current type of the variable from the list of Variable.types
          */
         valueType(typeName: string, _noCast: boolean): string;
         /**
          * Updates the type and value of a variable from an object or JSON definition of the variable.
+         * @param options - -
          */
         update(options: Variable.definition): void;
+        /**
+         * @param obj - -
+         */
         static isVariable(obj: any): boolean;
         /**
          * This (optional) flag denotes whether this property is disabled or not. Usually, this is helpful when a
@@ -2422,11 +2514,13 @@ declare module "postman-collection" {
 
     /**
      * Defines a Version.
+     * @param definition - -
      */
     export class Version extends PropertyBase {
         constructor(definition: Version.definition);
         /**
          * Set the version value as string or object with separate components of version
+         * @param value - -
          */
         set(value: any | string): void;
         /**
@@ -2448,6 +2542,8 @@ declare module "postman-collection" {
      * @example
      * An example UrlMatchPatternList
      * var matchPatternList = new UrlMatchPatternList(['https://*.google.com/*']);
+     * @param parent - -
+     * @param list - -
      */
     export class UrlMatchPatternList extends PropertyList {
         constructor(parent: any, list: string[]);
@@ -2474,6 +2570,7 @@ declare module "postman-collection" {
      * @example
      * An example UrlMatchPattern
      * var matchPattern = new UrlMatchPattern('https://*.google.com/*');
+     * @param options - -
      */
     export class UrlMatchPattern extends Property {
         constructor(options: UrlMatchPattern.definition);
@@ -2483,6 +2580,7 @@ declare module "postman-collection" {
         static pattern: string;
         /**
          * Assigns the given properties to the UrlMatchPattern.
+         * @param options - -
          */
         update(options: any): void;
         /**

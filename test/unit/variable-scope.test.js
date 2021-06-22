@@ -542,6 +542,7 @@ describe('VariableScope', function () {
             });
 
             // @todo delete last enabled on unset
+            // eslint-disable-next-line mocha/no-skipped-tests
             it.skip('should remove the last enabled from the multi value list', function () {
                 var scope = new VariableScope({
                     values: [{
@@ -640,6 +641,7 @@ describe('VariableScope', function () {
                         value: 'value1'
                     }]
                 });
+
                 expect(scope.replaceIn('{{var1}}')).to.equal('value1');
                 expect(scope.replaceIn(null)).to.equal(null);
                 expect(scope.replaceIn(undefined)).to.equal(undefined);
@@ -649,6 +651,7 @@ describe('VariableScope', function () {
 
             it('should work with no variables ', function () {
                 var emptyScope = new VariableScope();
+
                 expect(emptyScope.replaceIn('{{var1}}')).to.equal('{{var1}}');
             });
 
@@ -833,27 +836,18 @@ describe('VariableScope', function () {
     });
 
     describe('.variables()', function () {
-        var scope = new VariableScope({
-            values: [{
-                key: 'var1',
-                value: 'one'
-            }, {
-                key: 'var2',
-                value: 2,
-                type: 'number'
-            }, {
-                key: 'var3',
-                value: true,
-                type: 'boolean'
-            }]
-        });
-
-        it('should return a copy of all variables in an object form', function () {
-            expect(scope.variables()).to.be.an('object').that.eql({
-                var1: 'one',
-                var2: 2,
-                var3: true
+        it('should throw error as function is discontinued', function () {
+            var scope = new VariableScope({
+                values: [{
+                    key: 'var1',
+                    value: 'one'
+                }]
             });
+
+            expect(function () {
+                scope.variables();
+            // eslint-disable-next-line max-len
+            }).to.throw('`VariableScope#variables` has been discontinued, use `VariableScope#syncVariablesTo` instead.');
         });
     });
 
@@ -875,6 +869,7 @@ describe('VariableScope', function () {
 
         it('adds a variable list to the current instance', function () {
             var scope = new VariableScope(layerOne);
+
             scope.addLayer(layerTwo);
 
             expect(scope._layers.length).to.equal(1);
@@ -883,6 +878,7 @@ describe('VariableScope', function () {
 
         it('should bail out for a non VariableList argument', function () {
             var scope = new VariableScope(layerOne);
+
             scope.addLayer([]);
 
             expect(scope).to.not.have.property('_layers');
@@ -947,11 +943,13 @@ describe('VariableScope', function () {
 
         it('retrieves the value from the current scope', function () {
             var scope = new VariableScope(layerOne);
+
             expect(scope.get('var-1-layerOne')).to.equal('var-1-layerOne-value');
         });
 
         it('retrieves the value of a variable from parent scopes', function () {
             var scope = new VariableScope(layerOne);
+
             scope.addLayer(layerTwo);
 
             expect(scope.get('var-1-layerTwo')).to.equal('var-1-layerTwo-value');
@@ -959,6 +957,7 @@ describe('VariableScope', function () {
 
         it('retrieves the first occurence of a value should duplicates exist', function () {
             var scope = new VariableScope(layerOne);
+
             scope.addLayer(layerTwo);
             scope.addLayer(layerThree);
 
@@ -1009,9 +1008,9 @@ describe('VariableScope', function () {
             var scope = new VariableScope(keyVals);
 
             expect(scope.toObject()).to.eql({
-                'key1': 'val1',
-                'key2': 'val2',
-                'key3': 'val3'
+                key1: 'val1',
+                key2: 'val2',
+                key3: 'val3'
             });
         });
 
@@ -1022,9 +1021,9 @@ describe('VariableScope', function () {
             }));
 
             expect(scope.toObject()).to.eql({
-                'key1': 'val1',
-                'key2': 'val2',
-                'key3': 'duplicate-val3'
+                key1: 'val1',
+                key2: 'val2',
+                key3: 'duplicate-val3'
             });
         });
 
@@ -1034,9 +1033,9 @@ describe('VariableScope', function () {
                 localScope = new VariableScope([keyVals[2]], [envScope, globalScope]);
 
             expect(localScope.toObject()).to.eql({
-                'key1': 'val1',
-                'key2': 'val2',
-                'key3': 'val3'
+                key1: 'val1',
+                key2: 'val2',
+                key3: 'val3'
             });
         });
 
@@ -1051,8 +1050,8 @@ describe('VariableScope', function () {
                 scope = new VariableScope(localValues);
 
             expect(scope.toObject()).to.eql({
-                'key1': 'val1',
-                'key2': 'val2'
+                key1: 'val1',
+                key2: 'val2'
             });
         });
 
@@ -1084,9 +1083,9 @@ describe('VariableScope', function () {
                 variableScope = new VariableScope(null, [envScope, localScope, globalScope]);
 
             expect(variableScope.toObject()).to.eql({
-                'foo': '1',
-                'bar': '2',
-                'baz': '3'
+                foo: '1',
+                bar: '2',
+                baz: '3'
             });
         });
 
@@ -1118,9 +1117,9 @@ describe('VariableScope', function () {
                 variableScope = new VariableScope(envScope, [localScope, globalScope]);
 
             expect(variableScope.toObject()).to.eql({
-                'foo': '1',
-                'bar': '2',
-                'baz': '3'
+                foo: '1',
+                bar: '2',
+                baz: '3'
             });
         });
     });

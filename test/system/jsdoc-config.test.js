@@ -3,7 +3,8 @@
  * on the content of the file as well. Any change to .jsdoc-config.json must be accompanied by valid test case in this
  * spec-sheet.
  */
-var fs = require('fs');
+const fs = require('fs'),
+    expect = require('chai').expect;
 
 describe('JSDoc configuration', function () {
     var json,

@@ -180,6 +180,7 @@ describe('Proxy Config', function () {
     describe('test', function () {
         it('should match all urls provided', function () {
             var pc = new ProxyConfig({ host: 'proxy.com', tunnel: true });
+
             expect(pc.test('http://www.google.com/')).to.be.true;
             expect(pc.test('http://www.google.com:80/')).to.be.true;
             expect(pc.test('http://www.google.com:3000/')).to.be.true;
@@ -193,12 +194,14 @@ describe('Proxy Config', function () {
 
         it('should match all sdk Url provided', function () {
             var pc = new ProxyConfig({ host: 'proxy.com', tunnel: true });
+
             expect(pc.test(new Url('http://www.google.com/'))).to.be.true;
             expect(pc.test(new Url('http://foo.bar.com/'))).to.be.true;
         });
 
         it('should not match if URL pattern matches in bypass list', function () {
             var pc = new ProxyConfig({ host: 'proxy.com', bypass: ['http://localhost/*', '*://*/no-proxy'] });
+
             expect(pc.test('http://localhost')).to.be.false;
             expect(pc.test('http://localhost/proxy')).to.be.false;
             expect(pc.test('https://localhost')).to.be.true;
@@ -209,6 +212,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the http protocol', function () {
             var pc = new ProxyConfig({ match: 'http://*:*/*', host: 'proxy.com' });
+
             expect(pc.test('http://www.google.com/')).to.be.true;
             expect(pc.test('http://www.google.com:80/')).to.be.true;
             expect(pc.test('http://www.google.com:3000/')).to.be.true;
@@ -219,6 +223,7 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the http protocol, on any host, with path starts with /foo', function () {
             var pc = new ProxyConfig({ match: 'http://*:*/foo*', host: 'proxy.com' });
+
             expect(pc.test('http://example.com/foo/bar.html')).to.be.true;
             expect(pc.test('http://www.google.com/foo')).to.be.true;
             expect(pc.test('http://www.google.com:80/foo')).to.be.true;
@@ -230,61 +235,72 @@ describe('Proxy Config', function () {
 
         it('should parse any URL that uses the https protocol, is on a google.com host', function () {
             var pc = new ProxyConfig({ match: 'http://*.google.com/foo*bar', host: 'proxy.com' });
+
             expect(pc.test('http://www.google.com/foo/baz/bar')).to.be.true;
             expect(pc.test('http://docs.google.com/foobar')).to.be.true;
         });
 
         it('should parse any URL that uses the http protocol and is on the host 127.0.0.1', function () {
             var pc = new ProxyConfig({ match: 'http://127.0.0.1/*', host: 'proxy.com' });
+
             expect(pc.test('http://127.0.0.1/')).to.be.true;
             expect(pc.test('http://127.0.0.1/foo/bar.html')).to.be.true;
         });
 
         it('should parse any URL that uses the http protocol and is on the host ends with 0.0.1', function () {
             var pc = new ProxyConfig({ match: 'http://*.0.0.1/', host: 'proxy.com' });
+
             expect(pc.test('http://127.0.0.1/')).to.be.true;
             expect(pc.test('http://125.0.0.1/')).to.be.true;
         });
 
         it('should parse any URL which has host mail.google.com', function () {
             var pc = new ProxyConfig({ match: '*://mail.google.com/*', host: 'proxy.com' });
+
             expect(pc.test('http://mail.google.com/foo/baz/bar')).to.be.true;
             expect(pc.test('https://mail.google.com/foobar')).to.be.true;
         });
 
         it('Bad Match pattern [No Path]', function () {
             var pc = new ProxyConfig({ match: 'http://www.google.com', host: 'proxy.com' });
+
             expect(pc.test('http://www.google.com')).to.be.false;
         });
 
         it('Bad Match pattern ["*" in the host can be followed only by a "." or "/"]', function () {
             var pc = new ProxyConfig({ match: 'http://*foo/bar', host: 'proxy.com' });
+
             expect(pc.test('http://*foo.com')).to.be.false;
         });
 
         it('Bad Match pattern [If "*" is in the host, it must be the first character]', function () {
             var pc = new ProxyConfig({ match: 'http://foo.*.bar/baz', host: 'proxy.com' });
+
             expect(pc.test('http://foo.z.bar/baz')).to.be.false;
         });
 
         it('Bad Match pattern [Missing protocol separator ("/" should be "//")]', function () {
             var pc = new ProxyConfig({ match: 'http:/bar', host: 'proxy.com' });
+
             expect(pc.test('http:/bar.com')).to.be.false;
         });
 
         it('Bad Match pattern [Invalid protocol', function () {
             var pc = new ProxyConfig({ match: 'foo://*', host: 'proxy.com' });
+
             expect(pc.test('foo://www.google.com')).to.be.false;
         });
 
         it('Disallows test string with protocol not http or https', function () {
             var pc = new ProxyConfig({ match: 'http://*', host: 'proxy.com' });
+
             expect(pc.test('foo://www.google.com')).to.be.false;
             expect(pc.test('file://www.google.com')).to.be.false;
         });
 
         it('Disallows any test string when match protocol is not http or https', function () {
             var pc = new ProxyConfig({ match: 'ftp://*', host: 'proxy.com' });
+
             expect(pc.test('foo://www.google.com')).to.be.false;
             expect(pc.test('file://www.google.com')).to.be.false;
             expect(pc.test('http://www.google.com')).to.be.false;
@@ -293,6 +309,7 @@ describe('Proxy Config', function () {
 
         it('should return all the protocols in the match pattern', function () {
             var pc = new ProxyConfig({ match: 'http+https+file+ftp://*/*' });
+
             expect(pc.getProtocols()).to.eql(['http', 'https', 'file', 'ftp']);
         });
     });
@@ -358,6 +375,41 @@ describe('Proxy Config', function () {
             });
 
             expect(proxyConfig.getProxyUrl()).to.eql('http://%23%40%3F%3A:%23%40%3F%3A@proxy.com:9090');
+        });
+
+        it('should handle empty username', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true,
+                password: 'password'
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://:password@proxy.com:9090');
+        });
+
+        it('should handle empty password', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true,
+                username: 'user'
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://user@proxy.com:9090');
+        });
+
+        it('should handle empty username and password with authenticate=true', function () {
+            var proxyConfig = new ProxyConfig({
+                match: 'http+https://*/*',
+                host: 'proxy.com',
+                port: 9090,
+                authenticate: true
+            });
+
+            expect(proxyConfig.getProxyUrl()).to.eql('http://proxy.com:9090');
         });
     });
 });

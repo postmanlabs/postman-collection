@@ -62,6 +62,7 @@ describe('Url', function () {
         describe('hosts in query params', function () {
             it('should accept hosts as query param values in URL strings sans protocol', function () {
                 var url = new Url('google.com?param=https://fb.com');
+
                 expect(url.toJSON()).to.eql({
                     host: ['google', 'com'],
                     query: [{ key: 'param', value: 'https://fb.com' }],
@@ -71,6 +72,7 @@ describe('Url', function () {
 
             it('should accept hosts as query param values in URL strings with a protocol', function () {
                 var url = new Url('http://google.com?param=https://fb.com');
+
                 expect(url.toJSON()).to.eql({
                     protocol: 'http',
                     host: ['google', 'com'],
@@ -81,6 +83,7 @@ describe('Url', function () {
 
             it('should accept email addresses as query param values in URL strings', function () {
                 var url = new Url('localhost:80/api/validate-email?user_email=fred@gmail.com');
+
                 expect(url.toJSON()).to.eql({
                     host: ['localhost'],
                     path: ['api', 'validate-email'],
@@ -95,6 +98,7 @@ describe('Url', function () {
     describe('Constructor', function () {
         it('should be able to construct a URL from empty string', function () {
             var u = new Url('');
+
             expect(u).to.include.keys({
                 auth: undefined,
                 protocol: undefined,
@@ -128,6 +132,7 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -141,6 +146,7 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses with variables', function () {
             var subject = Url.parse('127.0.{{subnet}}.1');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -154,6 +160,7 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses with protocol', function () {
             var subject = Url.parse('http://127.0.0.1');
+
             expect(subject).to.deep.include({
                 protocol: 'http',
                 auth: undefined,
@@ -167,6 +174,7 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses with non standard protocol', function () {
             var subject = Url.parse('{{my-protocol}}://127.0.0.1');
+
             expect(subject).to.deep.include({
                 protocol: '{{my-protocol}}',
                 auth: undefined,
@@ -180,6 +188,7 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses with port', function () {
             var subject = Url.parse('127.0.0.1:80');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -193,6 +202,7 @@ describe('Url', function () {
 
         it('must parse invalid port of bare ipv4 addresses', function () {
             var subject = Url.parse('127.0.0.1:{{my-port}}');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -206,6 +216,7 @@ describe('Url', function () {
 
         it('must parse bare ipv4 addresses with protocol and port', function () {
             var subject = Url.parse('http://127.0.0.1:80');
+
             expect(subject).to.deep.include({
                 protocol: 'http',
                 auth: undefined,
@@ -218,6 +229,7 @@ describe('Url', function () {
         });
         it('must parse bare ipv4 addresses with protocol and port as variables', function () {
             var subject = Url.parse('{{my-protocol}}://127.0.0.1:{{my-port}}');
+
             expect(subject).to.deep.include({
                 protocol: '{{my-protocol}}',
                 auth: undefined,
@@ -230,6 +242,7 @@ describe('Url', function () {
         });
         it('must parse variable as host with protocol and port as variables', function () {
             var subject = Url.parse('{{my-protocol}}://{{my-host}}:{{my-port}}');
+
             expect(subject).to.deep.include({
                 protocol: '{{my-protocol}}',
                 auth: undefined,
@@ -243,6 +256,7 @@ describe('Url', function () {
 
         it('must parse trailing path backslash in ipv4 address', function () {
             var subject = Url.parse('http://127.0.0.1/');
+
             expect(subject).to.deep.include({
                 protocol: 'http',
                 auth: undefined,
@@ -256,6 +270,7 @@ describe('Url', function () {
 
         it('must parse trailing path backslash in ipv4 address and port', function () {
             var subject = Url.parse('http://127.0.0.1:8080/');
+
             expect(subject).to.deep.include({
                 protocol: 'http',
                 auth: undefined,
@@ -269,6 +284,7 @@ describe('Url', function () {
 
         it('must parse path backslash in ipv4 address and port', function () {
             var subject = Url.parse('http://127.0.0.1:8080/hello/world');
+
             expect(subject).to.deep.include({
                 protocol: 'http',
                 auth: undefined,
@@ -282,6 +298,7 @@ describe('Url', function () {
 
         it('must parse path backslash in ipv4 address and port and retain trailing slash marker', function () {
             var subject = Url.parse('http://127.0.0.1:8080/hello/world/');
+
             expect(subject).to.deep.include({
                 protocol: 'http',
                 auth: undefined,
@@ -295,6 +312,7 @@ describe('Url', function () {
 
         it('must parse path and query in ipv4 address and port and retain trailing slash marker', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -311,6 +329,7 @@ describe('Url', function () {
 
         it('must parse ip address host with query param and hash', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param#test-api');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -327,6 +346,7 @@ describe('Url', function () {
 
         it('must parse url query-param even if `?` is present in the URL hash', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param#?test-api=true');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -343,6 +363,7 @@ describe('Url', function () {
 
         it('must parse url even if duplicate `?` is present in query-param', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param&err?ng=v_l?e@!');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -362,6 +383,7 @@ describe('Url', function () {
 
         it('must parse url having auth even if duplicate `@` is present in query-param', function () {
             var subject = Url.parse('username:password@127.0.0.1/hello/world/?query=param&err?ng=v_l?e@!');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: {
@@ -384,6 +406,7 @@ describe('Url', function () {
 
         it('must parse query params with no values and save the value as null', function () {
             var subject = Url.parse('127.0.0.1/hello/world/?query=param&valueless1&valueless2');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -406,6 +429,7 @@ describe('Url', function () {
 
         it('must parse url hosts having dots within variables', function () {
             var subject = Url.parse('127.0.{{ip.subnet}}.1/get');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -417,6 +441,7 @@ describe('Url', function () {
 
         it('must parse url hosts having dots within variables and with values around variable', function () {
             var subject = Url.parse('127.0.1{{ip.subnet}}2.1/get');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -428,6 +453,7 @@ describe('Url', function () {
 
         it('must parse url hosts with invalid non-closing double braces', function () {
             var subject = Url.parse('127.0.{{ip.subnet.1');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -438,6 +464,7 @@ describe('Url', function () {
 
         it('must parse url hosts with multiple variables with dots', function () {
             var subject = Url.parse('{{ip.network_identifier}}.{{ip.subnet}}.1');
+
             expect(subject).to.deep.include({
                 protocol: undefined,
                 auth: undefined,
@@ -448,6 +475,7 @@ describe('Url', function () {
 
         it('must parse url with file protocol', function () {
             var subject = Url.parse('file://hostname/path/to/file.txt');
+
             expect(subject).to.deep.include({
                 protocol: 'file',
                 auth: undefined,
@@ -459,6 +487,7 @@ describe('Url', function () {
 
         it('must parse url with file protocol and file name without extension', function () {
             var subject = Url.parse('file://hostname/path/to/file');
+
             expect(subject).to.deep.include({
                 protocol: 'file',
                 auth: undefined,
@@ -470,6 +499,7 @@ describe('Url', function () {
 
         it('must parse url with file protocol and relative path to files', function () {
             var subject = Url.parse('file://../path/to/file');
+
             expect(subject).to.deep.include({
                 protocol: 'file',
                 auth: undefined,
@@ -481,6 +511,7 @@ describe('Url', function () {
 
         it('must parse url with file protocol and with leading / in path', function () {
             var subject = Url.parse('file:///etc/hosts');
+
             expect(subject.protocol).to.equal('file');
             expect(subject.auth).to.be.undefined;
             expect(subject.host).to.be.undefined;
@@ -490,6 +521,7 @@ describe('Url', function () {
 
         it('must parse url with file protocol and with leading / in path and relative path', function () {
             var subject = Url.parse('file:///../etc/hosts');
+
             expect(subject.protocol).to.equal('file');
             expect(subject.auth).to.be.undefined;
             expect(subject.host).to.be.undefined;
@@ -499,6 +531,7 @@ describe('Url', function () {
 
         it('must parse url with file protocol and with multiple leading / in path and relative path', function () {
             var subject = Url.parse('file:////../etc/hosts');
+
             expect(subject).to.deep.include({
                 protocol: 'file',
                 host: undefined,
@@ -510,6 +543,7 @@ describe('Url', function () {
 
         it('should parse path variables properly', function () {
             var subject = Url.parse('http://127.0.0.1/:a/:ab.json/:a+b');
+
             expect(subject).to.have.property('variable').that.has.lengthOf(3).that.eql([
                 { key: 'a' }, { key: 'ab.json' }, { key: 'a+b' }
             ]);
@@ -517,12 +551,14 @@ describe('Url', function () {
 
         it('should not parse empty path variables', function () {
             var subject = Url.parse('http://127.0.0.1/:/:/:var');
+
             expect(subject.path).to.eql([':', ':', ':var']);
             expect(subject.variable).to.have.lengthOf(1).that.eql([{ key: 'var' }]);
         });
 
         it('should parse a path variable only once if it is used multiple times', function () {
             var subject = Url.parse('http://127.0.0.1/:foo/:bar/:foo');
+
             expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
                 { key: 'foo' }, { key: 'bar' }
             ]);
@@ -530,6 +566,7 @@ describe('Url', function () {
 
         it('should parse path variables containing special characters properly', function () {
             var subject = Url.parse('http://127.0.0.1/:郵差/:foo.json');
+
             expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
                 { key: '郵差' }, { key: 'foo.json' }
             ]);
@@ -537,6 +574,7 @@ describe('Url', function () {
 
         it('should parse with variables having reserved characters', function () {
             var subject = Url.parse('{{p://}}://{{@}}:{{###}}@{{host.name}}:{{:p}}/{{f/o/o}}/bar?{{?}}={{&}}#{{[#]}}');
+
             expect(subject).to.deep.include({
                 raw: '{{p://}}://{{@}}:{{###}}@{{host.name}}:{{:p}}/{{f/o/o}}/bar?{{?}}={{&}}#{{[#]}}',
                 protocol: '{{p://}}',
@@ -551,6 +589,7 @@ describe('Url', function () {
 
         it('should handle newlines in every segment', function () {
             var subject = Url.parse('http://\n:\r@\r.\n:\n/\n/\n?\n=\r#\n');
+
             expect(subject).to.deep.include({
                 raw: 'http://\n:\r@\r.\n:\n/\n/\n?\n=\r#\n',
                 protocol: 'http',
@@ -565,6 +604,7 @@ describe('Url', function () {
 
         it('should handle empty port', function () {
             var subject = Url.parse('localhost:/path');
+
             expect(subject).to.deep.include({
                 raw: 'localhost:/path',
                 host: ['localhost'],
@@ -575,6 +615,7 @@ describe('Url', function () {
 
         it('should handle \\ in pathname', function () {
             var subject = Url.parse('http://localhost\\foo\\bar');
+
             expect(subject).to.deep.include({
                 raw: 'http://localhost\\foo\\bar',
                 host: ['localhost'],
@@ -584,6 +625,7 @@ describe('Url', function () {
 
         it('should distinguish between hostname and path', function () {
             var subject = Url.parse('http://postman.com:80\\@evil.com/#foo\\bar');
+
             expect(subject).to.deep.include({
                 raw: 'http://postman.com:80\\@evil.com/#foo\\bar',
                 protocol: 'http',
@@ -596,6 +638,7 @@ describe('Url', function () {
 
         it('should handle local IPv6 address', function () {
             var subject = Url.parse('http://[::1]/path');
+
             expect(subject).to.deep.include({
                 raw: 'http://[::1]/path',
                 host: ['[::1]'],
@@ -605,6 +648,7 @@ describe('Url', function () {
 
         it('should handle IPv6 address with port', function () {
             var subject = Url.parse('http://[::1]:8080');
+
             expect(subject).to.deep.include({
                 raw: 'http://[::1]:8080',
                 protocol: 'http',
@@ -615,6 +659,7 @@ describe('Url', function () {
 
         it('should handle IPv6 address without port', function () {
             var subject = Url.parse('http://[1080:0:0:0:8:800:200C:417A]/foo/bar?q=z');
+
             expect(subject).to.deep.include({
                 raw: 'http://[1080:0:0:0:8:800:200C:417A]/foo/bar?q=z',
                 protocol: 'http',
@@ -626,6 +671,7 @@ describe('Url', function () {
 
         it('should handle IPv6 with auth', function () {
             var subject = Url.parse('http://user:password@[1080:0:0:0:8:800:200C:417A]:8080');
+
             expect(subject).to.deep.include({
                 raw: 'http://user:password@[1080:0:0:0:8:800:200C:417A]:8080',
                 protocol: 'http',
@@ -640,6 +686,7 @@ describe('Url', function () {
 
         it('should trim whitespace on the left', function () {
             var subject = Url.parse(' \n\t\rhttp://localhost/path\n/name\n ');
+
             expect(subject).to.deep.include({
                 raw: 'http://localhost/path\n/name\n ',
                 protocol: 'http',
@@ -650,6 +697,7 @@ describe('Url', function () {
 
         it('should handle multiple : in auth', function () {
             var subject = Url.parse('http://user:p:a:s:s@localhost');
+
             expect(subject).to.deep.include({
                 raw: 'http://user:p:a:s:s@localhost',
                 protocol: 'http',
@@ -663,6 +711,7 @@ describe('Url', function () {
 
         it('should handle multiple @ in auth', function () {
             var subject = Url.parse('http://us@r:p@ssword@localhost');
+
             expect(subject).to.deep.include({
                 raw: 'http://us@r:p@ssword@localhost',
                 protocol: 'http',
@@ -676,6 +725,7 @@ describe('Url', function () {
 
         it('should handle multiple ???', function () {
             var subject = Url.parse('http://localhost/p/q=foo@bar???&hl=en&src=api&x=2&y=2&z=3&s=');
+
             expect(subject).to.deep.include({
                 raw: 'http://localhost/p/q=foo@bar???&hl=en&src=api&x=2&y=2&z=3&s=',
                 protocol: 'http',
@@ -695,6 +745,7 @@ describe('Url', function () {
 
         it('should handle multiple &&&', function () {
             var subject = Url.parse('http://localhost?foo=bar&&&bar=baz');
+
             expect(subject).to.deep.include({
                 raw: 'http://localhost?foo=bar&&&bar=baz',
                 protocol: 'http',
@@ -710,6 +761,7 @@ describe('Url', function () {
 
         it('should handle auth without password', function () {
             var subject = Url.parse('http://root@localhost');
+
             expect(subject).to.deep.include({
                 raw: 'http://root@localhost',
                 protocol: 'http',
@@ -723,6 +775,7 @@ describe('Url', function () {
 
         it('should handle handle protocol with backslashes', function () {
             var subject = Url.parse('http:\\\\localhost');
+
             expect(subject).to.deep.include({
                 raw: 'http:\\\\localhost',
                 protocol: 'http',
@@ -735,8 +788,9 @@ describe('Url', function () {
         rawUrls.forEach(function (rawUrl) {
             _.isString(rawUrl) && describe(rawUrl, function () {
                 var url = new Url(rawUrl);
+
                 it('should be unparsed properly', function () {
-                    expect(url.getRaw()).to.eql(rawUrl);
+                    expect(url.toString()).to.eql(rawUrl);
                 });
             });
         });
@@ -744,36 +798,42 @@ describe('Url', function () {
         it('should unparse urls containing parameters with equals sign properly', function () {
             var rawUrl = 'https://localhost:1234/get?param=(key==value)',
                 url = new Url(rawUrl);
+
             expect(url.toString()).to.eql(rawUrl);
         });
 
         it('should unparse urls containing parameters with no value or equal sign', function () {
             var urlstring = 'https://localhost:1234/get?param1=&param2&param3',
                 url = new Url(urlstring);
+
             expect(url.toString()).to.eql(urlstring);
         });
 
         it('should unparse urls containing parameters with no blank key and values', function () {
             var urlstring = 'https://localhost:1234/get?param1=&&&param2',
                 url = new Url(urlstring);
+
             expect(url.toString()).to.eql(urlstring);
         });
 
         it('should add a protocol if asked to', function () {
             var urlstring = 'httpbin.org/get?a=1',
                 url = new Url(urlstring);
+
             expect(url.toString(true)).to.eql('http://' + urlstring);
         });
 
         it('should not add a protocol if asked to but one already exists', function () {
             var urlstring = 'https://httpbin.org/get?a=1',
                 url = new Url(urlstring);
+
             expect(url.toString(true)).to.eql(urlstring);
         });
 
         it('should not add a protocol if not asked to', function () {
             var urlstring = 'httpbin.org/get?a=1',
                 url = new Url(urlstring);
+
             expect(url.toString()).to.eql(urlstring);
         });
 
@@ -801,6 +861,7 @@ describe('Url', function () {
         it('should be generated properly', function () {
             var rawUrl = rawUrls[8],
                 url = new Url(rawUrl);
+
             expect(url.getOAuth1BaseUrl()).to.eql('http://example.com/Resource');
         });
     });
@@ -809,6 +870,7 @@ describe('Url', function () {
         it('should be unparsed properly', function () {
             var rawUrl = 'https://postman-echo.com/post?a={{$guid}}',
                 url = new Url(rawUrl);
+
             expect(url.toString()).to.eql(rawUrl);
         });
     });
@@ -823,12 +885,12 @@ describe('Url', function () {
                 query: [{ key: 'id', value: '123' }],
                 variable: [
                     {
-                        'id': 'resource',
-                        'value': 'post'
+                        id: 'resource',
+                        value: 'post'
                     },
                     {
-                        'id': 'foo',
-                        'value': 'bar'
+                        id: 'foo',
+                        value: 'bar'
                     }
                 ]
             }).toJSON();
@@ -900,6 +962,7 @@ describe('Url', function () {
         it('should be processed and resolved', function () {
             var rawUrl = rawUrls[10],
                 url = new Url(rawUrl);
+
             expect(url.getPath()).to.eql('/get');
         });
 
@@ -970,15 +1033,6 @@ describe('Url', function () {
 
             expect(url.toString()).to.eql('https://postman-echo.com/get?w=x%y');
         });
-
-        it.skip('should be enabled if explicitly specified', function () {
-            var rawUrl = 'https://postman-echo.com/get?w=x%y',
-                url = new Url(rawUrl);
-
-            expect(url.toString({
-                encode: true
-            })).to.eql('https://postman-echo.com/get?w=x%25y');
-        });
     });
 
     describe('toString', function () {
@@ -988,8 +1042,27 @@ describe('Url', function () {
             expect(url.toString()).to.eql('');
         });
 
+        it('should handle null auth.user', function () {
+            var url = new Url({ host: 'localhost', auth: { user: null, password: 'password' } });
+
+            expect(url.toString()).to.eql(':password@localhost');
+        });
+
+        it('should handle null auth.password', function () {
+            var url = new Url({ host: 'localhost', auth: { user: 'user', password: null } });
+
+            expect(url.toString()).to.eql('user@localhost');
+        });
+
+        it('should handle empty auth', function () {
+            var url = new Url({ host: 'localhost', auth: {} });
+
+            expect(url.toString()).to.eql('localhost');
+        });
+
         it('should handle empty path properly', function () {
             var url = new Url('https://postman-echo.com///get');
+
             expect(url.toString()).to.eql('https://postman-echo.com///get');
         });
 
@@ -1002,6 +1075,7 @@ describe('Url', function () {
                     disabled: true
                 }]
             });
+
             expect(url.toString()).to.eql('https://postman-echo.com');
         });
 
@@ -1013,31 +1087,37 @@ describe('Url', function () {
                     value: 'bar =&= {{&baz=}}'
                 }]
             });
+
             expect(url.toString()).to.eql('https://postman-echo.com?%23foo%3D=bar =%26= {{&baz=}}');
         });
 
         it('should handle bare ipv4 addresses with variables', function () {
             var url = '127.0.{{subnet}}.1';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle bare ipv4 addresses with protocol and port as variables', function () {
             var url = '{{my-protocol}}://127.0.0.1:{{my-port}}';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle trailing path backslash in ipv4 address and port', function () {
             var url = 'http://127.0.0.1:8080/';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle url with file protocol and relative path to files', function () {
             var url = 'file://../path/to/file';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle path variables', function () {
             var url = 'http://127.0.0.1/:郵差/:/:foo.json';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
@@ -1056,36 +1136,43 @@ describe('Url', function () {
 
         it('should handle variables having reserved characters', function () {
             var url = '{{p://}}://{{@}}:{{###}}@{{host.name}}:{{:p}}/{{f/o/o}}/bar?{{?}}={{&}}#{{[#]}}';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle whitespace and newlines', function () {
             var url = 'http://\n:\r@\r.\n:\n/\n/\n?\n=\r#\n';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should trim whitespace on the left', function () {
             var url = ' \n\t\rhttp://localhost/path\n/name\n ';
+
             expect((new Url(url)).toString()).to.equal(url.trimLeft());
         });
 
         it('should replace \\ in pathname with /', function () {
             var url = 'http://localhost\\foo\\bar';
+
             expect((new Url(url)).toString()).to.equal('http://localhost/foo/bar');
         });
 
         it('should replace \\ in protocol with /', function () {
             var url = 'http:\\\\localhost/foo\\bar';
+
             expect((new Url(url)).toString()).to.equal('http://localhost/foo/bar');
         });
 
         it('should handle IPv6 with auth', function () {
             var url = 'http://user:password@[1080:0:0:0:8:800:200C:417A]:8080';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle multiple : and @ in auth', function () {
             var url = 'http://us@r:p@ssword@localhost';
+
             expect((new Url(url)).toString()).to.equal(url);
 
             url = 'http://user:p:a:s:s@localhost';
@@ -1094,46 +1181,63 @@ describe('Url', function () {
 
         it('should handle auth without user', function () {
             var url = 'http://:password@localhost';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should handle auth without password', function () {
             var url = 'http://user@localhost';
+
             expect((new Url(url)).toString()).to.equal(url);
+        });
+
+        it('should handle empty path', function () {
+            const url = new Url({ host: 'localhost', path: '' });
+
+            expect(url.path).to.be.undefined;
+            expect(url.toString()).to.equal('localhost');
         });
 
         it('should retain @ in auth without user and password', function () {
             var url = 'http://@localhost';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should retain : in auth with empty user and password', function () {
             var url = 'http://:@localhost';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should retain : in empty port', function () {
             var url = 'localhost:/path';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should retain / in empty path', function () {
             var url = 'localhost/';
+
             expect((new Url(url)).toString()).to.equal(url);
+            expect((new Url({ host: 'localhost', path: '/' })).toString()).to.equal(url);
         });
 
         it('should retain # in empty hash', function () {
             var url = 'localhost#';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should retain ? in empty query param', function () {
             var url = 'http://localhost?';
+
             expect((new Url(url)).toString()).to.equal(url);
         });
 
         it('should retain & in empty query params', function () {
             var url = 'http://localhost?&';
+
             expect((new Url(url)).toString()).to.equal(url);
 
             url = 'http://localhost?&&';
@@ -1181,6 +1285,7 @@ describe('Url', function () {
                 host: 'https://postman-echo.com',
                 query: 'foo=bar'
             });
+
             expect(url.toString()).to.equal('https://postman-echo.com?foo=bar');
         });
 
@@ -1189,6 +1294,7 @@ describe('Url', function () {
                 host: 'https://postman-echo.com',
                 query: null
             });
+
             expect(url.toString()).to.equal('https://postman-echo.com');
         });
 
@@ -1197,6 +1303,7 @@ describe('Url', function () {
                 host: 'https://postman-echo.com',
                 query: ''
             });
+
             expect(url.toString()).to.equal('https://postman-echo.com');
         });
     });
@@ -1297,11 +1404,13 @@ describe('Url', function () {
         describe('isUrl', function () {
             it('Should return true for the ProxyConfigList constructor', function () {
                 var url = new Url({}, []);
+
                 expect(Url.isUrl(url)).to.be.true;
             });
 
             it('Should return false for the invalid ProxyConfigList', function () {
                 var url = { _postman_propertyName: 'Url' };
+
                 expect(Url.isUrl(url)).to.be.false;
             });
         });
@@ -1340,9 +1449,20 @@ describe('Url', function () {
         });
     });
 
+    describe('.getRaw', function () {
+        it('should throw error as function is discontinued', function () {
+            var url = new Url('http://example.com');
+
+            expect(function () {
+                url.getRaw();
+            }).to.throw('`Url#getRaw` has been discontinued, use `Url#toString` instead.');
+        });
+    });
+
     describe('Query parameters', function () {
         it('should correctly add a string of query params to an existing Url instance', function () {
             var url = new Url();
+
             url.addQueryParams('alpha=foo&beta=bar');
 
             expect(url.toJSON().query).to.eql([
@@ -1354,6 +1474,7 @@ describe('Url', function () {
         // Refer: https://github.com/postmanlabs/postman-app-support/issues/8924
         it('should correctly add hasOwnProperty query key to an existing Url instance', function () {
             var url = new Url();
+
             url.addQueryParams('hasOwnProperty=0&foo=bar');
 
             expect(url.toJSON().query).to.eql([
@@ -1366,9 +1487,10 @@ describe('Url', function () {
             var url = new Url('https://postman-echo.com/get?alpha=foo&beta=bar&gamma=baz');
 
             url.removeQueryParams([{ key: 'alpha' }, { key: 'gamma' }]);
-            expect(url.toJSON().query).to.eql([
-                { key: 'beta', value: 'bar' }
-            ]);
+            expect(url.toJSON().query).to.eql([{ key: 'beta', value: 'bar' }]);
+
+            url.removeQueryParams(['beta']);
+            expect(url.toJSON().query).to.eql([]);
         });
 
         it('should return an empty string if there are no query parameters', function () {
@@ -1391,6 +1513,7 @@ describe('Url', function () {
 
         it('must be able to convert query params to object', function () {
             var url = new Url('http://127.0.0.1/hello/world/?query=param&query2=param2#test-api');
+
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
         });
     });
@@ -1540,6 +1663,7 @@ describe('Url', function () {
             // Reference: https://github.com/postmanlabs/postman-app-support/issues/6097
             it('should not remove trailing whitespace from value of last query parameter', function () {
                 var url = new Url('https://postman-echo.com/get?foo1  =bar1  &foo2  =bar2  ');
+
                 expect(url.query.all()[0].key).to.eql('foo1  ');
                 expect(url.query.all()[0].value).to.eql('bar1  ');
                 expect(url.query.all()[1].key).to.eql('foo2  ');

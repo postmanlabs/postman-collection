@@ -10,22 +10,26 @@ describe('HeaderList', function () {
 
     it('should be able to initialise with header as string', function () {
         var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
+
         expect(hl.count()).to.equal(2);
     });
 
     it('should be able to export headers to string', function () {
         var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
-        expect(hl.toString()).to.equal('Accept: *\nContent-Type: text/html');
+
+        expect(hl.toString()).to.equal('Accept: *\r\nContent-Type: text/html\r\n');
     });
 
     describe('.contentSize', function () {
         it('should be able to return header size', function () {
             var hl = new HeaderList(null, 'Accept: *\nContent-Type: text/html');
+
             expect(hl.contentSize(200, 'OK')).to.equal(36);
         });
 
         it('should return 0 for an empty header set', function () {
             var hl = new HeaderList();
+
             expect(hl.contentSize()).to.equal(0);
         });
 
@@ -38,6 +42,7 @@ describe('HeaderList', function () {
                 value: 'bar',
                 disabled: true
             }]);
+
             expect(hl.contentSize()).to.equal(7); // ": bar + CRLF"
         });
     });

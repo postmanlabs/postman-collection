@@ -15,9 +15,9 @@ describe('Request', function () {
                     method: 'GET',
                     url: {
                         host: ['postman-echo', 'com'],
-                        'protocol': 'http',
-                        'query': [],
-                        'variable': []
+                        protocol: 'http',
+                        query: [],
+                        variable: []
                     },
                     auth: {
                         type: 'basic',
@@ -43,9 +43,9 @@ describe('Request', function () {
                     method: 'GET',
                     url: {
                         host: ['postman-echo', 'com'],
-                        'protocol': 'http',
-                        'query': [],
-                        'variable': []
+                        protocol: 'http',
+                        query: [],
+                        variable: []
                     },
                     auth: null
                 },
@@ -129,8 +129,8 @@ describe('Request', function () {
 
                 expect(req).to.have.property('method', '[OBJECT OBJECT]');
 
-                req.update({ method: function () { return 0; } });
-                expect(req).to.have.property('method', 'FUNCTION () { RETURN 0; }');
+                req.update({ method () { return 0; } });
+                expect(req).to.have.property('method', 'METHOD () { RETURN 0; }');
 
                 req.update({ method: [1, 2, 3] });
                 expect(req).to.have.property('method', '1,2,3');
@@ -247,6 +247,7 @@ describe('Request', function () {
             expect(testReq.url.query.count()).to.equal(2);
             testReq.url.query.each(function (param, index) {
                 var expectedParam = addedParams[index];
+
                 expect(param).to.deep.include({
                     key: expectedParam.key,
                     value: expectedParam.value
@@ -258,6 +259,7 @@ describe('Request', function () {
     describe('getHeaders', function () {
         it('should return an empty object for empty requests', function () {
             var request = new Request();
+
             expect(request.getHeaders()).to.eql({});
         });
 
@@ -280,6 +282,7 @@ describe('Request', function () {
                     }]
                 },
                 request = new Request(rawRequest);
+
             expect(request.getHeaders()).to.eql({
                 name: ['alpha', 'beta', 'gamma'],
                 Name: 'alpha, beta'
@@ -303,6 +306,7 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             expect(request.getHeaders({ enabled: true })).to.eql({
                 some: 'header'
             });
@@ -321,6 +325,7 @@ describe('Request', function () {
                     }]
                 },
                 request = new Request(rawRequest);
+
             expect(request.getHeaders({ ignoreCase: true })).to.eql({
                 'content-type': 'application/json',
                 host: 'postman-echo.com'
@@ -345,6 +350,7 @@ describe('Request', function () {
                     }]
                 },
                 request = new Request(rawRequest);
+
             expect(request.getHeaders({ ignoreCase: true })).to.eql({
                 'content-type': ['application/json', 'application/xml'],
                 'x-forward-port': [443, 443]
@@ -380,6 +386,7 @@ describe('Request', function () {
                     }]
                 },
                 request = new Request(rawRequest);
+
             expect(request.getHeaders({ sanitizeKeys: true })).to.eql({
                 'Content-Type': 'application/json'
             });
@@ -404,6 +411,7 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             request.upsertHeader({ key: 'third', value: 'header' });
             expect(request.headers.toJSON()).to.eql([
                 {
@@ -438,6 +446,7 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             request.upsertHeader({ key: 'other', value: 'changedvalue' });
             expect(request.headers.toJSON()).to.eql([
                 {
@@ -468,6 +477,7 @@ describe('Request', function () {
                     ]
                 },
                 request = new Request(rawRequest);
+
             request.upsertHeader();
             expect(request.headers.toJSON()).to.eql([
                 {
@@ -660,31 +670,31 @@ describe('Request', function () {
             expect(request).to.have.property('auth');
             expect(request.toJSON()).to.have.property('auth');
             expect(request.auth.toJSON()).to.be.eql({
-                'basic': [{
-                    'key': 'username',
-                    'type': 'string',
-                    'value': 'postman'
+                basic: [{
+                    key: 'username',
+                    type: 'string',
+                    value: 'postman'
                 }, {
-                    'key': 'password',
-                    'type': 'string',
-                    'value': 'password'
+                    key: 'password',
+                    type: 'string',
+                    value: 'password'
                 }],
-                'type': 'basic'
+                type: 'basic'
             });
             request.authorizeUsing('type');
 
             // after setting to invalid type, the method should return with no change
             expect(request.auth.toJSON()).to.be.eql({
-                'basic': [{
-                    'key': 'username',
-                    'type': 'string',
-                    'value': 'postman'
+                basic: [{
+                    key: 'username',
+                    type: 'string',
+                    value: 'postman'
                 }, {
-                    'key': 'password',
-                    'type': 'string',
-                    'value': 'password'
+                    key: 'password',
+                    type: 'string',
+                    value: 'password'
                 }],
-                'type': 'basic'
+                type: 'basic'
             });
         });
     });
@@ -692,6 +702,7 @@ describe('Request', function () {
     describe('.size', function () {
         it('should handle blank request correctly', function () {
             var request = new Request();
+
             // GET / HTTP/1.1 + CRLF + CRLF
             expect(request.size()).to.eql({
                 body: 0, header: 18, total: 18, source: 'COMPUTED'
@@ -705,6 +716,7 @@ describe('Request', function () {
                     raw: 'POSTMAN'
                 }
             });
+
             expect(request.size()).to.eql({
                 body: 7, header: 18, total: 25, source: 'COMPUTED'
             });
@@ -720,6 +732,7 @@ describe('Request', function () {
                     }]
                 }
             });
+
             expect(request.size()).to.eql({
                 body: 7, header: 18, total: 25, source: 'COMPUTED' // foo=bar
             });
@@ -732,6 +745,7 @@ describe('Request', function () {
                     value: 'foo'
                 }]
             });
+
             expect(request.size()).to.eql({
                 body: 0, header: 35, total: 35, source: 'COMPUTED'
             });
@@ -748,6 +762,7 @@ describe('Request', function () {
                     raw: 'POSTMAN'
                 }
             });
+
             expect(request.size()).to.eql({
                 body: 7, header: 37, total: 44, source: 'CONTENT-LENGTH'
             });
@@ -755,7 +770,6 @@ describe('Request', function () {
     });
 
     describe('empty requests', function () {
-
         it('should have a url', function () {
             var r = new Request();
 
@@ -783,9 +797,9 @@ describe('Request', function () {
                 method: 'POSTMAN',
                 url: {
                     host: ['postman-echo', 'com'],
-                    'protocol': 'http',
-                    'query': [],
-                    'variable': []
+                    protocol: 'http',
+                    query: [],
+                    variable: []
                 }
             });
 
@@ -827,20 +841,6 @@ describe('Request', function () {
                     value: 'bar'
                 }
             ]);
-        });
-    });
-
-    describe('authorize', function () {
-        it('should throw error as function deprecated', function () {
-            var request = new Request({
-                    header: [{ key: 'foo', value: 'bar' }]
-                }),
-                newHeader = { key: 'testKey', value: 'testValue' };
-
-            request.addHeader(newHeader);
-            expect(function () {
-                request.authorize();
-            }).to.throw('collection request.authorize() has been discontinued');
         });
     });
 });

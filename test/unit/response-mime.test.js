@@ -4,18 +4,13 @@ var expect = require('chai').expect,
 describe('response mime', function () {
     it('must treat lack of information as plain text', function () {
         var response = new Response();
-        expect(response.mime()).to.eql({
-            type: 'text',
-            format: 'plain',
-            name: 'response',
-            ext: 'txt',
+
+        expect(response.contentInfo()).to.include({
+            mimeType: 'text',
+            mimeFormat: 'plain',
             charset: 'utf8',
-            _originalContentType: 'text/plain',
-            _sanitisedContentType: 'text/plain',
-            _accuratelyDetected: true,
-            filename: 'response.txt',
-            source: 'default',
-            detected: null
+            fileExtension: 'txt',
+            fileName: 'response.txt'
         });
     });
 
@@ -26,18 +21,13 @@ describe('response mime', function () {
                 value: 'application/json'
             }]
         });
-        expect(response.mime()).to.eql({
-            type: 'text',
-            format: 'json',
-            name: 'response',
-            ext: 'json',
+
+        expect(response.contentInfo()).to.include({
+            mimeType: 'text',
+            mimeFormat: 'json',
             charset: 'utf8',
-            _originalContentType: 'application/json',
-            _sanitisedContentType: 'application/json',
-            _accuratelyDetected: true,
-            filename: 'response.json',
-            source: 'header',
-            detected: null
+            fileExtension: 'json',
+            fileName: 'response.json'
         });
     });
 
@@ -48,18 +38,12 @@ describe('response mime', function () {
                 value: '  application  / hal+ json '
             }]
         });
-        expect(response.mime()).to.eql({
-            type: 'text',
-            format: 'json',
-            name: 'response',
-            ext: '',
+
+        expect(response.contentInfo()).to.include({
+            mimeType: 'text',
+            mimeFormat: 'json',
             charset: 'utf8',
-            _originalContentType: '  application  / hal+ json ',
-            _sanitisedContentType: 'application/hal+json',
-            _accuratelyDetected: true,
-            filename: 'response',
-            source: 'header',
-            detected: null
+            fileName: 'response'
         });
     });
 
@@ -70,18 +54,13 @@ describe('response mime', function () {
                 value: 'application/ogg; charset=utf8'
             }]
         });
-        expect(response.mime()).to.eql({
-            type: 'audio',
-            format: 'ogg',
-            name: 'response',
-            ext: 'ogx',
+
+        expect(response.contentInfo()).to.include({
+            mimeType: 'audio',
+            mimeFormat: 'ogg',
             charset: 'utf8',
-            _originalContentType: 'application/ogg; charset=utf8',
-            _sanitisedContentType: 'application/ogg',
-            _accuratelyDetected: true,
-            filename: 'response.ogx',
-            source: 'header',
-            detected: null
+            fileExtension: 'ogx',
+            fileName: 'response.ogx'
         });
     });
 
@@ -92,18 +71,12 @@ describe('response mime', function () {
                 value: 'application/x-ecmascript'
             }]
         });
-        expect(response.mime()).to.eql({
-            type: 'text',
-            format: 'script',
-            name: 'response',
-            ext: '',
+
+        expect(response.contentInfo()).to.include({
+            mimeType: 'text',
+            mimeFormat: 'script',
             charset: 'utf8',
-            _originalContentType: 'application/x-ecmascript',
-            _sanitisedContentType: 'application/x-ecmascript',
-            _accuratelyDetected: true,
-            filename: 'response',
-            source: 'header',
-            detected: null
+            fileName: 'response'
         });
     });
 
@@ -116,36 +89,24 @@ describe('response mime', function () {
             }]
         });
 
-        expect(response.mime()).to.eql({
-            type: 'text',
-            format: 'xml',
-            name: 'response',
-            ext: 'osfpvg',
+        expect(response.contentInfo()).to.include({
+            mimeType: 'text',
+            mimeFormat: 'xml',
             charset: 'utf8',
-            _originalContentType: 'application/vnd.yamaha.openscoreformat.osfpvg+xml',
-            _sanitisedContentType: 'application/vnd.yamaha.openscoreformat.osfpvg+xml',
-            _accuratelyDetected: true,
-            filename: 'response.osfpvg',
-            source: 'header',
-            detected: null
+            fileExtension: 'osfpvg',
+            fileName: 'response.osfpvg'
         });
 
         // customer reported
         // reusing the same response object
         response.headers.one('content-type').value = 'application/vnd.route66.link66+xml';
 
-        expect(response.mime()).to.eql({
-            type: 'text',
-            format: 'xml',
-            name: 'response',
-            ext: 'link66',
+        expect(response.contentInfo()).to.include({
+            mimeType: 'text',
+            mimeFormat: 'xml',
             charset: 'utf8',
-            _originalContentType: 'application/vnd.route66.link66+xml',
-            _sanitisedContentType: 'application/vnd.route66.link66+xml',
-            _accuratelyDetected: true,
-            filename: 'response.link66',
-            source: 'header',
-            detected: null
+            fileExtension: 'link66',
+            fileName: 'response.link66'
         });
     });
 
@@ -156,57 +117,28 @@ describe('response mime', function () {
                 value: 'machine/samaritan'
             }]
         });
-        expect(response.mime()).to.eql({
-            type: 'unknown',
-            format: 'raw',
-            name: 'response',
-            ext: '',
+
+        expect(response.contentInfo()).to.include({
+            mimeType: 'unknown',
+            mimeFormat: 'raw',
             charset: 'utf8',
-            _originalContentType: 'machine/samaritan',
-            _sanitisedContentType: 'machine/samaritan',
-            _accuratelyDetected: false,
-            filename: 'response',
-            source: 'header',
-            detected: null
+            fileName: 'response'
         });
     });
 
-    // @todo: update the test block when we decide to drop Node v4 support
-    it('must detect mime from body', function () {
-        var isNode4 = (/^v4\./).test(process.version),
-            sampleArray = [0xFF, 0xD8, 0xFF, 0x62, 0x75, 0x66, 0x66, 0x65, 0x72],
+    it('must detect mime from body if content-type is missing', function () {
+        var sampleArray = [0xFF, 0xD8, 0xFF, 0x62, 0x75, 0x66, 0x66, 0x65, 0x72],
             response = new Response({
-                header: [{
-                    key: 'content-type',
-                    value: 'machine/samaritan'
-                }],
-
                 // todo load real file content here (maybe 1x1 px bmp)
-                stream: isNode4 ? new Buffer(sampleArray) : Buffer.from(new Uint32Array(sampleArray))
+                stream: Buffer.from(new Uint32Array(sampleArray))
             });
 
-        expect(response.mime()).to.eql({
-            type: 'unknown',
-            format: 'raw',
-            name: 'response',
-            ext: '',
+        expect(response.contentInfo()).to.include({
+            mimeType: 'image',
+            mimeFormat: 'image',
             charset: 'utf8',
-            _originalContentType: 'machine/samaritan',
-            _sanitisedContentType: 'machine/samaritan',
-            _accuratelyDetected: false,
-            filename: 'response',
-            source: 'header',
-            detected: {
-                _accuratelyDetected: true,
-                _originalContentType: 'image/jpeg',
-                _sanitisedContentType: 'image/jpeg',
-                ext: 'jpeg',
-                charset: 'utf8',
-                filename: 'response.jpeg',
-                format: 'image',
-                name: 'response',
-                type: 'image'
-            }
+            fileExtension: 'jpg',
+            fileName: 'response.jpg'
         });
     });
 });

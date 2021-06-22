@@ -17,6 +17,7 @@ describe('contentInfo module', function () {
 
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
+            contentType: 'image/png',
             fileExtension: 'png',
             fileName: 'response.png',
             mimeFormat: 'image',
@@ -30,7 +31,7 @@ describe('contentInfo module', function () {
         var data = fs.readFileSync('test/fixtures/audio.mp3'),
             response = new Response({ stream: data });
 
-        expect(contentInfo.contentInfo(response)).to.eql({
+        expect(contentInfo.contentInfo(response)).to.include({
             charset: 'utf8',
             fileExtension: 'mp3',
             fileName: 'response.mp3',
@@ -51,8 +52,10 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('random').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to.eql({
             charset: 'utf8',
+            contentType: 'application/json',
             fileExtension: 'json',
             mimeFormat: 'json',
             mimeType: 'text',
@@ -68,7 +71,8 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('random').toJSON()
         });
-        expect(contentInfo.contentInfo(response)).to.eql({
+
+        expect(contentInfo.contentInfo(response)).to.include({
             charset: 'utf8',
             fileExtension: 'json',
             mimeFormat: 'json',
@@ -90,8 +94,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -113,8 +118,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -135,8 +141,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -158,8 +165,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -180,8 +188,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -202,8 +211,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -224,8 +234,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -246,8 +257,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -268,8 +280,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -290,8 +303,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -312,8 +326,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -346,6 +361,7 @@ describe('contentInfo module', function () {
         expect(contentInfo.contentInfo(response)).to
             .eql({
                 charset: 'utf8',
+                contentType: 'image/png',
                 fileExtension: 'png',
                 mimeFormat: 'image',
                 mimeType: 'image',
@@ -365,8 +381,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -387,8 +404,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -409,8 +427,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -431,8 +450,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -454,8 +474,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -477,8 +498,9 @@ describe('contentInfo module', function () {
             }],
             stream: Buffer.from('a test json').toJSON()
         });
+
         expect(contentInfo.contentInfo(response)).to
-            .eql({
+            .include({
                 charset: 'utf8',
                 fileExtension: 'json',
                 mimeFormat: 'json',
@@ -506,7 +528,7 @@ describe('contentInfo module', function () {
                 }],
                 stream: Buffer.from(data, 'base64') });
 
-        expect(contentInfo.contentInfo(response)).to.eql({
+        expect(contentInfo.contentInfo(response)).to.include({
             charset: 'utf8',
             fileExtension: 'png',
             fileName: 'testResponse.xml',
@@ -521,6 +543,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII char', function () {
             var filenameHeader = 'attachment;filename=' + 'hello.txt.'.repeat(1e5),
                 headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+
             expect(headerPart[1].toString()).to.have.lengthOf(1e6);
         });
 
@@ -528,6 +551,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             var filenameHeader = 'attachment;filename="' + 'hello你好你好你'.repeat(1e5) + '"',
                 headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+
             expect(headerPart).to.be.null;
         });
 
@@ -535,6 +559,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             var filenameHeader = 'attachment;filename="' + 'hello'.repeat(1e5) + '你好你好你'.repeat(1e5) + '"',
                 headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+
             expect(headerPart).to.be.null;
         });
 
@@ -542,6 +567,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             var filenameHeader = 'attachment;filename="' + 'helloooo你好'.repeat(1e5) + '"',
                 headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+
             expect(headerPart).to.be.null;
         });
 
@@ -549,12 +575,14 @@ describe('contentInfo module', function () {
         it('should not get ReDos by fileNameRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             var filenameHeader = 'attachment;filename="' + 'helloooo'.repeat(1e5) + '你你'.repeat(1e5) + '"',
                 headerPart = contentInfo.regexes.fileNameRegex.exec(filenameHeader);
+
             expect(headerPart).to.be.null;
         });
 
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII char', function () {
             var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello.txt.'.repeat(1e5),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+
             expect(headerPart[2].toString()).to.have.lengthOf(1e6);
         });
 
@@ -562,6 +590,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello你好你好你'.repeat(1e5),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+
             expect(headerPart[1]).to.eql('utf-8');
         });
 
@@ -569,6 +598,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'hello'.repeat(1e5) + '你好你好你'.repeat(1e5),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+
             expect(headerPart[1]).to.eql('utf-8');
         });
 
@@ -576,6 +606,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'helloooo你好'.repeat(1e5),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+
             expect(headerPart[1]).to.eql('utf-8');
         });
 
@@ -583,6 +614,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by encodedFileNameRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             var filenameHeader = 'attachment;filename*=utf-8\'en\'' + 'helloooo'.repeat(1e5) + '你你'.repeat(1e5),
                 headerPart = contentInfo.regexes.encodedFileNameRegex.exec(filenameHeader);
+
             expect(headerPart[1]).to.eql('utf-8');
         });
 
@@ -590,6 +622,7 @@ describe('contentInfo module', function () {
             // eslint-disable-next-line
             var filenameHeader = "\\h\\e\\l\\l\\o".repeat(2e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+
             expect(headerPart).to.have.lengthOf(1e6);
         });
 
@@ -598,6 +631,7 @@ describe('contentInfo module', function () {
             // eslint-disable-next-line
             var filenameHeader = "\\h\\e\\l\\l\\o\\你\\好\\你\\好\\你".repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+
             expect(headerPart).to.have.lengthOf(5e5);
         });
 
@@ -606,6 +640,7 @@ describe('contentInfo module', function () {
             // eslint-disable-next-line
             var filenameHeader = "\\h\\e\\l\\l\\o".repeat(1e5) + "\\你\\好\\你\\好\\你".repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+
             expect(headerPart).to.have.lengthOf(5e5);
         });
 
@@ -614,6 +649,7 @@ describe('contentInfo module', function () {
             // eslint-disable-next-line
             var filenameHeader = "\\h\\e\\l\\l\\o\\o\\o\\o\\你\\好".repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+
             expect(headerPart).to.have.lengthOf(8e5);
         });
 
@@ -622,12 +658,14 @@ describe('contentInfo module', function () {
             // eslint-disable-next-line
             var filenameHeader = "\\h\\e\\l\\l\\o\\o\\o\\o".repeat(1e5) + "\\你\\你".repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.quotedPairRegex);
+
             expect(headerPart).to.have.lengthOf(8e5);
         });
 
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII char', function () {
             var filenameHeader = 'hellohello'.repeat(1e6),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+
             expect(headerPart).to.be.null;
         });
 
@@ -635,6 +673,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             var filenameHeader = 'hello你好你好你'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(5e5);
         });
 
@@ -642,6 +681,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             var filenameHeader = 'hello'.repeat(1e5) + '你好你好你'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(5e5);
         });
 
@@ -649,6 +689,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             var filenameHeader = 'helloooo你好'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(2e5);
         });
 
@@ -656,12 +697,14 @@ describe('contentInfo module', function () {
         it('should not get ReDos by nonLatinCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             var filenameHeader = 'helloooo'.repeat(1e5) + '你你'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.nonLatinCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(2e5);
         });
 
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII char', function () {
             var filenameHeader = '%E4%BD%A0%E5%A5%BD%0A%0A%0A%0A'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(1e6);
         });
 
@@ -669,6 +712,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split parse', function () {
             var filenameHeader = '%E4%BD%A0%E5%A5你好你好你'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(5e5);
         });
 
@@ -676,6 +720,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars equal split Multiple', function () {
             var filenameHeader = '%E4%BD%A0%E5%A5'.repeat(1e5) + '你好你好你'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(5e5);
         });
 
@@ -683,6 +728,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split parse', function () {
             var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5你好'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(8e5);
         });
 
@@ -690,6 +736,7 @@ describe('contentInfo module', function () {
         it('should not get ReDos by hexCharMatchRegex for long patterns of ASCII and non-ASCII chars unequal split multiple', function () {
             var filenameHeader = '%E4%BD%A0%E5%A5%A0%E5%A5'.repeat(1e5) + '你你'.repeat(1e5),
                 headerPart = filenameHeader.match(contentInfo.regexes.hexCharMatchRegex);
+
             expect(headerPart).to.have.lengthOf(8e5);
         });
     });
