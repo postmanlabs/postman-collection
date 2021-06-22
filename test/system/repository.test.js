@@ -2,8 +2,9 @@
  * @fileOverview This test specs runs tests on the package.json file of repository. It has a set of strict tests on the
  * content of the file as well. Any change to package.json must be accompanied by valid test case in this spec-sheet.
  */
-var _ = require('lodash'),
+const _ = require('lodash'),
     yml = require('js-yaml'),
+    expect = require('chai').expect,
     parseIgnore = require('parse-gitignore');
 
 describe('project repository', function () {
@@ -37,7 +38,7 @@ describe('project repository', function () {
 
             it('should have a valid version string in form of <major>.<minor>.<revision>', function () {
                 expect(json.version)
-                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line max-len, security/detect-unsafe-regex
                     .to.match(/^((\d+)\.(\d+)\.(\d+))(?:-([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?(?:\+([\dA-Za-z-]+(?:\.[\dA-Za-z-]+)*))?$/);
             });
         });
@@ -47,15 +48,11 @@ describe('project repository', function () {
                 expect(json.devDependencies).to.be.an('object');
             });
 
-            it('should have specified version for dependencies ', function () {
-                _.forEach(json.devDependencies, function (dep) {
-                    expect(dep).to.be.ok;
-                });
-            });
-
-            it('should point to specific package version; (*, ^, ~) not expected', function () {
-                _.forEach(json.devDependencies, function (dep) {
-                    expect((/^\d/).test(dep)).to.be.ok;
+            it('should point to a valid semver', function () {
+                Object.keys(json.devDependencies).forEach(function (dependencyName) {
+                    // eslint-disable-next-line security/detect-non-literal-regexp
+                    expect(json.devDependencies[dependencyName]).to.match(new RegExp('((\\d+)\\.(\\d+)\\.(\\d+))(?:-' +
+                        '([\\dA-Za-z\\-]+(?:\\.[\\dA-Za-z\\-]+)*))?(?:\\+([\\dA-Za-z\\-]+(?:\\.[\\dA-Za-z\\-]+)*))?$'));
                 });
             });
         });
@@ -69,6 +66,13 @@ describe('project repository', function () {
                 _.forEach(json.dependencies, function (dep) {
                     expect((/^\d/).test(dep)).to.be.ok;
                 });
+            });
+
+            // @note file-type v4 was not browserify compatible and the latest
+            // version is async, we don't use it in a critical flow and since it
+            // does not have any dependencies, it's safe to use this older version.
+            it('should have dependency file-type v3.9.0', function () {
+                expect(json.dependencies).to.have.property('file-type', '3.9.0');
             });
         });
 
@@ -170,7 +174,7 @@ describe('project repository', function () {
         });
 
         it('should have appropriate plugins specified', function () {
-            expect(json.plugins).to.eql(['jsdoc', 'security', 'lodash']);
+            expect(json.plugins).to.eql(['jsdoc', 'lodash', 'security']);
         });
 
         it('should have appropriate environments specified', function () {

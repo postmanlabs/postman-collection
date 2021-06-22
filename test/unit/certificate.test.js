@@ -6,6 +6,7 @@ describe('Certificate', function () {
     describe('constructor', function () {
         it('should allow creating an empty Certificate', function () {
             var certificate = new Certificate();
+
             expect(certificate).to.not.eql(undefined);
             expect(certificate._postman_propertyName).to.not.eql('Certificate');
         });

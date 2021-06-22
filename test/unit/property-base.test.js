@@ -237,7 +237,6 @@ describe('PropertyBase', function () {
             expect(base.parent()).to.eql({
                 g: true
             });
-
         });
 
         it('should return parent if grandparent is missing', function () {
@@ -249,7 +248,6 @@ describe('PropertyBase', function () {
             expect(base.parent()).to.eql({
                 p: true
             });
-
         });
     });
 });

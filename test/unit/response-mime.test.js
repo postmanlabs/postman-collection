@@ -4,6 +4,7 @@ var expect = require('chai').expect,
 describe('response mime', function () {
     it('must treat lack of information as plain text', function () {
         var response = new Response();
+
         expect(response.contentInfo()).to.include({
             mimeType: 'text',
             mimeFormat: 'plain',
@@ -20,6 +21,7 @@ describe('response mime', function () {
                 value: 'application/json'
             }]
         });
+
         expect(response.contentInfo()).to.include({
             mimeType: 'text',
             mimeFormat: 'json',
@@ -36,6 +38,7 @@ describe('response mime', function () {
                 value: '  application  / hal+ json '
             }]
         });
+
         expect(response.contentInfo()).to.include({
             mimeType: 'text',
             mimeFormat: 'json',
@@ -51,6 +54,7 @@ describe('response mime', function () {
                 value: 'application/ogg; charset=utf8'
             }]
         });
+
         expect(response.contentInfo()).to.include({
             mimeType: 'audio',
             mimeFormat: 'ogg',
@@ -67,6 +71,7 @@ describe('response mime', function () {
                 value: 'application/x-ecmascript'
             }]
         });
+
         expect(response.contentInfo()).to.include({
             mimeType: 'text',
             mimeFormat: 'script',
@@ -83,6 +88,7 @@ describe('response mime', function () {
                 value: 'application/vnd.yamaha.openscoreformat.osfpvg+xml'
             }]
         });
+
         expect(response.contentInfo()).to.include({
             mimeType: 'text',
             mimeFormat: 'xml',
@@ -111,6 +117,7 @@ describe('response mime', function () {
                 value: 'machine/samaritan'
             }]
         });
+
         expect(response.contentInfo()).to.include({
             mimeType: 'unknown',
             mimeFormat: 'raw',

@@ -25,8 +25,8 @@ module.exports = {
             query: [{ key: 'id', value: '123' }],
             variable: [
                 {
-                    'id': 'resource',
-                    'value': 'post'
+                    id: 'resource',
+                    value: 'post'
                 }
             ]
         },

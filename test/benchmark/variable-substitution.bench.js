@@ -1,5 +1,4 @@
-/* eslint-disable mocha/no-mocha-arrows */
-suite('SuperString variable substitution', () => {
+suite('SuperString variable substitution', function () {
     var SDK = require('../../'),
         fakerMap = require('../../lib/superstring/faker-map'),
 

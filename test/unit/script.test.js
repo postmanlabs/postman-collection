@@ -139,7 +139,9 @@ describe('Script', function () {
                 var script = new Script();
 
                 script.update({ exec: 123 });
+                expect(script).to.have.property('exec', undefined);
 
+                script.update(null);
                 expect(script).to.have.property('exec', undefined);
             });
 
@@ -196,6 +198,7 @@ describe('Script', function () {
     describe('json representation', function () {
         it('must match what the script was initialized with', function () {
             var jsonified = script.toJSON();
+
             expect(jsonified).to.deep.include({
                 type: rawScript.type,
                 exec: rawScript.exec.split('\n')

@@ -10,6 +10,7 @@ describe('Property', function () {
         });
         it('allows a description to be set', function () {
             var prop = new Property();
+
             expect(prop.describe).to.be.a('function');
             expect(function () {
                 prop.describe.bind(prop)('Hello Postman');
@@ -290,7 +291,7 @@ describe('Property', function () {
          *    '1': ''
          * }
          *
-         * @param {Integer} n - Number of variables
+         * @param {Number} n - Number of variables
          * @returns {Object}
          */
         function getVariables (n) {
@@ -311,7 +312,7 @@ describe('Property', function () {
          * getPolyChainedVariable(2)
          * '{{1{{0}}}}'
          *
-         * @param {Integer} n
+         * @param {Number} n -
          * @returns {String}
          */
         function getPolyChainedVariable (n) {
@@ -370,6 +371,14 @@ describe('Property', function () {
         it('should bail out if a non-object argument is passed', function () {
             expect(Property.replaceSubstitutionsIn('random')).to.equal('random');
         });
+
+        it('should not mutate the original object', function () {
+            const obj = { foo: '{{var}}' },
+                variables = [{ var: 'bar' }];
+
+            expect(Property.replaceSubstitutionsIn(obj, variables)).to.eql({ foo: 'bar' });
+            expect(obj).to.eql({ foo: '{{var}}' });
+        });
     });
 
     describe('variable resolution', function () {
@@ -407,6 +416,7 @@ describe('Property', function () {
                         headerName: 'Content-Type'
                     }
                 ]);
+
             expect(resolved).to.eql(expectedResolution);
         });
 
@@ -472,6 +482,7 @@ describe('Property', function () {
                         zeta: 'test'
                     }
                 ]);
+
             expect(resolved).to.eql(expectedResolution);
         });
     });

@@ -80,7 +80,6 @@ describe('RequestAuth', function () {
                 foo: 'bar'
             });
         });
-
     });
 
     describe('.update', function () {
