@@ -535,7 +535,7 @@ describe('Url', function () {
             expect(subject).to.deep.include({
                 protocol: 'file',
                 host: undefined,
-                path: ['', '..', 'etc', 'hosts']
+                path: ['..', 'etc', 'hosts']
             });
             expect(subject.auth).to.be.undefined;
             expect(subject.port).to.be.undefined;
