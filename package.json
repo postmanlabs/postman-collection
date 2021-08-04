@@ -39,7 +39,7 @@
     "liquid-json": "0.3.1",
     "lodash": "4.17.21",
     "mime-format": "2.0.1",
-    "mime-types": "2.1.31",
+    "mime-types": "2.1.32",
     "postman-url-encoder": "3.0.3",
     "semver": "7.3.5",
     "uuid": "8.3.2"
