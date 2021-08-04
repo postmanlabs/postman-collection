@@ -1,3 +1,9 @@
+master:
+  fixed bugs:
+    - >-
+      GH-1208 Fixed descriptions for `$randomInt` and `$randomPrice` dynamic
+      variables
+
 4.0.1:
   date: 2021-07-25
   chores:
