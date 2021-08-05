@@ -1,8 +1,8 @@
 master:
   fixed bugs:
     - >-
-      GH-1208 Fixed descriptions for `$randomInt` and `$randomPrice` dynamic
-      variables
+      GH-1208, GH-1209 Fixed descriptions for `$randomInt` and `$randomPrice`
+      dynamic variables
 
 4.0.1:
   date: 2021-07-25
