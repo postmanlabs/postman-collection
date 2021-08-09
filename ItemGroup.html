@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ItemGroup - Postman Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home 4.0.2</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-concepts.html">Postman SDK Concepts</a></li><li><a href="tutorial-mutation-tracking.html">Tracking Variable Mutations</a></li></ul><h3>Classes</h3><ul><li><a href="Certificate.html">Certificate</a><ul class='methods'><li data-type='method'><a href="Certificate.html#.isCertificate">isCertificate</a></li><li data-type='method'><a href="Certificate.html#canApplyTo">canApplyTo</a></li><li data-type='method'><a href="Certificate.html#describe">describe</a></li><li data-type='method'><a href="Certificate.html#findInParents">findInParents</a></li><li data-type='method'><a href="Certificate.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Certificate.html#meta">meta</a></li><li data-type='method'><a href="Certificate.html#parent">parent</a></li><li data-type='method'><a href="Certificate.html#toJSON">toJSON</a></li><li data-type='method'><a href="Certificate.html#update">update</a></li></ul></li><li><a href="CertificateList.html">CertificateList</a><ul class='methods'><li data-type='method'><a href="CertificateList.html#.isCertificateList">isCertificateList</a></li><li data-type='method'><a href="CertificateList.html#add">add</a></li><li data-type='method'><a href="CertificateList.html#all">all</a></li><li data-type='method'><a href="CertificateList.html#append">append</a></li><li data-type='method'><a href="CertificateList.html#assimilate">assimilate</a></li><li data-type='method'><a href="CertificateList.html#clear">clear</a></li><li data-type='method'><a href="CertificateList.html#count">count</a></li><li data-type='method'><a href="CertificateList.html#each">each</a></li><li data-type='method'><a href="CertificateList.html#eachParent">eachParent</a></li><li data-type='method'><a href="CertificateList.html#filter">filter</a></li><li data-type='method'><a href="CertificateList.html#find">find</a></li><li data-type='method'><a href="CertificateList.html#get">get</a></li><li data-type='method'><a href="CertificateList.html#has">has</a></li><li data-type='method'><a href="CertificateList.html#idx">idx</a></li><li data-type='method'><a href="CertificateList.html#indexOf">indexOf</a></li><li data-type='method'><a href="CertificateList.html#insert">insert</a></li><li data-type='method'><a href="CertificateList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="CertificateList.html#map">map</a></li><li data-type='method'><a href="CertificateList.html#one">one</a></li><li data-type='method'><a href="CertificateList.html#populate">populate</a></li><li data-type='method'><a href="CertificateList.html#prepend">prepend</a></li><li data-type='method'><a href="CertificateList.html#reduce">reduce</a></li><li data-type='method'><a href="CertificateList.html#remove">remove</a></li><li data-type='method'><a href="CertificateList.html#repopulate">repopulate</a></li><li data-type='method'><a href="CertificateList.html#resolveOne">resolveOne</a></li><li data-type='method'><a href="CertificateList.html#toObject">toObject</a></li><li data-type='method'><a href="CertificateList.html#toString">toString</a></li><li data-type='method'><a href="CertificateList.html#upsert">upsert</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#.isCollection">isCollection</a></li><li data-type='method'><a href="Collection.html#describe">describe</a></li><li data-type='method'><a href="Collection.html#findInParents">findInParents</a></li><li data-type='method'><a href="Collection.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Collection.html#meta">meta</a></li><li data-type='method'><a href="Collection.html#oneDeep">oneDeep</a></li><li data-type='method'><a href="Collection.html#parent">parent</a></li><li data-type='method'><a href="Collection.html#syncVariablesFrom">syncVariablesFrom</a></li><li data-type='method'><a href="Collection.html#syncVariablesTo">syncVariablesTo</a></li><li data-type='method'><a href="Collection.html#toJSON">toJSON</a></li></ul></li><li><a href="Cookie.html">Cookie</a><ul class='methods'><li data-type='method'><a href="Cookie.html#.isCookie">isCookie</a></li><li data-type='method'><a href="Cookie.html#.parse">parse</a></li><li data-type='method'><a href="Cookie.html#.stringify">stringify</a></li><li data-type='method'><a href="Cookie.html#.unparse">unparse</a></li><li data-type='method'><a href="Cookie.html#.unparseSingle">unparseSingle</a></li><li data-type='method'><a href="Cookie.html#findInParents">findInParents</a></li><li data-type='method'><a href="Cookie.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Cookie.html#meta">meta</a></li><li data-type='method'><a href="Cookie.html#parent">parent</a></li><li data-type='method'><a href="Cookie.html#toJSON">toJSON</a></li><li data-type='method'><a href="Cookie.html#toString">toString</a></li><li data-type='method'><a href="Cookie.html#valueOf">valueOf</a></li></ul></li><li><a href="CookieList.html">CookieList</a><ul class='methods'><li data-type='method'><a href="CookieList.html#.isCookieList">isCookieList</a></li><li data-type='method'><a href="CookieList.html#add">add</a></li><li data-type='method'><a href="CookieList.html#all">all</a></li><li data-type='method'><a href="CookieList.html#append">append</a></li><li data-type='method'><a href="CookieList.html#assimilate">assimilate</a></li><li data-type='method'><a href="CookieList.html#clear">clear</a></li><li data-type='method'><a href="CookieList.html#count">count</a></li><li data-type='method'><a href="CookieList.html#each">each</a></li><li data-type='method'><a href="CookieList.html#eachParent">eachParent</a></li><li data-type='method'><a href="CookieList.html#filter">filter</a></li><li data-type='method'><a href="CookieList.html#find">find</a></li><li data-type='method'><a href="CookieList.html#get">get</a></li><li data-type='method'><a href="CookieList.html#has">has</a></li><li data-type='method'><a href="CookieList.html#idx">idx</a></li><li data-type='method'><a href="CookieList.html#indexOf">indexOf</a></li><li data-type='method'><a href="CookieList.html#insert">insert</a></li><li data-type='method'><a href="CookieList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="CookieList.html#map">map</a></li><li data-type='method'><a href="CookieList.html#one">one</a></li><li data-type='method'><a href="CookieList.html#populate">populate</a></li><li data-type='method'><a href="CookieList.html#prepend">prepend</a></li><li data-type='method'><a href="CookieList.html#reduce">reduce</a></li><li data-type='method'><a href="CookieList.html#remove">remove</a></li><li data-type='method'><a href="CookieList.html#repopulate">repopulate</a></li><li data-type='method'><a href="CookieList.html#toObject">toObject</a></li><li data-type='method'><a href="CookieList.html#toString">toString</a></li><li data-type='method'><a href="CookieList.html#upsert">upsert</a></li></ul></li><li><a href="Description.html">Description</a><ul class='methods'><li data-type='method'><a href="Description.html#.isDescription">isDescription</a></li><li data-type='method'><a href="Description.html#toJSON">toJSON</a></li><li data-type='method'><a href="Description.html#toString">toString</a></li><li data-type='method'><a href="Description.html#update">update</a></li></ul></li><li><a href="Event.html">Event</a><ul class='methods'><li data-type='method'><a href="Event.html#describe">describe</a></li><li data-type='method'><a href="Event.html#findInParents">findInParents</a></li><li data-type='method'><a href="Event.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Event.html#meta">meta</a></li><li data-type='method'><a href="Event.html#parent">parent</a></li><li data-type='method'><a href="Event.html#toJSON">toJSON</a></li><li data-type='method'><a href="Event.html#update">update</a></li></ul></li><li><a href="EventList.html">EventList</a><ul class='methods'><li data-type='method'><a href="EventList.html#.isEventList">isEventList</a></li><li data-type='method'><a href="EventList.html#add">add</a></li><li data-type='method'><a href="EventList.html#all">all</a></li><li data-type='method'><a href="EventList.html#append">append</a></li><li data-type='method'><a href="EventList.html#assimilate">assimilate</a></li><li data-type='method'><a href="EventList.html#clear">clear</a></li><li data-type='method'><a href="EventList.html#count">count</a></li><li data-type='method'><a href="EventList.html#each">each</a></li><li data-type='method'><a href="EventList.html#eachParent">eachParent</a></li><li data-type='method'><a href="EventList.html#filter">filter</a></li><li data-type='method'><a href="EventList.html#find">find</a></li><li data-type='method'><a href="EventList.html#get">get</a></li><li data-type='method'><a href="EventList.html#has">has</a></li><li data-type='method'><a href="EventList.html#idx">idx</a></li><li data-type='method'><a href="EventList.html#indexOf">indexOf</a></li><li data-type='method'><a href="EventList.html#insert">insert</a></li><li data-type='method'><a href="EventList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="EventList.html#listeners">listeners</a></li><li data-type='method'><a href="EventList.html#listenersOwn">listenersOwn</a></li><li data-type='method'><a href="EventList.html#map">map</a></li><li data-type='method'><a href="EventList.html#one">one</a></li><li data-type='method'><a href="EventList.html#populate">populate</a></li><li data-type='method'><a href="EventList.html#prepend">prepend</a></li><li data-type='method'><a href="EventList.html#reduce">reduce</a></li><li data-type='method'><a href="EventList.html#remove">remove</a></li><li data-type='method'><a href="EventList.html#repopulate">repopulate</a></li><li data-type='method'><a href="EventList.html#toObject">toObject</a></li><li data-type='method'><a href="EventList.html#toString">toString</a></li><li data-type='method'><a href="EventList.html#upsert">upsert</a></li></ul></li><li><a href="FormParam.html">FormParam</a><ul class='methods'><li data-type='method'><a href="FormParam.html#toJSON">toJSON</a></li><li data-type='method'><a href="FormParam.html#toString">toString</a></li><li data-type='method'><a href="FormParam.html#valueOf">valueOf</a></li></ul></li><li><a href="Header.html">Header</a><ul class='methods'><li data-type='method'><a href="Header.html#.create">create</a></li><li data-type='method'><a href="Header.html#.isHeader">isHeader</a></li><li data-type='method'><a href="Header.html#.parse">parse</a></li><li data-type='method'><a href="Header.html#.parseSingle">parseSingle</a></li><li data-type='method'><a href="Header.html#.unparse">unparse</a></li><li data-type='method'><a href="Header.html#.unparseSingle">unparseSingle</a></li><li data-type='method'><a href="Header.html#describe">describe</a></li><li data-type='method'><a href="Header.html#findInParents">findInParents</a></li><li data-type='method'><a href="Header.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Header.html#meta">meta</a></li><li data-type='method'><a href="Header.html#parent">parent</a></li><li data-type='method'><a href="Header.html#toJSON">toJSON</a></li><li data-type='method'><a href="Header.html#toString">toString</a></li><li data-type='method'><a href="Header.html#update">update</a></li><li data-type='method'><a href="Header.html#valueOf">valueOf</a></li></ul></li><li><a href="HeaderList.html">HeaderList</a><ul class='methods'><li data-type='method'><a href="HeaderList.html#.isHeaderList">isHeaderList</a></li><li data-type='method'><a href="HeaderList.html#add">add</a></li><li data-type='method'><a href="HeaderList.html#all">all</a></li><li data-type='method'><a href="HeaderList.html#append">append</a></li><li data-type='method'><a href="HeaderList.html#assimilate">assimilate</a></li><li data-type='method'><a href="HeaderList.html#clear">clear</a></li><li data-type='method'><a href="HeaderList.html#contentSize">contentSize</a></li><li data-type='method'><a href="HeaderList.html#count">count</a></li><li data-type='method'><a href="HeaderList.html#each">each</a></li><li data-type='method'><a href="HeaderList.html#eachParent">eachParent</a></li><li data-type='method'><a href="HeaderList.html#filter">filter</a></li><li data-type='method'><a href="HeaderList.html#find">find</a></li><li data-type='method'><a href="HeaderList.html#get">get</a></li><li data-type='method'><a href="HeaderList.html#has">has</a></li><li data-type='method'><a href="HeaderList.html#idx">idx</a></li><li data-type='method'><a href="HeaderList.html#indexOf">indexOf</a></li><li data-type='method'><a href="HeaderList.html#insert">insert</a></li><li data-type='method'><a href="HeaderList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="HeaderList.html#map">map</a></li><li data-type='method'><a href="HeaderList.html#one">one</a></li><li data-type='method'><a href="HeaderList.html#populate">populate</a></li><li data-type='method'><a href="HeaderList.html#prepend">prepend</a></li><li data-type='method'><a href="HeaderList.html#reduce">reduce</a></li><li data-type='method'><a href="HeaderList.html#remove">remove</a></li><li data-type='method'><a href="HeaderList.html#repopulate">repopulate</a></li><li data-type='method'><a href="HeaderList.html#toObject">toObject</a></li><li data-type='method'><a href="HeaderList.html#toString">toString</a></li><li data-type='method'><a href="HeaderList.html#upsert">upsert</a></li></ul></li><li><a href="Item.html">Item</a><ul class='methods'><li data-type='method'><a href="Item.html#.isItem">isItem</a></li><li data-type='method'><a href="Item.html#authorizeRequestUsing">authorizeRequestUsing</a></li><li data-type='method'><a href="Item.html#describe">describe</a></li><li data-type='method'><a href="Item.html#findInParents">findInParents</a></li><li data-type='method'><a href="Item.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Item.html#getAuth">getAuth</a></li><li data-type='method'><a href="Item.html#getEvents">getEvents</a></li><li data-type='method'><a href="Item.html#meta">meta</a></li><li data-type='method'><a href="Item.html#parent">parent</a></li><li data-type='method'><a href="Item.html#toJSON">toJSON</a></li></ul></li><li><a href="ItemGroup.html">ItemGroup</a><ul class='methods'><li data-type='method'><a href="ItemGroup.html#.isItemGroup">isItemGroup</a></li><li data-type='method'><a href="ItemGroup.html#describe">describe</a></li><li data-type='method'><a href="ItemGroup.html#findInParents">findInParents</a></li><li data-type='method'><a href="ItemGroup.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="ItemGroup.html#meta">meta</a></li><li data-type='method'><a href="ItemGroup.html#oneDeep">oneDeep</a></li><li data-type='method'><a href="ItemGroup.html#parent">parent</a></li><li data-type='method'><a href="ItemGroup.html#toJSON">toJSON</a></li></ul></li><li><a href="MutationTracker.html">MutationTracker</a><ul class='methods'><li data-type='method'><a href="MutationTracker.html#.isMutationTracker">isMutationTracker</a></li><li data-type='method'><a href="MutationTracker.html#applyOn">applyOn</a></li><li data-type='method'><a href="MutationTracker.html#compact">compact</a></li><li data-type='method'><a href="MutationTracker.html#count">count</a></li><li data-type='method'><a href="MutationTracker.html#findInParents">findInParents</a></li><li data-type='method'><a href="MutationTracker.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="MutationTracker.html#meta">meta</a></li><li data-type='method'><a href="MutationTracker.html#parent">parent</a></li><li data-type='method'><a href="MutationTracker.html#toJSON">toJSON</a></li><li data-type='method'><a href="MutationTracker.html#track">track</a></li></ul></li><li><a href="Property.html">Property</a><ul class='methods'><li data-type='method'><a href="Property.html#.replaceSubstitutions">replaceSubstitutions</a></li><li data-type='method'><a href="Property.html#.replaceSubstitutionsIn">replaceSubstitutionsIn</a></li><li data-type='method'><a href="Property.html#describe">describe</a></li><li data-type='method'><a href="Property.html#findInParents">findInParents</a></li><li data-type='method'><a href="Property.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Property.html#meta">meta</a></li><li data-type='method'><a href="Property.html#parent">parent</a></li><li data-type='method'><a href="Property.html#toJSON">toJSON</a></li></ul></li><li><a href="PropertyBase.html">PropertyBase</a><ul class='methods'><li data-type='method'><a href="PropertyBase.html#.propertyIsMeta">propertyIsMeta</a></li><li data-type='method'><a href="PropertyBase.html#.propertyUnprefixMeta">propertyUnprefixMeta</a></li><li data-type='method'><a href="PropertyBase.html#.toJSON">toJSON</a></li><li data-type='method'><a href="PropertyBase.html#findInParents">findInParents</a></li><li data-type='method'><a href="PropertyBase.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="PropertyBase.html#meta">meta</a></li><li data-type='method'><a href="PropertyBase.html#parent">parent</a></li><li data-type='method'><a href="PropertyBase.html#toJSON">toJSON</a></li></ul></li><li><a href="PropertyList.html">PropertyList</a><ul class='methods'><li data-type='method'><a href="PropertyList.html#.isPropertyList">isPropertyList</a></li><li data-type='method'><a href="PropertyList.html#add">add</a></li><li data-type='method'><a href="PropertyList.html#all">all</a></li><li data-type='method'><a href="PropertyList.html#append">append</a></li><li data-type='method'><a href="PropertyList.html#assimilate">assimilate</a></li><li data-type='method'><a href="PropertyList.html#clear">clear</a></li><li data-type='method'><a href="PropertyList.html#count">count</a></li><li data-type='method'><a href="PropertyList.html#each">each</a></li><li data-type='method'><a href="PropertyList.html#eachParent">eachParent</a></li><li data-type='method'><a href="PropertyList.html#filter">filter</a></li><li data-type='method'><a href="PropertyList.html#find">find</a></li><li data-type='method'><a href="PropertyList.html#get">get</a></li><li data-type='method'><a href="PropertyList.html#has">has</a></li><li data-type='method'><a href="PropertyList.html#idx">idx</a></li><li data-type='method'><a href="PropertyList.html#indexOf">indexOf</a></li><li data-type='method'><a href="PropertyList.html#insert">insert</a></li><li data-type='method'><a href="PropertyList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="PropertyList.html#map">map</a></li><li data-type='method'><a href="PropertyList.html#one">one</a></li><li data-type='method'><a href="PropertyList.html#populate">populate</a></li><li data-type='method'><a href="PropertyList.html#prepend">prepend</a></li><li data-type='method'><a href="PropertyList.html#reduce">reduce</a></li><li data-type='method'><a href="PropertyList.html#remove">remove</a></li><li data-type='method'><a href="PropertyList.html#repopulate">repopulate</a></li><li data-type='method'><a href="PropertyList.html#toObject">toObject</a></li><li data-type='method'><a href="PropertyList.html#toString">toString</a></li><li data-type='method'><a href="PropertyList.html#upsert">upsert</a></li></ul></li><li><a href="ProxyConfig.html">ProxyConfig</a><ul class='methods'><li data-type='method'><a href="ProxyConfig.html#.isProxyConfig">isProxyConfig</a></li><li data-type='method'><a href="ProxyConfig.html#describe">describe</a></li><li data-type='method'><a href="ProxyConfig.html#findInParents">findInParents</a></li><li data-type='method'><a href="ProxyConfig.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="ProxyConfig.html#getProtocols">getProtocols</a></li><li data-type='method'><a href="ProxyConfig.html#getProxyUrl">getProxyUrl</a></li><li data-type='method'><a href="ProxyConfig.html#meta">meta</a></li><li data-type='method'><a href="ProxyConfig.html#parent">parent</a></li><li data-type='method'><a href="ProxyConfig.html#test">test</a></li><li data-type='method'><a href="ProxyConfig.html#toJSON">toJSON</a></li><li data-type='method'><a href="ProxyConfig.html#update">update</a></li><li data-type='method'><a href="ProxyConfig.html#updateProtocols">updateProtocols</a></li></ul></li><li><a href="ProxyConfigList.html">ProxyConfigList</a><ul class='methods'><li data-type='method'><a href="ProxyConfigList.html#.isProxyConfigList">isProxyConfigList</a></li><li data-type='method'><a href="ProxyConfigList.html#add">add</a></li><li data-type='method'><a href="ProxyConfigList.html#all">all</a></li><li data-type='method'><a href="ProxyConfigList.html#append">append</a></li><li data-type='method'><a href="ProxyConfigList.html#assimilate">assimilate</a></li><li data-type='method'><a href="ProxyConfigList.html#clear">clear</a></li><li data-type='method'><a href="ProxyConfigList.html#count">count</a></li><li data-type='method'><a href="ProxyConfigList.html#each">each</a></li><li data-type='method'><a href="ProxyConfigList.html#eachParent">eachParent</a></li><li data-type='method'><a href="ProxyConfigList.html#filter">filter</a></li><li data-type='method'><a href="ProxyConfigList.html#find">find</a></li><li data-type='method'><a href="ProxyConfigList.html#get">get</a></li><li data-type='method'><a href="ProxyConfigList.html#has">has</a></li><li data-type='method'><a href="ProxyConfigList.html#idx">idx</a></li><li data-type='method'><a href="ProxyConfigList.html#indexOf">indexOf</a></li><li data-type='method'><a href="ProxyConfigList.html#insert">insert</a></li><li data-type='method'><a href="ProxyConfigList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="ProxyConfigList.html#map">map</a></li><li data-type='method'><a href="ProxyConfigList.html#one">one</a></li><li data-type='method'><a href="ProxyConfigList.html#populate">populate</a></li><li data-type='method'><a href="ProxyConfigList.html#prepend">prepend</a></li><li data-type='method'><a href="ProxyConfigList.html#reduce">reduce</a></li><li data-type='method'><a href="ProxyConfigList.html#remove">remove</a></li><li data-type='method'><a href="ProxyConfigList.html#repopulate">repopulate</a></li><li data-type='method'><a href="ProxyConfigList.html#resolve">resolve</a></li><li data-type='method'><a href="ProxyConfigList.html#toObject">toObject</a></li><li data-type='method'><a href="ProxyConfigList.html#toString">toString</a></li><li data-type='method'><a href="ProxyConfigList.html#upsert">upsert</a></li></ul></li><li><a href="QueryParam.html">QueryParam</a><ul class='methods'><li data-type='method'><a href="QueryParam.html#.parse">parse</a></li><li data-type='method'><a href="QueryParam.html#.parseSingle">parseSingle</a></li><li data-type='method'><a href="QueryParam.html#.unparse">unparse</a></li><li data-type='method'><a href="QueryParam.html#.unparseSingle">unparseSingle</a></li><li data-type='method'><a href="QueryParam.html#describe">describe</a></li><li data-type='method'><a href="QueryParam.html#findInParents">findInParents</a></li><li data-type='method'><a href="QueryParam.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="QueryParam.html#meta">meta</a></li><li data-type='method'><a href="QueryParam.html#parent">parent</a></li><li data-type='method'><a href="QueryParam.html#toJSON">toJSON</a></li><li data-type='method'><a href="QueryParam.html#toString">toString</a></li><li data-type='method'><a href="QueryParam.html#update">update</a></li></ul></li><li><a href="Request.html">Request</a><ul class='methods'><li data-type='method'><a href="Request.html#.isRequest">isRequest</a></li><li data-type='method'><a href="Request.html#addHeader">addHeader</a></li><li data-type='method'><a href="Request.html#addQueryParams">addQueryParams</a></li><li data-type='method'><a href="Request.html#authorizeUsing">authorizeUsing</a></li><li data-type='method'><a href="Request.html#clone">clone</a></li><li data-type='method'><a href="Request.html#describe">describe</a></li><li data-type='method'><a href="Request.html#findInParents">findInParents</a></li><li data-type='method'><a href="Request.html#forEachHeader">forEachHeader</a></li><li data-type='method'><a href="Request.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Request.html#getHeaders">getHeaders</a></li><li data-type='method'><a href="Request.html#meta">meta</a></li><li data-type='method'><a href="Request.html#parent">parent</a></li><li data-type='method'><a href="Request.html#removeHeader">removeHeader</a></li><li data-type='method'><a href="Request.html#removeQueryParams">removeQueryParams</a></li><li data-type='method'><a href="Request.html#size">size</a></li><li data-type='method'><a href="Request.html#toJSON">toJSON</a></li><li data-type='method'><a href="Request.html#update">update</a></li><li data-type='method'><a href="Request.html#upsertHeader">upsertHeader</a></li></ul></li><li><a href="RequestAuth.html">RequestAuth</a><ul class='methods'><li data-type='method'><a href="RequestAuth.html#.isValidType">isValidType</a></li><li data-type='method'><a href="RequestAuth.html#clear">clear</a></li><li data-type='method'><a href="RequestAuth.html#describe">describe</a></li><li data-type='method'><a href="RequestAuth.html#findInParents">findInParents</a></li><li data-type='method'><a href="RequestAuth.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="RequestAuth.html#meta">meta</a></li><li data-type='method'><a href="RequestAuth.html#parameters">parameters</a></li><li data-type='method'><a href="RequestAuth.html#parent">parent</a></li><li data-type='method'><a href="RequestAuth.html#toJSON">toJSON</a></li><li data-type='method'><a href="RequestAuth.html#update">update</a></li><li data-type='method'><a href="RequestAuth.html#use">use</a></li></ul></li><li><a href="RequestBody.html">RequestBody</a><ul class='methods'><li data-type='method'><a href="RequestBody.html#findInParents">findInParents</a></li><li data-type='method'><a href="RequestBody.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="RequestBody.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="RequestBody.html#meta">meta</a></li><li data-type='method'><a href="RequestBody.html#parent">parent</a></li><li data-type='method'><a href="RequestBody.html#toJSON">toJSON</a></li><li data-type='method'><a href="RequestBody.html#toString">toString</a></li><li data-type='method'><a href="RequestBody.html#update">update</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#.createFromNode">createFromNode</a></li><li data-type='method'><a href="Response.html#.isResponse">isResponse</a></li><li data-type='method'><a href="Response.html#contentInfo">contentInfo</a></li><li data-type='method'><a href="Response.html#dataURI">dataURI</a></li><li data-type='method'><a href="Response.html#describe">describe</a></li><li data-type='method'><a href="Response.html#findInParents">findInParents</a></li><li data-type='method'><a href="Response.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Response.html#json">json</a></li><li data-type='method'><a href="Response.html#jsonp">jsonp</a></li><li data-type='method'><a href="Response.html#meta">meta</a></li><li data-type='method'><a href="Response.html#parent">parent</a></li><li data-type='method'><a href="Response.html#reason">reason</a></li><li data-type='method'><a href="Response.html#size">size</a></li><li data-type='method'><a href="Response.html#text">text</a></li><li data-type='method'><a href="Response.html#toJSON">toJSON</a></li></ul></li><li><a href="Script.html">Script</a><ul class='methods'><li data-type='method'><a href="Script.html#.isScript">isScript</a></li><li data-type='method'><a href="Script.html#describe">describe</a></li><li data-type='method'><a href="Script.html#findInParents">findInParents</a></li><li data-type='method'><a href="Script.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Script.html#meta">meta</a></li><li data-type='method'><a href="Script.html#parent">parent</a></li><li data-type='method'><a href="Script.html#toJSON">toJSON</a></li><li data-type='method'><a href="Script.html#toSource">toSource</a></li><li data-type='method'><a href="Script.html#update">update</a></li></ul></li><li><a href="Url.html">Url</a><ul class='methods'><li data-type='method'><a href="Url.html#.isUrl">isUrl</a></li><li data-type='method'><a href="Url.html#.parse">parse</a></li><li data-type='method'><a href="Url.html#addQueryParams">addQueryParams</a></li><li data-type='method'><a href="Url.html#findInParents">findInParents</a></li><li data-type='method'><a href="Url.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Url.html#getHost">getHost</a></li><li data-type='method'><a href="Url.html#getPath">getPath</a></li><li data-type='method'><a href="Url.html#getPathWithQuery">getPathWithQuery</a></li><li data-type='method'><a href="Url.html#getQueryString">getQueryString</a></li><li data-type='method'><a href="Url.html#getRemote">getRemote</a></li><li data-type='method'><a href="Url.html#meta">meta</a></li><li data-type='method'><a href="Url.html#parent">parent</a></li><li data-type='method'><a href="Url.html#removeQueryParams">removeQueryParams</a></li><li data-type='method'><a href="Url.html#toJSON">toJSON</a></li><li data-type='method'><a href="Url.html#toString">toString</a></li><li data-type='method'><a href="Url.html#update">update</a></li></ul></li><li><a href="UrlMatchPattern.html">UrlMatchPattern</a><ul class='methods'><li data-type='method'><a href="UrlMatchPattern.html#describe">describe</a></li><li data-type='method'><a href="UrlMatchPattern.html#findInParents">findInParents</a></li><li data-type='method'><a href="UrlMatchPattern.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="UrlMatchPattern.html#getProtocols">getProtocols</a></li><li data-type='method'><a href="UrlMatchPattern.html#meta">meta</a></li><li data-type='method'><a href="UrlMatchPattern.html#parent">parent</a></li><li data-type='method'><a href="UrlMatchPattern.html#test">test</a></li><li data-type='method'><a href="UrlMatchPattern.html#testHost">testHost</a></li><li data-type='method'><a href="UrlMatchPattern.html#testPath">testPath</a></li><li data-type='method'><a href="UrlMatchPattern.html#testPort">testPort</a></li><li data-type='method'><a href="UrlMatchPattern.html#testProtocol">testProtocol</a></li><li data-type='method'><a href="UrlMatchPattern.html#toJSON">toJSON</a></li><li data-type='method'><a href="UrlMatchPattern.html#toString">toString</a></li><li data-type='method'><a href="UrlMatchPattern.html#update">update</a></li></ul></li><li><a href="UrlMatchPatternList.html">UrlMatchPatternList</a><ul class='methods'><li data-type='method'><a href="UrlMatchPatternList.html#add">add</a></li><li data-type='method'><a href="UrlMatchPatternList.html#all">all</a></li><li data-type='method'><a href="UrlMatchPatternList.html#append">append</a></li><li data-type='method'><a href="UrlMatchPatternList.html#assimilate">assimilate</a></li><li data-type='method'><a href="UrlMatchPatternList.html#clear">clear</a></li><li data-type='method'><a href="UrlMatchPatternList.html#count">count</a></li><li data-type='method'><a href="UrlMatchPatternList.html#each">each</a></li><li data-type='method'><a href="UrlMatchPatternList.html#eachParent">eachParent</a></li><li data-type='method'><a href="UrlMatchPatternList.html#filter">filter</a></li><li data-type='method'><a href="UrlMatchPatternList.html#find">find</a></li><li data-type='method'><a href="UrlMatchPatternList.html#get">get</a></li><li data-type='method'><a href="UrlMatchPatternList.html#has">has</a></li><li data-type='method'><a href="UrlMatchPatternList.html#idx">idx</a></li><li data-type='method'><a href="UrlMatchPatternList.html#indexOf">indexOf</a></li><li data-type='method'><a href="UrlMatchPatternList.html#insert">insert</a></li><li data-type='method'><a href="UrlMatchPatternList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="UrlMatchPatternList.html#map">map</a></li><li data-type='method'><a href="UrlMatchPatternList.html#one">one</a></li><li data-type='method'><a href="UrlMatchPatternList.html#populate">populate</a></li><li data-type='method'><a href="UrlMatchPatternList.html#prepend">prepend</a></li><li data-type='method'><a href="UrlMatchPatternList.html#reduce">reduce</a></li><li data-type='method'><a href="UrlMatchPatternList.html#remove">remove</a></li><li data-type='method'><a href="UrlMatchPatternList.html#repopulate">repopulate</a></li><li data-type='method'><a href="UrlMatchPatternList.html#test">test</a></li><li data-type='method'><a href="UrlMatchPatternList.html#toObject">toObject</a></li><li data-type='method'><a href="UrlMatchPatternList.html#toString">toString</a></li><li data-type='method'><a href="UrlMatchPatternList.html#upsert">upsert</a></li></ul></li><li><a href="Variable.html">Variable</a><ul class='methods'><li data-type='method'><a href="Variable.html#.isVariable">isVariable</a></li><li data-type='method'><a href="Variable.html#cast">cast</a></li><li data-type='method'><a href="Variable.html#describe">describe</a></li><li data-type='method'><a href="Variable.html#findInParents">findInParents</a></li><li data-type='method'><a href="Variable.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Variable.html#get">get</a></li><li data-type='method'><a href="Variable.html#meta">meta</a></li><li data-type='method'><a href="Variable.html#parent">parent</a></li><li data-type='method'><a href="Variable.html#set">set</a></li><li data-type='method'><a href="Variable.html#toJSON">toJSON</a></li><li data-type='method'><a href="Variable.html#toString">toString</a></li><li data-type='method'><a href="Variable.html#update">update</a></li><li data-type='method'><a href="Variable.html#valueOf">valueOf</a></li><li data-type='method'><a href="Variable.html#valueType">valueType</a></li></ul></li><li><a href="VariableList.html">VariableList</a><ul class='methods'><li data-type='method'><a href="VariableList.html#.isVariableList">isVariableList</a></li><li data-type='method'><a href="VariableList.html#add">add</a></li><li data-type='method'><a href="VariableList.html#all">all</a></li><li data-type='method'><a href="VariableList.html#append">append</a></li><li data-type='method'><a href="VariableList.html#assimilate">assimilate</a></li><li data-type='method'><a href="VariableList.html#clear">clear</a></li><li data-type='method'><a href="VariableList.html#count">count</a></li><li data-type='method'><a href="VariableList.html#each">each</a></li><li data-type='method'><a href="VariableList.html#eachParent">eachParent</a></li><li data-type='method'><a href="VariableList.html#filter">filter</a></li><li data-type='method'><a href="VariableList.html#find">find</a></li><li data-type='method'><a href="VariableList.html#get">get</a></li><li data-type='method'><a href="VariableList.html#has">has</a></li><li data-type='method'><a href="VariableList.html#idx">idx</a></li><li data-type='method'><a href="VariableList.html#indexOf">indexOf</a></li><li data-type='method'><a href="VariableList.html#insert">insert</a></li><li data-type='method'><a href="VariableList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="VariableList.html#map">map</a></li><li data-type='method'><a href="VariableList.html#one">one</a></li><li data-type='method'><a href="VariableList.html#populate">populate</a></li><li data-type='method'><a href="VariableList.html#prepend">prepend</a></li><li data-type='method'><a href="VariableList.html#reduce">reduce</a></li><li data-type='method'><a href="VariableList.html#remove">remove</a></li><li data-type='method'><a href="VariableList.html#replace">replace</a></li><li data-type='method'><a href="VariableList.html#repopulate">repopulate</a></li><li data-type='method'><a href="VariableList.html#substitute">substitute</a></li><li data-type='method'><a href="VariableList.html#syncFromObject">syncFromObject</a></li><li data-type='method'><a href="VariableList.html#syncToObject">syncToObject</a></li><li data-type='method'><a href="VariableList.html#toObject">toObject</a></li><li data-type='method'><a href="VariableList.html#toString">toString</a></li><li data-type='method'><a href="VariableList.html#upsert">upsert</a></li></ul></li><li><a href="VariableScope.html">VariableScope</a><ul class='methods'><li data-type='method'><a href="VariableScope.html#.isVariableScope">isVariableScope</a></li><li data-type='method'><a href="VariableScope.html#clear">clear</a></li><li data-type='method'><a href="VariableScope.html#describe">describe</a></li><li data-type='method'><a href="VariableScope.html#disableTracking">disableTracking</a></li><li data-type='method'><a href="VariableScope.html#enableTracking">enableTracking</a></li><li data-type='method'><a href="VariableScope.html#findInParents">findInParents</a></li><li data-type='method'><a href="VariableScope.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="VariableScope.html#get">get</a></li><li data-type='method'><a href="VariableScope.html#has">has</a></li><li data-type='method'><a href="VariableScope.html#meta">meta</a></li><li data-type='method'><a href="VariableScope.html#parent">parent</a></li><li data-type='method'><a href="VariableScope.html#replaceIn">replaceIn</a></li><li data-type='method'><a href="VariableScope.html#set">set</a></li><li data-type='method'><a href="VariableScope.html#toJSON">toJSON</a></li><li data-type='method'><a href="VariableScope.html#toObject">toObject</a></li><li data-type='method'><a href="VariableScope.html#unset">unset</a></li></ul></li><li><a href="Version.html">Version</a><ul class='methods'><li data-type='method'><a href="Version.html#findInParents">findInParents</a></li><li data-type='method'><a href="Version.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Version.html#meta">meta</a></li><li data-type='method'><a href="Version.html#parent">parent</a></li><li data-type='method'><a href="Version.html#set">set</a></li><li data-type='method'><a href="Version.html#toJSON">toJSON</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ItemGroup</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        ItemGroup
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="ItemGroup"><span class="type-signature"></span>new ItemGroup<span class="signature">(definition<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>An ItemGroup represents a composite list of <a href="Item.html">Item</a> or ItemGroup. In terms of Postman App, ItemGroup
+represents a &quot;Folder&quot;. This allows one to group Items into subsets that can have their own meaning. An
+ItemGroup also allows one to define a subset of common properties to be applied to each Item within it. For
+example, a <code>test</code> event defined on an ItemGroup is executed while testing any Item that belongs to that group.
+Similarly, ItemGroups can have a common {@RequestAuth} defined so that every <a href="Request.html">Request</a>, when processed,
+requires to be authenticated using the <code>auth</code> defined in the group.</p>
+<p>Essentially, <a href="Collection.html">Collection</a> too is a special type of ItemGroup ;-).</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>definition</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ItemGroup.html#.definition">ItemGroup.definition</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>While creating a new instance of ItemGroup, one can provide the
+initial configuration of the item group with the requests it contains, the authentication applied to all
+requests, events that the requests responds to, etc.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Add a new ItemGroup to a collection instance</p>
+    
+    <pre class="prettyprint"><code>var Collection = require('postman-collection').Collection,
+    ItemGroup = require('postman-collection').ItemGroup,
+    myCollection;
+
+myCollection = new Collection(); // create an empty collection
+myCollection.items.add(new ItemGroup({ // add a folder called "blank folder"
+    "name": "This is a blank folder"
+}));</code></pre>
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Property.html">Property</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="auth"><span class="type-signature"></span>auth<span class="type-signature"> :<a href="RequestAuth.html">RequestAuth</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>One can define the default authentication method required for every item that belongs to this list.
+Individual <a href="Request.html">Request</a>s can override this in their own definitions. More on how to define an
+authentication method is outlined in the <a href="RequestAuth.html">RequestAuth</a> property.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="RequestAuth.html">RequestAuth</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Define an entire ItemGroup (folder) or Collection to follow Basic Auth</p>
+    
+    <pre class="prettyprint"><code>var fs = require('fs'),
+    Collection = require('postman-collection').Collection,
+    RequestAuth = require('postman-collection').RequestAuth,
+    mycollection;
+
+// Create a collection having two requests
+myCollection = new Collection();
+myCollection.items.add([
+    { name: 'GET Request', request: 'https://postman-echo.com/get?auth=basic' },
+    { name: 'PUT Request', request: 'https://postman-echo.com/put?auth=basic' }
+]);
+
+// Add basic auth to the Collection, to be applied on all requests.
+myCollection.auth = new RequestAuth({
+    type: 'basic',
+    username: 'postman',
+    password: 'password'
+});</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="authorizeRequestsUsing"><span class="type-signature"></span>authorizeRequestsUsing<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Sets authentication method for all the items within this group</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line298">line 298</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="disabled"><span class="type-signature"></span>disabled<span class="type-signature"> :Boolean</span></h4>
+
+
+
+
+<div class="description">
+    <p>This (optional) flag denotes whether this property is disabled or not. Usually, this is helpful when a
+property is part of a <a href="PropertyList.html">PropertyList</a>. For example, in a PropertyList of <a href="Header.html">Header</a>s, the ones
+that are disabled can be filtered out and not processed.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Property.html#disabled">Property#disabled</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property.js.html">collection/property.js</a>, <a href="collection_property.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    <p>The <code>id</code> of the property is a unique string that identifies this property and can be used to refer to
+this property from relevant other places. It is a good practice to define the id or let the system
+auto generate a UUID if one is not defined for properties that require an <code>id</code>.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Property.html#id">Property#id</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property.js.html">collection/property.js</a>, <a href="collection_property.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :<a href="PropertyList.html">PropertyList</a>.&lt;(<a href="Item.html">Item</a>|<a href="ItemGroup.html">ItemGroup</a>)></span></h4>
+
+
+
+
+<div class="description">
+    <p>This is a <a href="PropertyList.html">PropertyList</a> that holds the list of <a href="Item.html">Item</a>s or <a href="ItemGroup.html">ItemGroup</a>s belonging to a
+<a href="Collection.html">Collection</a> or to an <a href="ItemGroup.html">ItemGroup</a>. Operation on an individual item in this list can be
+performed using various functions available to a <a href="PropertyList.html">PropertyList</a>.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="PropertyList.html">PropertyList</a>.&lt;(<a href="Item.html">Item</a>|<a href="ItemGroup.html">ItemGroup</a>)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Fetch empty ItemGroups in a list loaded from a file</p>
+    
+    <pre class="prettyprint"><code>var fs = require('fs'), // needed to read JSON file from disk
+    Collection = require('postman-collection').Collection,
+    myCollection,
+    emptyGroups;
+// Load a collection to memory from a JSON file on disk (say, sample-collection.json)
+myCollection = new Collection(JSON.stringify(fs.readFileSync('sample-collection.json').toString()));
+
+// Filter items in Collection root that is an empty ItemGroup
+emptyGroups = myCollection.items.filter(function (item) {
+    return item &amp;&amp; item.items &amp;&amp; (item.items.count() === 0);
+});
+
+// Log the emptyGroups array to check it's contents
+console.log(emptyGroups);</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    <p>A property can have a distinctive and human-readable name. This is to be used to display the name of the
+property within Postman, Newman or other runtimes that consume collection. In certain cases, the absence
+of name might cause the runtime to use the <code>id</code> as a fallback.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Property.html#name">Property#name</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property.js.html">collection/property.js</a>, <a href="collection_property.js.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="protocolProfileBehavior"><span class="type-signature"></span>protocolProfileBehavior<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Set of configurations used to alter the usual behavior of sending the request.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>disableBodyPruning</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Disable body pruning for request methods like GET, HEAD etc.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isItemGroup"><span class="type-signature">(static) </span>isItemGroup<span class="signature">(obj)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Check whether an object is an instance of <a href="ItemGroup.html">ItemGroup</a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><ul>
+<li></li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line333">line 333</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="describe"><span class="type-signature"></span>describe<span class="signature">(content, type<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>This function allows to describe the property for the purpose of detailed identification or documentation
+generation. This function sets or updates the <code>description</code> child-property of this property.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The content of the description can be provided here as a string. Note that it is expected
+that if the content is formatted in any other way than simple text, it should be specified in the subsequent
+<code>type</code> parameter.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "text/plain"
+                
+                </td>
+            
+
+            <td class="description last"><p>The type of the content.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Property.html#describe">Property#describe</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property.js.html">collection/property.js</a>, <a href="collection_property.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Add a description to an instance of Collection</p>
+    
+    <pre class="prettyprint"><code> var Collection = require('postman-collection').Collection,
+    mycollection;
+
+// create a blank collection
+myCollection = new Collection();
+myCollection.describe('Hey! This is a cool collection.');
+
+console.log(myCollection.description.toString()); // read the description</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findInParents"><span class="type-signature"></span>findInParents<span class="signature">(property, customizer<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {*|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tries to find the given property locally, and then proceeds to lookup in each parent,
+going up the chain as necessary. Lookup will continue until <code>customizer</code> returns a truthy value. If used
+without a customizer, the lookup will stop at the first parent that contains the property.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><ul>
+<li></li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>customizer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><ul>
+<li></li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="PropertyBase.html#findInParents">PropertyBase#findInParents</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property-base.js.html">collection/property-base.js</a>, <a href="collection_property-base.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">*</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="forEachParent"><span class="type-signature"></span>forEachParent<span class="signature">(options, iterator)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Invokes the given iterator for every parent in the parent chain of the given element.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A set of options for the parent chain traversal.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>withRoot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Set to true to include the collection object as well.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iterator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function to call for every parent in the ancestry chain.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="PropertyBase.html#forEachParent">PropertyBase#forEachParent</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property-base.js.html">collection/property-base.js</a>, <a href="collection_property-base.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Cache the results</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="meta"><span class="type-signature"></span>meta<span class="signature">()</span><span class="type-signature"> &rarr; {*}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns the meta keys associated with the property</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="PropertyBase.html#meta">PropertyBase#meta</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property-base.js.html">collection/property-base.js</a>, <a href="collection_property-base.js.html#line158">line 158</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">*</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="oneDeep"><span class="type-signature"></span>oneDeep<span class="signature">(idOrName)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Finds the first item with the given name or id in the current ItemGroup.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idOrName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><ul>
+<li></li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line222">line 222</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="parent"><span class="type-signature"></span>parent<span class="signature">()</span><span class="type-signature"> &rarr; {*|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns the parent of item</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="PropertyBase.html#parent">PropertyBase#parent</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property-base.js.html">collection/property-base.js</a>, <a href="collection_property-base.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">*</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toJSON"><span class="type-signature"></span>toJSON<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns the JSON representation of a property, which conforms to the way it is defined in a collection.
+You can use this method to get the instantaneous representation of any property, including a <a href="Collection.html">Collection</a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="PropertyBase.html#toJSON">PropertyBase#toJSON</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_property-base.js.html">collection/property-base.js</a>, <a href="collection_property-base.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".definition">definition</h4>
+
+
+
+
+<div class="description">
+    <p>The following defines the object (or JSON) structure that one can pass to the ItemGroup while creating a new
+ItemGroup instance. This is also the object structure returned when <code>.toJSON()</code> is called on an ItemGroup instance.</p>
+</div>
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>item</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(<a href="ItemGroup.html#.definition">ItemGroup.definition</a>|<a href="Item.html#.definition">Item.definition</a>)></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>auth</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="RequestAuth.html#.definition">RequestAuth.definition</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Event.html#.definition">Event.definition</a>></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="collection_item-group.js.html">collection/item-group.js</a>, <a href="collection_item-group.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>{
+    "name": "Echo Get Requests",
+    "id": "echo-get-requests",
+    "item": [{
+        "request": "https://postman-echo.com/get"
+    }, {
+        "request": "https://postman-echo.com/headers"
+    }],
+    "auth": {
+        "type": "basic",
+        "basic": {
+            "username": "jean",
+            "password": "{{somethingsecret}}"
+        }
+    },
+    "event": [{
+        "listen": "prerequest",
+        "script": {
+            "type": "text/javascript",
+            "exec": "console.log(new Date())"
+        }
+    }]
+}</code></pre>
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated at Mon Aug 09 2021 09:24:48 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

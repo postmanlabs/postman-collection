@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>collection/cookie.js - Postman Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home 4.0.2</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-concepts.html">Postman SDK Concepts</a></li><li><a href="tutorial-mutation-tracking.html">Tracking Variable Mutations</a></li></ul><h3>Classes</h3><ul><li><a href="Certificate.html">Certificate</a><ul class='methods'><li data-type='method'><a href="Certificate.html#.isCertificate">isCertificate</a></li><li data-type='method'><a href="Certificate.html#canApplyTo">canApplyTo</a></li><li data-type='method'><a href="Certificate.html#describe">describe</a></li><li data-type='method'><a href="Certificate.html#findInParents">findInParents</a></li><li data-type='method'><a href="Certificate.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Certificate.html#meta">meta</a></li><li data-type='method'><a href="Certificate.html#parent">parent</a></li><li data-type='method'><a href="Certificate.html#toJSON">toJSON</a></li><li data-type='method'><a href="Certificate.html#update">update</a></li></ul></li><li><a href="CertificateList.html">CertificateList</a><ul class='methods'><li data-type='method'><a href="CertificateList.html#.isCertificateList">isCertificateList</a></li><li data-type='method'><a href="CertificateList.html#add">add</a></li><li data-type='method'><a href="CertificateList.html#all">all</a></li><li data-type='method'><a href="CertificateList.html#append">append</a></li><li data-type='method'><a href="CertificateList.html#assimilate">assimilate</a></li><li data-type='method'><a href="CertificateList.html#clear">clear</a></li><li data-type='method'><a href="CertificateList.html#count">count</a></li><li data-type='method'><a href="CertificateList.html#each">each</a></li><li data-type='method'><a href="CertificateList.html#eachParent">eachParent</a></li><li data-type='method'><a href="CertificateList.html#filter">filter</a></li><li data-type='method'><a href="CertificateList.html#find">find</a></li><li data-type='method'><a href="CertificateList.html#get">get</a></li><li data-type='method'><a href="CertificateList.html#has">has</a></li><li data-type='method'><a href="CertificateList.html#idx">idx</a></li><li data-type='method'><a href="CertificateList.html#indexOf">indexOf</a></li><li data-type='method'><a href="CertificateList.html#insert">insert</a></li><li data-type='method'><a href="CertificateList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="CertificateList.html#map">map</a></li><li data-type='method'><a href="CertificateList.html#one">one</a></li><li data-type='method'><a href="CertificateList.html#populate">populate</a></li><li data-type='method'><a href="CertificateList.html#prepend">prepend</a></li><li data-type='method'><a href="CertificateList.html#reduce">reduce</a></li><li data-type='method'><a href="CertificateList.html#remove">remove</a></li><li data-type='method'><a href="CertificateList.html#repopulate">repopulate</a></li><li data-type='method'><a href="CertificateList.html#resolveOne">resolveOne</a></li><li data-type='method'><a href="CertificateList.html#toObject">toObject</a></li><li data-type='method'><a href="CertificateList.html#toString">toString</a></li><li data-type='method'><a href="CertificateList.html#upsert">upsert</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#.isCollection">isCollection</a></li><li data-type='method'><a href="Collection.html#describe">describe</a></li><li data-type='method'><a href="Collection.html#findInParents">findInParents</a></li><li data-type='method'><a href="Collection.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Collection.html#meta">meta</a></li><li data-type='method'><a href="Collection.html#oneDeep">oneDeep</a></li><li data-type='method'><a href="Collection.html#parent">parent</a></li><li data-type='method'><a href="Collection.html#syncVariablesFrom">syncVariablesFrom</a></li><li data-type='method'><a href="Collection.html#syncVariablesTo">syncVariablesTo</a></li><li data-type='method'><a href="Collection.html#toJSON">toJSON</a></li></ul></li><li><a href="Cookie.html">Cookie</a><ul class='methods'><li data-type='method'><a href="Cookie.html#.isCookie">isCookie</a></li><li data-type='method'><a href="Cookie.html#.parse">parse</a></li><li data-type='method'><a href="Cookie.html#.stringify">stringify</a></li><li data-type='method'><a href="Cookie.html#.unparse">unparse</a></li><li data-type='method'><a href="Cookie.html#.unparseSingle">unparseSingle</a></li><li data-type='method'><a href="Cookie.html#findInParents">findInParents</a></li><li data-type='method'><a href="Cookie.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Cookie.html#meta">meta</a></li><li data-type='method'><a href="Cookie.html#parent">parent</a></li><li data-type='method'><a href="Cookie.html#toJSON">toJSON</a></li><li data-type='method'><a href="Cookie.html#toString">toString</a></li><li data-type='method'><a href="Cookie.html#valueOf">valueOf</a></li></ul></li><li><a href="CookieList.html">CookieList</a><ul class='methods'><li data-type='method'><a href="CookieList.html#.isCookieList">isCookieList</a></li><li data-type='method'><a href="CookieList.html#add">add</a></li><li data-type='method'><a href="CookieList.html#all">all</a></li><li data-type='method'><a href="CookieList.html#append">append</a></li><li data-type='method'><a href="CookieList.html#assimilate">assimilate</a></li><li data-type='method'><a href="CookieList.html#clear">clear</a></li><li data-type='method'><a href="CookieList.html#count">count</a></li><li data-type='method'><a href="CookieList.html#each">each</a></li><li data-type='method'><a href="CookieList.html#eachParent">eachParent</a></li><li data-type='method'><a href="CookieList.html#filter">filter</a></li><li data-type='method'><a href="CookieList.html#find">find</a></li><li data-type='method'><a href="CookieList.html#get">get</a></li><li data-type='method'><a href="CookieList.html#has">has</a></li><li data-type='method'><a href="CookieList.html#idx">idx</a></li><li data-type='method'><a href="CookieList.html#indexOf">indexOf</a></li><li data-type='method'><a href="CookieList.html#insert">insert</a></li><li data-type='method'><a href="CookieList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="CookieList.html#map">map</a></li><li data-type='method'><a href="CookieList.html#one">one</a></li><li data-type='method'><a href="CookieList.html#populate">populate</a></li><li data-type='method'><a href="CookieList.html#prepend">prepend</a></li><li data-type='method'><a href="CookieList.html#reduce">reduce</a></li><li data-type='method'><a href="CookieList.html#remove">remove</a></li><li data-type='method'><a href="CookieList.html#repopulate">repopulate</a></li><li data-type='method'><a href="CookieList.html#toObject">toObject</a></li><li data-type='method'><a href="CookieList.html#toString">toString</a></li><li data-type='method'><a href="CookieList.html#upsert">upsert</a></li></ul></li><li><a href="Description.html">Description</a><ul class='methods'><li data-type='method'><a href="Description.html#.isDescription">isDescription</a></li><li data-type='method'><a href="Description.html#toJSON">toJSON</a></li><li data-type='method'><a href="Description.html#toString">toString</a></li><li data-type='method'><a href="Description.html#update">update</a></li></ul></li><li><a href="Event.html">Event</a><ul class='methods'><li data-type='method'><a href="Event.html#describe">describe</a></li><li data-type='method'><a href="Event.html#findInParents">findInParents</a></li><li data-type='method'><a href="Event.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Event.html#meta">meta</a></li><li data-type='method'><a href="Event.html#parent">parent</a></li><li data-type='method'><a href="Event.html#toJSON">toJSON</a></li><li data-type='method'><a href="Event.html#update">update</a></li></ul></li><li><a href="EventList.html">EventList</a><ul class='methods'><li data-type='method'><a href="EventList.html#.isEventList">isEventList</a></li><li data-type='method'><a href="EventList.html#add">add</a></li><li data-type='method'><a href="EventList.html#all">all</a></li><li data-type='method'><a href="EventList.html#append">append</a></li><li data-type='method'><a href="EventList.html#assimilate">assimilate</a></li><li data-type='method'><a href="EventList.html#clear">clear</a></li><li data-type='method'><a href="EventList.html#count">count</a></li><li data-type='method'><a href="EventList.html#each">each</a></li><li data-type='method'><a href="EventList.html#eachParent">eachParent</a></li><li data-type='method'><a href="EventList.html#filter">filter</a></li><li data-type='method'><a href="EventList.html#find">find</a></li><li data-type='method'><a href="EventList.html#get">get</a></li><li data-type='method'><a href="EventList.html#has">has</a></li><li data-type='method'><a href="EventList.html#idx">idx</a></li><li data-type='method'><a href="EventList.html#indexOf">indexOf</a></li><li data-type='method'><a href="EventList.html#insert">insert</a></li><li data-type='method'><a href="EventList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="EventList.html#listeners">listeners</a></li><li data-type='method'><a href="EventList.html#listenersOwn">listenersOwn</a></li><li data-type='method'><a href="EventList.html#map">map</a></li><li data-type='method'><a href="EventList.html#one">one</a></li><li data-type='method'><a href="EventList.html#populate">populate</a></li><li data-type='method'><a href="EventList.html#prepend">prepend</a></li><li data-type='method'><a href="EventList.html#reduce">reduce</a></li><li data-type='method'><a href="EventList.html#remove">remove</a></li><li data-type='method'><a href="EventList.html#repopulate">repopulate</a></li><li data-type='method'><a href="EventList.html#toObject">toObject</a></li><li data-type='method'><a href="EventList.html#toString">toString</a></li><li data-type='method'><a href="EventList.html#upsert">upsert</a></li></ul></li><li><a href="FormParam.html">FormParam</a><ul class='methods'><li data-type='method'><a href="FormParam.html#toJSON">toJSON</a></li><li data-type='method'><a href="FormParam.html#toString">toString</a></li><li data-type='method'><a href="FormParam.html#valueOf">valueOf</a></li></ul></li><li><a href="Header.html">Header</a><ul class='methods'><li data-type='method'><a href="Header.html#.create">create</a></li><li data-type='method'><a href="Header.html#.isHeader">isHeader</a></li><li data-type='method'><a href="Header.html#.parse">parse</a></li><li data-type='method'><a href="Header.html#.parseSingle">parseSingle</a></li><li data-type='method'><a href="Header.html#.unparse">unparse</a></li><li data-type='method'><a href="Header.html#.unparseSingle">unparseSingle</a></li><li data-type='method'><a href="Header.html#describe">describe</a></li><li data-type='method'><a href="Header.html#findInParents">findInParents</a></li><li data-type='method'><a href="Header.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Header.html#meta">meta</a></li><li data-type='method'><a href="Header.html#parent">parent</a></li><li data-type='method'><a href="Header.html#toJSON">toJSON</a></li><li data-type='method'><a href="Header.html#toString">toString</a></li><li data-type='method'><a href="Header.html#update">update</a></li><li data-type='method'><a href="Header.html#valueOf">valueOf</a></li></ul></li><li><a href="HeaderList.html">HeaderList</a><ul class='methods'><li data-type='method'><a href="HeaderList.html#.isHeaderList">isHeaderList</a></li><li data-type='method'><a href="HeaderList.html#add">add</a></li><li data-type='method'><a href="HeaderList.html#all">all</a></li><li data-type='method'><a href="HeaderList.html#append">append</a></li><li data-type='method'><a href="HeaderList.html#assimilate">assimilate</a></li><li data-type='method'><a href="HeaderList.html#clear">clear</a></li><li data-type='method'><a href="HeaderList.html#contentSize">contentSize</a></li><li data-type='method'><a href="HeaderList.html#count">count</a></li><li data-type='method'><a href="HeaderList.html#each">each</a></li><li data-type='method'><a href="HeaderList.html#eachParent">eachParent</a></li><li data-type='method'><a href="HeaderList.html#filter">filter</a></li><li data-type='method'><a href="HeaderList.html#find">find</a></li><li data-type='method'><a href="HeaderList.html#get">get</a></li><li data-type='method'><a href="HeaderList.html#has">has</a></li><li data-type='method'><a href="HeaderList.html#idx">idx</a></li><li data-type='method'><a href="HeaderList.html#indexOf">indexOf</a></li><li data-type='method'><a href="HeaderList.html#insert">insert</a></li><li data-type='method'><a href="HeaderList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="HeaderList.html#map">map</a></li><li data-type='method'><a href="HeaderList.html#one">one</a></li><li data-type='method'><a href="HeaderList.html#populate">populate</a></li><li data-type='method'><a href="HeaderList.html#prepend">prepend</a></li><li data-type='method'><a href="HeaderList.html#reduce">reduce</a></li><li data-type='method'><a href="HeaderList.html#remove">remove</a></li><li data-type='method'><a href="HeaderList.html#repopulate">repopulate</a></li><li data-type='method'><a href="HeaderList.html#toObject">toObject</a></li><li data-type='method'><a href="HeaderList.html#toString">toString</a></li><li data-type='method'><a href="HeaderList.html#upsert">upsert</a></li></ul></li><li><a href="Item.html">Item</a><ul class='methods'><li data-type='method'><a href="Item.html#.isItem">isItem</a></li><li data-type='method'><a href="Item.html#authorizeRequestUsing">authorizeRequestUsing</a></li><li data-type='method'><a href="Item.html#describe">describe</a></li><li data-type='method'><a href="Item.html#findInParents">findInParents</a></li><li data-type='method'><a href="Item.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Item.html#getAuth">getAuth</a></li><li data-type='method'><a href="Item.html#getEvents">getEvents</a></li><li data-type='method'><a href="Item.html#meta">meta</a></li><li data-type='method'><a href="Item.html#parent">parent</a></li><li data-type='method'><a href="Item.html#toJSON">toJSON</a></li></ul></li><li><a href="ItemGroup.html">ItemGroup</a><ul class='methods'><li data-type='method'><a href="ItemGroup.html#.isItemGroup">isItemGroup</a></li><li data-type='method'><a href="ItemGroup.html#describe">describe</a></li><li data-type='method'><a href="ItemGroup.html#findInParents">findInParents</a></li><li data-type='method'><a href="ItemGroup.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="ItemGroup.html#meta">meta</a></li><li data-type='method'><a href="ItemGroup.html#oneDeep">oneDeep</a></li><li data-type='method'><a href="ItemGroup.html#parent">parent</a></li><li data-type='method'><a href="ItemGroup.html#toJSON">toJSON</a></li></ul></li><li><a href="MutationTracker.html">MutationTracker</a><ul class='methods'><li data-type='method'><a href="MutationTracker.html#.isMutationTracker">isMutationTracker</a></li><li data-type='method'><a href="MutationTracker.html#applyOn">applyOn</a></li><li data-type='method'><a href="MutationTracker.html#compact">compact</a></li><li data-type='method'><a href="MutationTracker.html#count">count</a></li><li data-type='method'><a href="MutationTracker.html#findInParents">findInParents</a></li><li data-type='method'><a href="MutationTracker.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="MutationTracker.html#meta">meta</a></li><li data-type='method'><a href="MutationTracker.html#parent">parent</a></li><li data-type='method'><a href="MutationTracker.html#toJSON">toJSON</a></li><li data-type='method'><a href="MutationTracker.html#track">track</a></li></ul></li><li><a href="Property.html">Property</a><ul class='methods'><li data-type='method'><a href="Property.html#.replaceSubstitutions">replaceSubstitutions</a></li><li data-type='method'><a href="Property.html#.replaceSubstitutionsIn">replaceSubstitutionsIn</a></li><li data-type='method'><a href="Property.html#describe">describe</a></li><li data-type='method'><a href="Property.html#findInParents">findInParents</a></li><li data-type='method'><a href="Property.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Property.html#meta">meta</a></li><li data-type='method'><a href="Property.html#parent">parent</a></li><li data-type='method'><a href="Property.html#toJSON">toJSON</a></li></ul></li><li><a href="PropertyBase.html">PropertyBase</a><ul class='methods'><li data-type='method'><a href="PropertyBase.html#.propertyIsMeta">propertyIsMeta</a></li><li data-type='method'><a href="PropertyBase.html#.propertyUnprefixMeta">propertyUnprefixMeta</a></li><li data-type='method'><a href="PropertyBase.html#.toJSON">toJSON</a></li><li data-type='method'><a href="PropertyBase.html#findInParents">findInParents</a></li><li data-type='method'><a href="PropertyBase.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="PropertyBase.html#meta">meta</a></li><li data-type='method'><a href="PropertyBase.html#parent">parent</a></li><li data-type='method'><a href="PropertyBase.html#toJSON">toJSON</a></li></ul></li><li><a href="PropertyList.html">PropertyList</a><ul class='methods'><li data-type='method'><a href="PropertyList.html#.isPropertyList">isPropertyList</a></li><li data-type='method'><a href="PropertyList.html#add">add</a></li><li data-type='method'><a href="PropertyList.html#all">all</a></li><li data-type='method'><a href="PropertyList.html#append">append</a></li><li data-type='method'><a href="PropertyList.html#assimilate">assimilate</a></li><li data-type='method'><a href="PropertyList.html#clear">clear</a></li><li data-type='method'><a href="PropertyList.html#count">count</a></li><li data-type='method'><a href="PropertyList.html#each">each</a></li><li data-type='method'><a href="PropertyList.html#eachParent">eachParent</a></li><li data-type='method'><a href="PropertyList.html#filter">filter</a></li><li data-type='method'><a href="PropertyList.html#find">find</a></li><li data-type='method'><a href="PropertyList.html#get">get</a></li><li data-type='method'><a href="PropertyList.html#has">has</a></li><li data-type='method'><a href="PropertyList.html#idx">idx</a></li><li data-type='method'><a href="PropertyList.html#indexOf">indexOf</a></li><li data-type='method'><a href="PropertyList.html#insert">insert</a></li><li data-type='method'><a href="PropertyList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="PropertyList.html#map">map</a></li><li data-type='method'><a href="PropertyList.html#one">one</a></li><li data-type='method'><a href="PropertyList.html#populate">populate</a></li><li data-type='method'><a href="PropertyList.html#prepend">prepend</a></li><li data-type='method'><a href="PropertyList.html#reduce">reduce</a></li><li data-type='method'><a href="PropertyList.html#remove">remove</a></li><li data-type='method'><a href="PropertyList.html#repopulate">repopulate</a></li><li data-type='method'><a href="PropertyList.html#toObject">toObject</a></li><li data-type='method'><a href="PropertyList.html#toString">toString</a></li><li data-type='method'><a href="PropertyList.html#upsert">upsert</a></li></ul></li><li><a href="ProxyConfig.html">ProxyConfig</a><ul class='methods'><li data-type='method'><a href="ProxyConfig.html#.isProxyConfig">isProxyConfig</a></li><li data-type='method'><a href="ProxyConfig.html#describe">describe</a></li><li data-type='method'><a href="ProxyConfig.html#findInParents">findInParents</a></li><li data-type='method'><a href="ProxyConfig.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="ProxyConfig.html#getProtocols">getProtocols</a></li><li data-type='method'><a href="ProxyConfig.html#getProxyUrl">getProxyUrl</a></li><li data-type='method'><a href="ProxyConfig.html#meta">meta</a></li><li data-type='method'><a href="ProxyConfig.html#parent">parent</a></li><li data-type='method'><a href="ProxyConfig.html#test">test</a></li><li data-type='method'><a href="ProxyConfig.html#toJSON">toJSON</a></li><li data-type='method'><a href="ProxyConfig.html#update">update</a></li><li data-type='method'><a href="ProxyConfig.html#updateProtocols">updateProtocols</a></li></ul></li><li><a href="ProxyConfigList.html">ProxyConfigList</a><ul class='methods'><li data-type='method'><a href="ProxyConfigList.html#.isProxyConfigList">isProxyConfigList</a></li><li data-type='method'><a href="ProxyConfigList.html#add">add</a></li><li data-type='method'><a href="ProxyConfigList.html#all">all</a></li><li data-type='method'><a href="ProxyConfigList.html#append">append</a></li><li data-type='method'><a href="ProxyConfigList.html#assimilate">assimilate</a></li><li data-type='method'><a href="ProxyConfigList.html#clear">clear</a></li><li data-type='method'><a href="ProxyConfigList.html#count">count</a></li><li data-type='method'><a href="ProxyConfigList.html#each">each</a></li><li data-type='method'><a href="ProxyConfigList.html#eachParent">eachParent</a></li><li data-type='method'><a href="ProxyConfigList.html#filter">filter</a></li><li data-type='method'><a href="ProxyConfigList.html#find">find</a></li><li data-type='method'><a href="ProxyConfigList.html#get">get</a></li><li data-type='method'><a href="ProxyConfigList.html#has">has</a></li><li data-type='method'><a href="ProxyConfigList.html#idx">idx</a></li><li data-type='method'><a href="ProxyConfigList.html#indexOf">indexOf</a></li><li data-type='method'><a href="ProxyConfigList.html#insert">insert</a></li><li data-type='method'><a href="ProxyConfigList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="ProxyConfigList.html#map">map</a></li><li data-type='method'><a href="ProxyConfigList.html#one">one</a></li><li data-type='method'><a href="ProxyConfigList.html#populate">populate</a></li><li data-type='method'><a href="ProxyConfigList.html#prepend">prepend</a></li><li data-type='method'><a href="ProxyConfigList.html#reduce">reduce</a></li><li data-type='method'><a href="ProxyConfigList.html#remove">remove</a></li><li data-type='method'><a href="ProxyConfigList.html#repopulate">repopulate</a></li><li data-type='method'><a href="ProxyConfigList.html#resolve">resolve</a></li><li data-type='method'><a href="ProxyConfigList.html#toObject">toObject</a></li><li data-type='method'><a href="ProxyConfigList.html#toString">toString</a></li><li data-type='method'><a href="ProxyConfigList.html#upsert">upsert</a></li></ul></li><li><a href="QueryParam.html">QueryParam</a><ul class='methods'><li data-type='method'><a href="QueryParam.html#.parse">parse</a></li><li data-type='method'><a href="QueryParam.html#.parseSingle">parseSingle</a></li><li data-type='method'><a href="QueryParam.html#.unparse">unparse</a></li><li data-type='method'><a href="QueryParam.html#.unparseSingle">unparseSingle</a></li><li data-type='method'><a href="QueryParam.html#describe">describe</a></li><li data-type='method'><a href="QueryParam.html#findInParents">findInParents</a></li><li data-type='method'><a href="QueryParam.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="QueryParam.html#meta">meta</a></li><li data-type='method'><a href="QueryParam.html#parent">parent</a></li><li data-type='method'><a href="QueryParam.html#toJSON">toJSON</a></li><li data-type='method'><a href="QueryParam.html#toString">toString</a></li><li data-type='method'><a href="QueryParam.html#update">update</a></li></ul></li><li><a href="Request.html">Request</a><ul class='methods'><li data-type='method'><a href="Request.html#.isRequest">isRequest</a></li><li data-type='method'><a href="Request.html#addHeader">addHeader</a></li><li data-type='method'><a href="Request.html#addQueryParams">addQueryParams</a></li><li data-type='method'><a href="Request.html#authorizeUsing">authorizeUsing</a></li><li data-type='method'><a href="Request.html#clone">clone</a></li><li data-type='method'><a href="Request.html#describe">describe</a></li><li data-type='method'><a href="Request.html#findInParents">findInParents</a></li><li data-type='method'><a href="Request.html#forEachHeader">forEachHeader</a></li><li data-type='method'><a href="Request.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Request.html#getHeaders">getHeaders</a></li><li data-type='method'><a href="Request.html#meta">meta</a></li><li data-type='method'><a href="Request.html#parent">parent</a></li><li data-type='method'><a href="Request.html#removeHeader">removeHeader</a></li><li data-type='method'><a href="Request.html#removeQueryParams">removeQueryParams</a></li><li data-type='method'><a href="Request.html#size">size</a></li><li data-type='method'><a href="Request.html#toJSON">toJSON</a></li><li data-type='method'><a href="Request.html#update">update</a></li><li data-type='method'><a href="Request.html#upsertHeader">upsertHeader</a></li></ul></li><li><a href="RequestAuth.html">RequestAuth</a><ul class='methods'><li data-type='method'><a href="RequestAuth.html#.isValidType">isValidType</a></li><li data-type='method'><a href="RequestAuth.html#clear">clear</a></li><li data-type='method'><a href="RequestAuth.html#describe">describe</a></li><li data-type='method'><a href="RequestAuth.html#findInParents">findInParents</a></li><li data-type='method'><a href="RequestAuth.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="RequestAuth.html#meta">meta</a></li><li data-type='method'><a href="RequestAuth.html#parameters">parameters</a></li><li data-type='method'><a href="RequestAuth.html#parent">parent</a></li><li data-type='method'><a href="RequestAuth.html#toJSON">toJSON</a></li><li data-type='method'><a href="RequestAuth.html#update">update</a></li><li data-type='method'><a href="RequestAuth.html#use">use</a></li></ul></li><li><a href="RequestBody.html">RequestBody</a><ul class='methods'><li data-type='method'><a href="RequestBody.html#findInParents">findInParents</a></li><li data-type='method'><a href="RequestBody.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="RequestBody.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="RequestBody.html#meta">meta</a></li><li data-type='method'><a href="RequestBody.html#parent">parent</a></li><li data-type='method'><a href="RequestBody.html#toJSON">toJSON</a></li><li data-type='method'><a href="RequestBody.html#toString">toString</a></li><li data-type='method'><a href="RequestBody.html#update">update</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#.createFromNode">createFromNode</a></li><li data-type='method'><a href="Response.html#.isResponse">isResponse</a></li><li data-type='method'><a href="Response.html#contentInfo">contentInfo</a></li><li data-type='method'><a href="Response.html#dataURI">dataURI</a></li><li data-type='method'><a href="Response.html#describe">describe</a></li><li data-type='method'><a href="Response.html#findInParents">findInParents</a></li><li data-type='method'><a href="Response.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Response.html#json">json</a></li><li data-type='method'><a href="Response.html#jsonp">jsonp</a></li><li data-type='method'><a href="Response.html#meta">meta</a></li><li data-type='method'><a href="Response.html#parent">parent</a></li><li data-type='method'><a href="Response.html#reason">reason</a></li><li data-type='method'><a href="Response.html#size">size</a></li><li data-type='method'><a href="Response.html#text">text</a></li><li data-type='method'><a href="Response.html#toJSON">toJSON</a></li></ul></li><li><a href="Script.html">Script</a><ul class='methods'><li data-type='method'><a href="Script.html#.isScript">isScript</a></li><li data-type='method'><a href="Script.html#describe">describe</a></li><li data-type='method'><a href="Script.html#findInParents">findInParents</a></li><li data-type='method'><a href="Script.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Script.html#meta">meta</a></li><li data-type='method'><a href="Script.html#parent">parent</a></li><li data-type='method'><a href="Script.html#toJSON">toJSON</a></li><li data-type='method'><a href="Script.html#toSource">toSource</a></li><li data-type='method'><a href="Script.html#update">update</a></li></ul></li><li><a href="Url.html">Url</a><ul class='methods'><li data-type='method'><a href="Url.html#.isUrl">isUrl</a></li><li data-type='method'><a href="Url.html#.parse">parse</a></li><li data-type='method'><a href="Url.html#addQueryParams">addQueryParams</a></li><li data-type='method'><a href="Url.html#findInParents">findInParents</a></li><li data-type='method'><a href="Url.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Url.html#getHost">getHost</a></li><li data-type='method'><a href="Url.html#getPath">getPath</a></li><li data-type='method'><a href="Url.html#getPathWithQuery">getPathWithQuery</a></li><li data-type='method'><a href="Url.html#getQueryString">getQueryString</a></li><li data-type='method'><a href="Url.html#getRemote">getRemote</a></li><li data-type='method'><a href="Url.html#meta">meta</a></li><li data-type='method'><a href="Url.html#parent">parent</a></li><li data-type='method'><a href="Url.html#removeQueryParams">removeQueryParams</a></li><li data-type='method'><a href="Url.html#toJSON">toJSON</a></li><li data-type='method'><a href="Url.html#toString">toString</a></li><li data-type='method'><a href="Url.html#update">update</a></li></ul></li><li><a href="UrlMatchPattern.html">UrlMatchPattern</a><ul class='methods'><li data-type='method'><a href="UrlMatchPattern.html#describe">describe</a></li><li data-type='method'><a href="UrlMatchPattern.html#findInParents">findInParents</a></li><li data-type='method'><a href="UrlMatchPattern.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="UrlMatchPattern.html#getProtocols">getProtocols</a></li><li data-type='method'><a href="UrlMatchPattern.html#meta">meta</a></li><li data-type='method'><a href="UrlMatchPattern.html#parent">parent</a></li><li data-type='method'><a href="UrlMatchPattern.html#test">test</a></li><li data-type='method'><a href="UrlMatchPattern.html#testHost">testHost</a></li><li data-type='method'><a href="UrlMatchPattern.html#testPath">testPath</a></li><li data-type='method'><a href="UrlMatchPattern.html#testPort">testPort</a></li><li data-type='method'><a href="UrlMatchPattern.html#testProtocol">testProtocol</a></li><li data-type='method'><a href="UrlMatchPattern.html#toJSON">toJSON</a></li><li data-type='method'><a href="UrlMatchPattern.html#toString">toString</a></li><li data-type='method'><a href="UrlMatchPattern.html#update">update</a></li></ul></li><li><a href="UrlMatchPatternList.html">UrlMatchPatternList</a><ul class='methods'><li data-type='method'><a href="UrlMatchPatternList.html#add">add</a></li><li data-type='method'><a href="UrlMatchPatternList.html#all">all</a></li><li data-type='method'><a href="UrlMatchPatternList.html#append">append</a></li><li data-type='method'><a href="UrlMatchPatternList.html#assimilate">assimilate</a></li><li data-type='method'><a href="UrlMatchPatternList.html#clear">clear</a></li><li data-type='method'><a href="UrlMatchPatternList.html#count">count</a></li><li data-type='method'><a href="UrlMatchPatternList.html#each">each</a></li><li data-type='method'><a href="UrlMatchPatternList.html#eachParent">eachParent</a></li><li data-type='method'><a href="UrlMatchPatternList.html#filter">filter</a></li><li data-type='method'><a href="UrlMatchPatternList.html#find">find</a></li><li data-type='method'><a href="UrlMatchPatternList.html#get">get</a></li><li data-type='method'><a href="UrlMatchPatternList.html#has">has</a></li><li data-type='method'><a href="UrlMatchPatternList.html#idx">idx</a></li><li data-type='method'><a href="UrlMatchPatternList.html#indexOf">indexOf</a></li><li data-type='method'><a href="UrlMatchPatternList.html#insert">insert</a></li><li data-type='method'><a href="UrlMatchPatternList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="UrlMatchPatternList.html#map">map</a></li><li data-type='method'><a href="UrlMatchPatternList.html#one">one</a></li><li data-type='method'><a href="UrlMatchPatternList.html#populate">populate</a></li><li data-type='method'><a href="UrlMatchPatternList.html#prepend">prepend</a></li><li data-type='method'><a href="UrlMatchPatternList.html#reduce">reduce</a></li><li data-type='method'><a href="UrlMatchPatternList.html#remove">remove</a></li><li data-type='method'><a href="UrlMatchPatternList.html#repopulate">repopulate</a></li><li data-type='method'><a href="UrlMatchPatternList.html#test">test</a></li><li data-type='method'><a href="UrlMatchPatternList.html#toObject">toObject</a></li><li data-type='method'><a href="UrlMatchPatternList.html#toString">toString</a></li><li data-type='method'><a href="UrlMatchPatternList.html#upsert">upsert</a></li></ul></li><li><a href="Variable.html">Variable</a><ul class='methods'><li data-type='method'><a href="Variable.html#.isVariable">isVariable</a></li><li data-type='method'><a href="Variable.html#cast">cast</a></li><li data-type='method'><a href="Variable.html#describe">describe</a></li><li data-type='method'><a href="Variable.html#findInParents">findInParents</a></li><li data-type='method'><a href="Variable.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Variable.html#get">get</a></li><li data-type='method'><a href="Variable.html#meta">meta</a></li><li data-type='method'><a href="Variable.html#parent">parent</a></li><li data-type='method'><a href="Variable.html#set">set</a></li><li data-type='method'><a href="Variable.html#toJSON">toJSON</a></li><li data-type='method'><a href="Variable.html#toString">toString</a></li><li data-type='method'><a href="Variable.html#update">update</a></li><li data-type='method'><a href="Variable.html#valueOf">valueOf</a></li><li data-type='method'><a href="Variable.html#valueType">valueType</a></li></ul></li><li><a href="VariableList.html">VariableList</a><ul class='methods'><li data-type='method'><a href="VariableList.html#.isVariableList">isVariableList</a></li><li data-type='method'><a href="VariableList.html#add">add</a></li><li data-type='method'><a href="VariableList.html#all">all</a></li><li data-type='method'><a href="VariableList.html#append">append</a></li><li data-type='method'><a href="VariableList.html#assimilate">assimilate</a></li><li data-type='method'><a href="VariableList.html#clear">clear</a></li><li data-type='method'><a href="VariableList.html#count">count</a></li><li data-type='method'><a href="VariableList.html#each">each</a></li><li data-type='method'><a href="VariableList.html#eachParent">eachParent</a></li><li data-type='method'><a href="VariableList.html#filter">filter</a></li><li data-type='method'><a href="VariableList.html#find">find</a></li><li data-type='method'><a href="VariableList.html#get">get</a></li><li data-type='method'><a href="VariableList.html#has">has</a></li><li data-type='method'><a href="VariableList.html#idx">idx</a></li><li data-type='method'><a href="VariableList.html#indexOf">indexOf</a></li><li data-type='method'><a href="VariableList.html#insert">insert</a></li><li data-type='method'><a href="VariableList.html#insertAfter">insertAfter</a></li><li data-type='method'><a href="VariableList.html#map">map</a></li><li data-type='method'><a href="VariableList.html#one">one</a></li><li data-type='method'><a href="VariableList.html#populate">populate</a></li><li data-type='method'><a href="VariableList.html#prepend">prepend</a></li><li data-type='method'><a href="VariableList.html#reduce">reduce</a></li><li data-type='method'><a href="VariableList.html#remove">remove</a></li><li data-type='method'><a href="VariableList.html#replace">replace</a></li><li data-type='method'><a href="VariableList.html#repopulate">repopulate</a></li><li data-type='method'><a href="VariableList.html#substitute">substitute</a></li><li data-type='method'><a href="VariableList.html#syncFromObject">syncFromObject</a></li><li data-type='method'><a href="VariableList.html#syncToObject">syncToObject</a></li><li data-type='method'><a href="VariableList.html#toObject">toObject</a></li><li data-type='method'><a href="VariableList.html#toString">toString</a></li><li data-type='method'><a href="VariableList.html#upsert">upsert</a></li></ul></li><li><a href="VariableScope.html">VariableScope</a><ul class='methods'><li data-type='method'><a href="VariableScope.html#.isVariableScope">isVariableScope</a></li><li data-type='method'><a href="VariableScope.html#clear">clear</a></li><li data-type='method'><a href="VariableScope.html#describe">describe</a></li><li data-type='method'><a href="VariableScope.html#disableTracking">disableTracking</a></li><li data-type='method'><a href="VariableScope.html#enableTracking">enableTracking</a></li><li data-type='method'><a href="VariableScope.html#findInParents">findInParents</a></li><li data-type='method'><a href="VariableScope.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="VariableScope.html#get">get</a></li><li data-type='method'><a href="VariableScope.html#has">has</a></li><li data-type='method'><a href="VariableScope.html#meta">meta</a></li><li data-type='method'><a href="VariableScope.html#parent">parent</a></li><li data-type='method'><a href="VariableScope.html#replaceIn">replaceIn</a></li><li data-type='method'><a href="VariableScope.html#set">set</a></li><li data-type='method'><a href="VariableScope.html#toJSON">toJSON</a></li><li data-type='method'><a href="VariableScope.html#toObject">toObject</a></li><li data-type='method'><a href="VariableScope.html#unset">unset</a></li></ul></li><li><a href="Version.html">Version</a><ul class='methods'><li data-type='method'><a href="Version.html#findInParents">findInParents</a></li><li data-type='method'><a href="Version.html#forEachParent">forEachParent</a></li><li data-type='method'><a href="Version.html#meta">meta</a></li><li data-type='method'><a href="Version.html#parent">parent</a></li><li data-type='method'><a href="Version.html#set">set</a></li><li data-type='method'><a href="Version.html#toJSON">toJSON</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">collection/cookie.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var _ = require('../util').lodash,
+    PropertyBase = require('./property-base').PropertyBase,
+    PropertyList = require('./property-list').PropertyList,
+
+    E = '',
+    EQ = '=',
+    PAIR_SPLIT_REGEX = /; */,
+    COOKIES_SEPARATOR = '; ',
+
+    /**
+     * Enum for all the Cookie attributes.
+     *
+     * @private
+     * @readonly
+     * @enum {string} CookieAttributes
+     */
+    cookieAttributes = {
+        httponly: 'httpOnly',
+        secure: 'secure',
+        domain: 'domain',
+        path: 'path',
+        'max-age': 'maxAge',
+        session: 'session',
+        expires: 'expires'
+    },
+
+    Cookie;
+
+/**
+ * The following is the object structure accepted as constructor parameter while calling `new Cookie(...)`. It is
+ * also the structure exported when {@link Property#toJSON} or {@link Property#toObjectResolved} is called on a
+ * Cookie instance.
+ *
+ * @typedef Cookie.definition
+ *
+ * @property {String=} [key] The name of the cookie. Some call it the "name".
+ * @property {String=} [value] The value stored in the Cookie
+ * @property {String=} [expires] Expires sets an expiry date for when a cookie gets deleted. It should either be a
+ * date object or timestamp string of date.
+ * @property {Number=} [maxAge] Max-age sets the time in seconds for when a cookie will be deleted.
+ * @property {String=} [domain] Indicates the domain(s) for which the cookie should be sent.
+ * @property {String=} [path] Limits the scope of the cookie to a specified path, e.g: "/accounts"
+ * @property {Boolean=} [secure] A secure cookie will only be sent to the server when a request is made using SSL and
+ * the HTTPS protocol.
+ * The idea that the contents of the cookie are of high value and could be potentially damaging to transmit
+ * as clear text.
+ * @property {Boolean=} [httpOnly] The idea behind HTTP-only cookies is to instruct a browser that a cookie should never
+ * be accessible via JavaScript through the document.cookie property. This feature was designed as a security measure
+ * to help prevent cross-site scripting (XSS) attacks perpetrated by stealing cookies via JavaScript.
+ * @property {Boolean=} [hostOnly] Indicates that this cookie is only valid for the given domain (and not its parent or
+ * child domains.)
+ * @property {Boolean=} [session] Indicates whether this is a Session Cookie. (A transient cookie, which is deleted at
+ * the end of an HTTP session.)
+ * @property {Array=} [extensions] Any extra attributes that are extensions to the original Cookie specification can be
+ * specified here.
+ * @property {String} [extensions[].key] Name of the extension.
+ * @property {String} [extensions[].value] Value of the extension
+ *
+ * @example &lt;caption>JSON definition of an example cookie&lt;/caption>
+ * {
+ *     "key": "my-cookie-name",
+ *     "expires": "1464769543832",
+ *      // UNIX timestamp, in *milliseconds*
+ *     "maxAge": "300",
+ *      // In seconds. In this case, the Cookie is valid for 5 minutes
+ *     "domain": "something.example.com",
+ *     "path": "/",
+ *     "secure": false,
+ *     "httpOnly": true,
+ *     "session": false,
+ *     "value": "my-cookie-value",
+ *     "extensions": [{
+ *         "key": "Priority",
+ *         "value": "HIGH"
+ *     }]
+ * }
+ */
+_.inherit((
+
+    /**
+     * A Postman Cookie definition that comprehensively represents an HTTP Cookie.
+     *
+     * @constructor
+     * @extends {PropertyBase}
+     *
+     * @param {Cookie.definition} [options] Pass the initial definition of the Cookie.
+     * @example &lt;caption>Create a new Cookie&lt;/caption>
+     * var Cookie = require('postman-collection').Cookie,
+     *     myCookie = new Cookie({
+     *          name: 'my-cookie-name',
+     *          expires: '1464769543832', // UNIX timestamp, in *milliseconds*
+     *          maxAge: '300',  // In seconds. In this case, the Cookie is valid for 5 minutes
+     *          domain: 'something.example.com',
+     *          path: '/',
+     *          secure: false,
+     *          httpOnly: true,
+     *          session: false,
+     *          value: 'my-cookie-value',
+     *          extensions: [{
+     *              key: 'Priority',
+     *              value: 'HIGH'
+     *          }]
+     *     });
+     *
+     * @example &lt;caption>Parse a Cookie Header&lt;/caption>
+     * var Cookie = require('postman-collection').Cookie,
+     *     rawHeader = 'myCookie=myValue;Path=/;Expires=Sun, 04-Feb-2018 14:18:27 GMT;Secure;HttpOnly;Priority=HIGH'
+     *     myCookie = new Cookie(rawHeader);
+     *
+     * console.log(myCookie.toJSON());
+     */
+    Cookie = function PostmanCookie (options) {
+        // this constructor is intended to inherit and as such the super constructor is required to be executed
+        Cookie.super_.call(this, options);
+
+        _.isString(options) &amp;&amp; (options = Cookie.parse(options));
+
+        options &amp;&amp; this.update(options);
+    }), PropertyBase);
+
+_.assign(Cookie.prototype, /** @lends Cookie.prototype */ {
+    update (options) {
+        _.mergeDefined(this, /** @lends Cookie.prototype */ {
+            /**
+             * The name of the cookie.
+             *
+             * @type {String}
+             */
+            name: _.choose(options.name, options.key),
+
+            /**
+             * Expires sets an expiry date for when a cookie gets deleted. It should either be a date object or
+             * timestamp string of date.
+             *
+             * @type {Date|String}
+             *
+             * @note
+             * The value for this option is a date in the format Wdy, DD-Mon-YYYY HH:MM:SS GMT such as
+             * "Sat, 02 May 2009 23:38:25 GMT". Without the expires option, a cookie has a lifespan of a single session.
+             * A session is defined as finished when the browser is shut down, so session cookies exist only while the
+             * browser remains open. If the expires option is set to a date that appears in the past, then the cookie is
+             * immediately deleted in browser.
+             *
+             * @todo Accept date object and convert stringified date (timestamp only) to date object
+             * @todo Consider using Infinity as a default
+             */
+            expires: _.isString(options.expires) ? new Date(options.expires) : options.expires,
+
+            /**
+             * Max-age sets the time in seconds for when a cookie will be deleted.
+             *
+             * @type {Number}
+             */
+            maxAge: _.has(options, 'maxAge') ? Number(options.maxAge) : undefined,
+
+            /**
+             * Indicates the domain(s) for which the cookie should be sent.
+             *
+             * @type {String}
+             *
+             * @note
+             * By default, domain is set to the host name of the page setting the cookie, so the cookie value is sent
+             * whenever a request is made to the same host name. The value set for the domain option must be part of the
+             * host name that is sending the Set-Cookie header. The SDK does not perform this check, but the underlying
+             * client that actually sends the request could do it automatically.
+             */
+            domain: options.domain,
+
+            /**
+             * @type {String}
+             *
+             * @note
+             * On server, the default value for the path option is the path of the URL that sent the Set-Cookie header.
+             */
+            path: options.path,
+
+            /**
+             * A secure cookie will only be sent to the server when a request is made using SSL and the HTTPS protocol.
+             * The idea that the contents of the cookie are of high value and could be potentially damaging to transmit
+             * as clear text.
+             *
+             * @type {Boolean}
+             */
+            secure: _.has(options, 'secure') ? Boolean(options.secure) : undefined,
+
+            /**
+             * The idea behind HTTP-only cookies is to instruct a browser that a cookie should never be accessible via
+             * JavaScript through the document.cookie property. This feature was designed as a security measure to help
+             * prevent cross-site scripting (XSS) attacks perpetrated by stealing cookies via JavaScript.
+             *
+             * @type {Boolean}
+             */
+            httpOnly: _.has(options, 'httpOnly') ? Boolean(options.httpOnly) : undefined,
+
+            /**
+             * @type {Boolean}
+             */
+            hostOnly: _.has(options, 'hostOnly') ? Boolean(options.hostOnly) : undefined,
+
+            /**
+             * Indicates whether this is a Session Cookie.
+             *
+             * @type {Boolean}
+             */
+            session: _.has(options, 'session') ? Boolean(options.session) : undefined,
+
+            /**
+             * @note The commonly held belief is that cookie values must be URL-encoded, but this is a fallacy even
+             * though it is the de facto implementation. The original specification indicates that only three types of
+             * characters must be encoded: semicolon, comma, and white space. The specification indicates that URL
+             * encoding may be used but stops short of requiring it. The RFC makes no mention of encoding whatsoever.
+             * Still, almost all implementations perform some sort of URL encoding on cookie values.
+             * @type {String}
+             */
+            value: options.value ? _.ensureEncoded(options.value) : undefined,
+
+            /**
+             * Any extra parameters that are not strictly a part of the Cookie spec go here.
+             *
+             * @type {Array}
+             */
+            extensions: options.extensions || undefined
+        });
+    },
+
+    /**
+     * Get the value of this cookie.
+     *
+     * @returns {String}
+     */
+    valueOf () {
+        try {
+            return decodeURIComponent(this.value);
+        }
+        // handle malformed URI sequence
+        // refer: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Malformed_URI
+        catch (error) {
+            /* istanbul ignore next */
+            return this.value;
+        }
+    },
+
+    /**
+     * Converts the Cookie to a single Set-Cookie header string.
+     *
+     * @returns {String}
+     */
+    toString () {
+        var str = Cookie.unparseSingle(this);
+
+        if (this.expires &amp;&amp; this.expires instanceof Date) {
+            // check for valid date
+            if (!Number.isNaN(this.expires.getTime())) {
+                str += '; Expires=' + this.expires.toUTCString();
+            }
+        }
+        else if (this.expires) {
+            str += '; Expires=' + this.expires;
+        }
+
+        if (this.maxAge &amp;&amp; this.maxAge !== Infinity) {
+            str += '; Max-Age=' + this.maxAge;
+        }
+
+        if (this.domain &amp;&amp; !this.hostOnly) {
+            str += '; Domain=' + this.domain;
+        }
+
+        if (this.path) {
+            str += '; Path=' + this.path;
+        }
+
+        if (this.secure) {
+            str += '; Secure';
+        }
+
+        if (this.httpOnly) {
+            str += '; HttpOnly';
+        }
+
+        if (this.extensions) {
+            this.extensions.forEach(({ key, value }) => {
+                str += `; ${key}`;
+                str += value === true ? '' : `=${value}`;
+            });
+        }
+
+        return str;
+    }
+});
+
+_.assign(Cookie, /** @lends Cookie */ {
+
+    /**
+     * Defines the name of this property for internal use.
+     *
+     * @private
+     * @readOnly
+     * @type {String}
+     */
+    _postman_propertyName: 'Cookie',
+
+    // define behaviour of this object when put in list
+    _postman_propertyIndexKey: 'name',
+    _postman_propertyIndexCaseInsensitive: true,
+    _postman_propertyAllowsMultipleValues: true,
+
+    /**
+     * Check whether an object is an instance of PostmanCookie.
+     *
+     * @param {*} obj -
+     * @returns {Boolean}
+     */
+    isCookie: function (obj) {
+        return Boolean(obj) &amp;&amp; ((obj instanceof Cookie) ||
+            _.inSuperChain(obj.constructor, '_postman_propertyName', Cookie._postman_propertyName));
+    },
+
+    /**
+     * Stringifies an Array or {@link PropertyList} of Cookies into a single string.
+     *
+     * @param {Cookie[]} cookies - List of cookie definition object
+     * @returns {String}
+     */
+    unparse: function (cookies) {
+        if (!_.isArray(cookies) &amp;&amp; !PropertyList.isPropertyList(cookies)) {
+            return E;
+        }
+
+        return cookies.map(Cookie.unparseSingle).join(COOKIES_SEPARATOR);
+    },
+
+    /**
+     * Unparses a single Cookie.
+     *
+     * @param {Cookie} cookie - Cookie definition object
+     * @returns {String}
+     */
+    unparseSingle: function (cookie) {
+        if (!_.isObject(cookie)) { return E; }
+
+        var value = _.isNil(cookie.value) ? E : cookie.value;
+
+        // for the empty name, return just the value to match the browser behavior
+        if (!cookie.name) {
+            return value;
+        }
+
+        return cookie.name + EQ + value;
+    },
+
+    /**
+     * Cookie header parser
+     *
+     * @param {String} str -
+     * @returns {*} A plain cookie options object, use it to create a new Cookie
+     */
+    parse: function (str) {
+        if (!_.isString(str)) {
+            return str;
+        }
+
+        var obj = {},
+            pairs = str.split(PAIR_SPLIT_REGEX),
+            nameval;
+
+        nameval = Cookie.splitParam(pairs.shift()); // The first kvp is the name and value
+        obj.key = nameval.key;
+        obj.value = nameval.value;
+
+        pairs.forEach(function (pair) {
+            var keyval = Cookie.splitParam(pair),
+                value = keyval.value,
+                keyLower = keyval.key.toLowerCase();
+
+            if (cookieAttributes[keyLower]) {
+                obj[cookieAttributes[keyLower]] = value;
+            }
+            else {
+                obj.extensions = obj.extensions || [];
+                obj.extensions.push(keyval);
+            }
+        });
+        // Handle the hostOnly flag
+        if (!obj.domain) {
+            obj.hostOnly = true;
+        }
+
+        return obj;
+    },
+
+    /**
+     * Converts the Cookie to a single Set-Cookie header string.
+     *
+     * @param {Cookie} cookie - Cookie definition object
+     * @returns {String}
+     */
+    stringify: function (cookie) {
+        return Cookie.prototype.toString.call(cookie);
+    },
+
+    /**
+     * Splits a Cookie parameter into a key and a value
+     *
+     * @private
+     * @param {String} param -
+     * @returns {{key: *, value: (Boolean|*)}}
+     */
+    splitParam: function (param) {
+        var split = param.split('='),
+            key, value;
+
+        key = split[0].trim();
+        value = _.isString(split[1]) ? split[1].trim() : true;
+
+        if (_.isString(value) &amp;&amp; value[0] === '"') {
+            value = value.slice(1, -1);
+        }
+
+        return { key, value };
+    }
+});
+
+module.exports = {
+    Cookie
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated at Mon Aug 09 2021 09:24:47 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
