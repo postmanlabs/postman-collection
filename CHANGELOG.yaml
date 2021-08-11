@@ -1,8 +1,11 @@
-master:
+4.0.2:
+  date: 2021-08-09
   fixed bugs:
     - >-
       GH-1208, GH-1209 Fixed descriptions for `$randomInt` and `$randomPrice`
       dynamic variables
+  chores:
+    - Updated dependencies
 
 4.0.1:
   date: 2021-07-25
