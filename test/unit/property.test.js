@@ -290,7 +290,7 @@ describe('Property', function () {
         });
 
         it('should return extract variables from array of strings', function () {
-            expect(Property.findSubstitutions(['a {{var}}', 'b {{vbr}}', null, undefined]))
+            expect(Property.findSubstitutions(['a {{var}}', 'b {{vbr}}', 0, false, null, undefined]))
                 .to.eql(['var', 'vbr']);
         });
 
@@ -316,6 +316,17 @@ describe('Property', function () {
             obj.arr.push(obj);
 
             expect(Property.findSubstitutions(obj)).to.eql(['var1', 'var2']);
+        });
+
+        it('should not traverse the prototype chain', function () {
+            function TestObj () {
+                this.foo = '{{foo}}';
+                this.bar = '{{bar}}';
+            }
+
+            TestObj.prototype.baz = '{{baz}}';
+
+            expect(Property.findSubstitutions(new TestObj())).to.eql(['foo', 'bar']);
         });
 
         it('the instance function should work on entire JSON', function () {
