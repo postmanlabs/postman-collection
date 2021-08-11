@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.0.0
+// Type definitions for postman-collection 4.0.2
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1477,6 +1477,13 @@ declare module "postman-collection" {
          */
         describe(content: string, type?: string): void;
         /**
+         * Returns all the substitutions (variables) that are needed (or referenced) in this property (recursively).
+         * @example
+         * // returns ['host', 'path1']
+         * prop.findSubstitutions({request: 'https://{{host}}/{{path1}}-action/'});
+         */
+        findSubstitutions(): string[];
+        /**
          * This function accepts a string followed by a number of variable sources as arguments. One or more variable
          * sources can be provided and it will use the one that has the value in left-to-right order.
          * @param str - -
@@ -1490,6 +1497,15 @@ declare module "postman-collection" {
          * @param variables - -
          */
         static replaceSubstitutionsIn(obj: any, variables: (VariableList | object)[]): any;
+        /**
+         * This function recursively traverses a variable and detects all instances of variable replacements
+         * within the string of the object
+         * @example
+         * // returns ['host', 'path1']
+         * Property.findSubstitutions({request: 'https://{{host}}/{{path1}}-action/'});
+         * @param obj - Any JS variable within which we are trying to discover {{variables}}
+         */
+        static findSubstitutions(obj: any): string[];
     }
 
     /**
@@ -2628,7 +2644,7 @@ declare module "postman-collection" {
          */
         static readonly PROTOCOL_DELIMITER: string;
         /**
-         * String representation for matching all urls -
+         * String representation for matching all urls - 
          */
         static readonly MATCH_ALL_URLS: string;
     }
