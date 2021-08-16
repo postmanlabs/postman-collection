@@ -290,7 +290,7 @@ describe('Property', function () {
         });
 
         it('should return extract variables from array of strings', function () {
-            expect(Property.findSubstitutions(['a {{var}}', 'b {{vbr}}', 0, false, null, undefined]))
+            expect(Property.findSubstitutions(['a {{var}}', 'b {{vbr}}', 0, 1, false, null, undefined]))
                 .to.eql(['var', 'vbr']);
         });
 
@@ -306,14 +306,19 @@ describe('Property', function () {
             })).to.eql(['var1', 'var2']);
         });
 
+        it('should not return duplicates', function () {
+            expect(Property.findSubstitutions('{{foo}} {{bar}} | {{foo}} {{bar}}')).to.eql(['foo', 'bar']);
+        });
+
         it('should not stumble on cyclic objects', function () {
             let obj = {
                 obj: { key1: '{{var1}}' },
                 arr: ['{{var2}}']
             };
 
-            // add cyclic item
+            // add cyclic items
             obj.arr.push(obj);
+            obj.arr.push(obj.arr);
 
             expect(Property.findSubstitutions(obj)).to.eql(['var1', 'var2']);
         });
