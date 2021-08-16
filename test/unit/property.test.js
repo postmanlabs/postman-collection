@@ -280,6 +280,67 @@ describe('Property', function () {
         });
     });
 
+    describe('.findSubstitutions', function () {
+        it('should return blank array for invalid inpit', function () {
+            expect(Property.findSubstitutions()).to.eql([]);
+        });
+
+        it('should return extract variables from string', function () {
+            expect(Property.findSubstitutions('hello {{world}} of {{computers}}!')).to.eql(['world', 'computers']);
+        });
+
+        it('should return extract variables from array of strings', function () {
+            expect(Property.findSubstitutions(['a {{var}}', 'b {{vbr}}', 0, 1, false, null, undefined]))
+                .to.eql(['var', 'vbr']);
+        });
+
+        it('should return extract variables from object of strings', function () {
+            expect(Property.findSubstitutions({ key1: 'a {{var}}', key2: 'b {{vbr}}' }))
+                .to.eql(['var', 'vbr']);
+        });
+
+        it('should return extract variables recursively', function () {
+            expect(Property.findSubstitutions({
+                obj: { key1: '{{var1}}' },
+                arr: ['{{var2}}']
+            })).to.eql(['var1', 'var2']);
+        });
+
+        it('should not return duplicates', function () {
+            expect(Property.findSubstitutions('{{foo}} {{bar}} | {{foo}} {{bar}}')).to.eql(['foo', 'bar']);
+        });
+
+        it('should not stumble on cyclic objects', function () {
+            let obj = {
+                obj: { key1: '{{var1}}' },
+                arr: ['{{var2}}']
+            };
+
+            // add cyclic items
+            obj.arr.push(obj);
+            obj.arr.push(obj.arr);
+
+            expect(Property.findSubstitutions(obj)).to.eql(['var1', 'var2']);
+        });
+
+        it('should not traverse the prototype chain', function () {
+            function TestObj () {
+                this.foo = '{{foo}}';
+                this.bar = '{{bar}}';
+            }
+
+            TestObj.prototype.baz = '{{baz}}';
+
+            expect(Property.findSubstitutions(new TestObj())).to.eql(['foo', 'bar']);
+        });
+
+        it('the instance function should work on entire JSON', function () {
+            let prop = new Property({ description: 'This is a {{variable}} in description!' });
+
+            expect(prop.findSubstitutions()).to.eql(['variable']);
+        });
+    });
+
     describe('.replaceSubstitutions', function () {
         /**
          * Generates a object with n variables
