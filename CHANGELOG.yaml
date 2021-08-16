@@ -3,6 +3,8 @@ unreleased:
     - >-
       GH-1213 Added Property.findSubstitutions to get list of variables used in
       a property
+  chores:
+    - Updated dependencies
 
 4.0.2:
   date: 2021-08-09
