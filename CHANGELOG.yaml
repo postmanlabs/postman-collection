@@ -1,3 +1,9 @@
+unreleased:
+  new features:
+    - >-
+      GH-1213 Added Property.findSubstitutions to get list of variables used in
+      a property
+
 4.0.2:
   date: 2021-08-09
   fixed bugs:
