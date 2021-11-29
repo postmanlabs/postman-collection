@@ -1,6 +1,7 @@
 master:
   new features:
     - Added support for "password" data type in Variable
+    - Added ability to have hooks around getter and setter for variable scope
 
 4.1.0:
   date: 2021-08-16
