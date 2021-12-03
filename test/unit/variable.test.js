@@ -460,4 +460,14 @@ describe('Variable', function () {
             expect(Variable.isVariable()).to.be.false;
         });
     });
+
+    describe('secret data type support', function () {
+        it('should behave like string', function () {
+            var variable = new Variable({ key: 'foo', value: 0, type: 'secret' });
+
+            expect(variable.type).to.equal('secret');
+            expect(variable.key).to.equal('foo');
+            expect(variable.value).to.equal('0'); // assert number to string
+        });
+    });
 });

@@ -1,3 +1,7 @@
+master:
+  new features:
+    - Added support for "secret" data type in Variable
+
 4.1.0:
   date: 2021-08-16
   new features:
