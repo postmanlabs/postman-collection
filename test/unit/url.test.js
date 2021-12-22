@@ -1520,8 +1520,8 @@ describe('Url', function () {
         it('should NOT add ? in-case the params have only disabled values', function () {
             var url = new Url({
                 host: 'example.com',
-                path: [ 'blah' ],
-                query: [ { key: 'user', value: 'x', disabled: true } ]
+                path: ['blah'],
+                query: [{ key: 'user', value: 'x', disabled: true }]
             });
 
             expect(url.getPathWithQuery()).to.equal('/blah');
