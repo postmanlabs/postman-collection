@@ -1516,6 +1516,23 @@ describe('Url', function () {
 
             expect(url.query.toObject()).to.eql({ query: 'param', query2: 'param2' });
         });
+
+        it('should NOT add ? in-case the params have only disabled values', function () {
+            var url = new Url({
+                host: 'example.com',
+                path: ['blah'],
+                query: [{ key: 'user', value: 'x', disabled: true }]
+            });
+
+            expect(url.getPathWithQuery()).to.equal('/blah');
+        });
+
+        it('should add / in-case the path is not provided', function () {
+            var url = new Url('example.com');
+
+            // ref: https://datatracker.ietf.org/doc/html/rfc2616#section-3.2.3
+            expect(url.getPathWithQuery()).to.equal('/');
+        });
     });
 
     describe('Security', function () {
