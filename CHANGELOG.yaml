@@ -1,8 +1,9 @@
-unreleased:
+4.1.1:
+  date: 2022-01-03
   fixed bugs:
     - >-
-      GH-1231 Fixed the method `getPathWithQuery` where disabled params
-      were resulting into `?` at the end of the url
+      GH-1231 Fixed the method `getPathWithQuery` where disabled params were
+      resulting into `?` at the end of the url
   chores:
     - Updated dependencies
 
