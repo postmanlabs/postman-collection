@@ -2108,7 +2108,7 @@ declare module "postman-collection" {
          */
         json(reviver?: (...params: any[]) => any, strict?: boolean): any;
         /**
-         * Get the JSON from response body that reuturns JSONP response.
+         * Get the JSON from response body that returns JSONP response.
          * @param [reviver] - -
          * @param [strict = false] - Specify whether JSON parsing will be strict. This will fail on comments and BOM
          */
