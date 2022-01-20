@@ -1,3 +1,7 @@
+unreleased:
+  chores:
+    - Replaced unmaintained 'faker' dependency with '@faker-js/faker'
+
 4.1.1:
   date: 2022-01-03
   fixed bugs:
