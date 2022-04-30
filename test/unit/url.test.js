@@ -545,7 +545,15 @@ describe('Url', function () {
             var subject = Url.parse('http://127.0.0.1/:a/:ab.json/:a+b');
 
             expect(subject).to.have.property('variable').that.has.lengthOf(3).that.eql([
-                { key: 'a' }, { key: 'ab.json' }, { key: 'a+b' }
+                { key: 'a' }, { key: 'ab' }, { key: 'a+b' }
+            ]);
+        });
+
+        it('should parse path variables with media type extention properly', function () {
+            var subject = Url.parse('http://127.0.0.1/:a/:ab.json');
+
+            expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
+                { key: 'a' }, { key: 'ab' }
             ]);
         });
 
