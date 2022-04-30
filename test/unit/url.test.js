@@ -576,7 +576,7 @@ describe('Url', function () {
             var subject = Url.parse('http://127.0.0.1/:郵差/:foo.json');
 
             expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
-                { key: '郵差' }, { key: 'foo.json' }
+                { key: '郵差' }, { key: 'foo' }
             ]);
         });
 
