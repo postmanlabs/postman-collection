@@ -1,6 +1,10 @@
 unreleased:
   chores:
     - Run Travis coverage step in latest LTS Node.js release
+  fixed bugs:
+    - >-
+      GH-1268 Fixed a bug where URL path variables are not replaced if followed
+      by a dot
 
 4.1.2:
   date: 2022-03-28
