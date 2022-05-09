@@ -1,3 +1,7 @@
+unreleased:
+  chores:
+    - Run Travis coverage step in latest LTS Node.js release
+
 4.1.2:
   date: 2022-03-28
   chores:
