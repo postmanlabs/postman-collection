@@ -41,7 +41,7 @@
     "mime-format": "2.0.1",
     "mime-types": "2.1.35",
     "postman-url-encoder": "3.0.5",
-    "semver": "7.3.5",
+    "semver": "7.3.7",
     "uuid": "8.3.2"
   },
   "devDependencies": {
