@@ -10,10 +10,10 @@ node_js:
 
 jobs:
   include:
-    # run tests in Node.js stable and publish code coverage
+    # run tests in latest LTS Node.js release and publish code coverage
     - name: 'Coverage'
       os: linux
-      node_js: stable
+      node_js: lts/*
       script:
         - npm run test-unit
         - npm run codecov -- -c -Z -f .coverage/coverage-final.json -F unit
