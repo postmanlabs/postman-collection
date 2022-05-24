@@ -545,14 +545,30 @@ describe('Url', function () {
             var subject = Url.parse('http://127.0.0.1/:a/:ab.json/:a+b');
 
             expect(subject).to.have.property('variable').that.has.lengthOf(3).that.eql([
-                { key: 'a' }, { key: 'ab.json' }, { key: 'a+b' }
+                { key: 'a' }, { key: 'ab' }, { key: 'a+b' }
+            ]);
+        });
+
+        it('should parse path variables with media type extension', function () {
+            var subject = Url.parse('http://127.0.0.1/:a/:ab.json');
+
+            expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
+                { key: 'a' }, { key: 'ab' }
+            ]);
+        });
+
+        it('should ignore everything after a dot in path variable', function () {
+            var subject = Url.parse('http://127.0.0.1/:foo.bar.baz');
+
+            expect(subject).to.have.property('variable').that.has.lengthOf(1).that.eql([
+                { key: 'foo' }
             ]);
         });
 
         it('should not parse empty path variables', function () {
-            var subject = Url.parse('http://127.0.0.1/:/:/:var');
+            var subject = Url.parse('http://127.0.0.1/:/:./:var');
 
-            expect(subject.path).to.eql([':', ':', ':var']);
+            expect(subject.path).to.eql([':', ':.', ':var']);
             expect(subject.variable).to.have.lengthOf(1).that.eql([{ key: 'var' }]);
         });
 
@@ -565,10 +581,10 @@ describe('Url', function () {
         });
 
         it('should parse path variables containing special characters properly', function () {
-            var subject = Url.parse('http://127.0.0.1/:郵差/:foo.json');
+            var subject = Url.parse('http://127.0.0.1/:郵差/:foo-郵差.json');
 
             expect(subject).to.have.property('variable').that.has.lengthOf(2).that.eql([
-                { key: '郵差' }, { key: 'foo.json' }
+                { key: '郵差' }, { key: 'foo-郵差' }
             ]);
         });
 
@@ -1004,6 +1020,35 @@ describe('Url', function () {
             expect(url.getPath()).to.eql('/get/:beta/:gamma/:delta/:epsilon/:phi');
         });
 
+        it('should work with media type extension', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:alpha/:beta.json',
+                variable: [
+                    { key: 'alpha', value: 'foo' },
+                    { key: 'beta', value: 'bar' }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('/foo/bar.json');
+        });
+
+        it('should ignore everything after a dot', function () {
+            var url = new Url({
+                protocol: 'https',
+                host: 'postman-echo.com',
+                port: '443',
+                path: '/:郵差.bar.baz',
+                variable: [
+                    { key: '郵差', value: 'foo' }
+                ]
+            });
+
+            expect(url.getPath()).to.eql('/foo.bar.baz');
+        });
+
         it('should not resolve path variables when unresolved is set to false', function () {
             var url = new Url({
                 protocol: 'https',
@@ -1116,7 +1161,7 @@ describe('Url', function () {
         });
 
         it('should handle path variables', function () {
-            var url = 'http://127.0.0.1/:郵差/:/:foo.json';
+            var url = 'http://127.0.0.1/:郵差/:/:./:foo.bar.baz/:foo.json';
 
             expect((new Url(url)).toString()).to.equal(url);
         });
@@ -1124,14 +1169,15 @@ describe('Url', function () {
         it('should resolve path variables', function () {
             var url = new Url({
                 host: 'localhost',
-                path: '/:v1/:/:郵差',
+                path: '/:v1/:/:./:郵差/:郵差-郵差.1.json',
                 variable: [
                     { key: 'v1', value: 'foo' },
-                    { key: '郵差', value: 'bar' }
+                    { key: '郵差', value: 'bar' },
+                    { key: '郵差-郵差', value: 'baz' }
                 ]
             });
 
-            expect(url.toString()).to.equal('localhost/foo/:/bar');
+            expect(url.toString()).to.equal('localhost/foo/:/:./bar/baz.1.json');
         });
 
         it('should handle variables having reserved characters', function () {
