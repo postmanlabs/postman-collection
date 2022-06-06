@@ -1,4 +1,5 @@
-unreleased:
+4.1.4:
+  date: 2022-06-06
   chores:
     - Downgraded `@faker-js/faker` dependency to `5.5.3`
 
