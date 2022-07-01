@@ -55,6 +55,12 @@ describe('Event', function () {
                 });
             });
         });
+
+        it('should respect case for listen property', function () {
+            var postmanEvent = new Event({ id: 'dummy-id', listen: 'preRequest' });
+
+            expect(postmanEvent).to.have.property('listen', 'preRequest');
+        });
     });
 
     describe('json representation', function () {
