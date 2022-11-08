@@ -32,7 +32,7 @@
     "test-unit": "nyc --nycrc-path=.nycrc.js node npm/test-unit.js"
   },
   "dependencies": {
-    "@faker-js/faker": "5.5.3",
+    "@faker-js/faker": "7.6.0",
     "file-type": "3.9.0",
     "http-reasons": "0.1.0",
     "iconv-lite": "0.6.3",
