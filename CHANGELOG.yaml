@@ -1,4 +1,5 @@
-unreleased:
+4.1.6:
+  date: 2022-11-28
   chores:
     - Updated Travis configuration to use an updated Ubuntu distribution
     - Updated dependencies
