@@ -13,6 +13,7 @@ jobs:
     # run tests in latest LTS Node.js release and publish code coverage
     - name: 'Coverage'
       os: linux
+      dist: focal
       node_js: lts/*
       script:
         - npm run test-unit
