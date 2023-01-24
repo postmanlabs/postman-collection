@@ -1,4 +1,4 @@
-# Postman Collection SDK [![Build Status](https://travis-ci.com/postmanlabs/postman-collection.svg?branch=develop)](https://travis-ci.com/postmanlabs/postman-collection) [![codecov](https://codecov.io/gh/postmanlabs/postman-collection/branch/develop/graph/badge.svg)](https://codecov.io/gh/postmanlabs/postman-collection)
+# Postman Collection SDK [![Build Status](https://github.com/postmanlabs/postman-collection/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/postmanlabs/postman-collection/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/postmanlabs/postman-collection/branch/develop/graph/badge.svg)](https://codecov.io/gh/postmanlabs/postman-collection)
 
 Postman Collection SDK is a NodeJS module that allows a developer to work with Postman Collections. Using this module a
 developer can create collections, manipulate them and then export them in a format that the Postman Apps and Postman CLI
