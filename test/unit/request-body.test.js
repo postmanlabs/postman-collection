@@ -525,14 +525,14 @@ describe('RequestBody', function () {
             expect(rBody.toJSON()).to.eql(definition);
         });
 
-        it('should not have content in file body', function () {
+        it('should have content in file body', function () {
             var definition = {
                     mode: 'file',
-                    file: { src: 'fileSrc', content: 'this should be removed' }
+                    file: { src: 'fileSrc', content: 'this should not be removed' }
                 },
                 rBody = new RequestBody(definition);
 
-            expect(rBody.toJSON().file).to.not.have.property('content');
+            expect(rBody.toJSON().file).to.have.property('content');
         });
     });
 });

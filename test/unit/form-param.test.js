@@ -68,10 +68,22 @@ describe('FormParam', function () {
             expect(fp.toJSON()).to.eql(definition);
         });
 
-        it('should correctly handle param with type `file`', function () {
+        it('should correctly handle param with type `file` and src', function () {
             var definition = {
                     key: 'foo',
                     src: 'fileSrc',
+                    type: 'file',
+                    contentType: 'application/json'
+                },
+                fp = new FormParam(definition);
+
+            expect(fp.toJSON()).to.eql(definition);
+        });
+
+        it('should correctly handle param with type `file` and content', function () {
+            var definition = {
+                    key: 'foo',
+                    content: 'Base64 representation of buffer',
                     type: 'file',
                     contentType: 'application/json'
                 },
