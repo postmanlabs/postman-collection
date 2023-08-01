@@ -1,4 +1,5 @@
-var expect = require('chai').expect,
+var Stream = require('stream'),
+    expect = require('chai').expect,
     rawRequestBody = require('../fixtures').requestData,
     RequestBody = require('../../lib/index.js').RequestBody,
     QueryParam = require('../../lib/index.js').QueryParam,
@@ -533,6 +534,16 @@ describe('RequestBody', function () {
                 rBody = new RequestBody(definition);
 
             expect(rBody.toJSON().file).to.have.property('content');
+        });
+
+        it('should correctly handle request body with non serializable data', function () {
+            var definition = {
+                    mode: 'file',
+                    file: { content: new Stream.Readable() }
+                },
+                rBody = new RequestBody(definition);
+
+            expect(rBody.toJSON()).to.eql(definition);
         });
     });
 });
