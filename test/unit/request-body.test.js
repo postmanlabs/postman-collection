@@ -534,16 +534,19 @@ describe('RequestBody', function () {
                 rBody = new RequestBody(definition);
 
             expect(rBody.toJSON().file).to.have.property('content');
+            expect(rBody.toJSON().file.content).to.eql('this should not be removed');
         });
 
         it('should correctly handle request body with non serializable data', function () {
-            var definition = {
+            var stream = new Stream.Readable(),
+                definition = {
                     mode: 'file',
-                    file: { content: new Stream.Readable() }
+                    file: { content: stream }
                 },
                 rBody = new RequestBody(definition);
 
             expect(rBody.toJSON()).to.eql(definition);
+            expect(rBody.toJSON().file.content).to.eql(stream);
         });
     });
 });
