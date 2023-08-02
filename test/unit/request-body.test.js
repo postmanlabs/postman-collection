@@ -525,13 +525,16 @@ describe('RequestBody', function () {
             expect(rBody.toJSON()).to.eql(definition);
         });
 
-        it('should not have content in file body', function () {
+        it('should not have non-string content in file body', function () {
             var definition = {
                     mode: 'file',
-                    file: { src: 'fileSrc', content: 'this should be removed' }
+                    file: { src: 'fileSrc', content: 'foo' }
                 },
                 rBody = new RequestBody(definition);
 
+            expect(rBody.toJSON().file).to.have.property('content', 'foo');
+
+            rBody = new RequestBody({ mode: 'file', file: { content: Buffer.from('foo') } });
             expect(rBody.toJSON().file).to.not.have.property('content');
         });
     });
