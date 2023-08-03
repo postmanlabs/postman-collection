@@ -73,6 +73,7 @@ describe('FormParam', function () {
                     key: 'foo',
                     src: 'fileSrc',
                     type: 'file',
+                    fileName: 'file.txt',
                     contentType: 'application/json'
                 },
                 fp = new FormParam(definition);
@@ -80,10 +81,20 @@ describe('FormParam', function () {
             expect(fp.toJSON()).to.eql(definition);
         });
 
-        it('should not have value for param with type `file`', function () {
+        it('should not have non-string value for param with type `file`', function () {
             var fp = new FormParam({
                 key: 'foo',
-                value: 'this will be removed for file param',
+                value: 'bar',
+                type: 'file',
+                contentType: 'application/json',
+                src: 'fileSrc'
+            });
+
+            expect(fp.toJSON()).to.have.property('value', 'bar');
+
+            fp = new FormParam({
+                key: 'foo',
+                value: Buffer.from('bar'),
                 type: 'file',
                 contentType: 'application/json',
                 src: 'fileSrc'
