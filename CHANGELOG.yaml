@@ -1,4 +1,5 @@
-unreleased:
+4.2.0:
+  date: 2023-08-03
   new features:
     - GH-1329 Added support for `fileName` property in formdata request body
     - GH-1329 Retain string file content while parsing formdata and file bodies
