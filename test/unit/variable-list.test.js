@@ -255,6 +255,28 @@ describe('VariableList', function () {
         });
     });
 
+    describe('.assimilate', function () {
+        it('should retain description post assimilate', function () {
+            const variableList = new VariableList(),
+                pathParams = [
+                    {
+                        key: 'spacecraftId',
+                        value: '<string>',
+                        description: 'PATH_PARAM_DESCRIPTION',
+                        disabled: false
+                    }
+                ];
+
+            variableList.add({
+                key: 'spacecraftId',
+                value: '<string>'
+            });
+            variableList.assimilate(pathParams, true);
+            expect(variableList.members[0].description.content).to.equal('PATH_PARAM_DESCRIPTION');
+            expect(variableList.members[0].description.type).to.equal('text/plain');
+        });
+    });
+
     describe('.syncToObject', function () {
         it('should use a default blank target object if the provided target is not an object', function () {
             var list = new VariableList(null, [
