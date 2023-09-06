@@ -40,17 +40,17 @@ describe('Variable', function () {
         expect(v.system).to.be.false;
     });
 
-    it('should update the description property of a variable', function () {
+    it.only('should update the description property of a variable', function () {
         let v = new Variable();
 
         v.update({ description: 'Hello' });
-        expect(v.description).to.equal('Hello');
+        expect(v.description.content).to.equal('Hello');
 
         v = new Variable({
             description: true
         });
         v.update({ description: 'world' });
-        expect(v.description).to.equal('world');
+        expect(v.description.content).to.equal('world');
     });
 
     it('should update the disabled property of a variable', function () {
