@@ -40,7 +40,7 @@ describe('Variable', function () {
         expect(v.system).to.be.false;
     });
 
-    it.only('should update the description property of a variable', function () {
+    it('should update the description property of a variable', function () {
         let v = new Variable();
 
         v.update({ description: 'Hello' });
