@@ -1,6 +1,6 @@
 {
   "name": "postman-collection",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Inc.",
   "license": "Apache-2.0",
@@ -50,7 +50,7 @@
     "bipbip": "^0.4.2",
     "browserify": "^17.0.0",
     "btoa": "^1.2.1",
-    "chai": "^4.3.7",
+    "chai": "^4.3.8",
     "chalk": "^4.1.2",
     "dependency-check": "^4.1.0",
     "eslint": "^7.32.0",

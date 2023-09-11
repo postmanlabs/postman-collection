@@ -12,7 +12,7 @@ describe('Variable', function () {
     });
 
     it('should initialize variable with correct system value', function () {
-        var v = new Variable();
+        let v = new Variable();
 
         expect(v.system).to.be.undefined;
 
@@ -28,7 +28,7 @@ describe('Variable', function () {
     });
 
     it('should update the sytem property of a variable', function () {
-        var v = new Variable();
+        let v = new Variable();
 
         v.update({ system: true });
         expect(v.system).to.be.true;
@@ -40,8 +40,21 @@ describe('Variable', function () {
         expect(v.system).to.be.false;
     });
 
+    it('should update the description property of a variable', function () {
+        let v = new Variable();
+
+        v.update({ description: 'Hello' });
+        expect(v.description.content).to.equal('Hello');
+
+        v = new Variable({
+            description: true
+        });
+        v.update({ description: 'world' });
+        expect(v.description.content).to.equal('world');
+    });
+
     it('should update the disabled property of a variable', function () {
-        var v = new Variable();
+        let v = new Variable();
 
         v.update({ disabled: true });
         expect(v.disabled).to.be.true;
@@ -54,7 +67,7 @@ describe('Variable', function () {
     });
 
     it('should prepopulate value and type when passed to the constructor (string)', function () {
-        var v = new Variable({
+        let v = new Variable({
             value: 'Picard',
             type: 'string'
         });
@@ -66,7 +79,7 @@ describe('Variable', function () {
     });
 
     it('should prepopulate value and type when passed to the constructor (number)', function () {
-        var v = new Variable({
+        let v = new Variable({
             value: 42,
             type: 'number'
         });
@@ -78,7 +91,7 @@ describe('Variable', function () {
     });
 
     it('should prepopulate value and type when passed to the constructor (boolean)', function () {
-        var v = new Variable({
+        let v = new Variable({
             value: true,
             type: 'boolean'
         });
