@@ -128,6 +128,18 @@ describe('Variable', function () {
         });
     });
 
+    it('should prepopulate value and type when passed to the constructor (secret)', function () {
+        let v = new Variable({
+            value: 'Picard',
+            type: 'secret'
+        });
+
+        expect(v).to.deep.include({
+            value: 'Picard',
+            type: 'secret'
+        });
+    });
+
     it('should typecast value during construction when type is provided (number)', function () {
         var v = new Variable({
             value: '108',
@@ -215,6 +227,20 @@ describe('Variable', function () {
 
     it('should support any data type if type is set to `any`', function () {
         var v = new Variable(),
+            jsonValue = { iam: 'json' };
+
+        v.set('Picard');
+        expect(v.get()).to.equal('Picard');
+
+        v.set(3.142);
+        expect(v.get()).to.equal(3.142);
+
+        v.set(jsonValue);
+        expect(v.get()).to.equal(jsonValue);
+    });
+
+    it('should support any data type if type is set to `secret`', function () {
+        var v = new Variable({ type: 'secret' }),
             jsonValue = { iam: 'json' };
 
         v.set('Picard');

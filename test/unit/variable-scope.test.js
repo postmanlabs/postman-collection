@@ -1315,6 +1315,30 @@ describe('VariableScope', function () {
             expect(scope.mutations.count()).to.equal(1);
         });
 
+        it('should track set operations with datatype when datatype is secret', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+
+            scope.set('foo', 'bar', 'secret');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope.mutations.count()).to.equal(1);
+            expect(scope.mutations.stream[0].length).to.equal(3);
+        });
+
+        it('should track set operations without datatype when datatype other than secret', function () {
+            var scope = new VariableScope();
+
+            scope.enableTracking();
+
+            scope.set('foo', 'bar', 'string');
+
+            expect(scope).to.have.property('mutations');
+            expect(scope.mutations.count()).to.equal(1);
+            expect(scope.mutations.stream[0].length).to.equal(2);
+        });
+
         it('should track unset operations', function () {
             var scope = new VariableScope({
                 values: [{
@@ -1370,6 +1394,34 @@ describe('VariableScope', function () {
             scope1.set('baz', 'baz');
             // update a key
             scope1.set('foo', 'foo updated');
+            // remove a key
+            scope1.unset('bar');
+
+            // replay mutations on a different object
+            scope1.mutations.applyOn(scope2);
+
+            expect(scope1.values).to.eql(scope2.values);
+        });
+
+        it('should be capable of being replayed with secret datatype', function () {
+            var initialState = {
+                    values: [{
+                        key: 'foo',
+                        value: 'foo'
+                    }, {
+                        key: 'bar',
+                        value: 'bar'
+                    }]
+                },
+                scope1 = new VariableScope(initialState),
+                scope2 = new VariableScope(initialState);
+
+            scope1.enableTracking();
+
+            // add a new key
+            scope1.set('baz', 'baz', 'secret');
+            // update a key
+            scope1.set('foo', 'foo updated', 'secret');
             // remove a key
             scope1.unset('bar');
 
