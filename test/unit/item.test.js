@@ -573,4 +573,37 @@ describe('Item', function () {
             expect(itemGroup.getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0' });
         });
     });
+
+    describe('.getPath()', function () {
+        it('should return correct path ', function () {
+            var base = new sdk.Item();
+
+            base.name = 'child';
+
+            base.__parent = {
+                name: 'parent'
+            };
+
+            base.__parent.__parent = {
+                name: 'grand_parent'
+            };
+
+            expect(base.getPath()).to.eql([
+                'grand_parent', 'parent', 'child'
+            ]);
+        });
+
+        it('should not contain parents with name not defined', function () {
+            var base = new sdk.Item();
+
+            base.name = 'child';
+
+            base.__parent = {
+                p: true
+            };
+            expect(base.getPath()).to.eql([
+                'child'
+            ]);
+        });
+    });
 });
