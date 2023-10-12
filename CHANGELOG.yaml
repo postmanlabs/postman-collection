@@ -1,3 +1,7 @@
+unreleased:
+  new features:
+    - GH-1338 Add ability to read path of the request in scripts
+
 4.2.1:
   date: 2023-09-11
   fixed bugs:
