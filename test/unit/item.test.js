@@ -193,6 +193,40 @@ describe('Item', function () {
         });
     });
 
+    describe('.getPath()', function () {
+        it('should return correct path for 2 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                f1 = collection.items.members[0],
+                r1 = f1.items.members[0];
+
+            expect(r1.getPath()).to.deep.equal(['multi-level-folders-v2', 'F1', 'F1.R1']);
+        });
+
+        it('should return correct path for 1 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                r1 = collection.items.members[2];
+
+            expect(r1.getPath()).to.deep.equal(['multi-level-folders-v2', 'R1']);
+        });
+
+        it('should return correct path for 3 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                f2 = collection.items.members[1],
+                f3 = f2.items.members[0],
+                r1 = f3.items.members[0];
+
+            expect(r1.getPath()).to.deep.equal(['multi-level-folders-v2', 'F2', 'F2.F3', 'F2.F3.R1']);
+        });
+
+        it('should return path as empty array for item without name', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2WithoutNames),
+                f1 = collection.items.members[0],
+                r1 = f1.items.members[0];
+
+            expect(r1.getPath()).to.deep.equal([]);
+        });
+    });
+
     describe('.getAuth()', function () {
         var item,
             folder,
@@ -571,39 +605,6 @@ describe('Item', function () {
             expect(items[1].getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0', k2: 'v2' });
             expect(items[2].getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0', k3: 'v3' });
             expect(itemGroup.getProtocolProfileBehaviorResolved()).to.eql({ k0: 'v0' });
-        });
-    });
-
-    describe('.getPath()', function () {
-        it('should return correct path ', function () {
-            var base = new sdk.Item();
-
-            base.name = 'child';
-
-            base.__parent = {
-                name: 'parent'
-            };
-
-            base.__parent.__parent = {
-                name: 'grand_parent'
-            };
-
-            expect(base.getPath()).to.eql([
-                'grand_parent', 'parent', 'child'
-            ]);
-        });
-
-        it('should not contain parents with name not defined', function () {
-            var base = new sdk.Item();
-
-            base.name = 'child';
-
-            base.__parent = {
-                p: true
-            };
-            expect(base.getPath()).to.eql([
-                'child'
-            ]);
         });
     });
 });
