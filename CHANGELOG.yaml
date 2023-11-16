@@ -1,3 +1,7 @@
+unreleased:
+  new features:
+    - GH-1339 Added getPath method to Item class
+
 4.2.1:
   date: 2023-09-11
   fixed bugs:

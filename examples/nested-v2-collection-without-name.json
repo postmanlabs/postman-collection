@@ -1,19 +1,16 @@
 {
   "variables": [],
   "info": {
-    "name": "multi-level-folders-v2",
     "_postman_id": "e5f2e9cf-173b-c60a-7336-ac804a87d762",
     "description": "A simple V2 collection to test out multi level folder flows",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
   },
   "item": [
     {
-      "name": "F1",
       "id": "F1-id",
       "description": "",
       "item": [
         {
-          "name": "F1.R1",
           "event": [
             {
               "listen": "test",
@@ -37,9 +34,7 @@
           "id": "F1.R1-id"
         },
         {
-          "name": "F1.R2",
           "event": [
-
             {
               "listen": "test",
               "script": {
@@ -62,7 +57,6 @@
           "id": "F1.R2-id"
         },
         {
-          "name": "F1.R3",
           "event": [
             {
               "listen": "test",
@@ -82,22 +76,20 @@
             "body": {},
             "description": ""
           },
-          "response": []
+          "response": [],
+          "id": "F1.R3-id"
         }
       ]
     },
     {
-      "name": "F2",
       "id": "F2-id",
       "description": "",
       "item": [
         {
-          "name": "F2.F3",
           "id": "F2.F3-id",
           "description": "",
           "item": [
             {
-              "name": "F2.F3.R1",
               "id": "F2.F3.R1-id",
               "event": [
                 {
@@ -133,12 +125,10 @@
           ]
         },
         {
-          "name": "F4",
           "description": "",
           "item": []
         },
         {
-          "name": "F2.R1",
           "event": [
             {
               "listen": "test",
@@ -163,7 +153,6 @@
       ]
     },
     {
-      "name": "R1",
       "event": [
         {
           "listen": "prerequest",
