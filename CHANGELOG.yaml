@@ -1,4 +1,5 @@
-unreleased:
+4.3.0:
+  date: 2023-11-18
   new features:
     - GH-1339 Added `getPath` method on Item
   chores:
