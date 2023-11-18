@@ -193,6 +193,54 @@ describe('Item', function () {
         });
     });
 
+    describe('.getPath()', function () {
+        it('should return correct path for 1 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                req = collection.oneDeep('R1');
+
+            expect(req.getPath()).to.deep.equal([
+                'multi-level-folders-v2',
+                'R1'
+            ]);
+        });
+
+        it('should return correct path for 2 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                req = collection.oneDeep('F1.R1');
+
+            expect(req.getPath()).to.deep.equal([
+                'multi-level-folders-v2',
+                'F1',
+                'F1.R1'
+            ]);
+        });
+
+        it('should return correct path for 3 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                req = collection.oneDeep('F2.F3.R1');
+
+            expect(req.getPath()).to.deep.equal([
+                'multi-level-folders-v2',
+                'F2',
+                'F2.F3',
+                'F2.F3.R1'
+            ]);
+        });
+
+        it('should return path as array of undefined for items without name', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2WithoutNames),
+                // This is searching by id, as the item doesn't have a defined name
+                r1 = collection.oneDeep('F1.R1-id');
+
+            expect(r1.getPath()).to.deep.equal([
+                undefined,
+                undefined,
+                undefined
+            ]);
+        });
+    });
+
+
     describe('.getAuth()', function () {
         var item,
             folder,
