@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.0.2
+// Type definitions for postman-collection 4.2.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -2365,7 +2365,7 @@ declare module "postman-collection" {
          * @param value - The value of the variable to be set.
          * @param [type] - Optionally, the value of the variable can be set to a type
          */
-        set(key: string, value: any, type?: Variable.types): void;
+        set(key: string, value: any, type?: 'secret' | 'default'): void;
         /**
          * Removes the variable with the specified name.
          * @param key - -
@@ -2400,6 +2400,18 @@ declare module "postman-collection" {
          * @param obj - -
          */
         static isVariableScope(obj: any): boolean;
+    }
+
+    /**
+     * CollectionVariableScope are the variable scope that are defined at the collection level.
+     */
+    export class CollectionVariableScope {
+        /**
+         * Creates a new variable, or updates an existing one.
+         * @param key - The name of the variable to set.
+         * @param value - The value of the variable to be set.
+         */
+        set(key: string, value: any): void;
     }
 
     export namespace Variable {
@@ -2456,7 +2468,11 @@ declare module "postman-collection" {
              * Free-form type of a value. This is the default for any variable, unless specified otherwise. It ensures that
              * the variable can store data in any type and no conversion is done while using Variable.get.
              */
-            any = "{\"in\":\"\",\"out\":\"\"}"
+            any = "{\"in\":\"\",\"out\":\"\"}",
+            /**
+             * A "secret" type value stores data as postman secret variables
+             */
+            secret = "{\"in\":\"\",\"out\":\"\"}"
         }
     }
 

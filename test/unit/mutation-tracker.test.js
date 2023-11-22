@@ -163,8 +163,8 @@ describe('MutationTracker', function () {
         it('should not track invalid mutation format', function () {
             var tracker = new MutationTracker();
 
-            // expected signature is two parameters
-            tracker.track('set', 'foo', 'bar', 'baz');
+            // expected signature is three parameters
+            tracker.track('set', 'foo', 'bar', 'secret', 'baz');
 
             expect(tracker.count()).to.eql(0);
         });
