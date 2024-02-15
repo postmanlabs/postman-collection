@@ -89,7 +89,8 @@ describe('Script', function () {
             expect(scriptJSON).to.have.property('id');
             expect(scriptJSON).to.deep.include({
                 type: 'text/javascript',
-                exec: ['console.log("This is a line of test script code");']
+                exec: ['console.log("This is a line of test script code");'],
+                packages: []
             });
         });
 
@@ -201,7 +202,8 @@ describe('Script', function () {
 
             expect(jsonified).to.deep.include({
                 type: rawScript.type,
-                exec: rawScript.exec.split('\n')
+                exec: rawScript.exec.split('\n'),
+                packages: rawScript.packages
             });
             expect(jsonified.src).to.eql(rawScript.src);
         });

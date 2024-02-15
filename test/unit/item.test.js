@@ -18,7 +18,8 @@ describe('Item', function () {
                         script: {
                             id: 'my-script-1',
                             type: 'text/javascript',
-                            exec: ['console.log("This doesn\'t matter");']
+                            exec: ['console.log("This doesn\'t matter");'],
+                            packages: [{ id: 'script-package-1', name: 'package1' }]
                         }
                     }],
                     request: {

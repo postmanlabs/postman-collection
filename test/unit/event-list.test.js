@@ -10,7 +10,8 @@ describe('EventList', function () {
             id: 'my-global-script-1',
             script: {
                 type: 'text/javascript',
-                exec: 'console.log("hello");'
+                exec: 'console.log("hello");',
+                packages: [{ id: 'script-package-1', name: 'package1'}]
             }
         }];
 
@@ -35,7 +36,8 @@ describe('EventList', function () {
                     script: {
                         id: 'test-script-1',
                         type: 'text/javascript',
-                        exec: 'console.log("hello");'
+                        exec: 'console.log("hello");',
+                        packages: [{ id: 'script-package-1', name: 'package1'}]
                     }
                 }]),
                 eventListJSON;
@@ -46,7 +48,8 @@ describe('EventList', function () {
                 script: {
                     id: 'test-script-1',
                     type: 'text/javascript',
-                    exec: ['console.log("hello");']
+                    exec: ['console.log("hello");'],
+                    packages: [{ id: 'script-package-1', name: 'package1'}]
                 }
             }]);
 
@@ -63,7 +66,8 @@ describe('EventList', function () {
                 script: {
                     id: 'test-script-1',
                     type: 'text/javascript',
-                    exec: ['console.log("hello");']
+                    exec: ['console.log("hello");'],
+                    packages: [{ id: 'script-package-1', name: 'package1'}]
                 }
             });
 

@@ -42,14 +42,16 @@
             "id": "my-global-script-1",
             "script": {
                 "type": "text/javascript",
-                "exec": "console.log(\"hello\");"
+                "exec": "console.log(\"hello\");",
+                "packages": [{ "id":"script-package-1", "name":"package1"}]
             }
         },
         {
             "listen": "prerequest",
             "script": {
                 "type": "text/javascript",
-                "exec": "console.log(\"hello\");"
+                "exec": "console.log(\"hello\");",
+                "packages": [{ "id":"script-package-1", "name":"package1"}]
             }
         }
     ],
