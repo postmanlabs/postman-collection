@@ -90,7 +90,7 @@ describe('Script', function () {
             expect(scriptJSON).to.deep.include({
                 type: 'text/javascript',
                 exec: ['console.log("This is a line of test script code");'],
-                packages: []
+                packages: {}
             });
         });
 

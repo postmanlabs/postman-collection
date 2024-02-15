@@ -43,7 +43,7 @@
             "script": {
                 "type": "text/javascript",
                 "exec": "console.log(\"hello\");",
-                "packages": [{ "id":"script-package-1", "name":"package1"}]
+                "packages": { "package1": {"id":"script-package-1"}}
             }
         },
         {
@@ -51,7 +51,7 @@
             "script": {
                 "type": "text/javascript",
                 "exec": "console.log(\"hello\");",
-                "packages": [{ "id":"script-package-1", "name":"package1"}]
+                "packages": { "package1": {"id":"script-package-1"}}
             }
         }
     ],

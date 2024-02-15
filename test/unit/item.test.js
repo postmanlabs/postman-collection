@@ -19,7 +19,7 @@ describe('Item', function () {
                             id: 'my-script-1',
                             type: 'text/javascript',
                             exec: ['console.log("This doesn\'t matter");'],
-                            packages: [{ id: 'script-package-1', name: 'package1' }]
+                            packages: { package1: { id: 'script-apckage-1' } }
                         }
                     }],
                     request: {

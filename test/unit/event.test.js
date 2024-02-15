@@ -12,7 +12,7 @@ describe('Event', function () {
         script: {
             type: 'text/javascript',
             exec: 'console.log("hello");',
-            packages: []
+            packages: {}
         }
     };
 
@@ -53,7 +53,7 @@ describe('Event', function () {
                     expect(postmanEvent).to.have.property('script').that.is.an('object');
                     expect(postmanEvent.script).to.have.property('type', 'text/javascript');
                     expect(postmanEvent.script).to.have.property('exec').that.is.an('array');
-                    expect(postmanEvent.script).to.have.property('packages').that.is.an('array');
+                    expect(postmanEvent.script).to.have.property('packages').that.is.an('object');
                 });
             });
 
@@ -123,7 +123,7 @@ describe('Event', function () {
             expect(eventJSON.script).to.deep.include({
                 type: 'text/javascript',
                 exec: ['console.log("hello");'],
-                packages: []
+                packages: {}
             });
         });
 
@@ -136,7 +136,7 @@ describe('Event', function () {
             expect(beforeJSON.script).to.deep.include({
                 type: 'text/javascript',
                 exec: ['console.log("hello");'],
-                packages: []
+                packages: {}
             });
 
             event.update({ script: { id: 'my-new-script' } });

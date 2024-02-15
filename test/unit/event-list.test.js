@@ -37,7 +37,7 @@ describe('EventList', function () {
                         id: 'test-script-1',
                         type: 'text/javascript',
                         exec: 'console.log("hello");',
-                        packages: [{ id: 'script-package-1', name: 'package1' }]
+                        packages: { package1: { id: 'script-package-1' } }
                     }
                 }]),
                 eventListJSON;
@@ -49,7 +49,7 @@ describe('EventList', function () {
                     id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("hello");'],
-                    packages: [{ id: 'script-package-1', name: 'package1' }]
+                    packages: { package1: { id: 'script-apckage-1' } }
                 }
             }]);
 
@@ -67,7 +67,7 @@ describe('EventList', function () {
                     id: 'test-script-1',
                     type: 'text/javascript',
                     exec: ['console.log("hello");'],
-                    packages: [{ id: 'script-package-1', name: 'package1' }]
+                    packages: { package1: { id: 'script-apckage-1' } }
                 }
             });
 
