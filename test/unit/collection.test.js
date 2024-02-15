@@ -224,7 +224,7 @@ describe('Collection', function () {
                             packages: [
                                 {
                                     id: 'my-package-1',
-                                    name: 'superman',
+                                    name: 'superman'
                                 }
                             ]
                         }
