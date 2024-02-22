@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.0.2
+// Type definitions for postman-collection 4.3.0
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1100,6 +1100,10 @@ declare module "postman-collection" {
          * @param [options] - -
          */
         authorizeRequestUsing(type: string | RequestAuth.definition, options?: VariableList): void;
+        /**
+         * Returns the path of the item
+         */
+        getPath(): string[];
         /**
          * Check whether an object is an instance of PostmanItem.
          * @param obj - -
