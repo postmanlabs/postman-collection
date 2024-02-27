@@ -1,4 +1,6 @@
-develop:
+unreleased:
+  new features:
+    - GH-1356 Add new key `packages` to Script
   chores:
     - >-
       GH-1357 Fixed a bug where invalid JSDoc prevented generating docs and
