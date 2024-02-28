@@ -1,6 +1,6 @@
 {
   "name": "postman-collection",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Inc.",
   "license": "Apache-2.0",
