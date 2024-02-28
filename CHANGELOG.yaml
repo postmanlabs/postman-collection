@@ -1,4 +1,5 @@
-unreleased:
+4.4.0:
+  date: 2024-02-28
   new features:
     - GH-1356 Add new key `packages` to Script
   chores:
