@@ -42,14 +42,22 @@
             "id": "my-global-script-1",
             "script": {
                 "type": "text/javascript",
-                "exec": "console.log(\"hello\");"
+                "exec": [
+                  "const package1 = pm.require(\"package1\");",
+                  "console.log(\"hello\", package1);"
+                ],
+                "packages": { "package1": { "id": "script-package-1" } }
             }
         },
         {
             "listen": "prerequest",
             "script": {
                 "type": "text/javascript",
-                "exec": "console.log(\"hello\");"
+                "exec": [
+                  "const package1 = pm.require(\"package1\");",
+                  "console.log(\"hello\", package1);"
+                ],
+                "packages": { "package1": { "id":"script-package-1" } }
             }
         }
     ],
