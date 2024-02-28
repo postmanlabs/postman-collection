@@ -1,3 +1,13 @@
+4.4.0:
+  date: 2024-02-28
+  new features:
+    - GH-1356 Add new key `packages` to Script
+  chores:
+    - >-
+      GH-1357 Fixed a bug where invalid JSDoc prevented generating docs and
+      types
+    - GH-1357 Update types for `getPath`
+
 4.3.0:
   date: 2023-11-18
   new features:

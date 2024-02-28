@@ -11,7 +11,8 @@ describe('Event', function () {
         id: 'my-global-script-1',
         script: {
             type: 'text/javascript',
-            exec: 'console.log("hello");'
+            exec: 'console.log("hello");',
+            packages: {}
         }
     };
 
@@ -52,6 +53,7 @@ describe('Event', function () {
                     expect(postmanEvent).to.have.property('script').that.is.an('object');
                     expect(postmanEvent.script).to.have.property('type', 'text/javascript');
                     expect(postmanEvent.script).to.have.property('exec').that.is.an('array');
+                    expect(postmanEvent.script).to.have.property('packages').that.is.an('object');
                 });
             });
 
@@ -120,7 +122,8 @@ describe('Event', function () {
             expect(eventJSON).to.have.property('script').that.has.property('id');
             expect(eventJSON.script).to.deep.include({
                 type: 'text/javascript',
-                exec: ['console.log("hello");']
+                exec: ['console.log("hello");'],
+                packages: {}
             });
         });
 
@@ -132,7 +135,8 @@ describe('Event', function () {
             expect(beforeJSON).to.have.property('script').that.has.property('id');
             expect(beforeJSON.script).to.deep.include({
                 type: 'text/javascript',
-                exec: ['console.log("hello");']
+                exec: ['console.log("hello");'],
+                packages: {}
             });
 
             event.update({ script: { id: 'my-new-script' } });
@@ -141,6 +145,27 @@ describe('Event', function () {
             expect(beforeJSON.script.id).to.not.equal(afterJSON.script.id);
             expect(afterJSON.script).to.have.property('id', 'my-new-script');
             expect(afterJSON.script.exec).to.be.undefined;
+        });
+
+        it('should not add packages key if not present', function () {
+            var rawEvent = {
+                    listen: 'test',
+                    id: 'my-global-script-1',
+                    script: {
+                        type: 'text/javascript',
+                        exec: 'console.log("hello");'
+                    }
+                },
+                event = new Event(rawEvent),
+                beforeJSON = event.toJSON(),
+                afterJSON;
+
+            expect(beforeJSON.script).to.not.have.property('packages');
+
+            event.update({ script: { exec: 'console.log("updated");' } });
+            afterJSON = event.toJSON();
+
+            expect(afterJSON.script).to.not.have.property('packages');
         });
     });
 });

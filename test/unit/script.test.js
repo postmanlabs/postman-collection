@@ -64,7 +64,7 @@ describe('Script', function () {
                     var source = script.toSource();
 
                     expect(source).to.be.a('string');
-                    expect(source).to.equal(rawScript.exec);
+                    expect(source).to.equal(rawScript.exec.join('\n'));
                 });
             });
         });
@@ -201,7 +201,7 @@ describe('Script', function () {
 
             expect(jsonified).to.deep.include({
                 type: rawScript.type,
-                exec: rawScript.exec.split('\n')
+                exec: rawScript.exec
             });
             expect(jsonified.src).to.eql(rawScript.src);
         });

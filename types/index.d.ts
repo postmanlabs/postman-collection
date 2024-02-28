@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.0.2
+// Type definitions for postman-collection 4.3.0
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1101,6 +1101,10 @@ declare module "postman-collection" {
          */
         authorizeRequestUsing(type: string | RequestAuth.definition, options?: VariableList): void;
         /**
+         * Returns the path of the item
+         */
+        getPath(): string[];
+        /**
          * Check whether an object is an instance of PostmanItem.
          * @param obj - -
          */
@@ -2143,6 +2147,13 @@ declare module "postman-collection" {
     }
 
     /**
+     * A map of package names to the IDs of the packages
+     */
+    export type Packages = {
+        [key: string]: { id: string; };
+    };
+
+    /**
      * Postman scripts that are executed upon events on a collection  / request such as test and pre request.
      * @param options - -
      */
@@ -2158,13 +2169,19 @@ declare module "postman-collection" {
          * @param [options.type] - Script type
          * @param [options.src] - Script source url
          * @param [options.exec] - Script to execute
+         * @param [options.packages] - Packages required by the script
          */
         update(options?: {
             type?: string;
             src?: string;
             exec?: string[] | string;
+            packages?: Packages;
         }): void;
         type: string;
+        /**
+         * The packages required by the script
+         */
+        packages: Packages;
         src: Url;
         exec: string[];
         /**
