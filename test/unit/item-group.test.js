@@ -27,7 +27,8 @@ describe('ItemGroup', function () {
                         script: {
                             id: 'my-script-1',
                             type: 'text/javascript',
-                            exec: ['console.log("This doesn\'t matter");']
+                            exec: ['console.log("This doesn\'t matter");'],
+                            packages: { package1: { id: 'script-apckage-1' } }
                         }
                     }],
                     protocolProfileBehavior: {
@@ -527,7 +528,8 @@ describe('ItemGroup', function () {
                         script: {
                             id: 'my-test-script',
                             type: 'text/javascript',
-                            exec: ['console.log("hello there!");']
+                            exec: ['console.log("hello there!");'],
+                            packages: { package1: { id: 'script-apckage-1' } }
                         }
                     }],
                     item: [{

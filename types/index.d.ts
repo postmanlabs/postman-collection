@@ -2162,15 +2162,18 @@ declare module "postman-collection" {
          * @param [options.type] - Script type
          * @param [options.src] - Script source url
          * @param [options.exec] - Script to execute
+         * @param [options.packages] - packages to be preloaded
          */
         update(options?: {
             type?: string;
             src?: string;
             exec?: string[] | string;
+            packages?: Object;
         }): void;
         type: string;
         src: Url;
         exec: string[];
+        packages: Object;
         /**
          * Check whether an object is an instance of ItemGroup.
          * @param obj - -

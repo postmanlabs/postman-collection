@@ -25,7 +25,8 @@ describe('Collection', function () {
                         script: {
                             id: 'my-script-1',
                             type: 'text/javascript',
-                            exec: ['console.log("This doesn\'t matter");']
+                            exec: ['console.log("This doesn\'t matter");'],
+                            packages: {}
                         }
                     }]
                 },
@@ -178,7 +179,8 @@ describe('Collection', function () {
                 script: {
                     id: 'test-script-1',
                     type: 'text/javascript',
-                    exec: ['console.log("Random");']
+                    exec: ['console.log("Random");'],
+                    packages: {}
                 }
             });
             expect(collectionJSON.event[1]).to.have.property('listen', 'prerequest');
@@ -218,7 +220,8 @@ describe('Collection', function () {
                             type: 'text/javascript',
                             exec: [
                                 'console.log("bcoz I am batman!");'
-                            ]
+                            ],
+                            packages: { superman: { id: 'script-apckage-1' } }
                         }
                     }],
                     item: [{
@@ -280,7 +283,8 @@ describe('Collection', function () {
                         type: 'text/javascript',
                         exec: [
                             'console.log("bcoz I am batman!");'
-                        ]
+                        ],
+                        packages: { superman: { id: 'script-apckage-1' } }
                     }
                 }],
                 item: [{
