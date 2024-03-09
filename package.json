@@ -42,7 +42,7 @@
     "mime-types": "2.1.35",
     "postman-url-encoder": "3.0.5",
     "semver": "7.5.4",
-    "uuid": "8.3.2"
+    "uuid": "9.0.1"
   },
   "devDependencies": {
     "@postman/shipit": "^0.4.0",
