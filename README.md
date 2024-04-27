@@ -59,3 +59,4 @@ Postman Collection Format in [http://schema.postman.com/](http://schema.postman.
 
 Conceptually, a JSON input to the constructor of an SDK property should provide similar output when that property
 instance's `.toJSON()` is called.
+## Add Apis list for some beginner learner ##
