@@ -272,7 +272,15 @@ describe('Response', function () {
             var response = new Response();
 
             expect(response.size()).to.eql({
-                body: 0, header: 32, total: 32
+                body: 0, header: 32, total: 32, downloadedBytes: 0
+            });
+        });
+
+        it('should report downloaded size correctly', function () {
+            var response = new Response({ body: 'random', downloadedBytes: 6 });
+
+            expect(response.size()).to.eql({
+                body: 6, header: 32, total: 38, downloadedBytes: 6
             });
         });
     });
