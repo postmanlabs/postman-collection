@@ -280,7 +280,7 @@ describe('Response', function () {
             var response = new Response({ body: 'random', downloadedBytes: 6 });
 
             expect(response.size()).to.eql({
-                body: 6, header: 32, total: 38, downloadedBytes: 6
+                body: 6, header: 32, total: 38
             });
         });
     });
