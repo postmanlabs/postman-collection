@@ -459,8 +459,8 @@ describe('Response', function () {
                 size1 = response1.size(),
                 size2 = response2.size();
 
-            expect(size1.body + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
-            expect(size2.body + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size1.downloadedBytes + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size2.downloadedBytes + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
         });
 
         it('must match the content-length of the response if gzip encoded', function () {
@@ -471,7 +471,7 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
 
-            expect(response.size().body).to.equal(10);
+            expect(response.size().downloadedBytes).to.equal(10);
         });
 
         it('must match the content-length of the response if deflate encoded', function () {
@@ -482,7 +482,7 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
 
-            expect(response.size().body).to.equal(20);
+            expect(response.size().downloadedBytes).to.equal(20);
         });
 
         it('must use byteLength from buffer if provided', function () {
@@ -493,6 +493,18 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
 
+            expect(response.size().body).to.equal(14);
+        });
+
+        it('must use body size if no downloaded bytes are provided', function () {
+            var rawResponse = {
+                    code: 200,
+                    body: 'something nice',
+                    header: 'Transfer-Encoding: chunked'
+                },
+                response = new Response(rawResponse);
+
+            expect(response.size().downloadedBytes).to.equal(14);
             expect(response.size().body).to.equal(14);
         });
     });
