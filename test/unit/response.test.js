@@ -271,16 +271,14 @@ describe('Response', function () {
         it('should handle blank responses correctly', function () {
             var response = new Response();
 
-            expect(response.size()).to.eql({
-                body: 0, header: 32, total: 32, downloadedBytes: 0
-            });
+            expect(response.size()).to.eql({ body: 0, header: 32, total: 32, transferedBytes: 0, resourceBytes: 0 });
         });
 
         it('should report downloaded size correctly', function () {
-            var response = new Response({ body: 'random', downloadedBytes: 6 });
+            var response = new Response({ body: 'random', transferedBytes: 6 });
 
             expect(response.size()).to.eql({
-                body: 6, header: 32, total: 38
+                body: 6, header: 32, total: 38, transferedBytes: 6, resourceBytes: 6
             });
         });
     });
@@ -459,8 +457,8 @@ describe('Response', function () {
                 size1 = response1.size(),
                 size2 = response2.size();
 
-            expect(size1.downloadedBytes + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
-            expect(size2.downloadedBytes + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size1.body + size1.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
+            expect(size2.body + size2.header).to.eql(rawResponse1.header.length + rawResponse1.body.length);
         });
 
         it('must match the content-length of the response if gzip encoded', function () {
@@ -471,7 +469,7 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
 
-            expect(response.size().downloadedBytes).to.equal(10);
+            expect(response.size().body).to.equal(10);
         });
 
         it('must match the content-length of the response if deflate encoded', function () {
@@ -482,7 +480,7 @@ describe('Response', function () {
                 },
                 response = new Response(rawResponse);
 
-            expect(response.size().downloadedBytes).to.equal(20);
+            expect(response.size().body).to.equal(20);
         });
 
         it('must use byteLength from buffer if provided', function () {
@@ -496,16 +494,32 @@ describe('Response', function () {
             expect(response.size().body).to.equal(14);
         });
 
-        it('must use body size if no downloaded bytes are provided', function () {
+        it('must use downloaded size if provided', function () {
             var rawResponse = {
                     code: 200,
                     body: 'something nice',
-                    header: 'Transfer-Encoding: chunked'
+                    header: 'Transfer-Encoding: chunked\nContent-Length: 20',
+                    downloadedBytes: 10
                 },
                 response = new Response(rawResponse);
 
-            expect(response.size().downloadedBytes).to.equal(14);
             expect(response.size().body).to.equal(14);
+            expect(response.size().transferedBytes).to.equal(10);
+            expect(response.size().resourceBytes).to.equal(14);
+        });
+
+        it('must use content length of stream if header is provided', function () {
+            var rawResponse = {
+                    code: 200,
+                    stream: Buffer.from('something nice'),
+                    header: 'Transfer-Encoding: chunked\nContent-Length: 20\nContent-Encoding: gzip',
+                    downloadedBytes: 10
+                },
+                response = new Response(rawResponse);
+
+            expect(response.size().body).to.equal(20);
+            expect(response.size().transferedBytes).to.equal(10);
+            expect(response.size().resourceBytes).to.equal(14);
         });
     });
 
