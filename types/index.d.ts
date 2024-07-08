@@ -2327,6 +2327,7 @@ declare module "postman-collection" {
         type definition = {
             id?: string;
             name?: string;
+            prefix?: string;
             values?: Variable.definition[];
         };
     }
