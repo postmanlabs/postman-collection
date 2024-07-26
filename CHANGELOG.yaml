@@ -1,3 +1,9 @@
+unreleased:
+ fixed-bug:
+    - >-
+      GH-1366 Fixed a bug where $randomAvatarImage was returning an invalid URL.
+
+
 4.4.0:
   date: 2024-02-28
   new features:

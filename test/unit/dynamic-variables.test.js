@@ -97,5 +97,12 @@ describe('Dynamic variable', function () {
             expect(directoryPath).to.not.be.undefined;
             expect(directoryPath).to.not.be.null;
         });
+
+        it('$randomAvatarImage returns a random avatar image', function () {
+            var avatarImage = dynamicVariables.$randomAvatarImage.generator();
+
+            expect(avatarImage).to.not.be.undefined;
+            expect(avatarImage).to.not.be.null;
+        });
     });
 });
