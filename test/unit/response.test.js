@@ -271,14 +271,20 @@ describe('Response', function () {
         it('should handle blank responses correctly', function () {
             var response = new Response();
 
-            expect(response.size()).to.eql({ body: 0, header: 32, total: 32, resourceBytes: 0 });
+            expect(response.size()).to.eql({ body: 0, header: 32, total: 32 });
+        });
+
+        it('should handle string responses correctly', function () {
+            var response = new Response({ body: 'random' });
+
+            expect(response.size()).to.eql({ body: 6, header: 32, total: 38 });
         });
 
         it('should report downloaded size correctly', function () {
-            var response = new Response({ body: 'random', transferedBytes: 6 });
+            var response = new Response({ body: 'random', downloadedBytes: 6 });
 
             expect(response.size()).to.eql({
-                body: 6, header: 32, total: 38, resourceBytes: 6
+                body: 6, header: 32, total: 38
             });
         });
     });
@@ -515,7 +521,6 @@ describe('Response', function () {
                 response = new Response(rawResponse);
 
             expect(response.size().body).to.equal(10);
-            expect(response.size().resourceBytes).to.equal(14);
         });
 
         it('must use content length of stream if header is provided and downloaded bytes is not present', function () {
@@ -527,7 +532,6 @@ describe('Response', function () {
                 response = new Response(rawResponse);
 
             expect(response.size().body).to.equal(20);
-            expect(response.size().resourceBytes).to.equal(14);
         });
     });
 
