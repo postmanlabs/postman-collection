@@ -101,8 +101,8 @@ describe('Dynamic variable', function () {
         it('$randomAvatarImage returns a random avatar image', function () {
             var avatarImage = dynamicVariables.$randomAvatarImage.generator();
 
-            expect(avatarImage).to.not.be.undefined;
-            expect(avatarImage).to.not.be.null;
+            expect(avatarImage).to.be.a('string')
+                .and.match(/^https:\/\/(avatars\.githubusercontent\.com|cloudflare-ipfs\.com)\/.+/);
         });
     });
 });
