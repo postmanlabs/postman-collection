@@ -2333,12 +2333,14 @@ declare module "postman-collection" {
          * }
          * @property [id] - ID of the scope
          * @property [name] - A name of the scope
+         * @property [prefix] - A prefix to be used for variable names in this scope
          * @property [values] - A list of variables defined in an array in form of `{name:String,
          * value:String}`
          */
         type definition = {
             id?: string;
             name?: string;
+            prefix?: string;
             values?: Variable.definition[];
         };
     }
