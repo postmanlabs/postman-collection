@@ -1435,6 +1435,35 @@ describe('VariableScope', function () {
             expect(scope1.values).to.eql(scope2.values);
         });
 
+        it('should be capable of being replayed with prefix', function () {
+            var initialState = {
+                    prefix: 'vault:',
+                    values: [{
+                        key: 'foo',
+                        value: 'foo'
+                    }, {
+                        key: 'bar',
+                        value: 'bar'
+                    }]
+                },
+                scope1 = new VariableScope(initialState),
+                scope2 = new VariableScope(initialState);
+
+            scope1.enableTracking();
+
+            // add a new key
+            scope1.set('baz', 'baz');
+            // update a key
+            scope1.set('foo', 'foo updated');
+            // remove a key
+            scope1.unset('bar');
+
+            // replay mutations on a different object
+            scope1.mutations.applyOn(scope2);
+
+            expect(scope1.values).to.eql(scope2.values);
+        });
+
         it('should be serialized', function () {
             var scope = new VariableScope(),
                 serialized,
