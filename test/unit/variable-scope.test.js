@@ -325,6 +325,17 @@ describe('VariableScope', function () {
                 expect(scope.get('random')).to.be.undefined;
             });
 
+            it('should get variables with prefix', function () {
+                var scope = new VariableScope({
+                    prefix: 'vault:',
+                    values: [
+                        { key: 'vault:var-1', value: 'var-1-value' },
+                        { key: 'vault:var-2', value: 'var-2-value' }
+                    ] });
+
+                expect(scope.get('var-2')).to.equal('var-2-value');
+            });
+
             describe('multi layer search', function () {
                 it('should get from parent scope', function () {
                     var scope = new VariableScope([
@@ -506,6 +517,19 @@ describe('VariableScope', function () {
                 scope.set('var-4', 3.142, 'boolean');
                 expect(scope.get('var-4')).to.be.true;
             });
+
+            it('should correctly update an existing value with prefix', function () {
+                var scope = new VariableScope({
+                    prefix: 'vault:',
+                    values: [{
+                        key: 'vault:var-1',
+                        value: 'var-1-value'
+                    }]
+                });
+
+                scope.set('var-1', 'new-var-1-value');
+                expect(scope.get('var-1')).to.equal('new-var-1-value');
+            });
         });
 
         describe('unset', function () {
@@ -606,6 +630,24 @@ describe('VariableScope', function () {
 
                 // check reference list
                 expect(scope.values.reference).to.have.property('var-2');
+            });
+
+            it('should correctly remove an existing variable with prefix', function () {
+                var scope = new VariableScope({
+                    prefix: 'vault:',
+                    values: [{
+                        key: 'vault:var-1',
+                        value: 'var-1-value'
+                    }, {
+                        key: 'vault:var-2',
+                        value: 'var-2-value'
+                    }]
+                });
+
+                scope.unset('var-1');
+
+                expect(scope.values.count()).to.equal(1);
+                expect(scope.get('var-1')).to.be.undefined;
             });
         });
 
@@ -1233,6 +1275,20 @@ describe('VariableScope', function () {
 
             expect(scope.has('alpha')).to.be.true;
         });
+
+        it('should find variable from current scope with prefix', function () {
+            var scope = new VariableScope({
+                prefix: 'vault:',
+                values: [
+                    { key: 'vault:alpha', value: 'foo' },
+                    { key: 'vault:gamma', value: 'baz', disabled: true }
+                ]
+            });
+
+            expect(scope.has('alpha')).to.be.true;
+            expect(scope.has('gamma')).to.be.false;
+            expect(scope.has('random')).to.be.false;
+        });
     });
 
     describe('disabled variable', function () {
@@ -1353,6 +1409,35 @@ describe('VariableScope', function () {
 
         it('should be capable of being replayed', function () {
             var initialState = {
+                    values: [{
+                        key: 'foo',
+                        value: 'foo'
+                    }, {
+                        key: 'bar',
+                        value: 'bar'
+                    }]
+                },
+                scope1 = new VariableScope(initialState),
+                scope2 = new VariableScope(initialState);
+
+            scope1.enableTracking();
+
+            // add a new key
+            scope1.set('baz', 'baz');
+            // update a key
+            scope1.set('foo', 'foo updated');
+            // remove a key
+            scope1.unset('bar');
+
+            // replay mutations on a different object
+            scope1.mutations.applyOn(scope2);
+
+            expect(scope1.values).to.eql(scope2.values);
+        });
+
+        it('should be capable of being replayed with prefix', function () {
+            var initialState = {
+                    prefix: 'vault:',
                     values: [{
                         key: 'foo',
                         value: 'foo'

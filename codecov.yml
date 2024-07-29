@@ -16,8 +16,9 @@ coverage:
 
       # coverage status for unit tests
       unit:
-        flags: unit
         target: 100
+        flags:
+            - unit
 
 parsers:
   javascript:

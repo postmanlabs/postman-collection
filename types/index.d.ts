@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.3.0
+// Type definitions for postman-collection 4.4.0
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -2006,6 +2006,16 @@ declare module "postman-collection" {
             responseTime: number;
         };
         /**
+         * @property body - size of the response body in bytes
+         * @property header - size of the response header in bytes
+         * @property total - total size of the response body and header in bytes
+         */
+        type sizeInfo = {
+            body: number;
+            header: number;
+            total: number;
+        };
+        /**
          * Returns the durations of each request phase in milliseconds
          * @example
          * Output
@@ -2129,9 +2139,11 @@ declare module "postman-collection" {
          */
         dataURI(): string;
         /**
-         * Get the response size by computing the same from content length header or using the actual response body.
+         * Get the response size by computing the same from content length header or
+         * using the actual response body.
+         * @returns - Response size object
          */
-        size(): number;
+        size(): Response.sizeInfo;
         /**
          * Check whether an object is an instance of ItemGroup.
          * @param obj - -
@@ -2321,12 +2333,14 @@ declare module "postman-collection" {
          * }
          * @property [id] - ID of the scope
          * @property [name] - A name of the scope
+         * @property [prefix] - A prefix to be used for variable names in this scope
          * @property [values] - A list of variables defined in an array in form of `{name:String,
          * value:String}`
          */
         type definition = {
             id?: string;
             name?: string;
+            prefix?: string;
             values?: Variable.definition[];
         };
     }
