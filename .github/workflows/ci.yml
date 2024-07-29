@@ -85,4 +85,4 @@ jobs:
 
       - if: ${{ matrix.coverage }}
         name: Upload coverage
-        run: npm run codecov -- -c -Z -f .coverage/coverage-final.json -F unit
+        run: npm run codecov -- -c -Z -f .coverage/coverage-final.json -F unit -t ${{ secrets.CODECOV_TOKEN }}
