@@ -1,3 +1,9 @@
+unreleased:
+  fixed bugs:
+    - GH-1366 Fixed a bug where $randomAvatarImage was returning an invalid URL
+  chores:
+    - GH-1362 Updated `Request~size` to handle `downloadedBytes` property
+
 4.4.0:
   date: 2024-02-28
   new features:

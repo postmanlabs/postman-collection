@@ -271,8 +271,20 @@ describe('Response', function () {
         it('should handle blank responses correctly', function () {
             var response = new Response();
 
+            expect(response.size()).to.eql({ body: 0, header: 32, total: 32 });
+        });
+
+        it('should handle string responses correctly', function () {
+            var response = new Response({ body: 'random' });
+
+            expect(response.size()).to.eql({ body: 6, header: 32, total: 38 });
+        });
+
+        it('should report downloaded size correctly', function () {
+            var response = new Response({ body: 'random', downloadedBytes: 6 });
+
             expect(response.size()).to.eql({
-                body: 0, header: 32, total: 32
+                body: 6, header: 32, total: 38
             });
         });
     });
@@ -477,6 +489,17 @@ describe('Response', function () {
             expect(response.size().body).to.equal(20);
         });
 
+        it('must match the content-length of the response if brotli encoded', function () {
+            var rawResponse = {
+                    code: 200,
+                    body: 'gzipped content xyzxyzxyzxyzxyzxyz',
+                    header: 'Content-Encoding: br\nContent-Length: 20'
+                },
+                response = new Response(rawResponse);
+
+            expect(response.size().body).to.equal(20);
+        });
+
         it('must use byteLength from buffer if provided', function () {
             var rawResponse = {
                     code: 200,
@@ -486,6 +509,29 @@ describe('Response', function () {
                 response = new Response(rawResponse);
 
             expect(response.size().body).to.equal(14);
+        });
+
+        it('must use downloaded size if provided', function () {
+            var rawResponse = {
+                    code: 200,
+                    body: 'something nice',
+                    header: 'Transfer-Encoding: chunked\nContent-Length: 20',
+                    downloadedBytes: 10
+                },
+                response = new Response(rawResponse);
+
+            expect(response.size().body).to.equal(10);
+        });
+
+        it('must use content length of stream if header is provided and downloaded bytes is not present', function () {
+            var rawResponse = {
+                    code: 200,
+                    stream: Buffer.from('something nice'),
+                    header: 'Transfer-Encoding: chunked\nContent-Length: 20\nContent-Encoding: gzip'
+                },
+                response = new Response(rawResponse);
+
+            expect(response.size().body).to.equal(20);
         });
     });
 
