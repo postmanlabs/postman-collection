@@ -2202,6 +2202,10 @@ declare module "postman-collection" {
         src: Url;
         exec: string[];
         /**
+         * Checks if the script is empty i.e does not have any code to execute.
+         */
+        isEmpty(): boolean;
+        /**
          * Check whether an object is an instance of ItemGroup.
          * @param obj - -
          */
