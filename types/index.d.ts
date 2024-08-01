@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.4.0
+// Type definitions for postman-collection 4.4.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -649,6 +649,11 @@ declare module "postman-collection" {
          * The script that is to be executed when this event is triggered.
          */
         script: Script;
+        /**
+         * Check whether an object is an instance of Event.
+         * @param obj - -
+         */
+        static isEvent(obj: any): boolean;
     }
 
     export namespace FormParam {
