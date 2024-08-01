@@ -1,4 +1,5 @@
-unreleased:
+4.5.0:
+  date: 2024-08-01
   new features:
     - GH-1369 Added `isEvent` method in Event class
     - GH-1370 Added `isEmpty` method in Script class
