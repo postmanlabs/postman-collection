@@ -2,6 +2,8 @@ unreleased:
   new features:
     - GH-1369 Added `isEvent` method in Event class
     - GH-1370 Added `isEmpty` method in Script class
+  chores:
+    - Updated dependencies
 
 4.4.1:
   date: 2024-07-29
