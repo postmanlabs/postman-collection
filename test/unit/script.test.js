@@ -195,6 +195,36 @@ describe('Script', function () {
         });
     });
 
+    describe('.isEmpty', function () {
+        it('should return true for an empty script', function () {
+            var script = new Script();
+
+            expect(script.isEmpty()).to.be.true;
+        });
+
+        it('should return true for a script with no exec', function () {
+            var script = new Script({ id: '123' });
+
+            expect(script.isEmpty()).to.be.true;
+        });
+
+        it('should return true for a script with an empty exec', function () {
+            var script1 = new Script({ exec: '' }),
+                script2 = new Script({ exec: ['', ''] });
+
+            expect(script1.isEmpty()).to.be.true;
+            expect(script2.isEmpty()).to.be.true;
+        });
+
+        it('should return false for a script with exec', function () {
+            var script1 = new Script({ exec: 'console.log("Hello, World!");' }),
+                script2 = new Script({ exec: ['console.log("Hello, World!");'] });
+
+            expect(script1.isEmpty()).to.be.false;
+            expect(script2.isEmpty()).to.be.false;
+        });
+    });
+
     describe('json representation', function () {
         it('must match what the script was initialized with', function () {
             var jsonified = script.toJSON();

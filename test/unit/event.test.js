@@ -168,4 +168,27 @@ describe('Event', function () {
             expect(afterJSON.script).to.not.have.property('packages');
         });
     });
+
+    describe('isEvent', function () {
+        var rawEvent = {
+            listen: 'test',
+            id: 'my-global-script-1',
+            script: {
+                type: 'text/javascript',
+                exec: 'console.log("hello");'
+            }
+        };
+
+        it('should return true for an Event instance', function () {
+            expect(Event.isEvent(new Event(rawEvent))).to.be.true;
+        });
+
+        it('should return false for a raw Event object', function () {
+            expect(Event.isEvent(rawEvent)).to.be.false;
+        });
+
+        it('should return false when called without arguments', function () {
+            expect(Event.isEvent()).to.be.false;
+        });
+    });
 });
