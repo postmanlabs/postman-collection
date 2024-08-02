@@ -50,7 +50,7 @@
     "bipbip": "^0.4.2",
     "browserify": "^17.0.0",
     "btoa": "^1.2.1",
-    "chai": "^4.3.10",
+    "chai": "^5.1.1",
     "chalk": "^4.1.2",
     "dependency-check": "^4.1.0",
     "eslint": "^7.32.0",
