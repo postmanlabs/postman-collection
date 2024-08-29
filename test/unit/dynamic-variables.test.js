@@ -104,5 +104,10 @@ describe('Dynamic variable', function () {
             expect(avatarImage).to.be.a('string')
                 .and.match(/^https:\/\/(avatars\.githubusercontent\.com|cloudflare-ipfs\.com)\/.+/);
         });
+
+        it('$ulid should return a valid ulid', function () {
+            expect(dynamicVariables.$ulid.generator())
+                .to.match(/^[0-9A-HJKMNP-TV-Z]{26}$/);
+        });
     });
 });
