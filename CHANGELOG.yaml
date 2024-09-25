@@ -1,3 +1,11 @@
+unreleased:
+  breaking changes:
+    - GH-1381 Dropped support for Node.js < v18
+  chores:
+    - GH-1381 Updated dependencies
+    - GH-1381 Updated ESLint rules
+    - GH-1381 Run code coverage on latest Node version in CI
+
 4.5.0:
   date: 2024-08-01
   new features:

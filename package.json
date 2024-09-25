@@ -46,18 +46,20 @@
   },
   "devDependencies": {
     "@postman/shipit": "^0.4.0",
-    "async": "^3.2.5",
+    "@stylistic/eslint-plugin-js": "^1.8.0",
+    "async": "^3.2.6",
     "bipbip": "^0.4.2",
     "browserify": "^17.0.0",
     "btoa": "^1.2.1",
-    "chai": "^4.3.10",
+    "chai": "^4.5.0",
     "chalk": "^4.1.2",
     "dependency-check": "^4.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-jsdoc": "^36.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-jsdoc": "^47.0.2",
     "eslint-plugin-lodash": "^7.4.0",
     "eslint-plugin-mocha": "^10.5.0",
-    "eslint-plugin-security": "^1.7.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-security": "^2.1.1",
     "js-yaml": "^4.1.0",
     "jsdoc": "^3.6.11",
     "karma": "^6.4.4",
@@ -65,9 +67,9 @@
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "mocha": "^9.2.2",
+    "mocha": "^10.7.3",
     "nyc": "^15.1.0",
-    "parse-gitignore": "^1.0.1",
+    "parse-gitignore": "^2.0.0",
     "postman-jsdoc-theme": "^0.0.3",
     "postman-request": "^2.88.1-postman.31",
     "recursive-readdir": "^2.2.3",
@@ -77,6 +79,6 @@
     "tsd-jsdoc": "^2.5.0"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   }
 }
