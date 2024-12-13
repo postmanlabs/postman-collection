@@ -1,3 +1,9 @@
+unreleased:
+  fixed bugs:
+    - >-
+      Fixed a bug where `PropertyBase.parent` used to return grandparent for
+      non-list parent
+
 4.5.0:
   date: 2024-08-01
   new features:
