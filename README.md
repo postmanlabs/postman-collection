@@ -9,9 +9,9 @@ accurately mirror your API. Requests can also store sample responses when saved 
 like name and description too so that all the information that a developer needs to use your API is available easily.
 
 To know more about Postman Collections, visit the
-[collection documentation section on Postman Website](https://www.getpostman.com/collection).
+[collection documentation section on Postman Website](https://www.postman.com/collection/).
 
-> The new [Collection Format v2](http://blog.getpostman.com/2015/06/05/travelogue-of-postman-collection-format-v2/)
+> The new [Collection Format v2](https://blog.postman.com/travelogue-of-postman-collection-format-v2/)
 > builds a stronger foundation for improving your productivity while working with APIs. We want your feedback and iron
 > out issues before this goes into the Postman Apps.
 
