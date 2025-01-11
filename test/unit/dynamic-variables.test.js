@@ -15,7 +15,13 @@ describe('Dynamic variable', function () {
     describe('generator', function () {
         it('should return random data', function () {
             _.forOwn(dynamicVariables, function (variable) {
-                expect(variable.generator()).to.not.be.undefined;
+                // Check if generator exists and is a function
+                expect(variable.generator).to.be.a('function', 'Generator is not a function for ' +
+                variable.description);
+                // If the generator function exists, call it and check if it returns a value
+                if (typeof variable.generator === 'function') {
+                    expect(variable.generator()).to.not.be.undefined;
+                }
             });
         });
 
