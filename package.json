@@ -32,7 +32,7 @@
     "test-unit": "nyc --nycrc-path=.nycrc.js node npm/test-unit.js"
   },
   "dependencies": {
-    "@faker-js/faker": "5.5.3",
+    "@faker-js/faker": "^9.5.0",
     "file-type": "3.9.0",
     "http-reasons": "0.1.0",
     "iconv-lite": "0.6.3",
@@ -42,7 +42,7 @@
     "mime-types": "2.1.35",
     "postman-url-encoder": "3.0.5",
     "semver": "7.6.3",
-    "uuid": "8.3.2"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@postman/shipit": "^0.4.0",
