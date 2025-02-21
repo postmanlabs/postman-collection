@@ -1,4 +1,5 @@
-unreleased:
+5.0.0:
+  date: 2025-02-21
   breaking changes:
     - GH-1382 Dropped support for Node.js < v18
   fixed bugs:
