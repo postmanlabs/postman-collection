@@ -2,6 +2,7 @@ unreleased:
   breaking changes:
     - GH-1382 Dropped support for Node.js < v18
   fixed bugs:
+    - GH-1394 Fixed QueryParam normalization regex
     - >-
       Fixed a bug where `PropertyBase.parent` used to return grandparent for
       non-list parent
