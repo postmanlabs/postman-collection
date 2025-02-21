@@ -41,7 +41,7 @@
     "mime-format": "2.0.1",
     "mime-types": "2.1.35",
     "postman-url-encoder": "3.0.5",
-    "semver": "7.6.3",
+    "semver": "7.7.1",
     "uuid": "8.3.2"
   },
   "devDependencies": {
@@ -49,7 +49,7 @@
     "@stylistic/eslint-plugin-js": "^1.8.0",
     "async": "^3.2.6",
     "bipbip": "^0.4.2",
-    "browserify": "^17.0.0",
+    "browserify": "^17.0.1",
     "btoa": "^1.2.1",
     "chai": "^4.5.0",
     "chalk": "^4.1.2",
@@ -67,8 +67,8 @@
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "mocha": "^10.7.3",
-    "nyc": "^15.1.0",
+    "mocha": "^11.1.0",
+    "nyc": "^17.1.0",
     "parse-gitignore": "^2.0.0",
     "postman-jsdoc-theme": "^0.0.3",
     "postman-request": "^2.88.1-postman.31",
