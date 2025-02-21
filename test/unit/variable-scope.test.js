@@ -888,7 +888,7 @@ describe('VariableScope', function () {
 
             expect(function () {
                 scope.variables();
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/js/max-len
             }).to.throw('`VariableScope#variables` has been discontinued, use `VariableScope#syncVariablesTo` instead.');
         });
     });

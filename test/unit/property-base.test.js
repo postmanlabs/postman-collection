@@ -223,10 +223,40 @@ describe('PropertyBase', function () {
     });
 
     describe('.parent()', function () {
-        it('should return grandparent by default', function () {
+        it('should return parent when set', function () {
             var base = new sdk.PropertyBase();
 
             base.__parent = {
+                p: true
+            };
+
+            expect(base.parent()).to.have.property('p', true);
+        });
+
+        it('should return undefined when parent is not set', function () {
+            var base = new sdk.PropertyBase();
+
+            expect(base.parent()).to.be.undefined;
+        });
+
+        it('should return undefined when parent is falsy', function () {
+            var base = new sdk.PropertyBase();
+
+            base.__parent = null;
+            expect(base.parent()).to.be.undefined;
+
+            base.__parent = false;
+            expect(base.parent()).to.be.undefined;
+
+            base.__parent = '';
+            expect(base.parent()).to.be.undefined;
+        });
+
+        it('should return grandparent when parent is of type list', function () {
+            var base = new sdk.PropertyBase();
+
+            base.__parent = {
+                _postman_propertyIsList: true,
                 p: true
             };
 
@@ -234,20 +264,18 @@ describe('PropertyBase', function () {
                 g: true
             };
 
-            expect(base.parent()).to.eql({
-                g: true
-            });
+            expect(base.parent()).to.have.property('g', true);
         });
 
-        it('should return parent if grandparent is missing', function () {
+        it('should return parent if grandparent is missing for list type parent', function () {
             var base = new sdk.PropertyBase();
 
             base.__parent = {
+                _postman_propertyIsList: true,
                 p: true
             };
-            expect(base.parent()).to.eql({
-                p: true
-            });
+
+            expect(base.parent()).to.have.property('p', true);
         });
     });
 });

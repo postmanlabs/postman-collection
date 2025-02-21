@@ -1,3 +1,17 @@
+5.0.0:
+  date: 2025-02-21
+  breaking changes:
+    - GH-1382 Dropped support for Node.js < v18
+  fixed bugs:
+    - GH-1394 Fixed QueryParam normalization regex
+    - >-
+      Fixed a bug where `PropertyBase.parent` used to return grandparent for
+      non-list parent
+  chores:
+    - GH-1382 Updated dependencies
+    - GH-1382 Updated ESLint rules
+    - GH-1382 Run code coverage on latest Node version in CI
+
 4.5.0:
   date: 2024-08-01
   new features:
