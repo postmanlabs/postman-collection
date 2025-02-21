@@ -158,7 +158,7 @@ describe('Item', function () {
             expect(jsonified.id).to.eql(rawItem.id);
 
             // All of these have their own proper tests
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/js/max-len
             expect(jsonified).to.include.all.keys('description', 'request', 'response', 'event', 'protocolProfileBehavior');
         });
     });

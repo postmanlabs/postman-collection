@@ -31,12 +31,12 @@ suite('SuperString variable substitution', function () {
     });
 
     scenario('four constant dynamic variables', () => {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/js/max-len
         SDK.Property.replaceSubstitutions(manyVarsFixture4);
     });
 
     scenario('eight constant dynamic variables', () => {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/js/max-len
         SDK.Property.replaceSubstitutions(manyVarsFixture8);
     });
 

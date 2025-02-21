@@ -261,7 +261,7 @@ describe('Header', function () {
     });
 
     describe('isHeader', function () {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/js/max-len
         var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="\n';
 
         it('should return true for a Header instance', function () {
@@ -279,7 +279,7 @@ describe('Header', function () {
 
     describe('toString', function () {
         it('should convert the header to a single header string', function () {
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/js/max-len
             var rawHeader = 'Content-Type: application/json\nAuthorization: Hawk id="dh37fgj492je", ts="1448549987", nonce="eOJZCd", mac="O2TFlvAlMvKVSKOzc6XkfU6+5285k5p3m5dAjxumo2k="',
                 newHeader = new Header(rawHeader);
 
