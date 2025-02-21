@@ -1,6 +1,10 @@
 unreleased:
   breaking changes:
     - GH-1381 Dropped support for Node.js < v18
+  fixed bugs:
+    - >-
+      Fixed a bug where `PropertyBase.parent` used to return grandparent for
+      non-list parent
   chores:
     - GH-1381 Updated dependencies
     - GH-1381 Updated ESLint rules
