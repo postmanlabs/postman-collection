@@ -1,4 +1,5 @@
-unreleased:
+5.0.1:
+  date: 2025-03-21
   fixed bugs:
     - GH-1408 Fixed `Url#getPath` to handle empty path with unresolved flag
 
