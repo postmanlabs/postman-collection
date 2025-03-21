@@ -1700,6 +1700,12 @@ describe('Url', function () {
                 expect(url.toString()).to.eql('https://postman-echo.com////////get/');
             });
 
+            it('getPath->unresolved should handle empty path properly', function () {
+                var url = new Url('{{host}}');
+
+                expect(url.getPath(true)).to.be.equal('/');
+            });
+
             it('should parse string path properly for JSON representation', function () {
                 var url = new Url({
                     protocol: 'http',
