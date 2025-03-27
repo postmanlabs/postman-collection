@@ -1,6 +1,6 @@
 {
   "name": "postman-collection",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Enables developers to use a unified Postman Collection format Object across projects",
   "author": "Postman Inc.",
   "license": "Apache-2.0",
@@ -40,7 +40,7 @@
     "lodash": "4.17.21",
     "mime-format": "2.0.2",
     "mime-types": "2.1.35",
-    "postman-url-encoder": "3.0.6",
+    "postman-url-encoder": "3.0.7",
     "semver": "7.7.1",
     "uuid": "8.3.2"
   },
