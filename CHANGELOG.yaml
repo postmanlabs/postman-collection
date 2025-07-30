@@ -1,3 +1,7 @@
+unreleased:
+  new features:
+    - Add `protocol` property in `ProxyConfig`
+
 5.0.2:
   date: 2025-03-27
   chores:
