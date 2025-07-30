@@ -4,7 +4,9 @@ var expect = require('chai').expect,
 
     DEFAULT_HOST = '',
     DEFAULT_PORT = 8080,
+    DEFAULT_PROTOCOL = 'http',
     ALLOWED_PROTOCOLS = require('../../lib/collection/proxy-config').ALLOWED_PROTOCOLS,
+    ALLOWED_PROXY_PROTOCOLS = require('../../lib/collection/proxy-config').ALLOWED_PROXY_PROTOCOLS,
     DEFAULT_PATTERN = require('../../lib/collection/proxy-config').DEFAULT_PATTERN;
 
 describe('Proxy Config', function () {
@@ -16,7 +18,8 @@ describe('Proxy Config', function () {
             expect(p).to.deep.include({
                 tunnel: false,
                 host: DEFAULT_HOST,
-                port: DEFAULT_PORT
+                port: DEFAULT_PORT,
+                protocol: DEFAULT_PROTOCOL
             });
         });
 
@@ -25,6 +28,7 @@ describe('Proxy Config', function () {
                 match: 'http://*.google.com/foo*bar',
                 host: 'proxy.com',
                 port: 9090,
+                protocol: 'socks5',
                 tunnel: true,
                 disabled: true
             });
@@ -33,9 +37,10 @@ describe('Proxy Config', function () {
             expect(p.test('http://mail.google.com/foo/baz/bar')).to.be.true;
             expect(p.test('http://docs.google.com/foobar')).to.be.true;
             expect(p.getProtocols()).to.eql(['http']);
-            expect(p.getProxyUrl()).to.eql('http://proxy.com:9090');
+            expect(p.getProxyUrl()).to.eql('socks5://proxy.com:9090');
             expect(p).to.deep.include({
                 host: 'proxy.com',
+                protocol: 'socks5',
                 tunnel: true,
                 disabled: true
             });
@@ -61,12 +66,14 @@ describe('Proxy Config', function () {
                 newMatch = 'https://google.com/*',
                 newHost = 'new-host',
                 newPort = 9090,
+                newProtocol = 'socks5h',
                 newUsername = 'user',
                 newPassword = 'pass',
                 p2 = new ProxyConfig({
                     match: newMatch,
                     host: newHost,
                     port: newPort,
+                    protocol: newProtocol,
                     tunnel: true,
                     bypass: ['http://localhost/*'],
                     authenticate: true,
@@ -78,6 +85,7 @@ describe('Proxy Config', function () {
             expect(p1).to.deep.include({
                 host: DEFAULT_HOST,
                 port: DEFAULT_PORT,
+                protocol: DEFAULT_PROTOCOL,
                 bypass: undefined,
                 authenticate: false,
                 username: undefined,
@@ -90,6 +98,7 @@ describe('Proxy Config', function () {
             expect(p2).to.deep.include({
                 host: newHost,
                 port: newPort,
+                protocol: newProtocol,
                 authenticate: true,
                 username: 'user',
                 password: 'pass',
@@ -103,6 +112,7 @@ describe('Proxy Config', function () {
             expect(p1).to.deep.include({
                 host: newHost,
                 port: newPort,
+                protocol: newProtocol,
                 tunnel: true
             });
         });
@@ -168,12 +178,75 @@ describe('Proxy Config', function () {
                 match: 'http://*.google.com/foo*bar',
                 host: 'proxy.com',
                 port: 9090,
+                protocol: DEFAULT_PROTOCOL,
                 authenticate: true,
                 username: 'user',
                 password: 'pass'
             });
 
             expect(p.getProxyUrl()).to.eql('http://user:pass@proxy.com:9090');
+        });
+    });
+
+    describe('protocol', function () {
+        it('should accept valid proxy protocols', function () {
+            ALLOWED_PROXY_PROTOCOLS.forEach(function (protocol) {
+                var p = new ProxyConfig({
+                    host: 'proxy.com',
+                    port: 8080,
+                    protocol: protocol
+                });
+
+                expect(p.protocol).to.equal(protocol);
+                expect(p.getProxyUrl()).to.equal(protocol + '://proxy.com:8080');
+            });
+        });
+
+        it('should fallback to "http" for invalid proxy protocols', function () {
+            var p = new ProxyConfig({
+                host: 'proxy.com',
+                port: 8080,
+                protocol: 'invalid-protocol'
+            });
+
+            // Should fallback to default protocol
+            expect(p.protocol).to.equal(DEFAULT_PROTOCOL);
+            expect(p.getProxyUrl()).to.equal(DEFAULT_PROTOCOL + '://proxy.com:8080');
+        });
+
+        it('should update protocol through update method', function () {
+            var p = new ProxyConfig({
+                host: 'proxy.com',
+                port: 8080
+            });
+
+            expect(p.protocol).to.equal('http');
+
+            p.update({ protocol: 'socks5' });
+            expect(p.protocol).to.equal('socks5');
+        });
+
+        it('should ignore invalid protocol updates', function () {
+            var p = new ProxyConfig({
+                host: 'proxy.com',
+                port: 8080,
+                protocol: 'socks4a'
+            });
+
+            expect(p.protocol).to.equal('socks4a');
+
+            p.update({ protocol: 'invalid' });
+            expect(p.protocol).to.equal('socks4a'); // Should remain unchanged
+        });
+
+        it('should use protocol in getProxyUrl', function () {
+            var p = new ProxyConfig({
+                host: 'proxy.com',
+                port: 1080,
+                protocol: 'socks5'
+            });
+
+            expect(p.getProxyUrl()).to.equal('socks5://proxy.com:1080');
         });
     });
 
@@ -319,6 +392,7 @@ describe('Proxy Config', function () {
             var rawConfig = {
                     match: 'http+https://*/*',
                     host: 'proxy.com',
+                    protocol: 'socks5',
                     tunnel: true,
                     disabled: false,
                     authenticate: true,
@@ -337,6 +411,7 @@ describe('Proxy Config', function () {
                     { pattern: 'http://127.0.0.1' },
                     { pattern: 'http+https://localhost/*' }
                 ],
+                protocol: rawConfig.protocol,
                 tunnel: rawConfig.tunnel,
                 disabled: rawConfig.disabled,
                 authenticate: rawConfig.authenticate,
