@@ -44,9 +44,11 @@
                 "type": "text/javascript",
                 "exec": [
                   "const package1 = pm.require(\"package1\");",
-                  "console.log(\"hello\", package1);"
+                  "console.log(\"hello\", package1);",
+                  "const response = await pm.execution.runRequest(\"request-id-1\");"
                 ],
-                "packages": { "package1": { "id": "script-package-1" } }
+                "packages": { "package1": { "id": "script-package-1" } },
+                "requests": { "request-id-1": { "id": "request-id-1", "name": "collection request" } }
             }
         },
         {
@@ -55,9 +57,11 @@
                 "type": "text/javascript",
                 "exec": [
                   "const package1 = pm.require(\"package1\");",
-                  "console.log(\"hello\", package1);"
+                  "console.log(\"hello\", package1);",
+                  "const response = await pm.execution.runRequest(\"request-id-1\");"
                 ],
-                "packages": { "package1": { "id":"script-package-1" } }
+                "packages": { "package1": { "id":"script-package-1" } },
+                "requests": { "request-id-1": { "id": "request-id-1", "name": "collection request" } }
             }
         }
     ],
