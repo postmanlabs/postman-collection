@@ -2182,7 +2182,7 @@ declare module "postman-collection" {
      * A map of IDs to the names, location and other metadata and of the requests they refer to
      */
     export type Requests = {
-        [key: string]: { id: string; name: string; };
+        [key: string]: { id: string; name: string; location: string[]; workspace: string; collection: string; };
     };
 
     /**
