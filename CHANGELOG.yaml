@@ -1,3 +1,10 @@
+5.2.0:
+  date: 2025-09-19
+  new features:
+    - GH-1418 Add new key `requests` to Script
+  chores:
+    - GH-1417 Use mime instead of mime-types
+
 5.1.1:
   date: 2025-09-05
   chores:

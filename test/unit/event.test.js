@@ -167,6 +167,27 @@ describe('Event', function () {
 
             expect(afterJSON.script).to.not.have.property('packages');
         });
+
+        it('should not add requests key if not present', function () {
+            var rawEvent = {
+                    listen: 'test',
+                    id: 'my-global-script-1',
+                    script: {
+                        type: 'text/javascript',
+                        exec: 'console.log("hello");'
+                    }
+                },
+                event = new Event(rawEvent),
+                beforeJSON = event.toJSON(),
+                afterJSON;
+
+            expect(beforeJSON.script).to.not.have.property('requests');
+
+            event.update({ script: { exec: 'console.log("updated");' } });
+            afterJSON = event.toJSON();
+
+            expect(afterJSON.script).to.not.have.property('requests');
+        });
     });
 
     describe('isEvent', function () {
