@@ -1,3 +1,7 @@
+unreleased:
+  new features:
+    - GH-1418 Add new key `requests` to Script
+
 5.1.1:
   date: 2025-09-05
   chores:
