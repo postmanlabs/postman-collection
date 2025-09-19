@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 4.4.1
+// Type definitions for postman-collection 5.1.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1554,6 +1554,7 @@ declare module "postman-collection" {
          *     "match": "http+https://example.com/*",
          *     "host": "proxy.com",
          *     "port": "8080",
+         *     "protocol": "http",
          *     "tunnel": true,
          *     "disabled": false,
          *     "authenticate": true,
@@ -1563,6 +1564,7 @@ declare module "postman-collection" {
          * @property [match = 'http+https://*\/*'] - The match for which the proxy needs to be configured.
          * @property [host = ''] - The proxy server url.
          * @property [port = 8080] - The proxy server port number.
+         * @property [protocol = 'http'] - The proxy protocol. Allowed: 'http', 'socks4', 'socks4a', 'socks5', 'socks5h'.
          * @property [tunnel = false] - The tunneling option for the proxy request.
          * @property [disabled = false] - To override the proxy for the particular url, you need to provide true.
          * @property [authenticate = false] - To enable authentication for the proxy, you need to provide true.
@@ -1573,6 +1575,7 @@ declare module "postman-collection" {
             match?: string;
             host?: string;
             port?: number;
+            protocol?: string;
             tunnel?: boolean;
             disabled?: boolean;
             authenticate?: boolean;
@@ -1592,6 +1595,7 @@ declare module "postman-collection" {
      *          host: 'proxy.com',
      *          match: 'http+https://example.com/*',
      *          port: 8080,
+     *          protocol: 'http',
      *          tunnel: true,
      *          disabled: false,
      *          authenticate: true,
@@ -1634,6 +1638,10 @@ declare module "postman-collection" {
          * Proxy auth password
          */
         static password: string;
+        /**
+         * The proxy protocol type. Allowed values: 'http', 'socks4','socks4a', 'socks5', 'socks5h'.
+         */
+        static protocol: string;
         /**
          * Updates the properties of the proxy object based on the options provided.
          * @param options - The proxy object structure.
@@ -2171,6 +2179,13 @@ declare module "postman-collection" {
     };
 
     /**
+     * A map of IDs to the names, location and other metadata and of the requests they refer to
+     */
+    export type Requests = {
+        [key: string]: { location: string[]; workspace: string; collection: string; };
+    };
+
+    /**
      * Postman scripts that are executed upon events on a collection  / request such as test and pre request.
      * @param options - -
      */
@@ -2187,18 +2202,24 @@ declare module "postman-collection" {
          * @param [options.src] - Script source url
          * @param [options.exec] - Script to execute
          * @param [options.packages] - Packages required by the script
+         * @param [options.requests] - Requests referenced by the script
          */
         update(options?: {
             type?: string;
             src?: string;
             exec?: string[] | string;
             packages?: Packages;
+            requests?: Requests;
         }): void;
         type: string;
         /**
          * The packages required by the script
          */
         packages: Packages;
+        /**
+         * The requests referenced by the script
+         */
+        requests: Requests;
         src: Url;
         exec: string[];
         /**
