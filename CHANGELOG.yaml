@@ -1,3 +1,7 @@
+unreleased:
+  new features:
+    - Add `source` property in variables to resolve secrets
+
 5.2.1:
   date: 2026-02-04
   chores:
