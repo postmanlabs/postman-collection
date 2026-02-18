@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 5.1.1
+// Type definitions for postman-collection 5.2.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -2478,10 +2478,16 @@ declare module "postman-collection" {
          * @property [value] - The value of the variable that will be stored and will be typecast to the `type`
          * set in the variable or passed along in this parameter.
          * @property [type] - The type of this variable from the list of types defined at Variable.types.
+         * @property [system] - Indicates whether this is a system variable.
+         * @property [secret] - Indicates whether this variable contains secret/sensitive data.
+         * @property [disabled] - Indicates whether this variable is disabled.
          */
         type definition = {
             value?: any;
             type?: string;
+            system?: boolean;
+            secret?: boolean;
+            disabled?: boolean;
         };
         /**
          * The possible supported types of a variable is defined here. The keys defined here are the possible values of

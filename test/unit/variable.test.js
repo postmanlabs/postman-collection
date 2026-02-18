@@ -40,6 +40,35 @@ describe('Variable', function () {
         expect(v.system).to.be.false;
     });
 
+    it('should initialize variable with correct secret value', function () {
+        let v = new Variable();
+
+        expect(v.secret).to.be.undefined;
+
+        v = new Variable({
+            secret: true
+        });
+        expect(v.secret).to.be.true;
+
+        v = new Variable({
+            secret: false
+        });
+        expect(v.secret).to.be.false;
+    });
+
+    it('should update the secret property of a variable', function () {
+        let v = new Variable();
+
+        v.update({ secret: true });
+        expect(v.secret).to.be.true;
+
+        v = new Variable({
+            secret: true
+        });
+        v.update({ secret: false });
+        expect(v.secret).to.be.false;
+    });
+
     it('should update the description property of a variable', function () {
         let v = new Variable();
 
