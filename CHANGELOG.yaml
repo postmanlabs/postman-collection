@@ -1,6 +1,7 @@
 unreleased:
   new features:
     - Add `secret` property to `Variable`
+    - Add ability to set secret variables using `VariableScope.set()` method
 
 5.2.1:
   date: 2026-02-04

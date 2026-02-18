@@ -530,6 +530,74 @@ describe('VariableScope', function () {
                 scope.set('var-1', 'new-var-1-value');
                 expect(scope.get('var-1')).to.equal('new-var-1-value');
             });
+
+            it('should set secret property when passed as object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('var-1', 'secret-value', { secret: true });
+
+                variable = scope.values.oneNormalizedVariable('var-1');
+
+                expect(variable.get()).to.equal('secret-value');
+                expect(variable.secret).to.be.true;
+            });
+
+            it('should set secret and type when passed as object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('var-1', '3.142', { type: 'number', secret: true });
+
+                variable = scope.values.oneNormalizedVariable('var-1');
+
+                expect(variable.get()).to.equal(3.142);
+                expect(variable.secret).to.be.true;
+            });
+
+            it('should create new secret variable when passed as object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('secret-var', 'secret-value', { secret: true });
+
+                variable = scope.values.oneNormalizedVariable('secret-var');
+
+                expect(variable.get()).to.equal('secret-value');
+                expect(variable.secret).to.be.true;
+            });
+
+            it('should maintain backward compatibility with string type parameter', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('var-1', 3.142, 'number');
+
+                variable = scope.values.oneNormalizedVariable('var-1');
+
+                expect(variable.get()).to.equal(3.142);
+                expect(variable.secret).to.be.undefined;
+            });
         });
 
         describe('unset', function () {

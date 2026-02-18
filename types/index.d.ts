@@ -2424,9 +2424,12 @@ declare module "postman-collection" {
          * Creates a new variable, or updates an existing one.
          * @param key - The name of the variable to set.
          * @param value - The value of the variable to be set.
-         * @param [type] - Optionally, the value of the variable can be set to a type
+         * @param [options] - Optional configuration for the variable.
+         * Can be a string (e.g., 'string', 'number') or an object with properties:
+         * - `type` {String} - The variable type
+         * - `secret` {Boolean} - Whether the variable contains secret/sensitive data
          */
-        set(key: string, value: any, type?: Variable.types): void;
+        set(key: string, value: any, options?: Variable.types | any): void;
         /**
          * Removes the variable with the specified name.
          * @param key - -
