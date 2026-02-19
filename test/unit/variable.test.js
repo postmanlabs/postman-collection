@@ -69,6 +69,47 @@ describe('Variable', function () {
         expect(v.secret).to.be.false;
     });
 
+    it('should initialize variable with correct source value', function () {
+        let v = new Variable();
+
+        expect(v.source).to.be.undefined;
+
+        v = new Variable({
+            source: {
+                provider: 'postman',
+                postman: {
+                    type: 'local',
+                    secretId: '123',
+                    vaultId: '456'
+                }
+            }
+        });
+        expect(v.source).to.deep.include({
+            provider: 'postman',
+            postman: {
+                type: 'local',
+                secretId: '123',
+                vaultId: '456'
+            }
+        });
+    });
+
+    it('should update the source property of a variable', function () {
+        let v = new Variable();
+
+        expect(v.source).to.be.undefined;
+
+        v.update({ source: { provider: 'postman', postman: { type: 'local', secretId: '123', vaultId: '456' } } });
+        expect(v.source).to.deep.include({
+            provider: 'postman',
+            postman: {
+                type: 'local',
+                secretId: '123',
+                vaultId: '456'
+            }
+        });
+    });
+
     it('should update the description property of a variable', function () {
         let v = new Variable();
 
