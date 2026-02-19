@@ -1122,16 +1122,24 @@ declare module "postman-collection" {
          * This captures the instruction and the parameters of the instruction so that it can be replayed on a different object.
          * Mutations can be any change on an object. For example setting a key or unsetting a key.
          *
-         * For example, the mutation to set `name` on an object to 'Bruce Wayne' would look like ['name', 'Bruce Wayne']. Where
-         * the first item is the key path and second item is the value. To add a property `punchLine` to the object it would be
-         * the same as updating the property i.e. ['punchLine', 'I\'m Batman']. To remove a property `age` the mutation would
-         * look like ['age'].
+         * Mutation formats:
+         * - SET without metadata: ['key', 'value']
+         * - SET with metadata: ['key', 'value', { metadata }]
+         * - UNSET: ['key']
+         *
+         * For example, the mutation to set `name` on an object to 'Bruce Wayne' would look like ['name', 'Bruce Wayne'].
+         * To set a variable with secret flag: ['password', 'secret123', { secret: true }].
+         * To remove a property `age` the mutation would look like ['age'].
          *
          * This format of representing changes is derived from
          * http://json-delta.readthedocs.io/en/latest/philosophy.html.
          *
          * The `set` and `unset` are primitive instructions and can be derived from the mutation without explicitly stating the
          * instruction. For more complex mutation the instruction would have to be explicitly stated.
+         * @example
+         * ['password', 'secret123', { secret: true }]  // SET with metadata
+         * ['userId', '42']                             // SET without metadata
+         * ['tempKey']                                  // UNSET
          */
         type mutation = any[];
         /**
