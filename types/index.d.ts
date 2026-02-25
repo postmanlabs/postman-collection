@@ -2476,15 +2476,103 @@ declare module "postman-collection" {
 
     export namespace Variable {
         /**
-         * The object representation of a Variable consists the variable value and type. It also optionally includes the `id`
+         * Postman integration - local vault.
+         */
+        type sourcePostmanLocal = {
+            provider: "postman";
+            postman: {
+                type: "local";
+                secretId: string;
+                vaultId?: string;
+            };
+        };
+        /**
+         * Postman integration - cloud vault.
+         */
+        type sourcePostmanCloud = {
+            provider: "postman";
+            postman: {
+                type: "cloud";
+                secretId: string;
+                vaultId: string;
+            };
+        };
+        type sourcePostman = Variable.sourcePostmanLocal | Variable.sourcePostmanCloud;
+        /**
+         * Azure Key Vault integration.
+         */
+        type sourceAzure = {
+            provider: "azure";
+            azure: {
+                secretId: string;
+            };
+        };
+        /**
+         * 1Password integration.
+         */
+        type sourceOnePassword = {
+            provider: "1password";
+            "1password": {
+                secretReference: string;
+            };
+        };
+        /**
+         * AWS Secrets Manager integration.
+         */
+        type sourceAws = {
+            provider: "aws";
+            aws: {
+                secretArn: string;
+                roleArn?: string;
+                version?: string;
+                format?: "plaintext" | "json";
+            };
+        };
+        /**
+         * HashiCorp Vault integration.
+         */
+        type sourceHashiCorp = {
+            provider: "hashicorp";
+            hashicorp: {
+                engine: string;
+                path: string;
+                key: string;
+                version?: string;
+            };
+        };
+        /**
+         * Source object for external secret resolution. The structure depends on the `provider` field.
+         * Resolver lookup is keyed by `provider`
+         * (for example: "postman", "azure", "1password", "aws", "hashicorp").
+         */
+        type source = Variable.sourcePostman | Variable.sourceAzure | Variable.sourceOnePassword | Variable.sourceAws | Variable.sourceHashiCorp;
+        /**
+         * The object representation of a Variable consists of the variable value and type. It may also include the `id`
          * and a friendly `name` of the variable. The `id` and the `name` of a variable is usually managed and used when a
          * variable is made part of a VariableList instance.
          * @example
+         * Default variable
          * {
          *     "id": "my-var-1",
          *     "name": "MyFirstVariable",
          *     "value": "Hello World",
          *     "type": "string"
+         * }
+         * @example
+         * Secret variable - Postman local vault
+         * {
+         *     "id": "my-secret-var",
+         *     "key": "apiKey",
+         *     "value": "",
+         *     "type": "secret",
+         *     "source": {
+         *         "provider": "postman",
+         *         "postman": {
+         *             "type": "local",
+         *             "secretId": "ID_OF_THE_SECRET"
+         *             "vaultId": "ID_OF_THE_VAULT"
+         *         }
+         *     }
          * }
          * @property [value] - The value of the variable that will be stored and will be typecast to the `type`
          * set in the variable or passed along in this parameter.
@@ -2492,6 +2580,8 @@ declare module "postman-collection" {
          * @property [system] - Indicates whether this is a system variable.
          * @property [secret] - Indicates whether this variable contains secret/sensitive data.
          * @property [disabled] - Indicates whether this variable is disabled.
+         * @property [source] - Optional source object for external secret resolution. Contains metadata
+         * on how to resolve the variable value from an external source. The structure depends on the source `provider` field.
          */
         type definition = {
             value?: any;
@@ -2499,6 +2589,7 @@ declare module "postman-collection" {
             system?: boolean;
             secret?: boolean;
             disabled?: boolean;
+            source?: Variable.source;
         };
         /**
          * The possible supported types of a variable is defined here. The keys defined here are the possible values of
@@ -2550,6 +2641,10 @@ declare module "postman-collection" {
         constructor(definition?: Variable.definition);
         type: Variable.types;
         value: any;
+        /**
+         * Optional source object for external secret resolution.
+         */
+        source: Variable.source;
         /**
          * The name of the variable. This is used for referencing this variable from other locations and scripts
          */
@@ -2722,7 +2817,7 @@ declare module "postman-collection" {
          */
         static readonly PROTOCOL_DELIMITER: string;
         /**
-         * String representation for matching all urls - 
+         * String representation for matching all urls -
          */
         static readonly MATCH_ALL_URLS: string;
     }
