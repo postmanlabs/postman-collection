@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 5.3.0-beta.1
+// Type definitions for postman-collection 5.2.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -2476,7 +2476,7 @@ declare module "postman-collection" {
 
     export namespace Variable {
         /**
-         * Postman Vault - local
+         * Postman integration - local vault.
          */
         type sourcePostmanLocal = {
             provider: "postman";
@@ -2487,7 +2487,7 @@ declare module "postman-collection" {
             };
         };
         /**
-         * Postman Vault - cloud
+         * Postman integration - cloud vault.
          */
         type sourcePostmanCloud = {
             provider: "postman";
@@ -2531,7 +2531,7 @@ declare module "postman-collection" {
         /**
          * HashiCorp Vault integration.
          */
-        type sourceHashicorp = {
+        type sourceHashiCorp = {
             provider: "hashicorp";
             hashicorp: {
                 engine: string;
@@ -2542,11 +2542,12 @@ declare module "postman-collection" {
         };
         /**
          * Source object for external secret resolution. The structure depends on the `provider` field.
-         * Resolver lookup is keyed by `provider` (e.g. "postman", "azure", "1password", "aws", "hashicorp").
+         * Resolver lookup is keyed by `provider`
+         * (for example: "postman", "azure", "1password", "aws", "hashicorp").
          */
-        type source = Variable.sourcePostman | Variable.sourceAzure | Variable.sourceOnePassword | Variable.sourceAws | Variable.sourceHashicorp;
+        type source = Variable.sourcePostman | Variable.sourceAzure | Variable.sourceOnePassword | Variable.sourceAws | Variable.sourceHashiCorp;
         /**
-         * The object representation of a Variable consists the variable value and type. It also optionally includes the `id`
+         * The object representation of a Variable consists of the variable value and type. It may also include the `id`
          * and a friendly `name` of the variable. The `id` and the `name` of a variable is usually managed and used when a
          * variable is made part of a VariableList instance.
          * @example
@@ -2568,8 +2569,8 @@ declare module "postman-collection" {
          *         "provider": "postman",
          *         "postman": {
          *             "type": "local",
-         *             "secretId": "UUID_OF_THE_SECRET",
-         *             "vaultId": "UUID_OF_THE_VAULT"
+         *             "secretId": "ID_OF_THE_SECRET"
+         *             "vaultId": "ID_OF_THE_VAULT"
          *         }
          *     }
          * }
@@ -2620,11 +2621,6 @@ declare module "postman-collection" {
              * A "object" type value stores Object data format
              */
             object = "{\"in\":\"\",\"out\":\"\"}",
-            /**
-             * A "secret" type variable indicates the value should be resolved from an external source
-             * using the `source` property.
-             */
-            secret = "{\"in\":\"\",\"out\":\"\"}",
             /**
              * Free-form type of a value. This is the default for any variable, unless specified otherwise. It ensures that
              * the variable can store data in any type and no conversion is done while using Variable.get.
