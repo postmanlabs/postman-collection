@@ -530,6 +530,74 @@ describe('VariableScope', function () {
                 scope.set('var-1', 'new-var-1-value');
                 expect(scope.get('var-1')).to.equal('new-var-1-value');
             });
+
+            it('should set secret property when passed as object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('var-1', 'secret-value', { secret: true });
+
+                variable = scope.values.oneNormalizedVariable('var-1');
+
+                expect(variable.get()).to.equal('secret-value');
+                expect(variable.secret).to.be.true;
+            });
+
+            it('should set secret and type when passed as object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('var-1', '3.142', { type: 'number', secret: true });
+
+                variable = scope.values.oneNormalizedVariable('var-1');
+
+                expect(variable.get()).to.equal(3.142);
+                expect(variable.secret).to.be.true;
+            });
+
+            it('should create new secret variable when passed as object', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('secret-var', 'secret-value', { secret: true });
+
+                variable = scope.values.oneNormalizedVariable('secret-var');
+
+                expect(variable.get()).to.equal('secret-value');
+                expect(variable.secret).to.be.true;
+            });
+
+            it('should maintain backward compatibility with string type parameter', function () {
+                var scope = new VariableScope({
+                        values: [{
+                            key: 'var-1',
+                            value: 'var-1-value'
+                        }]
+                    }),
+                    variable;
+
+                scope.set('var-1', 3.142, 'number');
+
+                variable = scope.values.oneNormalizedVariable('var-1');
+
+                expect(variable.get()).to.equal(3.142);
+                expect(variable.secret).to.be.undefined;
+            });
         });
 
         describe('unset', function () {
@@ -1462,6 +1530,59 @@ describe('VariableScope', function () {
             scope1.mutations.applyOn(scope2);
 
             expect(scope1.values).to.eql(scope2.values);
+        });
+
+        it('should track and replay secret variables', function () {
+            var initialState = {
+                    values: [{
+                        key: 'foo',
+                        value: 'foo'
+                    }]
+                },
+                scope1 = new VariableScope(initialState),
+                scope2 = new VariableScope(initialState),
+                variable1,
+                variable2;
+
+            scope1.enableTracking();
+
+            // set a secret variable
+            scope1.set('password', 'secret123', { secret: true });
+            // set a variable with type and secret (only secret is tracked)
+            scope1.set('apiKey', '12345', { type: 'string', secret: true });
+            // set a regular variable (no secret)
+            scope1.set('userId', '42', { type: 'number' });
+
+            // replay mutations on a different object
+            scope1.mutations.applyOn(scope2);
+
+            // verify password has secret flag
+            variable1 = scope1.values.oneNormalizedVariable('password');
+            variable2 = scope2.values.oneNormalizedVariable('password');
+            expect(variable1.secret).to.be.true;
+            expect(variable2.secret).to.be.true;
+            expect(variable1.get()).to.equal('secret123');
+            expect(variable2.get()).to.equal('secret123');
+
+            // verify apiKey has secret (but type is not preserved via mutation)
+            variable1 = scope1.values.oneNormalizedVariable('apiKey');
+            variable2 = scope2.values.oneNormalizedVariable('apiKey');
+            expect(variable1.secret).to.be.true;
+            expect(variable2.secret).to.be.true;
+            expect(variable1.type).to.equal('string');
+            // type is not tracked in mutations, so scope2 will have default 'any' type
+            expect(variable2.type).to.equal('any');
+            expect(variable1.get()).to.equal('12345');
+            expect(variable2.get()).to.equal('12345');
+
+            // verify userId has no secret
+            variable1 = scope1.values.oneNormalizedVariable('userId');
+            variable2 = scope2.values.oneNormalizedVariable('userId');
+            expect(variable1.secret).to.be.undefined;
+            expect(variable2.secret).to.be.undefined;
+            expect(variable1.get()).to.equal(42);
+            // type is not tracked, so scope2 gets the raw value without type casting
+            expect(variable2.get()).to.equal('42');
         });
 
         it('should be serialized', function () {

@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 5.1.1
+// Type definitions for postman-collection 5.2.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1122,16 +1122,24 @@ declare module "postman-collection" {
          * This captures the instruction and the parameters of the instruction so that it can be replayed on a different object.
          * Mutations can be any change on an object. For example setting a key or unsetting a key.
          *
-         * For example, the mutation to set `name` on an object to 'Bruce Wayne' would look like ['name', 'Bruce Wayne']. Where
-         * the first item is the key path and second item is the value. To add a property `punchLine` to the object it would be
-         * the same as updating the property i.e. ['punchLine', 'I\'m Batman']. To remove a property `age` the mutation would
-         * look like ['age'].
+         * Mutation formats:
+         * - SET without metadata: ['key', 'value']
+         * - SET with metadata: ['key', 'value', { metadata }]
+         * - UNSET: ['key']
+         *
+         * For example, the mutation to set `name` on an object to 'Bruce Wayne' would look like ['name', 'Bruce Wayne'].
+         * To set a variable with secret flag: ['password', 'secret123', { secret: true }].
+         * To remove a property `age` the mutation would look like ['age'].
          *
          * This format of representing changes is derived from
          * http://json-delta.readthedocs.io/en/latest/philosophy.html.
          *
          * The `set` and `unset` are primitive instructions and can be derived from the mutation without explicitly stating the
          * instruction. For more complex mutation the instruction would have to be explicitly stated.
+         * @example
+         * ['password', 'secret123', { secret: true }]  // SET with metadata
+         * ['userId', '42']                             // SET without metadata
+         * ['tempKey']                                  // UNSET
          */
         type mutation = any[];
         /**
@@ -2424,9 +2432,12 @@ declare module "postman-collection" {
          * Creates a new variable, or updates an existing one.
          * @param key - The name of the variable to set.
          * @param value - The value of the variable to be set.
-         * @param [type] - Optionally, the value of the variable can be set to a type
+         * @param [options] - Optional configuration for the variable.
+         * Can be a string (e.g., 'string', 'number') or an object with properties:
+         * - `type` {String} - The variable type
+         * - `secret` {Boolean} - Whether the variable contains secret/sensitive data
          */
-        set(key: string, value: any, type?: Variable.types): void;
+        set(key: string, value: any, options?: Variable.types | any): void;
         /**
          * Removes the variable with the specified name.
          * @param key - -
@@ -2465,23 +2476,120 @@ declare module "postman-collection" {
 
     export namespace Variable {
         /**
-         * The object representation of a Variable consists the variable value and type. It also optionally includes the `id`
+         * Postman integration - local vault.
+         */
+        type sourcePostmanLocal = {
+            provider: "postman";
+            postman: {
+                type: "local";
+                secretId: string;
+                vaultId?: string;
+            };
+        };
+        /**
+         * Postman integration - cloud vault.
+         */
+        type sourcePostmanCloud = {
+            provider: "postman";
+            postman: {
+                type: "cloud";
+                secretId: string;
+                vaultId: string;
+            };
+        };
+        type sourcePostman = Variable.sourcePostmanLocal | Variable.sourcePostmanCloud;
+        /**
+         * Azure Key Vault integration.
+         */
+        type sourceAzure = {
+            provider: "azure";
+            azure: {
+                secretId: string;
+            };
+        };
+        /**
+         * 1Password integration.
+         */
+        type sourceOnePassword = {
+            provider: "1password";
+            "1password": {
+                secretReference: string;
+            };
+        };
+        /**
+         * AWS Secrets Manager integration.
+         */
+        type sourceAws = {
+            provider: "aws";
+            aws: {
+                secretArn: string;
+                roleArn?: string;
+                version?: string;
+                format?: "plaintext" | "json";
+            };
+        };
+        /**
+         * HashiCorp Vault integration.
+         */
+        type sourceHashiCorp = {
+            provider: "hashicorp";
+            hashicorp: {
+                engine: string;
+                path: string;
+                key: string;
+                version?: string;
+            };
+        };
+        /**
+         * Source object for external secret resolution. The structure depends on the `provider` field.
+         * Resolver lookup is keyed by `provider`
+         * (for example: "postman", "azure", "1password", "aws", "hashicorp").
+         */
+        type source = Variable.sourcePostman | Variable.sourceAzure | Variable.sourceOnePassword | Variable.sourceAws | Variable.sourceHashiCorp;
+        /**
+         * The object representation of a Variable consists of the variable value and type. It may also include the `id`
          * and a friendly `name` of the variable. The `id` and the `name` of a variable is usually managed and used when a
          * variable is made part of a VariableList instance.
          * @example
+         * Default variable
          * {
          *     "id": "my-var-1",
          *     "name": "MyFirstVariable",
          *     "value": "Hello World",
          *     "type": "string"
          * }
+         * @example
+         * Secret variable - Postman local vault
+         * {
+         *     "id": "my-secret-var",
+         *     "key": "apiKey",
+         *     "value": "",
+         *     "type": "secret",
+         *     "source": {
+         *         "provider": "postman",
+         *         "postman": {
+         *             "type": "local",
+         *             "secretId": "ID_OF_THE_SECRET"
+         *             "vaultId": "ID_OF_THE_VAULT"
+         *         }
+         *     }
+         * }
          * @property [value] - The value of the variable that will be stored and will be typecast to the `type`
          * set in the variable or passed along in this parameter.
          * @property [type] - The type of this variable from the list of types defined at Variable.types.
+         * @property [system] - Indicates whether this is a system variable.
+         * @property [secret] - Indicates whether this variable contains secret/sensitive data.
+         * @property [disabled] - Indicates whether this variable is disabled.
+         * @property [source] - Optional source object for external secret resolution. Contains metadata
+         * on how to resolve the variable value from an external source. The structure depends on the source `provider` field.
          */
         type definition = {
             value?: any;
             type?: string;
+            system?: boolean;
+            secret?: boolean;
+            disabled?: boolean;
+            source?: Variable.source;
         };
         /**
          * The possible supported types of a variable is defined here. The keys defined here are the possible values of
@@ -2533,6 +2641,10 @@ declare module "postman-collection" {
         constructor(definition?: Variable.definition);
         type: Variable.types;
         value: any;
+        /**
+         * Optional source object for external secret resolution.
+         */
+        source: Variable.source;
         /**
          * The name of the variable. This is used for referencing this variable from other locations and scripts
          */
@@ -2705,7 +2817,7 @@ declare module "postman-collection" {
          */
         static readonly PROTOCOL_DELIMITER: string;
         /**
-         * String representation for matching all urls - 
+         * String representation for matching all urls -
          */
         static readonly MATCH_ALL_URLS: string;
     }
