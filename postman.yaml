@@ -1,0 +1,21 @@
+---
+# postman.yaml
+# Library that publishes one or more npm packages. Filed under PLAT-1265.
+#
+# Sources used to populate this file:
+#  - description: GitHub repo description
+#  - npmPackages: package-to-repo verification at HIGH confidence (commit 2fba6bf
+#    in postman-eng/cloud9-claude, audit dated 2026-05-21)
+name: "postman-collection"
+friendlyName: "Postman Collection"
+description: "Javascript module that allows a developer to work with Postman Collections"
+type: "LIB"
+owner: "pranav.joglekar@postman.com"
+dataClass: "Public"
+containsCustomerData: false
+requiredInSelfHosted: false
+npmPackages:
+- name: "@postman/poc-postman-collection-esm"
+  path: "package.json"
+- name: "@postman/postman-collection-fork"
+  path: "package.json"
