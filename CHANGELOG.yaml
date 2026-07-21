@@ -1,3 +1,7 @@
+unreleased:
+  chores:
+    - Updated dependencies
+
 5.3.0:
   date: 2026-02-24
   new features:
