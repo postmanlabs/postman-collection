@@ -74,7 +74,7 @@
     "postman-request": "^2.88.1-postman.31",
     "recursive-readdir": "^2.2.3",
     "require-all": "^3.0.0",
-    "shelljs": "^0.8.5",
+    "shelljs": "^0.10.0",
     "strip-json-comments": "^3.1.1",
     "tsd-jsdoc": "^2.5.0"
   },
