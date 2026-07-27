@@ -46,10 +46,8 @@
   "devDependencies": {
     "@postman/shipit": "^0.4.0",
     "@stylistic/eslint-plugin-js": "^1.8.0",
-    "async": "^3.2.6",
     "bipbip": "^0.4.2",
     "browserify": "^17.0.1",
-    "btoa": "^1.2.1",
     "chai": "^4.5.0",
     "chalk": "^4.1.2",
     "dependency-check": "^4.1.0",
@@ -71,7 +69,6 @@
     "parse-gitignore": "^2.0.0",
     "postman-jsdoc-theme": "^0.0.3",
     "postman-request": "^2.88.1-postman.31",
-    "recursive-readdir": "^2.2.3",
     "require-all": "^3.0.0",
     "shelljs": "^0.8.5",
     "strip-json-comments": "^3.1.1",
