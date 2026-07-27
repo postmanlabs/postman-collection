@@ -1,3 +1,12 @@
+unreleased:
+  breaking changes:
+    - GH-1431 Dropped support for Node.js < v22
+    - GH-1431 Removed the `uuid` dependency in favor of the Web Crypto API
+  chores:
+    - GH-1431 Updated dependencies
+    - GH-1431 Updated ESLint rules
+    - GH-1431 Fixed type-definition generation
+
 5.3.1:
   date: 2026-07-21
   chores:
