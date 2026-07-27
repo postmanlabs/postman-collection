@@ -35,7 +35,19 @@ module.exports = function (exit) {
     }
 
     exec(`${IS_WINDOWS ? '' : 'node'} ${path.join('node_modules', '.bin', 'jsdoc')}${IS_WINDOWS ? '.cmd' : ''}` +
-        ' -c .jsdoc-config-type-def.json -p', function (code) {
+        ' -c .jsdoc-config-type-def.json -p', { silent: true }, function (code, stdout, stderr) {
+        // tsd-jsdoc emits non-fatal diagnostics for private/internal symbols (documented via
+        // @lends/@module/@enum) and for stub/by-reference members it cannot type - none of which
+        // affect the generated definitions. Filter out that noise; fatal errors still surface via
+        // a non-zero exit code and any non-tsd-jsdoc output is kept visible.
+        const output = `${stdout || ''}${stderr || ''}`
+            .split('\n')
+            .filter(function (line) {
+                return line.trim() && !(/^\[TSD-JSDoc]/).test(line);
+            });
+
+        output.length && console.info(output.join('\n'));
+
         if (!code) {
             fs.readFile(`${TARGET_DIR}/index.d.ts`, function (err, contents) {
                 if (err) {
@@ -53,11 +65,16 @@ module.exports = function (exit) {
                     .replace(/Boolean\[]/gm, 'boolean[]')
                     // removing all occurrences html, as the these tags are not supported in Type-definitions
                     .replace(/<[^>]*>/gm, '')
+                    // quoting object keys that start with a digit (e.g. `1password`), as unquoted
+                    // digit-leading keys are not valid TypeScript identifiers
+                    .replace(/^(\s*)(\d+[A-Za-z_$][\w$]*)(\??\s*:)/gm, '$1"$2"$3')
                     // replacing @link tags with the object namepath to which it was linked,
                     // as these link tags are not navigable in type-definitions.
                     .replace(/\{@link (\w*)[#.]+(\w*)\}/gm, '$1.$2')
                     .replace(/\{@link (\S+)\}/gm, '$1') // remove @link tags
-                    .replace(/^(.+)/gm, '    $1');
+                    .replace(/^(.+)/gm, '    $1')
+                    // strip trailing whitespace left behind by the transforms above
+                    .replace(/[ \t]+$/gm, '');
 
                 source = `${heading}\ndeclare module "postman-collection" {\n\n${source}}\n`;
 
