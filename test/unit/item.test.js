@@ -240,6 +240,40 @@ describe('Item', function () {
         });
     });
 
+    describe('.getPathIds()', function () {
+        it('should return correct path for 1 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                req = collection.oneDeep('R1');
+
+            expect(req.getPathIds()).to.deep.equal([
+                'e5f2e9cf-173b-c60a-7336-ac804a87d762',
+                'R1-id'
+            ]);
+        });
+
+        it('should return correct path for 2 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                req = collection.oneDeep('F1.R1');
+
+            expect(req.getPathIds()).to.deep.equal([
+                'e5f2e9cf-173b-c60a-7336-ac804a87d762',
+                'F1-id',
+                'F1.R1-id'
+            ]);
+        });
+
+        it('should return correct path for 3 level nested item', function () {
+            const collection = new sdk.Collection(fixtures.nestedCollectionV2),
+                req = collection.oneDeep('F2.F3.R1');
+
+            expect(req.getPathIds()).to.deep.equal([
+                'e5f2e9cf-173b-c60a-7336-ac804a87d762',
+                'F2-id',
+                'F2.F3-id',
+                'F2.F3.R1-id'
+            ]);
+        });
+    });
 
     describe('.getAuth()', function () {
         var item,
