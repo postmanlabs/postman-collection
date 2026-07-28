@@ -32,7 +32,7 @@
     "test-unit": "nyc --nycrc-path=.nycrc.js node npm/test-unit.js"
   },
   "dependencies": {
-    "@faker-js/faker": "5.5.3",
+    "@faker-js/faker": "10.5.0",
     "file-type": "3.9.0",
     "http-reasons": "0.1.0",
     "iconv-lite": "0.6.3",
@@ -41,44 +41,41 @@
     "mime": "3.0.0",
     "mime-format": "2.0.2",
     "postman-url-encoder": "3.0.8",
-    "semver": "7.7.1",
-    "uuid": "8.3.2"
+    "semver": "7.8.5"
   },
   "devDependencies": {
     "@postman/shipit": "^0.4.0",
     "@stylistic/eslint-plugin-js": "^1.8.0",
-    "async": "^3.2.6",
     "bipbip": "^0.4.2",
-    "browserify": "^17.0.1",
-    "btoa": "^1.2.1",
     "chai": "^4.5.0",
     "chalk": "^4.1.2",
     "dependency-check": "^4.1.0",
+    "esbuild": "^0.28.1",
     "eslint": "^8.57.0",
-    "eslint-plugin-jsdoc": "^47.0.2",
+    "eslint-plugin-jsdoc": "^63.3.1",
     "eslint-plugin-lodash": "^7.4.0",
     "eslint-plugin-mocha": "^10.5.0",
-    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-n": "^18.2.2",
     "eslint-plugin-security": "^2.1.1",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.3.0",
     "jsdoc": "^3.6.11",
     "karma": "^6.4.4",
-    "karma-browserify": "^8.1.0",
     "karma-chrome-launcher": "^3.2.0",
+    "karma-esbuild": "^2.3.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "mocha": "^11.1.0",
-    "nyc": "^17.1.0",
+    "mocha": "^11.7.6",
+    "node-stdlib-browser": "^1.3.1",
+    "nyc": "^18.0.0",
     "parse-gitignore": "^2.0.0",
     "postman-jsdoc-theme": "^0.0.3",
     "postman-request": "^2.88.1-postman.31",
-    "recursive-readdir": "^2.2.3",
     "require-all": "^3.0.0",
-    "shelljs": "^0.8.5",
+    "shelljs": "^0.10.0",
     "strip-json-comments": "^3.1.1",
     "tsd-jsdoc": "^2.5.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.12"
   }
 }

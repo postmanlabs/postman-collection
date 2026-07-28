@@ -3,11 +3,11 @@
 // This script is intended to execute all system tests.
 // ---------------------------------------------------------------------------------------------------------------------
 
-const path = require('path'),
+const fs = require('fs'),
+    path = require('path'),
 
     Mocha = require('mocha'),
     chalk = require('chalk'),
-    recursive = require('recursive-readdir'),
     { exec } = require('shelljs'),
 
     SPEC_SOURCE_DIR = path.join(__dirname, '..', 'test', 'system');
@@ -17,7 +17,7 @@ module.exports = function (exit) {
     console.info(chalk.yellow.bold('\nRunning system tests using mocha...'));
 
     // add all spec files to mocha
-    recursive(SPEC_SOURCE_DIR, (err, files) => {
+    fs.readdir(SPEC_SOURCE_DIR, { recursive: true }, (err, files) => {
         if (err) {
             console.error(err);
 
@@ -28,7 +28,7 @@ module.exports = function (exit) {
 
         files.filter((file) => { // extract all test files
             return (file.substr(-8) === '.test.js');
-        }).forEach(mocha.addFile.bind(mocha));
+        }).forEach((file) => { mocha.addFile(path.join(SPEC_SOURCE_DIR, file)); });
 
         // start the mocha run
         mocha.run((runError) => {
