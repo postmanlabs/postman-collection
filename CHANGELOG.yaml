@@ -1,9 +1,14 @@
 unreleased:
   breaking changes:
-    - GH-1431 Dropped support for Node.js < v22
+    - GH-1431 Dropped support for Node.js < v22.12
     - GH-1431 Removed the `uuid` dependency in favor of the Web Crypto API
   chores:
     - GH-1431 Updated dependencies
+    - GH-1431 Updated `@faker-js/faker` dependency to `10.5.0`
+    - >-
+      GH-1431 Replaced the dead `placeimg.com` host with `loremflickr.com` in
+      `$random*Image` dynamic variables
+    - GH-1431 Replaced browserify with esbuild to bundle the browser tests
     - GH-1431 Updated ESLint rules
     - GH-1431 Fixed type-definition generation
 

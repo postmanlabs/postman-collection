@@ -1,4 +1,15 @@
 // Karma configuration
+const _ = require('lodash'),
+    stdLibBrowser = require('node-stdlib-browser'),
+    stdLibBrowserPlugin = require('node-stdlib-browser/helpers/esbuild/plugin'),
+
+    // node-stdlib-browser mocks the builtins that have no browser equivalent with `null`, whereas
+    // browserify used an empty object. dependencies like `forever-agent` read properties off them
+    // while loading, so keep the browserify behaviour.
+    nodeBuiltinShims = _.mapValues(stdLibBrowser, function (shim) {
+        return (/mock[/\\]empty\.js$/).test(shim) ? require.resolve('./empty-module') : shim;
+    });
+
 module.exports = function (config) {
     var configuration = {
 
@@ -7,7 +18,7 @@ module.exports = function (config) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['mocha', 'browserify'],
+        frameworks: ['mocha'],
 
         // list of files / patterns to load in the browser
         files: [
@@ -18,9 +29,18 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            '../index.js': ['browserify'], // Mention path as per your test js folder
-            '../test/unit/**/*.js': ['browserify'] // Mention path as per your library js folder
+            '../index.js': ['esbuild'], // Mention path as per your test js folder
+            '../test/unit/**/*.js': ['esbuild'] // Mention path as per your library js folder
         },
+
+        // the library itself needs no Node.js builtins, but tests (and their dependencies) do.
+        // browserify shimmed those implicitly, esbuild needs to be told to.
+        esbuild: {
+            plugins: [stdLibBrowserPlugin(nodeBuiltinShims)],
+            inject: [require.resolve('node-stdlib-browser/helpers/esbuild/shim')],
+            define: { global: 'global', process: 'process', Buffer: 'Buffer' }
+        },
+
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -51,12 +71,10 @@ module.exports = function (config) {
         // how many browser should be started simultaneously
         concurrency: Infinity,
 
-        // Uncomment "karma-browserify" if you see an error like this:
-        // Error: No provider for "framework:browserify"! (Resolving: framework:browserify)
         plugins: [
             'karma-mocha',
             'karma-chrome-launcher',
-            'karma-browserify',
+            'karma-esbuild',
             'karma-mocha-reporter'
         ],
 

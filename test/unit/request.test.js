@@ -123,14 +123,16 @@ describe('Request', function () {
 
             it('should handle object & function correctly', function () {
                 var req = new Request({
-                    method: { name: 'GET' },
-                    url: 'https://postman-echo.com/:path'
-                });
+                        method: { name: 'GET' },
+                        url: 'https://postman-echo.com/:path'
+                    }),
+                    // the source of a function is reformatted by bundlers, so it can not be asserted verbatim
+                    methodSource = { method () { return 0; } };
 
                 expect(req).to.have.property('method', '[OBJECT OBJECT]');
 
-                req.update({ method () { return 0; } });
-                expect(req).to.have.property('method', 'METHOD () { RETURN 0; }');
+                req.update(methodSource);
+                expect(req).to.have.property('method', methodSource.method.toString().toUpperCase());
 
                 req.update({ method: [1, 2, 3] });
                 expect(req).to.have.property('method', '1,2,3');
