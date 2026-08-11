@@ -45,6 +45,24 @@ After loading the collection from file, one can do a lot more using the function
 more about these functions, head over to
 [Collection SDK Docs](http://www.postmanlabs.com/postman-collection).
 
+## Discovering Public Postman Collections
+
+Finding public Postman collections on GitHub can be challenging. Here are some ways to discover them effectively:
+
+### Using GitHub Search
+Search for Postman collection files using:
+`postman_collection.json`
+
+This helps locate repositories containing exported Postman collections.
+
+### Explore Postman Public Workspace
+Browse publicly available collections here:
+https://www.postman.com/explore
+
+### Collection Format Reference
+Refer to the official schema:
+https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+
 ## Postman Collection Schema
 
 The collection schema outlines the JSON definition of data structure accepted by the constructor of each properties of
