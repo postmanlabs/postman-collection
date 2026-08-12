@@ -56,7 +56,7 @@
     "dependency-check": "^4.1.0",
     "eslint": "^8.57.0",
     "eslint-plugin-jsdoc": "^47.0.2",
-    "eslint-plugin-lodash": "^7.4.0",
+    "eslint-plugin-lodash": "^8.0.0",
     "eslint-plugin-mocha": "^10.5.0",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-security": "^2.1.1",
