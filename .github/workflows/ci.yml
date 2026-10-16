@@ -14,6 +14,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 8
 
     steps:
       - name: Checkout repository
@@ -36,6 +37,7 @@ jobs:
   browser-tests:
     name: Browser Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 8
 
     steps:
       - name: Checkout repository
@@ -58,6 +60,7 @@ jobs:
   tests:
     name: Tests
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 8
     strategy:
       fail-fast: false
       matrix:
