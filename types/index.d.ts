@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 5.2.1
+// Type definitions for postman-collection 5.3.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1871,7 +1871,7 @@ declare module "postman-collection" {
          * Holds a reference to a file which should be read as the RequestBody. It can be a file path (when used
          * with Node) or a unique ID (when used with the browser).
          */
-        file: any;
+        file: string;
         /**
          * If the request has raw graphql data associated with it, the data is held in this field.
          */

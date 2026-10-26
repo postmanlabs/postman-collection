@@ -18,7 +18,7 @@
       }
   },
   "parserOptions": {
-      "ecmaVersion": 13
+      "ecmaVersion": 15
   },
   "rules": {
       // Possible Errors

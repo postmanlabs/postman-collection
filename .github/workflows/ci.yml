@@ -22,10 +22,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 22.x
           cache: 'npm'
 
       - name: Install
@@ -45,10 +45,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 22.x
           cache: 'npm'
 
       - name: Install
@@ -64,7 +64,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 20]
+        node-version: [22, 24]
         os: [ubuntu-latest, windows-latest]
         include:
           - coverage: true

@@ -1,6 +1,4 @@
 var _ = require('lodash'),
-    path = require('path'),
-    btoa = require('btoa'),
     expect = require('chai').expect,
     util = require('../../lib/util.js'),
 
@@ -59,31 +57,6 @@ describe('SDK Utils', function () {
 
             it('should handle malformed URI sequence on encode', function () {
                 expect(util.lodash.ensureEncoded('\uD800')).to.equal('\uD800');
-            });
-        });
-    });
-
-    describe('.btoa', function () {
-        it('should work correctly under regular conditions', function () {
-            expect(util.btoa('randomString')).to.equal('cmFuZG9tU3RyaW5n');
-        });
-
-        (typeof window === 'undefined' ? describe : describe.skip)('special cases', function () {
-            var util,
-                cleanup = false;
-
-            before(function () {
-                if (!global.btoa) {
-                    global.btoa = btoa;
-                    cleanup = true;
-                }
-                delete require.cache[path.resolve('lib/util.js')];
-                util = require('../../lib/util');
-            });
-            after(function () { cleanup && delete global.btoa; });
-
-            it('should use the provided btoa implementation when applicable', function () {
-                expect(util.btoa('randomString')).to.equal('cmFuZG9tU3RyaW5n');
             });
         });
     });
