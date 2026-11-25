@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@postman/shipit": "^0.4.0",
-    "@stylistic/eslint-plugin-js": "^1.8.0",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
     "async": "^3.2.6",
     "bipbip": "^0.4.2",
     "browserify": "^17.0.1",
