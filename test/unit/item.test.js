@@ -51,6 +51,29 @@ describe('Item', function () {
 
             expect(item.toJSON()).to.eql(itemDefinition);
         });
+
+        it('should handle responses property and preserve custom HTTP methods on example responses', function () {
+            var itemDefinition = {
+                    name: 'WebDAV Item',
+                    request: {
+                        method: 'PROPFIND',
+                        url: 'https://postman-echo.com/webdav'
+                    },
+                    responses: [{
+                        name: '207 Multi-Status',
+                        code: 207,
+                        request: {
+                            method: 'PROPFIND',
+                            url: 'https://postman-echo.com/webdav'
+                        }
+                    }]
+                },
+                item = new Item(itemDefinition);
+
+            expect(item.responses.count()).to.equal(1);
+            expect(item.responses.idx(0).originalRequest.method).to.equal('PROPFIND');
+            expect(item.toJSON().response[0].originalRequest.method).to.equal('PROPFIND');
+        });
     });
 
     describe('sanity', function () {

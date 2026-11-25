@@ -566,6 +566,41 @@ describe('Response', function () {
                 cookie: []
             });
         });
+
+        it('should correctly parse request definition and preserve custom HTTP methods', function () {
+            var response = new Response({
+                    name: 'custom method response',
+                    request: {
+                        url: 'https://postman-echo.com/resource',
+                        method: 'PROPFIND',
+                        header: [{ key: 'Depth', value: '1' }]
+                    },
+                    code: 207,
+                    body: '<multistatus></multistatus>'
+                }),
+                responseJson = response.toJSON();
+
+            expect(response.originalRequest).to.be.ok;
+            expect(response.originalRequest.method).to.equal('PROPFIND');
+            expect(response.originalRequest.headers.get('Depth')).to.equal('1');
+            expect(responseJson.originalRequest.method).to.equal('PROPFIND');
+            expect(responseJson.code).to.equal(207);
+        });
+
+        it('should preserve custom HTTP methods in originalRequest', function () {
+            var response = new Response({
+                name: 'custom method in originalRequest',
+                originalRequest: {
+                    url: 'https://postman-echo.com/resource',
+                    method: 'LOCK'
+                },
+                code: 200
+            });
+
+            expect(response.originalRequest).to.be.ok;
+            expect(response.originalRequest.method).to.equal('LOCK');
+            expect(response.toJSON().originalRequest.method).to.equal('LOCK');
+        });
     });
 
     describe('timingPhases', function () {

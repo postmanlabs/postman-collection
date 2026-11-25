@@ -1,4 +1,4 @@
-// Type definitions for postman-collection 5.2.1
+// Type definitions for postman-collection 5.3.1
 // Project: https://github.com/postmanlabs/postman-collection
 // Definitions by: PostmanLabs
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -2025,6 +2025,8 @@ declare module "postman-collection" {
             body?: string;
             stream?: Buffer | ArrayBuffer;
             responseTime: number;
+            originalRequest?: Request.definition;
+            request?: Request.definition;
         };
         /**
          * @property body - size of the response body in bytes
@@ -2512,7 +2514,7 @@ declare module "postman-collection" {
          */
         type sourceOnePassword = {
             provider: "1password";
-            "1password": {
+            1password: {
                 secretReference: string;
             };
         };
@@ -2817,7 +2819,7 @@ declare module "postman-collection" {
          */
         static readonly PROTOCOL_DELIMITER: string;
         /**
-         * String representation for matching all urls -
+         * String representation for matching all urls - 
          */
         static readonly MATCH_ALL_URLS: string;
     }

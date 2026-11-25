@@ -41,7 +41,7 @@
     "mime": "3.0.0",
     "mime-format": "2.0.2",
     "postman-url-encoder": "3.0.8",
-    "semver": "7.7.1",
+    "semver": "7.8.5",
     "uuid": "8.3.2"
   },
   "devDependencies": {
@@ -67,7 +67,7 @@
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "mocha": "^11.1.0",
+    "mocha": "^11.8.0",
     "nyc": "^17.1.0",
     "parse-gitignore": "^2.0.0",
     "postman-jsdoc-theme": "^0.0.3",
