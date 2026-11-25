@@ -61,7 +61,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-security": "^2.1.1",
     "js-yaml": "^4.1.0",
-    "jsdoc": "^3.6.11",
+    "jsdoc": "^4.0.4",
     "karma": "^6.4.4",
     "karma-browserify": "^8.1.0",
     "karma-chrome-launcher": "^3.2.0",
