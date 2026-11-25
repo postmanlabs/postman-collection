@@ -299,6 +299,15 @@ describe('VariableScope', function () {
                 expect(scope.get('var-2')).to.equal('var-2-value');
             });
 
+            it('should get the specified variable with value as a fn', function () {
+                var scope = new VariableScope([
+                    { key: 'var-1', value: () => { return 'var-1-value'; } },
+                    { key: 'var-2', value: () => { return 'var-2-value'; } }
+                ]);
+
+                expect(scope.get('var-2')).to.equal('var-2-value');
+            });
+
             it('should get last enabled from multi value list', function () {
                 var scope = new VariableScope([
                     { key: 'var-2', value: 'var-2-value' },

@@ -426,6 +426,59 @@ describe('Property', function () {
             // resolves all independent unique variables as well as poly-chained {{0}} & {{1}}
             expect(Property.replaceSubstitutions(str, variables)).to.eql('{{xyz}}');
         });
+
+        it('should correctly resolve variables with values as sync fn', function () {
+            const str = '{{world}}',
+                variables = new VariableList(null, [
+                    {
+                        key: 'world',
+                        value: () => {
+                            return 'hello';
+                        }
+                    }
+                ]);
+
+            expect(Property.replaceSubstitutions(str, variables)).to.eql('hello');
+        });
+    });
+
+    describe('.replaceSubstitutionsAsync', function () {
+        it('should correctly resolve variables with values as async fn', async function () {
+            const str = '{{world}}',
+                variables = new VariableList(null, [
+                    {
+                        key: 'world',
+                        type: 'function',
+                        value: async () => {
+                            const x = await new Promise((resolve) => {
+                                resolve('hello');
+                            });
+
+                            return x;
+                        }
+                    }
+                ]);
+
+            expect(await Property.replaceSubstitutionsAsync(str, variables)).to.eql('hello');
+        });
+
+        it('should show variables as unresolved with values as async fn with error', async function () {
+            const str = '{{world}}',
+                variables = new VariableList(null, [
+                    {
+                        key: 'world',
+                        type: 'function',
+                        value: async () => {
+                            await new Promise((resolve) => {
+                                resolve('hello');
+                            });
+                            throw new Error('fail');
+                        }
+                    }
+                ]);
+
+            expect(await Property.replaceSubstitutionsAsync(str, variables)).to.eql('{{world}}');
+        });
     });
 
     describe('.replaceSubstitutionsIn', function () {
@@ -438,6 +491,29 @@ describe('Property', function () {
                 variables = [{ var: 'bar' }];
 
             expect(Property.replaceSubstitutionsIn(obj, variables)).to.eql({ foo: 'bar' });
+            expect(obj).to.eql({ foo: '{{var}}' });
+        });
+    });
+
+    describe('.replaceSubstitutionsInAsync', function () {
+        it('should replace with async variables', async function () {
+            const obj = { foo: '{{var}}' },
+                variables = new VariableList(null, [
+                    {
+                        key: 'var',
+                        type: 'any',
+                        value: async () => {
+                            const res = await new Promise((resolve) => {
+                                resolve('bar');
+                            });
+
+                            return res;
+                        }
+                    }
+                ]),
+                res = await Property.replaceSubstitutionsInAsync(obj, [variables]);
+
+            expect(res).to.eql({ foo: 'bar' });
             expect(obj).to.eql({ foo: '{{var}}' });
         });
     });
