@@ -454,6 +454,118 @@ describe('Response', function () {
         });
     });
 
+    describe('text cache', function () {
+        var originalDecode = util.bufferOrArrayBufferToString,
+            decodeCount;
+
+        beforeEach(function () {
+            decodeCount = 0;
+            util.bufferOrArrayBufferToString = function () {
+                decodeCount++;
+
+                return originalDecode.apply(util, arguments);
+            };
+        });
+
+        afterEach(function () {
+            util.bufferOrArrayBufferToString = originalDecode;
+        });
+
+        it('should decode the stream once and return the same string on repeated text() calls', function () {
+            var response = new Response({ stream: Buffer.from('{"a":1}') }),
+                first = response.text();
+
+            expect(first).to.equal('{"a":1}');
+            expect(response.text()).to.equal(first);
+            expect(response.text()).to.equal(first);
+            expect(decodeCount).to.equal(1);
+        });
+
+        it('should decode the stream once across json() and jsonp() calls', function () {
+            var response = new Response({ stream: Buffer.from('{"a":1}') });
+
+            response.json();
+            response.json();
+            response.jsonp();
+            expect(decodeCount).to.equal(1);
+        });
+
+        it('should not read stale text after update() with a new stream', function () {
+            var response = new Response({ stream: Buffer.from('first') });
+
+            expect(response.text()).to.equal('first');
+
+            response.update({ stream: Buffer.from('second') });
+            expect(response.text()).to.equal('second');
+            expect(response.text()).to.equal('second');
+            expect(decodeCount).to.equal(2);
+        });
+
+        it('should not read stale text after update() with a new body', function () {
+            var response = new Response({ stream: Buffer.from('first') });
+
+            expect(response.text()).to.equal('first');
+
+            response.update({ body: 'second', stream: null });
+            response.stream = undefined;
+            expect(response.text()).to.equal('second');
+        });
+
+        it('should not read stale text after the stream is assigned directly', function () {
+            var response = new Response({ stream: Buffer.from('first') });
+
+            expect(response.text()).to.equal('first');
+
+            response.stream = Buffer.from('second');
+            expect(response.text()).to.equal('second');
+
+            response.stream = new Uint8Array([0x74, 0x68, 0x69, 0x72, 0x64]).buffer;
+            expect(response.text()).to.equal('third');
+        });
+
+        it('should not read stale text after the body is assigned directly', function () {
+            var response = new Response({ body: 'first' });
+
+            expect(response.text()).to.equal('first');
+
+            response.body = 'second';
+            expect(response.text()).to.equal('second');
+        });
+
+        it('should decode again when the response charset changes', function () {
+            var response = new Response({
+                header: [{ key: 'Content-Type', value: 'text/plain; charset=utf-8' }],
+                stream: Buffer.from([0xe9]) // "é" in latin1, invalid in utf-8
+            });
+
+            expect(response.text()).to.not.equal('\u00e9');
+
+            response.headers.clear();
+            response.headers.add({ key: 'Content-Type', value: 'text/plain; charset=iso-8859-1' });
+            expect(response.text()).to.equal('\u00e9');
+        });
+
+        it('should keep the cache out of the JSON representation', function () {
+            var response = new Response({ code: 200, stream: Buffer.from('abc') });
+
+            response.text();
+            expect(Object.keys(response.toJSON())).to.not.include.members(['_textCache', 'textCache']);
+            expect(_.some(Object.keys(response), (key) => { return (/cache/i).test(key); })).to.be.false;
+        });
+
+        it('should return a fresh object on every json() call', function () {
+            var response = new Response({ stream: Buffer.from('{"a":{"b":1}}') }),
+                first = response.json(),
+                second;
+
+            first.a.b = 2;
+            second = response.json();
+
+            expect(second).to.not.equal(first);
+            expect(second).to.eql({ a: { b: 1 } });
+        });
+    });
+
     describe('size', function () {
         it('must match the total size of the response', function () {
             var rawResponse1 = fixtures.responseData1,
